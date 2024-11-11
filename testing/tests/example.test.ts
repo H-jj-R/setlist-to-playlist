@@ -1,6 +1,6 @@
 import * as puppeteer from "puppeteer";
 import { log } from "console";
-import { launch } from "../utils";
+import { launch, delay } from "../utils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -11,7 +11,8 @@ describe("Example -", () => {
     }, 20000);
 
     it("Example test", async () => {
-          expect(true).toBe(true); 
+        await delay(5000);
+        expect(true).toBe(true);
     }, 10000);
 
     afterAll(async () => {

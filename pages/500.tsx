@@ -1,7 +1,7 @@
 /**
  *
  */
-import Layout from "../components/layouts/layout";
+import Layout from "../components/Layout";
 import Head from "next/head";
 
 export default function Custom500() {

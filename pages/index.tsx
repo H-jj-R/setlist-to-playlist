@@ -2,7 +2,7 @@
  *
  */
 import Link from "next/link";
-import Layout from "../components/layouts/layout";
+import Layout from "../components/Layout";
 
 export default function Home() {
     return (
