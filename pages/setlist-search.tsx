@@ -14,7 +14,7 @@ export default function SetlistSearch() {
                 to choose from.
             </p>
             <Link href="/">Back to Home</Link>
-            <p className="padding:400px;"></p>
+            {/* <p className="padding:400px;"></p> */}
             <div className="p-5">
                 <SearchBar onSearch={handleSearch}></SearchBar>
             </div>
@@ -24,4 +24,10 @@ export default function SetlistSearch() {
 
 const handleSearch = (query) => {
     console.log("Searched: ", query);
+
+    // TODO: Move directly up
+    // TODO: Get setlist data
+    // TODO: Add ListOfSetlists
+
+    // TODO: If setlist.fm link is provided, just display the setlist in screen centre
 };
