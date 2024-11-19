@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import cookie from "cookie";
 import CryptoJS from "crypto-js";
 
 const clientId = process.env.SPOTIFY_API_C_ID;
@@ -45,8 +46,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const encryptedRefreshToken = CryptoJS.AES.encrypt(data.refresh_token, process.env.ENCRYPTION_KEY).toString();
 
         res.setHeader("Set-Cookie", [
-            `spotify_user_access_token=${encryptedAccessToken}; HttpOnly; Secure; Max-Age=${data.expires_in}; Path=/`,
-            `spotify_user_refresh_token=${encryptedRefreshToken}; HttpOnly; Secure; Max-Age=2147483646; Path=/`
+            cookie.serialize("spotify_user_access_token", encryptedAccessToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: data.expires_in,
+                path: "/"
+            }),
+            cookie.serialize("spotify_user_refresh_token", encryptedRefreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 2147483646,
+                path: "/"
+            })
         ]);
 
         const redirectUrl = state ? `${baseUrl}${decodeURIComponent(state as string)}` : "/";

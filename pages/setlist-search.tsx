@@ -7,10 +7,24 @@ import utilStyles from "../styles/utils.module.css";
 export default function SetlistSearch() {
     const [searchTriggered, setSearchTriggered] = useState(false);
 
-    const handleSearch = (query) => {
+    const handleSearch = async (query) => {
         if (query !== "") {
-            setSearchTriggered(true);
-            console.log("Searched: ", query);
+            if (!searchTriggered) {
+                setSearchTriggered(true);
+            }
+
+            try {
+                const response = await fetch(`/api/controllers/get-setlists?query=${query}`);
+
+                if (!response.ok) {
+                    throw new Error("There has been an error!"); // TODO: Make error messages more informative
+                }
+
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error("error: ", error);
+            }
         }
     };
 
