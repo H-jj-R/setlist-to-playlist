@@ -4,6 +4,7 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import { SITE_TITLE } from "../pages/_app";
+import HeaderBar from "./HeaderBar";
 
 interface LayoutProps {
     children: ReactNode;
@@ -15,6 +16,7 @@ export default function Layout({ children }: LayoutProps) {
             <Head>
                 <title>{SITE_TITLE}</title>
             </Head>
+            <HeaderBar />
             <div>{children}</div>
         </div>
     );
