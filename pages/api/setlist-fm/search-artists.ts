@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             method: "GET",
             headers: {
                 Accept: "application/json",
-                "x-api-key": process.env.SETLIST_FM_API_KEY
+                "x-api-key": process.env.SETLIST_FM_API_KEY!
             }
         };
         const response = await fetch(url, params);

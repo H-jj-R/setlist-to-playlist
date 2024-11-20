@@ -8,12 +8,12 @@ import { setTimeout } from "timers/promises";
  * @returns The most recent setlist from an artist with a matching name
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { artistMbid } = req.query;
+    const { setlistId } = req.query;
     const maxRetries = 5;
     const baseDelay = 1000;
 
     async function fetchSetlist(retries: number = 0): Promise<Response> {
-        const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${artistMbid}&p=1&sort=recency`;
+        const url = `https://api.setlist.fm/rest/1.0/setlist/${setlistId}`;
         const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -47,14 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const data = await response.json();
-
-        if (!data.setlist || data.setlist.length === 0) {
-            res.status(404).json({
-                error: `No setlists found for artist with mbid: ${artistMbid}`
-            });
-            return;
-        }
-
+        
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: "Error fetching setlist" });

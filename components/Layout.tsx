@@ -10,7 +10,7 @@ interface LayoutProps {
     children: ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
     return (
         <div>
             <Head>
@@ -21,3 +21,5 @@ export default function Layout({ children }: LayoutProps) {
         </div>
     );
 }
+
+export default Layout;
