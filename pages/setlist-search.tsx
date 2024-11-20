@@ -41,7 +41,7 @@ export default function SetlistSearch() {
                     }
 
                     const data = await response.json();
-                    
+
                     setSetlistData(data);
                     setSearchComplete(true);
                 } catch (error) {
@@ -68,7 +68,7 @@ export default function SetlistSearch() {
                     </div>
                 </CSSTransition>
                 {searchComplete && (
-                    <div className="pt-8 w-4/5 mx-auto">
+                    <div className="pt-8 w-4/5 max-w-3xl mx-auto">
                         <ListOfSetlists setlistData={setlistData} />
                     </div>
                 )}
