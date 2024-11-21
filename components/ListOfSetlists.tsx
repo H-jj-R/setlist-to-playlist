@@ -9,9 +9,17 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData }) => {
         return <p>No setlists found for {setlistData.spotifyArtist.name}. Please try a different query.</p>;
     }
 
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString.split("-").reverse().join("-"));
+        return date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    };
+
     const handleSetlistClick = (setlist: Record<string, any>) => {
         console.log("Selected Setlist Details:", setlist);
-        // Add navigation or detailed rendering logic here
     };
 
     return (
@@ -26,18 +34,29 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData }) => {
                     <h2 className="text-3xl font-bold">Setlists for {setlistData.spotifyArtist.name}</h2>
                 </div>
                 <ul className="space-y-3 px-4 w-full">
-                    {setlistData.setlists.setlist.map((setlist: Record<string, any>) => (
-                        <li
-                            key={setlist.id}
-                            className="border border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                            onClick={() => handleSetlistClick(setlist)}
-                        >
-                            <div className="text-lg font-semibold">{setlist.eventDate}</div>
-                            <div className="text-sm text-gray-600">
-                                {setlist.venue.name}, {setlist.venue.city.name}, {setlist.venue.city.country.name}
-                            </div>
-                        </li>
-                    ))}
+                    {setlistData.setlists.setlist.map((setlist: Record<string, any>) => {
+                        const songCount = setlist.sets.set.reduce(
+                            (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
+                            0
+                        );
+                        const locationDetails = `${setlist.venue.name}, ${setlist.venue.city.name}${
+                            setlist.venue.city.country.code === "US" ? `, ${setlist.venue.city.stateCode}` : ""
+                        }, ${setlist.venue.city.country.name}`;
+
+                        return (
+                            <li
+                                key={setlist.id}
+                                className="border border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                                onClick={() => handleSetlistClick(setlist)}
+                            >
+                                <div className="text-lg font-semibold">{formatDate(setlist.eventDate)}</div>
+                                <div className="text-lg">
+                                    {setlist.artist.name} at {locationDetails}
+                                </div>
+                                <div className="text-base">Number of songs: {songCount}</div>
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
         </div>

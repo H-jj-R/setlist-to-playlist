@@ -48,6 +48,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const data = await response.json();
 
+         // Filter out setlists with no songs
+         if (data.setlist) {
+            data.setlist = data.setlist.filter((setlist: any) =>
+                setlist.sets.set.some((set: any) => set.song && set.song.length > 0)
+            );
+        }
+
         if (!data.setlist || data.setlist.length === 0) {
             res.status(404).json({
                 error: `No setlists found for artist with mbid: ${artistMbid}`
