@@ -11,7 +11,6 @@ import Setlist from "../components/Setlist";
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
-    // State to manage various aspects of the search and selected setlist
     const [state, setState] = useState({
         searchTriggered: false, // Indicates if a search has been triggered
         searchComplete: false, // Indicates if the search is complete
