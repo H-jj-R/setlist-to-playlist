@@ -2,15 +2,15 @@ import React from "react";
 import SetlistChoiceBlock from "./SetlistChoiceBlock";
 
 interface ListOfSetlistsProps {
-    setlistData: Record<string, any>;
-    onSetlistChosen: (setlist: Record<string, any>) => void;
+    setlistData: Record<string, any>; // The setlist data containing Spotify artist details and associated setlists
+    onSetlistChosen: (setlist: Record<string, any>) => void; // Callback function that handles when a user selects a setlist
 }
 
+/**
+ * This component displays a list of setlists for a given Spotify artist.
+ * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
+ */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
-    if (!setlistData.setlists?.setlist || setlistData.setlists.setlist.length === 0) {
-        return <p>No setlists found for {setlistData.spotifyArtist.name}. Please try a different query.</p>;
-    }
-
     return (
         <div className="border border-gray-300 rounded-lg h-[calc(100vh-10rem)] overflow-y-auto">
             <div className="p-4 w-full flex flex-col items-center">
@@ -24,11 +24,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                 </div>
                 <ul className="space-y-3 px-4 w-full">
                     {setlistData.setlists.setlist.map((setlist: Record<string, any>) => (
-                        <SetlistChoiceBlock
-                            key={setlist.id}
-                            setlist={setlist}
-                            onClick={onSetlistChosen}
-                        />
+                        <SetlistChoiceBlock key={setlist.id} setlist={setlist} onClick={onSetlistChosen} />
                     ))}
                 </ul>
             </div>

@@ -1,20 +1,27 @@
-/**
- * Primary search bar
- */
 import React, { useState } from "react";
 
+/**
+ * Primary search bar component.
+ * This component allows users to search for artists/bands or setlist.fm links.
+ * 
+ * @param {Function} onSearch - Callback function passed down to handle the search action when the user submits a query.
+ */
 const SearchBar = ({ onSearch }) => {
+    // State to store the current value of the search query
     const [query, setQuery] = useState("");
 
+    // Handle input changes and update the query state
     const handleInputChange = (e) => {
         setQuery(e.target.value);
     };
 
+    // Handle the search button click event
     const handleSearch = () => {
         onSearch(query);
     };
 
-    const handleKeyDown = (e) => {
+    // If the Enter key is pressed, trigger the search action
+    const handleKeyUp = (e) => {
         if (e.key === "Enter") {
             handleSearch();
         }
@@ -29,7 +36,7 @@ const SearchBar = ({ onSearch }) => {
                     placeholder="Search for an artist/band or setlist.fm link..."
                     value={query}
                     onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={handleKeyUp}
                 />
                 <button
                     onClick={handleSearch}

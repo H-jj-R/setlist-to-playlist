@@ -2,22 +2,26 @@ import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
 
+/**
+ * API handler for searching an artist on Spotify using the Spotify API.
+ * Requires an access token, encrypted in cookies.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { query } = req.query;
     const cookies = cookie.parse(req.headers.cookie || "");
-    let encryptedAccessToken = cookies.spotify_access_token;
+    const encryptedAccessToken = cookies.spotify_access_token;
 
-    // If no token in cookie, generate a new one
+    // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) {
-        
-            return res.status(500).json({ error: "No access token"});
-        
+        return res.status(500).json({ error: "No access token" });
     }
 
+    // Decrypt the access token using the AES decryption function
     const accessToken = decryptToken(encryptedAccessToken);
     const searchUrl = `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=1`;
 
     try {
+        // Make a GET request to Spotify's search API
         const response = await fetch(searchUrl, {
             method: "GET",
             headers: {
@@ -25,29 +29,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         });
 
+        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            throw new Error(`Spotify API error: ${response.status}`);
+            // Get the error details from the response
+            const errorResponse = await response.json();
+            const errorMessage = errorResponse.error?.message || "Unknown error";
+            throw new Error(
+                `${response.status}: Error searching artist - Error: ${errorMessage}`
+            );
         }
 
+        // Parse the JSON response
         const data = await response.json();
+
+        // Check if the artist was found; if not, throw an error
         if (data.artists.items.length === 0) {
             throw new Error("Artist not found");
         }
 
+        // Respond with the first artist's (best match) data
         res.status(200).json(data.artists.items[0]);
     } catch (error) {
-        console.error("Error searching artist:", error);
+        console.error("Error searching artist: ", error);
         res.status(500).json({ error: error.message });
     }
 }
 
+/**
+ * Decrypts an encrypted token using AES decryption.
+ *
+ * @param {string} encryptedToken - The encrypted token string.
+ * @returns {string} - The decrypted token.
+ */
 function decryptToken(encryptedToken: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, process.env.ENCRYPTION_KEY!);
-    return bytes.toString(CryptoJS.enc.Utf8);
-}
-
-function getBaseUrl(req: NextApiRequest): string {
-    const protocol = req.headers["x-forwarded-proto"] || "http";
-    const host = req.headers.host!;
-    return `${protocol}://${host}`;
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, process.env.ENCRYPTION_KEY!); // Decrypt using the encryption key from environment variables
+    return bytes.toString(CryptoJS.enc.Utf8); // Convert decrypted bytes to a UTF-8 string
 }

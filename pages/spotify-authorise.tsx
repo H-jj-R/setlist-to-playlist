@@ -1,10 +1,17 @@
 import React from "react";
 import { useRouter } from "next/router";
 
+/**
+ * Page which redirects the user to a Spotify authorisation endpoint.
+ */
 export default function SpotifyAuthorise() {
     const router = useRouter();
     const { redirect } = router.query;
 
+    /**
+     * Handles the login/authentication process.
+     * Redirects the user to the Spotify authorisation API.
+     */
     const handleLogin = async () => {
         router.push(`/api/spotify/authorise?redirect=${redirect}`);
     };

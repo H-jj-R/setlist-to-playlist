@@ -1,12 +1,15 @@
-/**
- *
- */
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
+/**
+ * The landing page of the site.
+ */
 export default function Home() {
     const router = useRouter();
 
+    /**
+     * Handles navigation to the "Setlist Search" page when the button is clicked.
+     */
     const handleNavigation = () => {
         router.push("/setlist-search");
     };

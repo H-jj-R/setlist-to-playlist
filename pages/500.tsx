@@ -1,9 +1,10 @@
-/**
- *
- */
 import Layout from "../components/Layout";
 import Head from "next/head";
 
+/**
+ * Renders a custom 500 error page.
+ * It displays a friendly error message for server-side issues.
+ */
 export default function Custom500() {
     return (
         <Layout>
