@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
+import "../lib/i18n";
 
 export const SITE_TITLE: string = "Setlist to Playlist";
 

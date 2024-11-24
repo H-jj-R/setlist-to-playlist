@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Primary search bar component.
  * This component allows users to search for artists/bands or setlist.fm links.
- * 
+ *
  * @param {Function} onSearch - Callback function passed down to handle the search action when the user submits a query.
  */
 const SearchBar = ({ onSearch }) => {
+    const { t: i18nCommon } = useTranslation("common");
+    const { t: i18n } = useTranslation("setlist-search");
+
     // State to store the current value of the search query
     const [query, setQuery] = useState("");
 
@@ -33,7 +37,7 @@ const SearchBar = ({ onSearch }) => {
                 <input
                     type="text"
                     className="flex-1 h-12 py-2 px-4 rounded-l-lg text-lg border border-gray-300"
-                    placeholder="Search for an artist/band or setlist.fm link..."
+                    placeholder={i18n("searchForSetlist")}
                     value={query}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyUp}
@@ -42,7 +46,7 @@ const SearchBar = ({ onSearch }) => {
                     onClick={handleSearch}
                     className="h-12 py-2 px-6 bg-blue-500 text-white font-semibold rounded-r-lg hover:bg-blue-600"
                 >
-                    Search
+                    {i18nCommon("search")}
                 </button>
             </div>
         </div>

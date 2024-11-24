@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface SetlistChoiceBlockProps {
     setlist: Record<string, any>; // The setlist data to be displayed
@@ -9,6 +10,8 @@ interface SetlistChoiceBlockProps {
  * Displays information about a setlist, including event date, artist, location, and song count.
  */
 const SetlistBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) => {
+    const { t: i18n } = useTranslation("setlist-search");
+
     // Formats the event date string into a readable format (e.g. "01 Jan 1970")
     const formatDate = (dateString: string) => {
         // Splitting the date string and reordering for correct formatting
@@ -27,7 +30,7 @@ const SetlistBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) =
     );
 
     // Construct the location string with venue name, city, and country details
-    const locationDetails = `${setlist.venue.name}, ${setlist.venue.city.name}${
+    const location = `${setlist.venue.name}, ${setlist.venue.city.name}${
         setlist.venue.city.country.code === "US" ? `, ${setlist.venue.city.stateCode}` : ""
     }, ${setlist.venue.city.country.name}`;
 
@@ -37,11 +40,9 @@ const SetlistBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) =
             onClick={() => onClick(setlist)}
         >
             <div className="text-lg font-semibold">{formatDate(setlist.eventDate)}</div>
-            <div className="text-lg">
-                {setlist.artist.name} at {locationDetails}
-            </div>
+            <div className="text-lg">{i18n("artistAtVenue", { artistName: setlist.artist.name, location })}</div>
             <div className="text-base italic">
-                {songCount} {songCount === 1 ? "song" : "songs"}
+                {songCount === 1 ? i18n("songCount", { songCount }) : i18n("songCount_plural", { songCount })}
             </div>
         </li>
     );

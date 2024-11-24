@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
-import { SITE_TITLE } from "../pages/_app";
+import { useTranslation } from "react-i18next";
 import HeaderBar from "./HeaderBar";
 
 interface LayoutProps {
@@ -11,10 +11,12 @@ interface LayoutProps {
  * Layout for all pages - for any common components
  */
 const Layout = ({ children }: LayoutProps) => {
+    const { t: i18nCommon } = useTranslation("common");
+
     return (
         <div>
             <Head>
-                <title>{SITE_TITLE}</title>
+                <title>{i18nCommon("siteTitle")}</title>
             </Head>
             <HeaderBar />
             <div>{children}</div>
