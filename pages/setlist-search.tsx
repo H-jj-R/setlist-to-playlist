@@ -23,6 +23,7 @@ export default function SetlistSearch() {
     const [animLoading, setAnimLoading] = useState(false); // Controls animation for the loader
     const [showLoading, setShowLoading] = useState(false); // Indicates if the loading spinner should be displayed
     const [error, setError] = useState<string | null>(null); // Stores any error messages
+    const [transitionStage, setTransitionStage] = useState<"idle" | "shrinking" | "setlist">("idle");
 
     // Helper function to fetch data from a given URL and handle errors
     const fetchData = async (url: string) => {
@@ -99,21 +100,29 @@ export default function SetlistSearch() {
 
     // Updates the state when a specific setlist is chosen
     const handleSetlistChosen = async (setlist: any) => {
+        setTransitionStage("shrinking");
         console.log("Setlist chosen:", setlist);
-        setState((prev) => ({
-            ...prev,
-            setlistChosen: true,
-            chosenSetlistData: setlist
-        }));
+        setTimeout(() => {
+            setTransitionStage("setlist");
+            setState((prev) => ({
+                ...prev,
+                setlistChosen: true,
+                chosenSetlistData: setlist
+            }));
+        }, 1000);
     };
 
     // Returns to the list view from a chosen setlist
     const handleBackToList = () => {
-        setState((prev) => ({
-            ...prev,
-            setlistChosen: false,
-            chosenSetlistData: null
-        }));
+        setTransitionStage("shrinking");
+        setTimeout(() => {
+            setState((prev) => ({
+                ...prev,
+                setlistChosen: false,
+                chosenSetlistData: null
+            }));
+            setTransitionStage("idle");
+        }, 1000);
     };
 
     // Renders the search bar with animations
@@ -159,7 +168,13 @@ export default function SetlistSearch() {
         return (
             state.searchComplete &&
             animLoading && (
-                <div className="pt-8 mt-5 w-4/5 max-w-3xl mx-auto">
+                <div
+                    className={`transition-all duration-1000 ${
+                        transitionStage === "shrinking" || transitionStage === "setlist"
+                            ? "w-1/3"
+                            : "w-4/5 max-w-3xl mx-auto"
+                    }`}
+                >
                     <ListOfSetlists setlistData={state.allSetlistsData} onSetlistChosen={handleSetlistChosen} />
                 </div>
             )
@@ -171,8 +186,17 @@ export default function SetlistSearch() {
         return (
             state.setlistChosen &&
             animLoading && (
-                <div className="pt-8 mt-5 w-4/5 max-w-3xl mx-auto">
-                    <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} />
+                <div
+                    className={`transition-all duration-1000 ease-in-out w-full ${
+                        transitionStage === "setlist" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
+                    }`}
+                    style={{
+                        visibility: transitionStage === "setlist" ? "visible" : "hidden"
+                    }}
+                >
+                    {transitionStage === "setlist" && (
+                        <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} />
+                    )}
                 </div>
             )
         );
@@ -188,8 +212,10 @@ export default function SetlistSearch() {
                 {renderSearchBar()}
                 {renderLoading()}
                 {renderError()}
-                {renderListOfSetlists()}
-                {renderSetlist()}
+                <div className="flex gap-4 mt-14">
+                    {renderListOfSetlists()}
+                    {renderSetlist()}
+                </div>
             </div>
         </Layout>
     );
