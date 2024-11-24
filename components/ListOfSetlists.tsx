@@ -15,7 +15,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     const { t: i18n } = useTranslation("setlist-search");
 
     return (
-        <div className="border border-gray-300 rounded-lg h-[calc(100vh-10rem)] overflow-y-auto">
+        <div className="h-[calc(100vh-10rem)] overflow-y-auto border border-gray-300 rounded-lg w-full">
             <div className="p-4 w-full flex flex-col items-center">
                 <div className="flex items-center mb-5 px-4">
                     <img
