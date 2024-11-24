@@ -146,7 +146,7 @@ export default function SetlistSearch() {
                         loading={showLoading}
                         cssOverride={{} as CSSProperties}
                         size={150}
-                        aria-label="Loading Spinner"
+                        aria-label="Loader"
                         data-testid="loader"
                     />
                 </div>

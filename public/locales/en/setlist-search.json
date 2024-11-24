@@ -1,0 +1,9 @@
+{
+    "setlistListTitle": "Setlists for {{artistName}}",
+    "searchForSetlist": "Search for an artist/band or setlist.fm link...",
+    "backToList": "Back to List",
+    "artistAtVenue": "{{artistName}} at {{location}}",
+    "setlistDate": "Date: {{date}}",
+    "songCount": "{{songCount}} song",
+    "songCount_plural": "{{songCount}} songs"
+}
