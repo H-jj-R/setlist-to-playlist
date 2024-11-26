@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
 import HeaderBar from "./HeaderBar";
@@ -13,15 +13,26 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
     const { t: i18nCommon } = useTranslation("common");
 
+    useEffect(() => {
+        // Prevent scrolling on the body
+        document.body.style.overflow = "hidden";
+
+        // Cleanup to restore scrolling on component unmount
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
     return (
-        <div>
+        <div className="h-screen flex flex-col">
             <Head>
                 <title>{i18nCommon("siteTitle")}</title>
             </Head>
             <HeaderBar />
-            <div>{children}</div>
+            {/* Main content container */}
+            <main className="flex-grow overflow-auto">{children}</main>
         </div>
     );
-}
+};
 
 export default Layout;

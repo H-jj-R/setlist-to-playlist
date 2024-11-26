@@ -1,4 +1,13 @@
 {
-    "landingPageTitle": "Landing Page",
-    "goToSetlistSearch": "Go To Setlist Search"
+    "landingPageTitle": "Transform Setlists into Playlists",
+    "landingPageDescription": "Effortlessly create Spotify playlists from your favorite artists' live performances.",
+    "goToSetlistSearch": "Search for Setlists",
+    "whyCreateAccountTitle": "Why Create an Account?",
+    "whyCreateAccountDescription": "Unlock exclusive features by creating an account. Save playlists, recover deleted playlists, and more!",
+    "feature1Title": "Save Your Playlists",
+    "feature1Description": "Keep track of your created playlists and access them anytime.",
+    "feature2Title": "Sync Seamlessly",
+    "feature2Description": "Easily integrate with Spotify and save playlists directly to your account.",
+    "feature3Title": "Playlist Recovery",
+    "feature3Description": "Deleting a playlist on Spotify doesn't mean it's gone forever."
 }

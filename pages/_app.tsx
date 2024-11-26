@@ -3,8 +3,6 @@ import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import "../lib/i18n";
 
-export const SITE_TITLE: string = "Setlist to Playlist";
-
 /**
  * Custom App component for Next.js.
  * It initialises and wraps every page with a theme provider and props.
@@ -15,7 +13,7 @@ export const SITE_TITLE: string = "Setlist to Playlist";
  */
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Component {...pageProps} />
         </ThemeProvider>
     );

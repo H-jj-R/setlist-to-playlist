@@ -29,6 +29,7 @@
         "react-transition-group": "^4.4.5",
         "remark": "^15.0.1",
         "remark-html": "^16.0.1",
+        "tailwind-scrollbar": "^3.1.0",
         "ts-node": "^10.9.2"
     },
     "engines": {
