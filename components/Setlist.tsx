@@ -38,8 +38,10 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose }) => {
             </h2>
             <p className="text-lg font-semibold mb-4">{i18n("setlistDate", { date: formatDate(setlist.eventDate) })}</p>
             <ul className="list-disc ml-5">
-                {setlist.sets.set.flatMap(
-                    (set: any) => set.song.map((song: any, idx: number) => <li key={idx}>{song.name}</li>) // Map songs to list items
+                {setlist.sets.set.flatMap((set: any, setIdx: number) =>
+                    set.song.map((song: any, songIdx: number) => (
+                        <li key={`${setIdx}-${songIdx}-${song.name}`}>{song.name}</li>
+                    ))
                 )}
             </ul>
         </div>

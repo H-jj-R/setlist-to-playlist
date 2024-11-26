@@ -32,8 +32,8 @@ const SearchBar = ({ onSearch }) => {
     };
 
     return (
-        <div className="flex items-center justify-center w-full mt-4 px-4">
-            <div className="flex w-[70vw] max-w-xl">
+        <div className="flex items-center justify-center w-full mt-4 px-2 sm:px-4">
+            <div className="flex w-full sm:w-[70vw] max-w-xl">
                 <input
                     type="text"
                     className="flex-1 h-12 py-2 px-4 rounded-l-lg text-lg border border-gray-300"
