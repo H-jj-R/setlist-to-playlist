@@ -1,5 +1,6 @@
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties, useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
 import ListOfSetlists from "../components/ListOfSetlists";
 import { CSSTransition } from "react-transition-group";
@@ -11,6 +12,7 @@ import Setlist from "../components/Setlist";
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
+    const router = useRouter();
     const [state, setState] = useState({
         searchTriggered: false, // Indicates if a search has been triggered
         searchComplete: false, // Indicates if the search is complete
@@ -19,11 +21,31 @@ export default function SetlistSearch() {
         chosenSetlistData: [] // Holds data of the chosen setlist
     });
 
-    // State for managing animation/loading indicators and error messages
-    const [animLoading, setAnimLoading] = useState(false); // Controls animation for the loader
+    const [animLoading, setAnimLoading] = useState(true); // Controls animation for the loader
     const [showLoading, setShowLoading] = useState(false); // Indicates if the loading spinner should be displayed
     const [error, setError] = useState<string | null>(null); // Stores any error messages
-    const [transitionStage, setTransitionStage] = useState<"idle" | "shrinking" | "setlist">("idle");
+    const [pageState, setPageState] = useState<"idle" | "shrinking" | "setlist" | "expanding">("idle");
+
+    // Sync state with URL parameters
+    useEffect(() => {
+        const { query, setlist } = router.query;
+
+        if (query && !setlist) {
+            if (pageState !== "setlist") {
+                handleSearch(query as string, null);
+            }
+        } else if (setlist && !query) {
+            handleSearch(null, setlist as string);
+        } else if (setlist && query) {
+            if (!state.searchComplete) {
+                handleSearch(query as string, setlist as string);
+            } else {
+                handleSetlistChosen(state.chosenSetlistData);
+            }
+        } else if (!query && !setlist) {
+            // TODO: Handle neither (set page back to default when navigating back)
+        }
+    }, [router.query.query, router.query.setlist]);
 
     // Helper function to fetch data from a given URL and handle errors
     const fetchData = async (url: string) => {
@@ -40,7 +62,7 @@ export default function SetlistSearch() {
     };
 
     // Triggered when the user initiates a new search
-    const handleSearchStart = () => {
+    const handleSearchStart = async () => {
         setState((prev) => ({
             ...prev,
             searchTriggered: true,
@@ -52,7 +74,7 @@ export default function SetlistSearch() {
     };
 
     // Updates the state with the fetched setlist data after a successful search
-    const handleSearchComplete = (data: any[]) =>
+    const handleSearchComplete = async (data: any[]) =>
         setState((prev) => ({
             ...prev,
             searchComplete: true,
@@ -60,87 +82,102 @@ export default function SetlistSearch() {
         }));
 
     // Main search handler, fetches data based on the query and manages state
-    const handleSearch = async (query: string) => {
-        if (!query) return; // No action if query is empty
-
+    const handleSearch = async (query: string, setlist: string) => {
         setError(null); // Clear any previous errors
         handleSearchStart(); // Reset state for new search
 
         // Delay showing the loader when search bar animation plays
-        if (!animLoading) {
-            setTimeout(() => setAnimLoading(true), 750);
+        if (animLoading) {
+            setTimeout(() => setAnimLoading(false), 750);
         }
-
         setShowLoading(true);
+
         try {
-            if (query.startsWith("https://www.setlist.fm/setlist/")) {
-                // Extract setlist ID from the URL and fetch specific setlist data
-                const setlistId = query.substring(query.lastIndexOf("-") + 1, query.lastIndexOf(".html"));
-                const data = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlistId}`);
-                console.log("Setlist data from link:", data);
+            if (setlist !== null && query === null) {
+                const data = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
                 setShowLoading(false);
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
                     chosenSetlistData: data
                 }));
-            } else {
+                setPageState("setlist");
+            } else if (query !== null && setlist === null) {
                 // Fetch all setlists matching the search query
                 const data = await fetchData(`/api/controllers/get-setlists?query=${query}`);
                 setShowLoading(false);
                 handleSearchComplete(data);
+            } else if (query !== null && setlist !== null) {
+                const queryData = await fetchData(`/api/controllers/get-setlists?query=${query}`);
+                setShowLoading(false);
+                handleSearchComplete(queryData);
+                const setlistData = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
+                await handleSetlistChosen(setlistData);
             }
         } catch (err) {
             // Handle errors during the search process
             console.error("Error during search:", err);
             setShowLoading(false);
-            setError("Something went wrong. Please try again.");
+            setError(`Something went wrong. Please try again: ${err}`);
         }
     };
 
     // Updates the state when a specific setlist is chosen
     const handleSetlistChosen = async (setlist: any) => {
-        setTransitionStage("shrinking");
         console.log("Setlist chosen:", setlist);
-        setTimeout(() => {
-            setTransitionStage("setlist");
-            setState((prev) => ({
-                ...prev,
-                setlistChosen: true,
-                chosenSetlistData: setlist
-            }));
-        }, 1000);
+        setPageState("setlist");
+        setState((prev) => ({
+            ...prev,
+            setlistChosen: true,
+            chosenSetlistData: setlist
+        }));
     };
 
     // Returns to the list view from a chosen setlist
-    const handleBackToList = () => {
-        setTransitionStage("shrinking");
-        setTimeout(() => {
-            setState((prev) => ({
-                ...prev,
-                setlistChosen: false,
-                chosenSetlistData: null
-            }));
-            setTransitionStage("idle");
-        }, 1000);
+    const handleBackToList = async () => {
+        await router.push(
+            {
+                pathname: "/setlist-search",
+                query: { query: router.query.query }
+            },
+            undefined,
+            { shallow: true }
+        );
+
+        setState((prev) => ({
+            ...prev,
+            setlistChosen: false,
+            chosenSetlistData: null
+        }));
+        setPageState("idle");
     };
 
     // Renders the search bar with animations
     const renderSearchBar = () => {
         return (
-            <CSSTransition
-                in={state.searchTriggered}
-                timeout={750}
-                classNames={{
-                    enter: utilStyles["searchbar-enter"],
-                    enterActive: utilStyles["searchbar-enter-active"],
-                    enterDone: utilStyles["searchbar-enter-done"]
-                }}
+            <div
+                className={`fixed left-1/2 transform -translate-x-1/2 transition-all duration-[750ms] ease-in-out ${
+                    state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
+                }`}
             >
-                <div className={utilStyles.searchbar}>
-                    <SearchBar onSearch={handleSearch} aria-label="Search for setlists" />
-                </div>
-            </CSSTransition>
+                <SearchBar
+                    onSearch={async (query: string) => {
+                        if (!query) return;
+                        if (query.startsWith("https://www.setlist.fm/setlist/")) {
+                            // Extract setlist ID from the URL and fetch specific setlist data
+                            const setlist = query.substring(query.lastIndexOf("-") + 1, query.lastIndexOf(".html"));
+                            await router.push({ pathname: "/setlist-search", query: { setlist } }, undefined, {
+                                shallow: true
+                            });
+                        } else {
+                            await router.push({ pathname: "/setlist-search", query: { query } }, undefined, {
+                                shallow: true
+                            });
+                        }
+                    }}
+                    aria-label="Search for setlists"
+                />
+            </div>
         );
     };
 
@@ -148,7 +185,7 @@ export default function SetlistSearch() {
     const renderLoading = () => {
         return (
             showLoading &&
-            animLoading && (
+            !animLoading && (
                 <div className="pt-8 mt-16 flex justify-center items-center">
                     <HashLoader
                         color={"#36d7c0"}
@@ -167,15 +204,25 @@ export default function SetlistSearch() {
     const renderListOfSetlists = () => {
         return (
             state.searchComplete &&
-            animLoading && (
-                <div
-                    className={`transition-all duration-1000 ${
-                        transitionStage === "shrinking" || transitionStage === "setlist"
-                            ? "w-1/3"
-                            : "w-4/5 max-w-3xl mx-auto"
-                    }`}
-                >
-                    <ListOfSetlists setlistData={state.allSetlistsData} onSetlistChosen={handleSetlistChosen} />
+            !animLoading && (
+                <div className="w-4/5 max-w-3xl mx-auto">
+                    <ListOfSetlists
+                        setlistData={state.allSetlistsData}
+                        onSetlistChosen={async (setlist: any) => {
+                            setState((prev) => ({
+                                ...prev,
+                                chosenSetlistData: setlist
+                            }));
+                            await router.push(
+                                {
+                                    pathname: "/setlist-search",
+                                    query: { query: router.query.query, setlist: setlist.id }
+                                },
+                                undefined,
+                                { shallow: true }
+                            );
+                        }}
+                    />
                 </div>
             )
         );
@@ -185,16 +232,9 @@ export default function SetlistSearch() {
     const renderSetlist = () => {
         return (
             state.setlistChosen &&
-            animLoading && (
-                <div
-                    className={`transition-all duration-1000 ease-in-out w-full ${
-                        transitionStage === "setlist" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
-                    }`}
-                    style={{
-                        visibility: transitionStage === "setlist" ? "visible" : "hidden"
-                    }}
-                >
-                    {transitionStage === "setlist" && (
+            !animLoading && (
+                <div className="w-full">
+                    {pageState === "setlist" && (
                         <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} />
                     )}
                 </div>
@@ -205,10 +245,9 @@ export default function SetlistSearch() {
     // Displays any error messages
     const renderError = () => error && <div className="pt-8 mt-5 text-red-500 text-center">{error}</div>;
 
-    // Main render function for the component
     return (
         <Layout>
-            <div className="p-5">
+            <div className="p-5 overflow-hidden">
                 {renderSearchBar()}
                 {renderLoading()}
                 {renderError()}
