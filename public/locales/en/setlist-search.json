@@ -5,5 +5,6 @@
     "artistAtVenue": "{{artistName}} at {{location}}",
     "setlistDate": "Date: {{date}}",
     "songCount": "{{songCount}} song",
-    "songCount_plural": "{{songCount}} songs"
+    "songCount_plural": "{{songCount}} songs",
+    "exportToSpotify": "Export to Spotify"
 }

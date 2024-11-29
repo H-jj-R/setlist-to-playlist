@@ -17,6 +17,7 @@ export default function SetlistSearch() {
         mounted: false,
         searchTriggered: false,
         searchComplete: false,
+        lastQuery: null as string | null,
         allSetlistsData: [],
         setlistChosen: false,
         chosenSetlistData: null,
@@ -27,19 +28,25 @@ export default function SetlistSearch() {
     });
 
     useEffect(() => {
-        setState((prev) => ({ ...prev, mounted: true }));
+        setState((prev) => ({
+            ...prev,
+            mounted: true
+        }));
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
     useEffect(() => {
         const { query, setlist } = router.query;
         if (query && !setlist) {
-            if (state.pageState !== "losSetlist") handleSearch(query as string, null);
+            if (state.pageState !== "losSetlist" || query !== state.lastQuery) {
+                handleSearch(query as string, null);
+            }
         } else if (setlist && !query) {
             handleSearch(null, setlist as string);
         } else if (setlist && query) {
-            if (!state.searchComplete) handleSearch(query as string, setlist as string);
-            else {
+            if (!state.searchComplete) {
+                handleSearch(query as string, setlist as string);
+            } else {
                 handleSetlistChosen(state.chosenSetlistData);
                 setState((prev) => ({
                     ...prev,
@@ -47,8 +54,17 @@ export default function SetlistSearch() {
                 }));
             }
         } else {
-            setState((prev) => ({ ...prev, searchTriggered: false, animLoading: true, pageState: "idle" }));
+            setState((prev) => ({
+                ...prev,
+                searchTriggered: false,
+                animLoading: true,
+                pageState: "idle"
+            }));
         }
+        setState((prev) => ({
+            ...prev,
+            lastQuery: router.query.query as string
+        }));
     }, [router.query.query, router.query.setlist]);
 
     const fetchData = async (url: string) => {
@@ -82,20 +98,37 @@ export default function SetlistSearch() {
     };
 
     const handleSearch = async (query: string | null, setlist: string | null) => {
-        setState((prev) => ({ ...prev, error: null }));
+        setState((prev) => ({
+            ...prev,
+            error: null
+        }));
         handleSearchStart();
 
         if (state.animLoading) {
-            setTimeout(() => setState((prev) => ({ ...prev, animLoading: false })), 750);
+            setTimeout(
+                () =>
+                    setState((prev) => ({
+                        ...prev,
+                        animLoading: false
+                    })),
+                750
+            );
         }
 
-        setState((prev) => ({ ...prev, showLoading: true }));
+        setState((prev) => ({
+            ...prev,
+            showLoading: true
+        }));
 
         try {
             if (query && !setlist) {
                 const data = await fetchData(`/api/controllers/get-setlists?query=${query}`);
                 handleSearchComplete(data);
-                setState((prev) => ({ ...prev, showLoading: false, pageState: "listOfSetlists" }));
+                setState((prev) => ({
+                    ...prev,
+                    showLoading: false,
+                    pageState: "listOfSetlists"
+                }));
             } else if (!query && setlist) {
                 const data = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
                 setState((prev) => ({
@@ -107,11 +140,17 @@ export default function SetlistSearch() {
                 }));
             } else if (query && setlist) {
                 const queryData = await fetchData(`/api/controllers/get-setlists?query=${query}`);
-                setState((prev) => ({ ...prev, showLoading: false }));
+                setState((prev) => ({
+                    ...prev,
+                    showLoading: false
+                }));
                 handleSearchComplete(queryData);
                 const setlistData = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
                 handleSetlistChosen(setlistData);
-                setState((prev) => ({ ...prev, pageState: "losSetlist" }));
+                setState((prev) => ({
+                    ...prev,
+                    pageState: "losSetlist"
+                }));
             }
         } catch (err) {
             console.error("Error during search:", err);
@@ -132,9 +171,14 @@ export default function SetlistSearch() {
     };
 
     const handleBackToList = async () => {
-        await router.push({ pathname: "/setlist-search", query: { query: router.query.query } }, undefined, {
-            shallow: true
-        });
+        await router.push(
+            {
+                pathname: "/setlist-search",
+                query: { query: router.query.query }
+            },
+            undefined,
+            { shallow: true }
+        );
         setState((prev) => ({
             ...prev,
             setlistChosen: false,
@@ -142,6 +186,10 @@ export default function SetlistSearch() {
             pageState: "listOfSetlists"
         }));
     };
+
+    const handleExport = async () => {
+
+    }
 
     if (!state.mounted) return null;
 
@@ -163,7 +211,10 @@ export default function SetlistSearch() {
                                 ? query.split("-").pop()?.replace(".html", "")
                                 : null;
                             await router.push(
-                                { pathname: "/setlist-search", query: { query: setlistId || query } },
+                                {
+                                    pathname: "/setlist-search",
+                                    query: { query: setlistId || query }
+                                },
                                 undefined,
                                 { shallow: true }
                             );
@@ -190,14 +241,17 @@ export default function SetlistSearch() {
                         {/* Error indicator */}
                         {state.error && <div className="pt-8 mt-5 text-red-500 text-center">{state.error}</div>}
 
-                        <div className="flex gap-4 mt-14">
+                        <div className="flex gap-4 mt-[3rem]">
                             {/* List of setlists */}
                             {state.searchComplete && !state.animLoading && (
                                 <div className="w-4/5 max-w-3xl mx-auto">
                                     <ListOfSetlists
                                         setlistData={state.allSetlistsData}
                                         onSetlistChosen={async (setlist: any) => {
-                                            setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
+                                            setState((prev) => ({
+                                                ...prev,
+                                                chosenSetlistData: setlist
+                                            }));
                                             await router.push(
                                                 {
                                                     pathname: "/setlist-search",
@@ -215,7 +269,7 @@ export default function SetlistSearch() {
                             {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
                                 state.pageState === "setlist") && (
                                 <div className="w-full">
-                                    <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} />
+                                    <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} onExport={handleExport} />
                                 </div>
                             )}
                         </div>
