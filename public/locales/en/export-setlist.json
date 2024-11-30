@@ -1,0 +1,13 @@
+{
+    "exportToSpotify": "Export to Spotify",
+    "playlistName": "Playlist Name",
+    "enterPlaylistName": "Enter playlist name",
+    "playlistDescription": "Playlist Description",
+    "enterPlaylistDescription": "Enter playlist description",
+    "playlistCoverImage": " Playlist Cover Image",
+    "privatePlaylist": "Private Playlist",
+    "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
+    "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
+    "removeImage": "Remove Image",
+    "export": "Export"
+}

@@ -5,6 +5,7 @@ import SearchBar from "../components/SearchBar";
 import ListOfSetlists from "../components/ListOfSetlists";
 import HashLoader from "react-spinners/HashLoader";
 import Setlist from "../components/Setlist";
+import ExportDialog from "../components/ExportDialog";
 import { useTheme } from "next-themes";
 
 /**
@@ -14,15 +15,16 @@ export default function SetlistSearch() {
     const router = useRouter();
     const { resolvedTheme } = useTheme();
     const [state, setState] = useState({
-        mounted: false,
-        searchTriggered: false,
-        searchComplete: false,
+        mounted: false as boolean,
+        searchTriggered: false as boolean,
+        searchComplete: false as boolean,
         lastQuery: null as string | null,
-        allSetlistsData: [],
-        setlistChosen: false,
-        chosenSetlistData: null,
-        animLoading: true,
-        showLoading: false,
+        allSetlistsData: [] as any,
+        setlistChosen: false as boolean,
+        chosenSetlistData: null as any,
+        exportDialogOpen: false as boolean,
+        animLoading: true as boolean,
+        showLoading: false as boolean,
         error: null as string | null,
         pageState: "idle" as "idle" | "listOfSetlists" | "losSetlist" | "setlist"
     });
@@ -36,16 +38,16 @@ export default function SetlistSearch() {
     }, [resolvedTheme]);
 
     useEffect(() => {
-        const { query, setlist } = router.query;
-        if (query && !setlist) {
-            if (state.pageState !== "losSetlist" || query !== state.lastQuery) {
-                handleSearch(query as string, null);
+        const { q, setlist } = router.query;
+        if (q && !setlist) {
+            if (state.pageState !== "losSetlist" || q !== state.lastQuery) {
+                handleSearch(q as string, null);
             }
-        } else if (setlist && !query) {
+        } else if (setlist && !q) {
             handleSearch(null, setlist as string);
-        } else if (setlist && query) {
+        } else if (setlist && q) {
             if (!state.searchComplete) {
-                handleSearch(query as string, setlist as string);
+                handleSearch(q as string, setlist as string);
             } else {
                 handleSetlistChosen(state.chosenSetlistData);
                 setState((prev) => ({
@@ -63,9 +65,9 @@ export default function SetlistSearch() {
         }
         setState((prev) => ({
             ...prev,
-            lastQuery: router.query.query as string
+            lastQuery: router.query.q as string
         }));
-    }, [router.query.query, router.query.setlist]);
+    }, [router.query.q, router.query.setlist]);
 
     const fetchData = async (url: string) => {
         const response = await fetch(url);
@@ -174,7 +176,7 @@ export default function SetlistSearch() {
         await router.push(
             {
                 pathname: "/setlist-search",
-                query: { query: router.query.query }
+                query: { q: router.query.q }
             },
             undefined,
             { shallow: true }
@@ -187,95 +189,112 @@ export default function SetlistSearch() {
         }));
     };
 
-    const handleExport = async () => {
-
-    }
-
     if (!state.mounted) return null;
 
     return (
-        <Layout>
-            {/* Search bar */}
-            <div className="p-5 overflow-hidden">
-                <div
-                    className={`fixed left-1/2 transform -translate-x-1/2 transition-all duration-[750ms] ease-in-out ${
-                        state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
-                    }`}
-                >
-                    <SearchBar
-                        onSearch={async (query: string) => {
-                            if (!query) {
-                                return;
-                            }
-                            const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
-                                ? query.split("-").pop()?.replace(".html", "")
-                                : null;
-                            await router.push(
-                                {
-                                    pathname: "/setlist-search",
-                                    query: { query: setlistId || query }
-                                },
-                                undefined,
-                                { shallow: true }
-                            );
-                        }}
-                        aria-label="Search for setlists"
-                    />
-                </div>
-
-                {/* Loading indicator */}
-                {state.showLoading && !state.animLoading && (
-                    <div className="pt-8 mt-16 flex justify-center items-center">
-                        <HashLoader
-                            color="#36d7c0"
-                            loading={state.showLoading}
-                            size={150}
-                            aria-label="Loader"
-                            data-testid="loader"
+        <>
+            <Layout>
+                {/* Search bar */}
+                <div className="p-5 overflow-hidden">
+                    <div
+                        className={`fixed left-1/2 transform -translate-x-1/2 transition-all duration-[750ms] ease-in-out ${
+                            state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
+                        }`}
+                    >
+                        <SearchBar
+                            onSearch={async (query: string) => {
+                                if (!query) {
+                                    return;
+                                }
+                                const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
+                                    ? query.split("-").pop()?.replace(".html", "")
+                                    : null;
+                                await router.push(
+                                    {
+                                        pathname: "/setlist-search",
+                                        query: { q: setlistId || query }
+                                    },
+                                    undefined,
+                                    { shallow: true }
+                                );
+                            }}
+                            aria-label="Search for setlists"
                         />
                     </div>
-                )}
 
-                {state.pageState !== "idle" && (
-                    <>
-                        {/* Error indicator */}
-                        {state.error && <div className="pt-8 mt-5 text-red-500 text-center">{state.error}</div>}
-
-                        <div className="flex gap-4 mt-[3rem]">
-                            {/* List of setlists */}
-                            {state.searchComplete && !state.animLoading && (
-                                <div className="w-4/5 max-w-3xl mx-auto">
-                                    <ListOfSetlists
-                                        setlistData={state.allSetlistsData}
-                                        onSetlistChosen={async (setlist: any) => {
-                                            setState((prev) => ({
-                                                ...prev,
-                                                chosenSetlistData: setlist
-                                            }));
-                                            await router.push(
-                                                {
-                                                    pathname: "/setlist-search",
-                                                    query: { query: router.query.query, setlist: setlist.id }
-                                                },
-                                                undefined,
-                                                { shallow: true }
-                                            );
-                                        }}
-                                    />
-                                </div>
-                            )}
-
-                            {/* Setlist display */}
-                            {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
-                                state.pageState === "setlist") && (
-                                <div className="w-full">
-                                    <Setlist setlist={state.chosenSetlistData} onClose={handleBackToList} onExport={handleExport} />
-                                </div>
-                            )}
+                    {/* Loading indicator */}
+                    {state.showLoading && !state.animLoading && (
+                        <div className="pt-8 mt-16 flex justify-center items-center">
+                            <HashLoader
+                                color="#36d7c0"
+                                loading={state.showLoading}
+                                size={150}
+                                aria-label="Loader"
+                                data-testid="loader"
+                            />
                         </div>
-                    </>
-                )}
-            </div>
-        </Layout>
+                    )}
+
+                    {state.pageState !== "idle" && (
+                        <>
+                            {/* Error indicator */}
+                            {state.error && <div className="pt-8 mt-5 text-red-500 text-center">{state.error}</div>}
+
+                            <div className="flex gap-4 mt-[3rem]">
+                                {/* List of setlists */}
+                                {state.searchComplete && !state.animLoading && (
+                                    <div className="w-4/5 max-w-3xl mx-auto">
+                                        <ListOfSetlists
+                                            setlistData={state.allSetlistsData}
+                                            onSetlistChosen={async (setlist: any) => {
+                                                setState((prev) => ({
+                                                    ...prev,
+                                                    chosenSetlistData: setlist
+                                                }));
+                                                await router.push(
+                                                    {
+                                                        pathname: "/setlist-search",
+                                                        query: { q: router.query.q, setlist: setlist.id }
+                                                    },
+                                                    undefined,
+                                                    { shallow: true }
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Setlist display */}
+                                {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
+                                    state.pageState === "setlist") && (
+                                    <div className="w-full">
+                                        <Setlist
+                                            setlist={state.chosenSetlistData}
+                                            onClose={handleBackToList}
+                                            onExport={async () => {
+                                                setState((prev) => ({
+                                                    ...prev,
+                                                    exportDialogOpen: true
+                                                }));
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </Layout>
+            <ExportDialog
+                setlist={state.chosenSetlistData}
+                isOpen={state.exportDialogOpen}
+                onClose={async () => {
+                    setState((prev) => ({
+                        ...prev,
+                        exportDialogOpen: false
+                    }));
+                }}
+            />
+        </>
     );
 }
