@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "next-themes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,7 +11,6 @@ interface SetlistProps {
 
 const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
     const { t: i18n } = useTranslation("setlist-search");
-    const { resolvedTheme } = useTheme();
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString.split("-").reverse().join("-"));

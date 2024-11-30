@@ -6,6 +6,7 @@ import commonEn from "../public/locales/en/common.json";
 import landingPageEn from "../public/locales/en/landing-page.json";
 import setlistSearchEn from "../public/locales/en/setlist-search.json";
 import errorsEn from "../public/locales/en/errors.json";
+import exportSetlistEn from "../public/locales/en/export-setlist.json";
 
 if (!i18n.isInitialized) {
     i18n.use(LanguageDetector)
@@ -16,7 +17,8 @@ if (!i18n.isInitialized) {
                     common: commonEn,
                     "landing-page": landingPageEn,
                     "setlist-search": setlistSearchEn,
-                    "errors": errorsEn
+                    "errors": errorsEn,
+                    "export-setlist":exportSetlistEn
                 }
             },
             fallbackLng: "en",
