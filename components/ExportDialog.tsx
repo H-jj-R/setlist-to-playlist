@@ -150,10 +150,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
 
                     {/* Playlist Name */}
                     <div className="mb-4">
-                        <label
-                            htmlFor="playlistName"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                        >
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             {i18n("playlistName")}
                         </label>
                         <input
@@ -172,14 +169,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
 
                     {/* Playlist Description */}
                     <div className="mb-4">
-                        <label
-                            htmlFor="playlistDescription"
-                            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                        >
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             {i18n("playlistDescription")}
                         </label>
                         <textarea
-                            id="playlistDescription"
                             className="mt-1 p-2 w-full min-h-24 border rounded-lg overflow-auto resize-none"
                             maxLength={300}
                             value={state.playlistDescription}

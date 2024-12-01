@@ -77,7 +77,7 @@ export default function SetlistSearch() {
                 `${response.status}: Failed to fetch data - Error: ${errorResponse.error?.message || "Unknown error"}`
             );
         }
-        return response.json();
+        return await response.json();
     };
 
     const handleSearchStart = () => {
@@ -189,6 +189,33 @@ export default function SetlistSearch() {
         }));
     };
 
+    const handleExport = async () => {
+        try {
+            // Check the user's token status
+            const response = await fetch("/api/controllers/check-for-user-token", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (response.status === 200) {
+                // User is authorised, proceed with export dialog
+                setState((prev) => ({
+                    ...prev,
+                    exportDialogOpen: true
+                }));
+            } else if (response.status === 401) {
+                // User needs to authorise, open Spotify OAuth
+                const redirectState = encodeURIComponent(window.location.pathname + window.location.search);
+                router.push(`/api/spotify/authorise?redirect=${redirectState}`);
+            } else {
+                // Handle other potential errors
+                console.error("Unexpected response from checking user token:", response.status);
+            }
+        } catch (error) {
+            console.error("Error checking authorisation:", error);
+        }
+    };
+
     if (!state.mounted) return null;
 
     return (
@@ -271,12 +298,7 @@ export default function SetlistSearch() {
                                         <Setlist
                                             setlist={state.chosenSetlistData}
                                             onClose={handleBackToList}
-                                            onExport={async () => {
-                                                setState((prev) => ({
-                                                    ...prev,
-                                                    exportDialogOpen: true
-                                                }));
-                                            }}
+                                            onExport={handleExport}
                                         />
                                     </div>
                                 )}
