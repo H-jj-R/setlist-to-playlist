@@ -6,5 +6,7 @@
     "setlistDate": "Date: {{date}}",
     "songCount": "{{songCount}} song",
     "songCount_plural": "{{songCount}} songs",
+    "noSongsFound": "No songs found!",
+    "loadMore": "Load More",
     "exportToSpotify": "Export to Spotify"
 }

@@ -5,7 +5,7 @@ import { setTimeout } from "timers/promises";
  * Search for a setlist by artist Mbid.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { artistMbid } = req.query;
+    const { artistMbid, page = 1 } = req.query;
     const maxRetries = 5; // Maximum number of retry attempts if rate-limited
     const baseDelay = 1000; // Base delay for exponential backoff during retries
 
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     async function fetchSetlist(retries: number = 0): Promise<Response> {
         const response = await fetch(
-            `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${artistMbid}&p=1&sort=recency`,
+            `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${artistMbid}&p=${page}&sort=recency`,
             {
                 method: "GET",
                 headers: {
@@ -52,13 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const data = await response.json();
-
-        // Filter out setlists with no songs
-        if (data.setlist) {
-            data.setlist = data.setlist.filter((setlist: any) =>
-                setlist.sets.set.some((set: any) => set.song && set.song.length > 0)
-            );
-        }
 
         if (!data.setlist || data.setlist.length === 0) {
             res.status(404).json({
