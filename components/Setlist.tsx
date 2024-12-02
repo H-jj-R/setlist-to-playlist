@@ -25,7 +25,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
         setlist.venue.city.country.code === "US" ? `, ${setlist.venue.city.stateCode}` : ""
     }, ${setlist.venue.city.country.name}`;
 
-    const SongListItem = ({ song, isLast }: { song: any; isLast: boolean }) => (
+    const SongListItem = ({ song, isFirst, isLast }: { song: any; isFirst: boolean; isLast: boolean }) => (
         <li className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}>
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
@@ -35,7 +35,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     )}
                     {/* Song name */}
                     <span className={`font-medium ${song.tape ? "italic opacity-80" : ""}`}>
-                        {song.name || (song.tape && !song.name ? "Intro" : "(Unknown)")}
+                        {song.name || (song.tape && !song.name ? (isFirst ? "Intro" : "Interlude") : "(Unknown)")}
                     </span>
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400 text-right max-w-[60%]">
@@ -85,11 +85,13 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                 <ul className="space-y-1 pb-6">
                     {setlist.sets.set.flatMap((set: any, setIdx: number, setArray: any[]) =>
                         set.song.map((song: any, songIdx: number) => {
+                            const isFirst = setIdx === 0 && songIdx === 0;
                             const isLast = setIdx === setArray.length - 1 && songIdx === set.song.length - 1;
                             return (
                                 <SongListItem
                                     key={`${songIdx}-${song.name || "unknown"}`}
                                     song={song}
+                                    isFirst={isFirst}
                                     isLast={isLast}
                                 />
                             );

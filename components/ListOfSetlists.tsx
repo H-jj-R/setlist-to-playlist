@@ -12,6 +12,7 @@ interface ListOfSetlistsProps {
  * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
+    const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("setlist-search");
     const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []);
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
@@ -61,7 +62,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                         disabled={isLoading}
                         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
-                        {isLoading ? i18n("loading") : i18n("loadMore")}
+                        {isLoading ? `${i18nCommon("loading")}...` : i18n("loadMore")}
                     </button>
                 )}
             </div>

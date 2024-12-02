@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
@@ -270,7 +270,7 @@ export default function SetlistSearch() {
                             <div className="flex gap-4 mt-[3rem]">
                                 {/* List of setlists */}
                                 {state.searchComplete && !state.animLoading && (
-                                    <div className="w-4/5 max-w-3xl mx-auto">
+                                    <div className="w-4/5 max-w-3xl mx-auto animate-fadeIn">
                                         <ListOfSetlists
                                             setlistData={state.allSetlistsData}
                                             onSetlistChosen={async (setlist: any) => {
@@ -294,7 +294,7 @@ export default function SetlistSearch() {
                                 {/* Setlist display */}
                                 {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
                                     state.pageState === "setlist") && (
-                                    <div className="w-full">
+                                    <div className="w-full animate-fadeIn">
                                         <Setlist
                                             setlist={state.chosenSetlistData}
                                             onClose={handleBackToList}
@@ -309,6 +309,10 @@ export default function SetlistSearch() {
             </Layout>
             <ExportDialog
                 setlist={state.chosenSetlistData}
+                artistData={{
+                    spotifyArtist: state.allSetlistsData.spotifyArtist,
+                    setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                }}
                 isOpen={state.exportDialogOpen}
                 onClose={async () => {
                     setState((prev) => ({

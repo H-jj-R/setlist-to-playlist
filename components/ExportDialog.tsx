@@ -1,14 +1,16 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 import { useDropzone } from "react-dropzone";
 
 interface ExportDialogProps {
     setlist: Record<string, any>; // The setlist data to be exported
+    artistData: Record<string, any>;
     isOpen: boolean; // Controls the visibility of the dialog
     onClose: () => void; // Close function
 }
 
-const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose }) => {
+const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, onClose }) => {
     const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("export-setlist");
 
@@ -21,8 +23,24 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
         error: null as string | null
     });
 
-    const fileInputRef = useRef(null);
-    const MAX_FILE_SIZE = 256 * 1024; // 256 KB
+    useEffect(() => {
+        if (isOpen) {
+            setState((prev) => ({
+                ...prev,
+                playlistName: `${artistData.spotifyArtist.name} Setlist - ${format(
+                    parseDate(setlist.eventDate),
+                    "MMMM dd, yyyy"
+                )}`
+            }));
+        }
+    }, [isOpen]);
+
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split("-");
+        return new Date(`${year}-${month}-${day}`);
+    };
+
+    const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
 
     const processImage = (file: File) => {
         return new Promise((resolve, reject) => {
@@ -54,8 +72,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
                     let fileSize = base64Image.length;
 
                     // Downscale resolution until under 256KB
-                    while (fileSize > MAX_FILE_SIZE) {
-                        const scaleFactor = Math.sqrt(MAX_FILE_SIZE / fileSize);
+                    while (fileSize > MAX_IMAGE_FILE_SIZE) {
+                        const scaleFactor = Math.sqrt(MAX_IMAGE_FILE_SIZE / fileSize);
                         const newWidth = Math.floor(canvas.width * scaleFactor);
                         const newHeight = Math.floor(canvas.height * scaleFactor);
 
@@ -111,9 +129,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
             image: null,
             imagePreview: null
         }));
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
     };
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -155,6 +170,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
                         </label>
                         <input
                             type="text"
+                            maxLength={100}
                             className="mt-1 p-2 w-full border rounded-lg"
                             value={state.playlistName}
                             onChange={(e) => {
@@ -164,6 +180,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, isOpen, onClose })
                                 }));
                             }}
                             placeholder={i18n("enterPlaylistName")}
+                            required
                         />
                     </div>
 
