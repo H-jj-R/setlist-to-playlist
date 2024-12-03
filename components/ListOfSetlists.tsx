@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SetlistChoiceBlock from "./SetlistChoiceBlock";
 
@@ -12,7 +12,31 @@ interface ListOfSetlistsProps {
  * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
+    const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("setlist-search");
+    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []);
+    const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const hasMorePages = currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    const loadMoreSetlists = async () => {
+        setIsLoading(true);
+
+        try {
+            const response = await fetch(
+                `/api/setlist-fm/search-setlists?artistMbid=${setlistData.setlistfmArtist.mbid}&page=${currentPage + 1}`
+            );
+            if (!response.ok) throw new Error("Failed to load more setlists");
+
+            const newData = await response.json();
+            setSetlists((prevSetlists) => [...prevSetlists, ...newData.setlist]);
+            setCurrentPage((prevPage) => prevPage + 1);
+        } catch (error) {
+            console.error("Error loading more setlists:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="h-[calc(100vh-9rem)] overflow-y-auto border border-gray-300 rounded-lg w-full">
@@ -28,10 +52,19 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                     </h2>
                 </div>
                 <ul className="space-y-3 px-4 w-full">
-                    {setlistData.setlists.setlist.map((setlist: Record<string, any>) => (
+                    {setlists.map((setlist: Record<string, any>) => (
                         <SetlistChoiceBlock key={setlist.id} setlist={setlist} onClick={onSetlistChosen} />
                     ))}
                 </ul>
+                {hasMorePages && (
+                    <button
+                        onClick={loadMoreSetlists}
+                        disabled={isLoading}
+                        className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        {isLoading ? `${i18nCommon("loading")}...` : i18n("loadMore")}
+                    </button>
+                )}
             </div>
         </div>
     );

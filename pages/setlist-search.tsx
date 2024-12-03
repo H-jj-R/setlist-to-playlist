@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
@@ -77,7 +77,7 @@ export default function SetlistSearch() {
                 `${response.status}: Failed to fetch data - Error: ${errorResponse.error?.message || "Unknown error"}`
             );
         }
-        return response.json();
+        return await response.json();
     };
 
     const handleSearchStart = () => {
@@ -189,6 +189,33 @@ export default function SetlistSearch() {
         }));
     };
 
+    const handleExport = async () => {
+        try {
+            // Check the user's token status
+            const response = await fetch("/api/controllers/check-for-user-token", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (response.status === 200) {
+                // User is authorised, proceed with export dialog
+                setState((prev) => ({
+                    ...prev,
+                    exportDialogOpen: true
+                }));
+            } else if (response.status === 401) {
+                // User needs to authorise, open Spotify OAuth
+                const redirectState = encodeURIComponent(window.location.pathname + window.location.search);
+                router.push(`/api/spotify/authorise?redirect=${redirectState}`);
+            } else {
+                // Handle other potential errors
+                console.error("Unexpected response from checking user token:", response.status);
+            }
+        } catch (error) {
+            console.error("Error checking authorisation:", error);
+        }
+    };
+
     if (!state.mounted) return null;
 
     return (
@@ -243,7 +270,7 @@ export default function SetlistSearch() {
                             <div className="flex gap-4 mt-[3rem]">
                                 {/* List of setlists */}
                                 {state.searchComplete && !state.animLoading && (
-                                    <div className="w-4/5 max-w-3xl mx-auto">
+                                    <div className="w-4/5 max-w-3xl mx-auto animate-fadeIn">
                                         <ListOfSetlists
                                             setlistData={state.allSetlistsData}
                                             onSetlistChosen={async (setlist: any) => {
@@ -267,16 +294,11 @@ export default function SetlistSearch() {
                                 {/* Setlist display */}
                                 {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
                                     state.pageState === "setlist") && (
-                                    <div className="w-full">
+                                    <div className="w-full animate-fadeIn">
                                         <Setlist
                                             setlist={state.chosenSetlistData}
                                             onClose={handleBackToList}
-                                            onExport={async () => {
-                                                setState((prev) => ({
-                                                    ...prev,
-                                                    exportDialogOpen: true
-                                                }));
-                                            }}
+                                            onExport={handleExport}
                                         />
                                     </div>
                                 )}
@@ -287,6 +309,10 @@ export default function SetlistSearch() {
             </Layout>
             <ExportDialog
                 setlist={state.chosenSetlistData}
+                artistData={{
+                    spotifyArtist: state.allSetlistsData.spotifyArtist,
+                    setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                }}
                 isOpen={state.exportDialogOpen}
                 onClose={async () => {
                     setState((prev) => ({

@@ -44,10 +44,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             );
         }
 
-        const { mbid } = await setlistfmArtistResponse.json();
+        const setlistfmArtist = await setlistfmArtistResponse.json();
 
         // Step 3: Fetch setlists by the artist's mbid from Setlist.fm
-        const setlistsResponse = await fetch(`${baseUrl}/api/setlist-fm/search-setlists?artistMbid=${mbid}`);
+        const setlistsResponse = await fetch(`${baseUrl}/api/setlist-fm/search-setlists?artistMbid=${setlistfmArtist.mbid}`);
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistsResponse.ok) {
@@ -60,6 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Return a combined response containing Spotify artist details and their setlists
         res.status(200).json({
             spotifyArtist,
+            setlistfmArtist,
             setlists: await setlistsResponse.json()
         });
     } catch (error) {

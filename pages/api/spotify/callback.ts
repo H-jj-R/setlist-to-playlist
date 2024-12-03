@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ]);
 
         // Redirect the user to the original state URL or the home page if none provided
-        const redirectUrl = state ? `${baseUrl}${decodeURIComponent(state as string)}` : "/";
+        const redirectUrl = state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl;
         res.redirect(redirectUrl);
     } catch (error) {
         console.error("Error in callback: ", error);
