@@ -307,20 +307,23 @@ export default function SetlistSearch() {
                     )}
                 </div>
             </Layout>
-            <ExportDialog
-                setlist={state.chosenSetlistData}
-                artistData={{
-                    spotifyArtist: state.allSetlistsData.spotifyArtist,
-                    setlistfmArtist: state.allSetlistsData.setlistfmArtist
-                }}
-                isOpen={state.exportDialogOpen}
-                onClose={async () => {
-                    setState((prev) => ({
-                        ...prev,
-                        exportDialogOpen: false
-                    }));
-                }}
-            />
+            {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
+                state.pageState === "setlist") && (
+                <ExportDialog
+                    setlist={state.chosenSetlistData}
+                    artistData={{
+                        spotifyArtist: state.allSetlistsData.spotifyArtist,
+                        setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                    }}
+                    isOpen={state.exportDialogOpen}
+                    onClose={async () => {
+                        setState((prev) => ({
+                            ...prev,
+                            exportDialogOpen: false
+                        }));
+                    }}
+                />
+            )}
         </>
     );
 }
