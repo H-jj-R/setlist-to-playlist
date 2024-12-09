@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
  * Requires an access token, encrypted in cookies.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { query } = req.query;
+    const { artist, track } = req.query;
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_access_token;
 
@@ -16,9 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: "No access token" });
     }
 
-    // Decrypt the access token using the AES decryption function
     const accessToken = decryptToken(encryptedAccessToken);
-    const searchUrl = `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=1`;
+    const searchUrl = `https://api.spotify.com/v1/search?q=${track}+artist:${artist}&type=track&limit=5`;
 
     try {
         // Make a GET request to Spotify's search API
@@ -33,23 +32,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!response.ok) {
             const errorResponse = await response.json();
             const errorMessage = errorResponse.error?.message || "Unknown error";
-            throw new Error(
-                `${response.status}: Error searching artist - Error: ${errorMessage}`
-            );
+            throw new Error(`${response.status}: Error searching song - Error: ${errorMessage}`);
         }
 
         // Parse the JSON response
         const data = await response.json();
 
-        // Check if the artist was found; if not, throw an error
-        if (data.artists.items.length === 0) {
-            throw new Error("Artist not found");
-        }
+        // TODO: Check that track actually is the right track (better algorithm)
+        // Check if there is a perfectly matching track from the top 5 results
+        const trackMatch = data.tracks.items.find(
+            (trackList) =>
+                trackList.name.toLowerCase() === track.toString().toLowerCase() &&
+                trackList.album.album_type !== "compilation"
+        );
 
-        // Respond with the first artist's (best match) data
-        res.status(200).json(data.artists.items[0]);
+        if (trackMatch) {
+            // If there's an exact match, send it
+            res.status(200).json({
+                ...trackMatch
+            });
+        } else {
+            // If not, send the top result
+            res.status(200).json({
+                ...data.tracks.items[0]
+            });
+        }
     } catch (error) {
-        console.error("Error searching artist: ", error);
+        console.error("Error searching song: ", error);
         res.status(500).json({ error: error.message });
     }
 }
