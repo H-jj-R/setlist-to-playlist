@@ -3,10 +3,11 @@ import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
 import ListOfSetlists from "../components/ListOfSetlists";
-import HashLoader from "react-spinners/HashLoader";
 import Setlist from "../components/Setlist";
 import ExportDialog from "../components/ExportDialog";
 import { useTheme } from "next-themes";
+import CustomHashLoader from "../components/CustomHashLoader";
+import ErrorMessage from "../components/ErrorMessage";
 
 /**
  * Main page for viewing setlists.
@@ -99,6 +100,23 @@ export default function SetlistSearch() {
         }));
     };
 
+    const handleSearchRouterPush = async (query: string) => {
+        if (!query) {
+            return;
+        }
+        const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
+            ? query.split("-").pop()?.replace(".html", "")
+            : null;
+        await router.push(
+            {
+                pathname: "/setlist-search",
+                query: { q: setlistId || query }
+            },
+            undefined,
+            { shallow: true }
+        );
+    };
+
     const handleSearch = async (query: string | null, setlist: string | null) => {
         setState((prev) => ({
             ...prev,
@@ -164,6 +182,21 @@ export default function SetlistSearch() {
         }
     };
 
+    const handleSetlistChosenRouterPush = async (setlist: any) => {
+        setState((prev) => ({
+            ...prev,
+            chosenSetlistData: setlist
+        }));
+        await router.push(
+            {
+                pathname: "/setlist-search",
+                query: { q: router.query.q, setlist: setlist.id }
+            },
+            undefined,
+            { shallow: true }
+        );
+    };
+
     const handleSetlistChosen = (setlist: any) => {
         setState((prev) => ({
             ...prev,
@@ -216,6 +249,13 @@ export default function SetlistSearch() {
         }
     };
 
+    const handleExportDialogClosed = async () => {
+        setState((prev) => ({
+            ...prev,
+            exportDialogOpen: false
+        }));
+    };
+
     if (!state.mounted) return null;
 
     return (
@@ -228,44 +268,24 @@ export default function SetlistSearch() {
                             state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                         }`}
                     >
-                        <SearchBar
-                            onSearch={async (query: string) => {
-                                if (!query) {
-                                    return;
-                                }
-                                const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
-                                    ? query.split("-").pop()?.replace(".html", "")
-                                    : null;
-                                await router.push(
-                                    {
-                                        pathname: "/setlist-search",
-                                        query: { q: setlistId || query }
-                                    },
-                                    undefined,
-                                    { shallow: true }
-                                );
-                            }}
-                            aria-label="Search for setlists"
-                        />
+                        <SearchBar onSearch={handleSearchRouterPush} aria-label="Search for setlists" />
                     </div>
 
                     {/* Loading indicator */}
                     {state.showLoading && !state.animLoading && (
                         <div className="pt-8 mt-16 flex justify-center items-center">
-                            <HashLoader
-                                color="#36d7c0"
-                                loading={state.showLoading}
-                                size={150}
-                                aria-label="Loader"
-                                data-testid="loader"
-                            />
+                            <CustomHashLoader showLoading={state.showLoading} size={150} />
                         </div>
                     )}
 
                     {state.pageState !== "idle" && (
                         <>
                             {/* Error indicator */}
-                            {state.error && <div className="pt-8 mt-5 text-red-500 text-center">{state.error}</div>}
+                            {state.error && (
+                                <div className="pt-8 mt-5 max-w-4xl mx-auto">
+                                    <ErrorMessage message={state.error} />
+                                </div>
+                            )}
 
                             <div className="flex gap-4 mt-[3rem]">
                                 {/* List of setlists */}
@@ -273,20 +293,7 @@ export default function SetlistSearch() {
                                     <div className="w-4/5 max-w-3xl mx-auto animate-fadeIn">
                                         <ListOfSetlists
                                             setlistData={state.allSetlistsData}
-                                            onSetlistChosen={async (setlist: any) => {
-                                                setState((prev) => ({
-                                                    ...prev,
-                                                    chosenSetlistData: setlist
-                                                }));
-                                                await router.push(
-                                                    {
-                                                        pathname: "/setlist-search",
-                                                        query: { q: router.query.q, setlist: setlist.id }
-                                                    },
-                                                    undefined,
-                                                    { shallow: true }
-                                                );
-                                            }}
+                                            onSetlistChosen={handleSetlistChosenRouterPush}
                                         />
                                     </div>
                                 )}
@@ -307,6 +314,8 @@ export default function SetlistSearch() {
                     )}
                 </div>
             </Layout>
+
+            {/* Export Dialog */}
             {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
                 state.pageState === "setlist") && (
                 <ExportDialog
@@ -316,12 +325,7 @@ export default function SetlistSearch() {
                         setlistfmArtist: state.allSetlistsData.setlistfmArtist
                     }}
                     isOpen={state.exportDialogOpen}
-                    onClose={async () => {
-                        setState((prev) => ({
-                            ...prev,
-                            exportDialogOpen: false
-                        }));
-                    }}
+                    onClose={handleExportDialogClosed}
                 />
             )}
         </>
