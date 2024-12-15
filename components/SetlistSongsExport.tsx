@@ -31,8 +31,6 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                 }
 
                 const data = await response.json();
-                console.log("Fetched Spotify song data:", data);
-
                 setSpotifySongs(data);
             } catch (err) {
                 console.error("Error fetching Spotify songs:", err);

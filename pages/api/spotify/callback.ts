@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import getBaseUrl from "../../../lib/utils/getBaseUrl";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
 
@@ -77,16 +78,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error("Error in callback: ", error);
         res.status(500).json({ error: error.message });
     }
-}
-
-/**
- * Utility function to construct the base URL of the server.
- *
- * @param {NextApiRequest} req - The API request object.
- * @returns {string} - The base URL string.
- */
-function getBaseUrl(req: NextApiRequest): string {
-    const protocol = req.headers["x-forwarded-proto"] || "http"; // Determine the protocol (HTTP or HTTPS)
-    const host = req.headers.host!; // Get the host from headers
-    return `${protocol}://${host}`; // Construct and return the base URL
 }

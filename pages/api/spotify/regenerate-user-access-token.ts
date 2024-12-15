@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import decryptToken from "../../../lib/utils/decryptToken";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
 
@@ -57,15 +58,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error("Error refreshing token: ", error);
         res.status(500).json({ error: error.message });
     }
-}
-
-/**
- * Decrypts an encrypted token using AES decryption.
- *
- * @param {string} encryptedToken - The encrypted token string.
- * @returns {string} - The decrypted token.
- */
-function decryptToken(encryptedToken: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, process.env.ENCRYPTION_KEY!);
-    return bytes.toString(CryptoJS.enc.Utf8);
 }

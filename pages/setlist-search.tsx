@@ -1,262 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Layout from "../components/Layout";
-import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
 import ListOfSetlists from "../components/ListOfSetlists";
 import Setlist from "../components/Setlist";
 import ExportDialog from "../components/ExportDialog";
-import { useTheme } from "next-themes";
 import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
+import setlistSearchHook from "../lib/hooks/setlistSearchHook";
+import { PageState } from "../lib/constants/setlistSearchPageState";
 
 /**
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
-    const router = useRouter();
-    const { resolvedTheme } = useTheme();
-    const [state, setState] = useState({
-        mounted: false as boolean,
-        searchTriggered: false as boolean,
-        searchComplete: false as boolean,
-        lastQuery: null as string | null,
-        allSetlistsData: [] as any,
-        setlistChosen: false as boolean,
-        chosenSetlistData: null as any,
-        exportDialogOpen: false as boolean,
-        animLoading: true as boolean,
-        showLoading: false as boolean,
-        error: null as string | null,
-        pageState: "idle" as "idle" | "listOfSetlists" | "losSetlist" | "setlist"
-    });
+    const {
+        mounted,
+        state,
+        handleSearchRouterPush,
+        handleBackToList,
+        handleSetlistChosenRouterPush,
+        handleExport,
+        handleExportDialogClosed
+    } = setlistSearchHook();
 
-    useEffect(() => {
-        setState((prev) => ({
-            ...prev,
-            mounted: true
-        }));
-        document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
-    }, [resolvedTheme]);
-
-    useEffect(() => {
-        const { q, setlist } = router.query;
-        if (q && !setlist) {
-            if (state.pageState !== "losSetlist" || q !== state.lastQuery) {
-                handleSearch(q as string, null);
-            }
-        } else if (setlist && !q) {
-            handleSearch(null, setlist as string);
-        } else if (setlist && q) {
-            if (!state.searchComplete) {
-                handleSearch(q as string, setlist as string);
-            } else {
-                handleSetlistChosen(state.chosenSetlistData);
-                setState((prev) => ({
-                    ...prev,
-                    pageState: "losSetlist"
-                }));
-            }
-        } else {
-            setState((prev) => ({
-                ...prev,
-                searchTriggered: false,
-                animLoading: true,
-                pageState: "idle"
-            }));
-        }
-        setState((prev) => ({
-            ...prev,
-            lastQuery: router.query.q as string
-        }));
-    }, [router.query.q, router.query.setlist]);
-
-    const fetchData = async (url: string) => {
-        const response = await fetch(url);
-        if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to fetch data - Error: ${errorResponse.error?.message || "Unknown error"}`
-            );
-        }
-        return await response.json();
-    };
-
-    const handleSearchStart = () => {
-        setState((prev) => ({
-            ...prev,
-            searchTriggered: true,
-            searchComplete: false,
-            setlistChosen: false,
-            chosenSetlistData: null,
-            showLoading: false
-        }));
-    };
-
-    const handleSearchComplete = (data: any[]) => {
-        setState((prev) => ({
-            ...prev,
-            searchComplete: true,
-            allSetlistsData: data
-        }));
-    };
-
-    const handleSearchRouterPush = async (query: string) => {
-        if (!query) {
-            return;
-        }
-        const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
-            ? query.split("-").pop()?.replace(".html", "")
-            : null;
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: { q: setlistId || query }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
-
-    const handleSearch = async (query: string | null, setlist: string | null) => {
-        setState((prev) => ({
-            ...prev,
-            error: null
-        }));
-        handleSearchStart();
-
-        if (state.animLoading) {
-            setTimeout(
-                () =>
-                    setState((prev) => ({
-                        ...prev,
-                        animLoading: false
-                    })),
-                750
-            );
-        }
-
-        setState((prev) => ({
-            ...prev,
-            showLoading: true
-        }));
-
-        try {
-            if (query && !setlist) {
-                const data = await fetchData(`/api/controllers/get-setlists?query=${encodeURIComponent(query)}`);
-                handleSearchComplete(data);
-                setState((prev) => ({
-                    ...prev,
-                    showLoading: false,
-                    pageState: "listOfSetlists"
-                }));
-            } else if (!query && setlist) {
-                const data = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
-                setState((prev) => ({
-                    ...prev,
-                    setlistChosen: true,
-                    chosenSetlistData: data,
-                    showLoading: false,
-                    pageState: "setlist"
-                }));
-            } else if (query && setlist) {
-                const queryData = await fetchData(`/api/controllers/get-setlists?query=${query}`);
-                setState((prev) => ({
-                    ...prev,
-                    showLoading: false
-                }));
-                handleSearchComplete(queryData);
-                const setlistData = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
-                handleSetlistChosen(setlistData);
-                setState((prev) => ({
-                    ...prev,
-                    pageState: "losSetlist"
-                }));
-            }
-        } catch (err) {
-            console.error("Error during search:", err);
-            setState((prev) => ({
-                ...prev,
-                showLoading: false,
-                error: `Something went wrong. Please try again: ${err}`
-            }));
-        }
-    };
-
-    const handleSetlistChosenRouterPush = async (setlist: any) => {
-        setState((prev) => ({
-            ...prev,
-            chosenSetlistData: setlist
-        }));
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: { q: router.query.q, setlist: setlist.id }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
-
-    const handleSetlistChosen = (setlist: any) => {
-        setState((prev) => ({
-            ...prev,
-            setlistChosen: true,
-            chosenSetlistData: setlist
-        }));
-    };
-
-    const handleBackToList = async () => {
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: { q: router.query.q }
-            },
-            undefined,
-            { shallow: true }
-        );
-        setState((prev) => ({
-            ...prev,
-            setlistChosen: false,
-            chosenSetlistData: null,
-            pageState: "listOfSetlists"
-        }));
-    };
-
-    const handleExport = async () => {
-        try {
-            // Check the user's token status
-            const response = await fetch("/api/controllers/check-for-user-token", {
-                method: "GET",
-                credentials: "include"
-            });
-
-            if (response.status === 200) {
-                // User is authorised, proceed with export dialog
-                setState((prev) => ({
-                    ...prev,
-                    exportDialogOpen: true
-                }));
-            } else if (response.status === 401) {
-                // User needs to authorise, open Spotify OAuth
-                const redirectState = encodeURIComponent(window.location.pathname + window.location.search);
-                router.push(`/api/spotify/authorise?redirect=${redirectState}`);
-            } else {
-                // Handle other potential errors
-                console.error("Unexpected response from checking user token:", response.status);
-            }
-        } catch (error) {
-            console.error("Error checking authorisation:", error);
-        }
-    };
-
-    const handleExportDialogClosed = async () => {
-        setState((prev) => ({
-            ...prev,
-            exportDialogOpen: false
-        }));
-    };
-
-    if (!state.mounted) return null;
+    if (!mounted) return null;
 
     return (
         <>
@@ -278,7 +45,7 @@ export default function SetlistSearch() {
                         </div>
                     )}
 
-                    {state.pageState !== "idle" && (
+                    {state.pageState !== PageState.Idle && (
                         <>
                             {/* Error indicator */}
                             {state.error && (
@@ -299,8 +66,10 @@ export default function SetlistSearch() {
                                 )}
 
                                 {/* Setlist display */}
-                                {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
-                                    state.pageState === "setlist") && (
+                                {((state.setlistChosen &&
+                                    !state.animLoading &&
+                                    state.pageState === PageState.LosSetlist) ||
+                                    state.pageState === PageState.Setlist) && (
                                     <div className="w-full animate-fadeIn">
                                         <Setlist
                                             setlist={state.chosenSetlistData}
@@ -316,8 +85,8 @@ export default function SetlistSearch() {
             </Layout>
 
             {/* Export Dialog */}
-            {((state.setlistChosen && !state.animLoading && state.pageState === "losSetlist") ||
-                state.pageState === "setlist") && (
+            {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
+                state.pageState === PageState.Setlist) && (
                 <ExportDialog
                     setlist={state.chosenSetlistData}
                     artistData={{

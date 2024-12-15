@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import decryptToken from "../../../lib/utils/decryptToken";
 import cookie from "cookie";
-import CryptoJS from "crypto-js";
 
 /**
  * API handler for searching an artist on Spotify using the Spotify API.
@@ -61,15 +61,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error("Error searching song: ", error);
         res.status(500).json({ error: error.message });
     }
-}
-
-/**
- * Decrypts an encrypted token using AES decryption.
- *
- * @param {string} encryptedToken - The encrypted token string.
- * @returns {string} - The decrypted token.
- */
-function decryptToken(encryptedToken: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedToken, process.env.ENCRYPTION_KEY!); // Decrypt using the encryption key from environment variables
-    return bytes.toString(CryptoJS.enc.Utf8); // Convert decrypted bytes to a UTF-8 string
 }

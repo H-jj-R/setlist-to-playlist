@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import getBaseUrl from "../../../lib/utils/getBaseUrl";
 
 /**
  * API handler to fetch Spotify artist details and associated setlists.
@@ -47,7 +48,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const setlistfmArtist = await setlistfmArtistResponse.json();
 
         // Step 3: Fetch setlists by the artist's mbid from Setlist.fm
-        const setlistsResponse = await fetch(`${baseUrl}/api/setlist-fm/search-setlists?artistMbid=${setlistfmArtist.mbid}`);
+        const setlistsResponse = await fetch(
+            `${baseUrl}/api/setlist-fm/search-setlists?artistMbid=${setlistfmArtist.mbid}`
+        );
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistsResponse.ok) {
@@ -67,16 +70,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error("Error fetching setlists: ", error);
         res.status(500).json({ error: error.message });
     }
-}
-
-/**
- * Utility function to construct the base URL of the server.
- *
- * @param {NextApiRequest} req - The API request object.
- * @returns {string} - The base URL string.
- */
-function getBaseUrl(req: NextApiRequest): string {
-    const protocol = req.headers["x-forwarded-proto"] || "http"; // Determine the protocol (HTTP or HTTPS)
-    const host = req.headers.host!; // Get the host from headers
-    return `${protocol}://${host}`; // Construct and return the base URL
 }
