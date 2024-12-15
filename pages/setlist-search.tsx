@@ -142,7 +142,7 @@ export default function SetlistSearch() {
 
         try {
             if (query && !setlist) {
-                const data = await fetchData(`/api/controllers/get-setlists?query=${query}`);
+                const data = await fetchData(`/api/controllers/get-setlists?query=${encodeURIComponent(query)}`);
                 handleSearchComplete(data);
                 setState((prev) => ({
                     ...prev,

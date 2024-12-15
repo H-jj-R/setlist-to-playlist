@@ -162,9 +162,9 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
                     }`}
                 >
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-4/5 max-w-5xl flex flex-col md:flex-row gap-6 max-h-[50vh] overflow-y-auto">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-full flex flex-col md:flex-row gap-6 h-[59vh] overflow-y-auto">
                         {/* Main Export Dialog */}
-                        <div className="flex-1">
+                        <div className="flex-1 p-4">
                             <h3 className="text-xl font-semibold mb-4">{i18n("exportToSpotify")}</h3>
 
                             {/* Playlist Name */}
@@ -209,7 +209,9 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
 
                             <div className="flex flex-col md:flex-row items-start gap-4 mb-4">
                                 {/* Playlist Cover Dropzone */}
-                                <div className="flex-1">
+                                <div className="flex-1 h-40 overflow-hidden">
+                                    {" "}
+                                    {/* Prevent overflow of text */}
                                     {state.imagePreview ? (
                                         <div className="flex items-center">
                                             <img
@@ -229,12 +231,12 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         <div
                                             {...getRootProps({
                                                 className:
-                                                    "border-dashed border-2 border-gray-300 p-4 text-center cursor-pointer"
+                                                    "border-dashed border-2 border-gray-300 p-4 text-center cursor-pointer h-full flex flex-col justify-center overflow-hidden"
                                             })}
                                         >
                                             <input {...getInputProps()} />
-                                            <p>{i18n("dropzoneMessage")}</p>
-                                            <p>{i18n("dropzoneFileTypes")}</p>
+                                            <p className="overflow-hidden">{i18n("dropzoneMessage")}</p>
+                                            <p className="overflow-hidden">{i18n("dropzoneFileTypes")}</p>
                                         </div>
                                     )}
                                 </div>
@@ -262,7 +264,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                             </div>
 
                             {/* Buttons */}
-                            <div className="mt-4 flex justify-end gap-4">
+                            <div className="mt-4 pt-2 flex justify-end gap-4">
                                 <button
                                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                     onClick={() => {

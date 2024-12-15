@@ -31,6 +31,8 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                 }
 
                 const data = await response.json();
+                console.log("Fetched Spotify song data:", data);
+
                 setSpotifySongs(data);
             } catch (err) {
                 console.error("Error fetching Spotify songs:", err);
@@ -62,7 +64,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
     );
 
     return (
-        <div className="flex flex-col bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shadow-md max-w-sm w-full overflow-y-auto">
+        <div className="flex flex-col bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shadow-md w-full max-w-sm overflow-y-auto">
             {loading ? (
                 <div className="flex items-center justify-center h-full">
                     <CustomHashLoader showLoading={true} size={100} />
@@ -73,17 +75,17 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                 <>
                     <h4 className="text-lg font-semibold mb-2">Songs</h4>
                     <ul className="space-y-1">
-                        {setlist.sets.set.flatMap((set: any, setIdx: number) =>
-                            set.song.flatMap((song: any, songIdx: number) => {
-                                const spotifySong = spotifySongs?.[setIdx * set.song.length + songIdx] || null;
-                                if (!spotifySong?.name) return null; // Exclude the song if spotifySong is null
-                                return (
-                                    <SongListItem
-                                        key={`${setIdx}-${songIdx}-${song.name || "unknown"}`}
-                                        spotifySong={spotifySong}
-                                    />
-                                );
-                            })
+                        {spotifySongs?.map((spotifySong, idx) =>
+                            spotifySong?.name ? (
+                                <SongListItem
+                                    key={`${idx}-${spotifySong.name || "unknown"}`}
+                                    spotifySong={spotifySong}
+                                />
+                            ) : (
+                                <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
+                                    Song not found: {setlist?.sets?.set[0]?.song[idx]?.name || "Unknown Song"}
+                                </li>
+                            )
                         )}
                     </ul>
                 </>
