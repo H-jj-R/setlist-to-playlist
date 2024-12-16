@@ -2,24 +2,19 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
+import formatDate from "../lib/utils/formatDate";
 
 interface SetlistProps {
     setlist: Record<string, any>; // The setlist data to be displayed
     onClose: () => void; // Function to handle the close action (navigate back to the list)
-    onExport: () => void; // Function to trigger Spotify export (to be implemented)
+    onExport: () => void; // Function to trigger Spotify export
 }
 
+/**
+ * Displays a setlist from it's setlist.fm details.
+ */
 const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
     const { t: i18n } = useTranslation("setlist-search");
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString.split("-").reverse().join("-"));
-        return date.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        });
-    };
 
     const location: string = `${setlist.venue.name}, ${setlist.venue.city.name}${
         setlist.venue.city.country.code === "US" ? `, ${setlist.venue.city.stateCode}` : ""

@@ -22,58 +22,60 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const baseUrl = getBaseUrl(req);
 
-        // Create parameters for the token request
-        const params = new URLSearchParams();
-        params.append("client_id", process.env.SPOTIFY_API_C_ID!);
-        params.append("client_secret", process.env.SPOTIFY_API_C_SECRET!);
-        params.append("grant_type", "authorization_code");
-        params.append("code", code as string);
-        params.append("redirect_uri", process.env.SPOTIFY_API_REDIRECT_URI!);
-
         // Make a POST request to Spotify's token endpoint to exchange the authorisation code for tokens
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: params
+            body: new URLSearchParams({
+                client_id: process.env.SPOTIFY_API_C_ID!,
+                client_secret: process.env.SPOTIFY_API_C_SECRET!,
+                grant_type: "authorization_code",
+                code: code as string,
+                redirect_uri: process.env.SPOTIFY_API_REDIRECT_URI!
+            }).toString()
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             // Get the error details from the response
             const errorResponse = await response.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
             throw new Error(
-                `${response.status}: Failed to exchange authorisation code for access token - Error: ${errorMessage}`
+                `${response.status}: Failed to exchange authorisation code for access token - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
             );
         }
 
         const data = await response.json();
 
-        // Encrypt the access token using AES encryption
-        const encryptedAccessToken = CryptoJS.AES.encrypt(data.access_token, process.env.ENCRYPTION_KEY!).toString();
-        const encryptedRefreshToken = CryptoJS.AES.encrypt(data.refresh_token, process.env.ENCRYPTION_KEY!).toString();
-
-        // Set the encrypted access token as a secure HTTP-only cookie
+        // Set the encrypted access token and refresh token as a secure cookies
         res.setHeader("Set-Cookie", [
             // Access token cookie
-            cookie.serialize("spotify_user_access_token", encryptedAccessToken, {
-                httpOnly: true,
-                secure: true,
-                maxAge: data.expires_in,
-                path: "/"
-            }),
+            cookie.serialize(
+                "spotify_user_access_token",
+                CryptoJS.AES.encrypt(data.access_token, process.env.ENCRYPTION_KEY!).toString(),
+                {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: data.expires_in,
+                    path: "/"
+                }
+            ),
             // Refresh token cookie
-            cookie.serialize("spotify_user_refresh_token", encryptedRefreshToken, {
-                httpOnly: true,
-                secure: true,
-                maxAge: 2147483646,
-                path: "/"
-            })
+            cookie.serialize(
+                "spotify_user_refresh_token",
+                CryptoJS.AES.encrypt(data.refresh_token, process.env.ENCRYPTION_KEY!).toString(),
+                {
+                    httpOnly: true,
+                    secure: true,
+                    maxAge: 2147483646,
+                    path: "/"
+                }
+            )
         ]);
 
         // Redirect the user to the original state URL or the home page if none provided
-        const redirectUrl = state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl;
-        res.redirect(redirectUrl);
+        res.redirect(state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl);
     } catch (error) {
         console.error("Error in callback: ", error);
         res.status(500).json({ error: error.message });

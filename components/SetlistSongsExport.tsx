@@ -5,20 +5,26 @@ import ErrorMessage from "./ErrorMessage";
 interface SetlistSongsExportProps {
     setlist: Record<string, any>; // The setlist data
     artistData: Record<string, any>; // Artist information
+    onSongsFetched: (songs: Record<string, any>[]) => void; // Callback to pass songs to ExportDialog
 }
 
-const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artistData }) => {
+/**
+ * Displays setlist songs as from Spotify as they will be exported.
+ */
+const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artistData, onSongsFetched }) => {
     const [spotifySongs, setSpotifySongs] = useState<Record<string, any>[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchSpotifySongs = async () => {
+        (async () => {
             setLoading(true);
             setError(null);
             try {
                 const response = await fetch(
-                    `/api/controllers/get-spotify-songs?artist=${artistData.spotifyArtist.name}`,
+                    `/api/controllers/get-spotify-songs?${new URLSearchParams({
+                        artist: artistData.spotifyArtist.name
+                    }).toString()}`,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -30,18 +36,21 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                     throw new Error("Failed to fetch Spotify song details");
                 }
 
-                const data = await response.json();
-                setSpotifySongs(data);
+                setSpotifySongs((await response.json()));
             } catch (err) {
                 console.error("Error fetching Spotify songs:", err);
                 setError("Failed to load songs. Error: " + err);
             } finally {
                 setLoading(false);
             }
-        };
-
-        fetchSpotifySongs();
+        })();
     }, [setlist, artistData.spotifyArtist.name]);
+
+    useEffect(() => {
+        if (spotifySongs) {
+            onSongsFetched(spotifySongs);
+        }
+    }, [spotifySongs]);
 
     const SongListItem = ({ spotifySong }: { spotifySong: any }) => (
         <li className="py-2">

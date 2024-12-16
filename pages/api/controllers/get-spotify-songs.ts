@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "../../../lib/utils/getBaseUrl";
 
+/**
+ * API handler to get a set of songs from Spotify.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { artist } = req.query;
     const { setlist } = req.body;
@@ -11,14 +14,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const fetchSongDetails = async (song: any) => {
-        const mainArtistSearchUrl = `${baseUrl}/api/spotify/search-track?artist=${artist}&track=${encodeURIComponent(
-            song.name
-        )}`;
-        const coverArtist = song.cover?.name || null; // Check if there's a cover artist
+        const mainArtistSearchUrl = `${baseUrl}/api/spotify/search-track?${new URLSearchParams({
+            artist: artist as string,
+            track: song.name
+        }).toString()}`;
+
+        // Construct cover artist search URL if a cover artist exists
+        const coverArtist = song.cover?.name || null;
         const coverArtistSearchUrl = coverArtist
-            ? `${baseUrl}/api/spotify/search-track?artist=${encodeURIComponent(coverArtist)}&track=${encodeURIComponent(
-                  song.name
-              )}`
+            ? `${baseUrl}/api/spotify/search-track?${new URLSearchParams({
+                  artist: coverArtist,
+                  track: song.name
+              }).toString()}`
             : null;
 
         // Attempt to fetch details for the main artist first
@@ -42,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
 
         let trackDetails = await fetchTrack(mainArtistSearchUrl);
-        
+
         // If no match for the main artist, try the cover artist
         if (!trackDetails?.name && coverArtistSearchUrl) {
             trackDetails = await fetchTrack(coverArtistSearchUrl);
@@ -54,7 +61,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const spotifyDetails = await Promise.all(
         setlist.sets.set.flatMap((set: any) =>
             set.song
-                .filter((song: any) => song.name.toLowerCase() !== "intro" && song.name.toLowerCase() !== "interlude")
+                .filter(
+                    (song: any) =>
+                        song.name.toLowerCase() !== "intro" &&
+                        song.name.toLowerCase() !== "interlude" &&
+                        song.name.toLowerCase() !== ""
+                )
                 .map((song: any) => fetchSongDetails(song))
         )
     );

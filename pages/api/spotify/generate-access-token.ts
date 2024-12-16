@@ -10,31 +10,25 @@ import CryptoJS from "crypto-js";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const url = `https://accounts.spotify.com/api/token`;
-        const headers = new Headers({
-            "Content-Type": "application/x-www-form-urlencoded"
-        });
-
-        const body = new URLSearchParams({
-            grant_type: "client_credentials",
-            client_id: process.env.SPOTIFY_API_C_ID!,
-            client_secret: process.env.SPOTIFY_API_C_SECRET!
-        });
-
-        // Fetch access token from Spotify
-        const response = await fetch(url, {
+        const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
-            headers,
-            body
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                grant_type: "client_credentials",
+                client_id: process.env.SPOTIFY_API_C_ID!,
+                client_secret: process.env.SPOTIFY_API_C_SECRET!
+            })
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            // Get the error details from the response
             const errorResponse = await response.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
             throw new Error(
-                `${response.status}: Error fetching access token - Error: ${errorMessage}`
+                `${response.status}: Failed to generate access token - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
             );
         }
 
@@ -56,15 +50,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         // Extract the original redirect path and optional query parameter from the request
-        const redirectPath = req.query.redirect as string;
-        const query = req.query.query as string;
-
-        if (redirectPath) {
-            // If a redirect path is provided, redirect back to that path with the query parameter
-            res.redirect(307, redirectPath + `?query=${query}`);
+        if (req.query.redirect) {
+            res.redirect(
+                307,
+                `${req.query.redirect as string}?${new URLSearchParams({
+                    query: req.query.query as string
+                }).toString()}`
+            );
         } else {
             // If no redirect path is provided, respond with a success message
-            res.status(200).json({ message: "Access token generated and stored in cookie" });
+            res.status(200).json({ success: true });
         }
     } catch (error) {
         // Log any errors and respond with a 500 status

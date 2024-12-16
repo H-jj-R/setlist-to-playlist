@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 /**
- * Layout for all pages - for any common components
+ * Layout for all pages - for common components.
  */
 const Layout = ({ children }: LayoutProps) => {
     const { t: i18nCommon } = useTranslation("common");

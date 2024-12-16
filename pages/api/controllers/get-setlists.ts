@@ -9,39 +9,48 @@ import getBaseUrl from "../../../lib/utils/getBaseUrl";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { query } = req.query;
-
     try {
         const baseUrl = getBaseUrl(req);
 
         // Step 1: Fetch artist details from Spotify
-        const spotifyResponse = await fetch(`${baseUrl}/api/spotify/search-artist?query=${query}`, {
-            headers: {
-                cookie: req.headers.cookie || "" // Forward client cookies for access token
+        const spotifyResponse = await fetch(
+            `${baseUrl}/api/spotify/search-artist?${new URLSearchParams({ query: query as string }).toString()}`,
+            {
+                headers: {
+                    cookie: req.headers.cookie || "" // Forward client cookies for access token
+                }
             }
-        });
+        );
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!spotifyResponse.ok) {
             // Get the error details from the response
             const errorResponse = await spotifyResponse.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
-            throw new Error(`${spotifyResponse.status}: Failed to fetch Spotify artist - Error: ${errorMessage}`);
+            throw new Error(
+                `${spotifyResponse.status}: Failed to fetch Spotify artist - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
+            );
         }
 
         const spotifyArtist = await spotifyResponse.json();
 
         // Step 2: Fetch the artist's mbid (MusicBrainz ID) from Setlist.fm
         const setlistfmArtistResponse = await fetch(
-            `${baseUrl}/api/setlist-fm/search-artists?artistName=${spotifyArtist.name}&page=1`
+            `${baseUrl}/api/setlist-fm/search-artists?${new URLSearchParams({
+                artistName: spotifyArtist.name,
+                page: "1"
+            }).toString()}`
         );
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistfmArtistResponse.ok) {
             // Get the error details from the response
             const errorResponse = await setlistfmArtistResponse.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
             throw new Error(
-                `${setlistfmArtistResponse.status}: Failed to fetch setlist.fm artist - Error: ${errorMessage}`
+                `${setlistfmArtistResponse.status}: Failed to fetch setlist.fm artist - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
             );
         }
 
@@ -49,15 +58,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Step 3: Fetch setlists by the artist's mbid from Setlist.fm
         const setlistsResponse = await fetch(
-            `${baseUrl}/api/setlist-fm/search-setlists?artistMbid=${setlistfmArtist.mbid}`
+            `${baseUrl}/api/setlist-fm/search-setlists?${new URLSearchParams({
+                artistMbid: setlistfmArtist.mbid
+            }).toString()}`
         );
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistsResponse.ok) {
             // Get the error details from the response
             const errorResponse = await setlistsResponse.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
-            throw new Error(`${setlistsResponse.status}: Failed to fetch setlists - Error: ${errorMessage}`);
+            throw new Error(
+                `${setlistsResponse.status}: Failed to fetch setlists - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
+            );
         }
 
         // Return a combined response containing Spotify artist details and their setlists

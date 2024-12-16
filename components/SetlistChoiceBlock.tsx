@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import formatDate from "../lib/utils/formatDate";
 
 interface SetlistChoiceBlockProps {
     setlist: Record<string, any>; // The setlist data to be displayed
@@ -11,17 +12,6 @@ interface SetlistChoiceBlockProps {
  */
 const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) => {
     const { t: i18n } = useTranslation("setlist-search");
-
-    // Formats the event date string into a readable format (e.g. "01 Jan 1970")
-    const formatDate = (dateString: string) => {
-        // Splitting the date string and reordering for correct formatting
-        const date = new Date(dateString.split("-").reverse().join("-"));
-        return date.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        });
-    };
 
     // Calculate the total number of songs in the setlist
     const songCount = setlist.sets.set.reduce(

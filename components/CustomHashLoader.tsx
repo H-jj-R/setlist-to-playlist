@@ -7,7 +7,7 @@ interface CustomHashLoaderProps {
 }
 
 /**
- * Custom hash loader
+ * Custom hash loader.
  */
 const CustomHashLoader = ({ showLoading, size }: CustomHashLoaderProps) => {
     return (

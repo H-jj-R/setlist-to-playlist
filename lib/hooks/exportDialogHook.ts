@@ -10,6 +10,9 @@ interface ExportDialogHookProps {
     onClose: () => void;
 }
 
+/**
+ * Hook for data handling on ExportDialog component.
+ */
 export default function exportDialogHook({ setlist, artistData, isOpen, onClose }: ExportDialogHookProps) {
     const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("export-setlist");
@@ -20,22 +23,21 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
         isPrivate: false,
         image: null as File | null,
         imagePreview: null as any,
+        spotifySongs: null as any,
         error: null as string | null
     });
 
     const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
-
-    const parseDate = (dateString: string) => {
-        const [day, month, year] = dateString.split("-");
-        return new Date(`${year}-${month}-${day}`);
-    };
 
     useEffect(() => {
         if (isOpen) {
             setState((prev) => ({
                 ...prev,
                 playlistName: `${artistData.spotifyArtist.name} Setlist - ${format(
-                    parseDate(setlist.eventDate),
+                    ((dateString: string) => {
+                        const [day, month, year] = dateString.split("-");
+                        return new Date(`${year}-${month}-${day}`);
+                    })(setlist.eventDate),
                     "MMMM dd, yyyy"
                 )}`
             }));
@@ -54,18 +56,19 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                     const canvas = document.createElement("canvas");
                     canvas.width = minSize;
                     canvas.height = minSize;
-                    const ctx = canvas.getContext("2d")!;
-                    ctx.drawImage(
-                        img,
-                        (img.width - minSize) / 2,
-                        (img.height - minSize) / 2,
-                        minSize,
-                        minSize,
-                        0,
-                        0,
-                        minSize,
-                        minSize
-                    );
+                    canvas
+                        .getContext("2d")!
+                        .drawImage(
+                            img,
+                            (img.width - minSize) / 2,
+                            (img.height - minSize) / 2,
+                            minSize,
+                            minSize,
+                            0,
+                            0,
+                            minSize,
+                            minSize
+                        );
 
                     let base64Image = canvas.toDataURL("image/jpeg");
                     let fileSize = base64Image.length;
@@ -78,12 +81,11 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                         const tempCanvas = document.createElement("canvas");
                         tempCanvas.width = newWidth;
                         tempCanvas.height = newHeight;
-                        const tempCtx = tempCanvas.getContext("2d")!;
-                        tempCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
+                        tempCanvas.getContext("2d")!.drawImage(canvas, 0, 0, newWidth, newHeight);
 
                         canvas.width = newWidth;
                         canvas.height = newHeight;
-                        ctx.drawImage(tempCanvas, 0, 0);
+                        canvas.getContext("2d")!.drawImage(tempCanvas, 0, 0);
 
                         base64Image = canvas.toDataURL("image/jpeg");
                         fileSize = base64Image.length;
@@ -120,14 +122,6 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
         }
     }, []);
 
-    const removeImage = () => {
-        setState((prev) => ({
-            ...prev,
-            image: null,
-            imagePreview: null
-        }));
-    };
-
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: handleImageChange,
         accept: {
@@ -138,7 +132,55 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
     });
 
     const handleExport = async () => {
-        // TODO: Add export functionality
+        if (!state.playlistName.trim()) {
+            setState((prev) => ({ ...prev, error: i18n("playlistNameRequired") }));
+            return;
+        }
+
+        try {
+            // Reset errors
+            setState((prev) => ({ ...prev, error: null }));
+
+            let base64Image = null;
+            if (state.image) {
+                base64Image = await processImage(state.image);
+                if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
+                    throw new Error("Error processing image or file size too large.");
+                }
+            }
+
+            const response = await fetch(`/api/controllers/create-spotify-playlist`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: state.playlistName,
+                    description: state.playlistDescription,
+                    isprivate: state.isPrivate,
+                    image: base64Image,
+                    spotifySongs: JSON.stringify(state.spotifySongs)
+                })
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(
+                    `${response.status}: Failed to fetch data - Error: ${
+                        errorResponse.error?.message || "Unknown error"
+                    }`
+                );
+            }
+
+            console.log(await response.json());
+            // Success
+            alert(i18n("exportSuccess"));
+            onClose();
+            resetState();
+        } catch (error) {
+            console.error(error);
+            setState((prev) => ({ ...prev, error: i18n("exportFailed") }));
+        }
     };
 
     const resetState = () => {
@@ -148,6 +190,7 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
             isPrivate: false,
             image: null,
             imagePreview: null,
+            spotifySongs: null,
             error: null
         });
     };
@@ -160,7 +203,6 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
         getRootProps,
         getInputProps,
         handleExport,
-        removeImage,
         resetState,
         onClose
     };

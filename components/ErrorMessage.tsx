@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 }
 
 /**
- * Error message box
+ * Error message box.
  */
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
     if (!message) return null; // Don't render if there's no error message

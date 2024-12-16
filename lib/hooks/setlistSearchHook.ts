@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 import { PageState } from "../constants/setlistSearchPageState";
 
+/**
+ * Hook for data handling on setlist-search page.
+ */
 export default function setlistSearchHook() {
     const router = useRouter();
     const { resolvedTheme } = useTheme();
@@ -39,9 +42,10 @@ export default function setlistSearchHook() {
             if (!state.searchComplete) {
                 handleSearch(q as string, setlist as string);
             } else {
-                handleSetlistChosen(state.chosenSetlistData);
                 setState((prev) => ({
                     ...prev,
+                    setlistChosen: true,
+                    //chosenSetlistData: state.chosenSetlistData,
                     pageState: PageState.LosSetlist
                 }));
             }
@@ -71,20 +75,16 @@ export default function setlistSearchHook() {
         return await response.json();
     };
 
-    const handleSearchStart = () => {
+    const handleSearch = async (query: string | null, setlist: string | null) => {
         setState((prev) => ({
             ...prev,
             searchTriggered: true,
             searchComplete: false,
             setlistChosen: false,
             chosenSetlistData: null,
-            showLoading: false
+            showLoading: false,
+            error: null
         }));
-    };
-
-    const handleSearch = async (query: string | null, setlist: string | null) => {
-        setState((prev) => ({ ...prev, error: null }));
-        handleSearchStart();
 
         if (state.animLoading) {
             setTimeout(() => setState((prev) => ({ ...prev, animLoading: false })), 750);
@@ -94,7 +94,9 @@ export default function setlistSearchHook() {
 
         try {
             if (query && !setlist) {
-                const data = await fetchData(`/api/controllers/get-setlists?query=${encodeURIComponent(query)}`);
+                const data = await fetchData(
+                    `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
+                );
                 setState((prev) => ({
                     ...prev,
                     searchComplete: true,
@@ -103,13 +105,34 @@ export default function setlistSearchHook() {
                     pageState: PageState.ListOfSetlists
                 }));
             } else if (!query && setlist) {
-                const data = await fetchData(`/api/setlist-fm/setlist-setlistid?setlistId=${setlist}`);
+                const data = await fetchData(
+                    `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
+                );
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
                     chosenSetlistData: data,
                     showLoading: false,
                     pageState: PageState.Setlist
+                }));
+            } else if (query && setlist) {
+                const queryData = await fetchData(
+                    `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
+                );
+                setState((prev) => ({
+                    ...prev,
+                    showLoading: false,
+                    searchComplete: true,
+                    allSetlistsData: queryData
+                }));
+                const setlistData = await fetchData(
+                    `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
+                );
+                setState((prev) => ({
+                    ...prev,
+                    setlistChosen: true,
+                    chosenSetlistData: setlistData,
+                    pageState: PageState.LosSetlist
                 }));
             }
         } catch (err) {
@@ -125,14 +148,14 @@ export default function setlistSearchHook() {
     const handleSearchRouterPush = async (query: string) => {
         if (!query) return;
 
-        const setlistId = query.startsWith("https://www.setlist.fm/setlist/")
-            ? query.split("-").pop()?.replace(".html", "")
-            : null;
+        const queryParams = query.startsWith("https://www.setlist.fm/setlist/")
+            ? { setlist: query.split("-").pop()?.replace(".html", "") }
+            : { q: query };
 
         await router.push(
             {
                 pathname: "/setlist-search",
-                query: { q: setlistId || query }
+                query: queryParams
             },
             undefined,
             { shallow: true }
@@ -149,14 +172,6 @@ export default function setlistSearchHook() {
             undefined,
             { shallow: true }
         );
-    };
-
-    const handleSetlistChosen = (setlist: any) => {
-        setState((prev) => ({
-            ...prev,
-            setlistChosen: true,
-            chosenSetlistData: setlist
-        }));
     };
 
     const handleBackToList = async () => {
@@ -186,8 +201,10 @@ export default function setlistSearchHook() {
             if (response.status === 200) {
                 setState((prev) => ({ ...prev, exportDialogOpen: true }));
             } else if (response.status === 401) {
-                const redirectState = encodeURIComponent(window.location.pathname + window.location.search);
-                router.push(`/api/spotify/authorise?redirect=${redirectState}`);
+                const params = new URLSearchParams({
+                    redirect: window.location.pathname + window.location.search
+                });
+                router.push(`/api/spotify/authorise?${params.toString()}`);
             }
         } catch (error) {
             console.error("Error checking authorisation:", error);

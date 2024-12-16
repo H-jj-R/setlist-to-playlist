@@ -16,25 +16,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: "No access token" });
     }
 
-    // Decrypt the access token using the AES decryption function
-    const accessToken = decryptToken(encryptedAccessToken);
-    const searchUrl = `https://api.spotify.com/v1/search?q=${query}&type=artist&limit=1`;
-
     try {
         // Make a GET request to Spotify's search API
-        const response = await fetch(searchUrl, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+        const response = await fetch(
+            `https://api.spotify.com/v1/search?${new URLSearchParams({
+                q: query as string,
+                type: "artist",
+                limit: "1"
+            }).toString()}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`
+                }
             }
-        });
+        );
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             const errorResponse = await response.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
             throw new Error(
-                `${response.status}: Error searching artist - Error: ${errorMessage}`
+                `${response.status}: Failed to generate access token - Error: ${
+                    errorResponse.error?.message || "Unknown error"
+                }`
             );
         }
 

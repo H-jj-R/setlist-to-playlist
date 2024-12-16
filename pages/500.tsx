@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
  */
 export default function Custom500() {
     const { t: i18nErrors } = useTranslation("errors");
-
+    // TODO: Make this page look good
     return (
         <Layout>
             <Head>

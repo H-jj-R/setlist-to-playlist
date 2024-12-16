@@ -24,7 +24,10 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
 
         try {
             const response = await fetch(
-                `/api/setlist-fm/search-setlists?artistMbid=${setlistData.setlistfmArtist.mbid}&page=${currentPage + 1}`
+                `/api/setlist-fm/search-setlists?${new URLSearchParams({
+                    artistMbid: setlistData.setlistfmArtist.mbid,
+                    page: currentPage + 1
+                }).toString()}`
             );
             if (!response.ok) throw new Error("Failed to load more setlists");
 

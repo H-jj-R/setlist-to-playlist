@@ -9,10 +9,14 @@ interface ExportDialogProps {
     onClose: () => void; // Close function
 }
 
+/**
+ * Dialog allowing user to export chosen setlist to playlist with custom specification.
+ */
 const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, onClose }) => {
-    const { state, i18nCommon, i18n, setState, getRootProps, getInputProps, handleExport, removeImage, resetState } =
+    const { state, i18nCommon, i18n, setState, getRootProps, getInputProps, handleExport, resetState } =
         exportDialogHook({ setlist, artistData, isOpen, onClose });
 
+    //TODO: Export dialog doesn't currently account for no query (when just setlist)
     return (
         isOpen && (
             <>
@@ -49,7 +53,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     className="mt-1 p-2 w-full border rounded-lg"
                                     value={state.playlistName}
                                     onChange={(e) => {
-                                        resetState(); // Reset the state after changing playlist name
                                         setState((prev) => ({
                                             ...prev,
                                             playlistName: e.target.value
@@ -70,7 +73,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     maxLength={300}
                                     value={state.playlistDescription}
                                     onChange={(e) => {
-                                        resetState(); // Reset the state after changing playlist description
                                         setState((prev) => ({
                                             ...prev,
                                             playlistDescription: e.target.value
@@ -82,7 +84,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
 
                             <div className="flex flex-col md:flex-row items-start gap-4 mb-4">
                                 {/* Playlist Cover Dropzone */}
-                                <div className="flex-1 h-40 overflow-hidden">
+                                <div className="flex-1 max-h-40 overflow-hidden">
                                     {state.imagePreview ? (
                                         <div className="flex items-center">
                                             <img
@@ -92,7 +94,13 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                             />
                                             <button
                                                 type="button"
-                                                onClick={removeImage}
+                                                onClick={() => {
+                                                    setState((prev) => ({
+                                                        ...prev,
+                                                        image: null,
+                                                        imagePreview: null
+                                                    }));
+                                                }}
                                                 className="text-red-500 hover:text-red-700 focus:outline-none"
                                             >
                                                 {i18n("removeImage")}
@@ -106,8 +114,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                             })}
                                         >
                                             <input {...getInputProps()} />
-                                            <p className="overflow-hidden">{i18n("dropzoneMessage")}</p>
-                                            <p className="overflow-hidden">{i18n("dropzoneFileTypes")}</p>
+                                            <p className="overflow-hidden text-sm">{i18n("dropzoneMessage")}</p>
+                                            <p className="overflow-hidden text-sm">{i18n("dropzoneFileTypes")}</p>
                                         </div>
                                     )}
                                 </div>
@@ -122,7 +130,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                             type="checkbox"
                                             checked={state.isPrivate}
                                             onChange={() => {
-                                                resetState(); // Reset the state after changing the privacy status
                                                 setState((prev) => ({
                                                     ...prev,
                                                     isPrivate: !state.isPrivate
@@ -156,7 +163,16 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         </div>
 
                         {/* Setlist Songs Component */}
-                        <SetlistSongsExport setlist={setlist} artistData={artistData} />
+                        <SetlistSongsExport
+                            setlist={setlist}
+                            artistData={artistData}
+                            onSongsFetched={(songs) =>
+                                setState((prev) => ({
+                                    ...prev,
+                                    spotifySongs: songs
+                                }))
+                            }
+                        />
                     </div>
                 </div>
             </>
