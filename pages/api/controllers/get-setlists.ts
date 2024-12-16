@@ -24,13 +24,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!spotifyResponse.ok) {
-            // Get the error details from the response
             const errorResponse = await spotifyResponse.json();
-            throw new Error(
-                `${spotifyResponse.status}: Failed to fetch Spotify artist - Error: ${
-                    errorResponse.error?.message || "Unknown error"
-                }`
-            );
+            return res.status(spotifyResponse.status).json({
+                error: errorResponse.error
+            });
         }
 
         const spotifyArtist = await spotifyResponse.json();
@@ -45,13 +42,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistfmArtistResponse.ok) {
-            // Get the error details from the response
             const errorResponse = await setlistfmArtistResponse.json();
-            throw new Error(
-                `${setlistfmArtistResponse.status}: Failed to fetch setlist.fm artist - Error: ${
-                    errorResponse.error?.message || "Unknown error"
-                }`
-            );
+            return res.status(setlistfmArtistResponse.status).json({
+                error: errorResponse.error
+            });
         }
 
         const setlistfmArtist = await setlistfmArtistResponse.json();
@@ -65,23 +59,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistsResponse.ok) {
-            // Get the error details from the response
             const errorResponse = await setlistsResponse.json();
-            throw new Error(
-                `${setlistsResponse.status}: Failed to fetch setlists - Error: ${
-                    errorResponse.error?.message || "Unknown error"
-                }`
-            );
+            return res.status(setlistsResponse.status).json({
+                error: errorResponse.error
+            });
         }
 
-        // Return a combined response containing Spotify artist details and their setlists
+        // Return a combined response containing full artist details and their setlists
         res.status(200).json({
             spotifyArtist,
             setlistfmArtist,
             setlists: await setlistsResponse.json()
         });
     } catch (error) {
-        console.error("Error fetching setlists: ", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

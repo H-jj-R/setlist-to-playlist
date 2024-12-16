@@ -157,7 +157,7 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                 body: JSON.stringify({
                     name: state.playlistName,
                     description: state.playlistDescription,
-                    isprivate: state.isPrivate,
+                    isPrivate: state.isPrivate,
                     image: base64Image,
                     spotifySongs: JSON.stringify(state.spotifySongs)
                 })
@@ -167,12 +167,11 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                 const errorResponse = await response.json();
                 throw new Error(
                     `${response.status}: Failed to fetch data - Error: ${
-                        errorResponse.error?.message || "Unknown error"
+                        errorResponse.message || "Unknown error"
                     }`
                 );
             }
 
-            console.log(await response.json());
             // Success
             alert(i18n("exportSuccess"));
             onClose();

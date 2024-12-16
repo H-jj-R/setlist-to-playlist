@@ -8,7 +8,7 @@ import cookie from "cookie";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
-
+    
     if (!encryptedAccessToken) {
         return res.status(401).json({ error: "No access token found" });
     }
@@ -23,9 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!response.ok) {
             const errorResponse = await response.json();
+
             throw new Error(
                 `${response.status}: Failed to get user data - Error: ${
-                    errorResponse.error?.message || "Unknown error"
+                    errorResponse.message || "Unknown error"
                 }`
             );
         }

@@ -13,7 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) {
-        return res.status(500).json({ error: "No access token" });
+        return res.status(500).json({
+            error: "spotifyAccessTokenError"
+        });
     }
 
     try {
@@ -34,12 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to generate access token - Error: ${
-                    errorResponse.error?.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "spotifySearchArtistError"
+            });
         }
 
         // Parse the JSON response
@@ -47,13 +46,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the artist was found; if not, throw an error
         if (data.artists.items.length === 0) {
-            throw new Error("Artist not found");
+            return res.status(404).json({
+                error: "spotifySearchArtistError"
+            });
         }
 
         // Respond with the first artist's (best match) data
         res.status(200).json(data.artists.items[0]);
     } catch (error) {
-        console.error("Error searching artist: ", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

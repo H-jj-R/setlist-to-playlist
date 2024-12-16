@@ -49,11 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            // Get the error details from the response
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to fetch artist - Error: ${errorResponse.error?.message || "Unknown error"}`
-            );
+            return res.status(response.status).json({
+                error: "setlistFmSearchArtistError"
+            });
         }
 
         // Find an artist matching the exact name
@@ -63,13 +61,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Return a 404 if no artist is found
         if (!artist) {
-            res.status(404).json({ error: "Artist not found" });
-            return;
+            return res.status(404).json({
+                error: "setlistFmSearchArtistError"
+            });
         }
 
         res.status(200).json(artist);
     } catch (error) {
-        console.error("Error finding artist: ", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

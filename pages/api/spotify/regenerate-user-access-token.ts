@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const errorResponse = await response.json();
             throw new Error(
                 `${response.status}: Failed to regenerate access token - Error: ${
-                    errorResponse.error?.message || "Unknown error"
+                    errorResponse.message || "Unknown error"
                 }`
             );
         }

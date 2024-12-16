@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // If the API rate limits (429 status) and we haven't exceeded max retries, retry after a delay
         if (response.status === 429 && retries < 5) {
             const retryAfterHeader = response.headers.get("Retry-After"); // Check for a Retry-After header
-             // Wait before retrying
+            // Wait before retrying
             await setTimeout(
                 retryAfterHeader
                     ? parseInt(retryAfterHeader, 10) // Use Retry-After if provided
@@ -49,27 +49,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            // Get the error details from the response
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to search setlists - Error: ${
-                    errorResponse.error?.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "setlistFmSearchSetlistError"
+            });
         }
 
         const data = await response.json();
 
         if (!data.setlist || data.setlist.length === 0) {
-            res.status(404).json({
-                error: `No setlists found for artist with mbid: ${artistMbid}`
+            return res.status(404).json({
+                error: "setlistFmNoSetlistsError"
             });
-            return;
         }
 
         res.status(200).json(data);
     } catch (error) {
-        console.error("Error finding setlist: ", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }
