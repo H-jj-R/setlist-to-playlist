@@ -4,11 +4,13 @@ interface InfoSectionProps {
     theme: string | undefined;
 }
 
+/**
+ * Info section under hero section on landing page.
+ */
 const InfoSection = ({ theme }: InfoSectionProps) => {
     const { t: i18n } = useTranslation("landing-page");
 
-    // TODO: Figure out why this doesn't go to bottom of screen
-    // TODO: Add button to create account
+    // TODO: Figure out why this sometimes doesn't go to bottom of screen
     return (
         <div
             className={`flex-grow py-16 px-10 ${

@@ -6,7 +6,7 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import Settings from "./Settings";
 
 /**
- * The header bar at the top of the page
+ * The header bar at the top of the page.
  */
 const HeaderBar: React.FC = () => {
     const { t: i18nCommon } = useTranslation("common");

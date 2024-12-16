@@ -2,12 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { setTimeout } from "timers/promises";
 
 /**
- * Search for an artist by name.
+ * API handler to search for an artist by name.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { artistName, page } = req.query;
-    const maxRetries = 5; // Maximum number of retry attempts if rate-limited
-    const baseDelay = 1000; // Base delay for exponential backoff during retries
 
     /**
      * Fetches a setlist from the Setlist.fm API, with retry logic for handling rate limits (429 errors).
@@ -17,7 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     async function fetchArtist(retries: number = 0): Promise<Response> {
         const response = await fetch(
-            `https://api.setlist.fm/rest/1.0/search/artists?artistName=${artistName}&p=${page}&sort=relevance`,
+            `https://api.setlist.fm/rest/1.0/search/artists?${new URLSearchParams({
+                artistName: artistName as string,
+                p: page as string,
+                sort: "relevance"
+            }).toString()}`,
             {
                 method: "GET",
                 headers: {
@@ -28,12 +30,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         // If the API rate limits (429 status) and we haven't exceeded max retries, retry after a delay
-        if (response.status === 429 && retries < maxRetries) {
+        if (response.status === 429 && retries < 5) {
             const retryAfterHeader = response.headers.get("Retry-After"); // Check for a Retry-After header
-            const retryAfter = retryAfterHeader
-                ? parseInt(retryAfterHeader, 10) // Use Retry-After if provided
-                : baseDelay * Math.pow(2, retries); // Otherwise, use exponential backoff
-            await setTimeout(retryAfter); // Wait before retrying
+            // Wait before retrying
+            await setTimeout(
+                retryAfterHeader
+                    ? parseInt(retryAfterHeader, 10) // Use Retry-After if provided
+                    : 1000 * Math.pow(2, retries)
+            );
             return fetchArtist(retries + 1); // Recursive call with incremented retry count
         }
 
@@ -47,8 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!response.ok) {
             // Get the error details from the response
             const errorResponse = await response.json();
-            const errorMessage = errorResponse.error?.message || "Unknown error";
-            throw new Error(`${response.status}: Failed to fetch artist - Error: ${errorMessage}`);
+            throw new Error(
+                `${response.status}: Failed to fetch artist - Error: ${errorResponse.error?.message || "Unknown error"}`
+            );
         }
 
         // Find an artist matching the exact name

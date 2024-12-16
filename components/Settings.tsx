@@ -8,7 +8,7 @@ interface SettingsProps {
 }
 
 /**
- * The settings overlay component
+ * The settings overlay component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -19,16 +19,6 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
         setIsVisible(true);
     }, []);
 
-    const handleClose = () => {
-        // Trigger the slide-out and undimming animation before unmounting
-        setIsVisible(false);
-        setTimeout(onClose, 300); // Match the animation duration
-    };
-
-    const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setTheme(event.target.value);
-    };
-
     return (
         <div className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
@@ -36,7 +26,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     isVisible ? "opacity-70" : "opacity-0"
                 }`}
-                onClick={handleClose} // Close when clicking outside the panel
+                onClick={() => {
+                    // Trigger the slide-out and undimming animation before unmounting
+                    setIsVisible(false);
+                    setTimeout(onClose, 300); // Match the animation duration
+                }}
             />
             {/* Settings panel */}
             <div
@@ -46,7 +40,14 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             >
                 <div className="flex justify-between items-center mb-4 mr-5">
                     <h2 className="text-black text-xl font-bold">Settings</h2>
-                    <button onClick={handleClose} className="text-black hover:text-gray-800 text-xl">
+                    <button
+                        onClick={() => {
+                            // Trigger the slide-out and undimming animation before unmounting
+                            setIsVisible(false);
+                            setTimeout(onClose, 300); // Match the animation duration
+                        }}
+                        className="text-black hover:text-gray-800 text-xl"
+                    >
                         <FontAwesomeIcon icon={faChevronRight} size="lg" />
                     </button>
                 </div>
@@ -55,7 +56,9 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <h3 className="text-lg font-medium text-gray-900">Theme</h3>
                     <select
                         value={theme}
-                        onChange={handleThemeChange}
+                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                            setTheme(event.target.value);
+                        }}
                         className="w-full px-4 py-2 border border-gray-400 rounded-md text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="light">Light</option>
