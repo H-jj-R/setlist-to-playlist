@@ -36,7 +36,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                     throw new Error("Failed to fetch Spotify song details");
                 }
 
-                setSpotifySongs((await response.json()));
+                setSpotifySongs(await response.json());
             } catch (err) {
                 console.error("Error fetching Spotify songs:", err);
                 setError("Failed to load songs. Error: " + err);
@@ -90,7 +90,12 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                                 />
                             ) : (
                                 <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
-                                    Song not found: {setlist?.sets?.set[0]?.song[idx]?.name || "Unknown Song"}
+                                    <ErrorMessage
+                                        message={`Song not found: ${
+                                            (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
+                                            "Unknown Song"
+                                        }`}
+                                    ></ErrorMessage>
                                 </li>
                             )
                         )}

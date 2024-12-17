@@ -47,7 +47,6 @@ export default function setlistSearchHook() {
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
-                    //chosenSetlistData: state.chosenSetlistData,
                     pageState: PageState.LosSetlist
                 }));
             }
@@ -108,13 +107,18 @@ export default function setlistSearchHook() {
                     pageState: PageState.ListOfSetlists
                 }));
             } else if (!query && setlist) {
-                const data = await fetchData(
+                const setlistData = await fetchData(
                     `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
                 );
+                const artistData = await fetchData(
+                    `/api/spotify/search-artist?${new URLSearchParams({ query: setlistData.artist.name }).toString()}`
+                );
+                const fullArtistdetails = { setlistfmArtist: setlistData.artist, spotifyArtist: artistData };
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
-                    chosenSetlistData: data,
+                    allSetlistsData: fullArtistdetails,
+                    chosenSetlistData: setlistData,
                     showLoading: false,
                     pageState: PageState.Setlist
                 }));

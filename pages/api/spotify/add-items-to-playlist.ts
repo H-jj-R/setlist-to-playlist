@@ -7,7 +7,6 @@ import cookie from "cookie";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { playlistId, tracks } = req.body;
-
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
 
@@ -18,13 +17,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
+        const parsedTracks = JSON.parse(tracks);
+        const trackUris: string[] = parsedTracks.filter((track) => track && track.uri).map((track) => track.uri);
+
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ uris: tracks })
+            body: JSON.stringify({ uris: trackUris })
         });
 
         if (!response.ok) {

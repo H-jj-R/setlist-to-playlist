@@ -6,7 +6,7 @@ import cookie from "cookie";
  * API handler to add a custom image to a playlist.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { playlist_id, image } = req.body;
+    const { playlistId, image } = req.body;
 
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
@@ -19,13 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/images`, {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`,
                 "Content-Type": "image/jpeg"
             },
-            body: image
+            body: image.replace(/^data:image\/\w+;base64,/, "")
         });
 
         if (!response.ok) {

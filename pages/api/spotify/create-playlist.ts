@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
     }
 
+    // TODO: Private playlist doesn't seem to be working - always public
     try {
         const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
             method: "POST",
