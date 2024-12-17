@@ -11,6 +11,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const cookies = cookie.parse(req.headers.cookie || "");
         const encryptedRefreshToken = cookies.spotify_user_refresh_token;
 
+        // If no refresh token is found in the cookies, respond with an error
+        if (!encryptedRefreshToken) {
+            return res.status(401).json({
+                error: "spotifyAccessTokenError"
+            });
+        }
+
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -23,12 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to regenerate access token - Error: ${
-                    errorResponse.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "spotifyGenerateAccessTokenError"
+            });
         }
 
         const data = await response.json();
@@ -58,7 +62,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(200).json({ success: true });
         }
     } catch (error) {
-        console.error("Error refreshing token: ", error);
-        res.status(500).json({ error: error.message });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

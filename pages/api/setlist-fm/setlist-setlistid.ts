@@ -42,18 +42,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            // Get the error details from the response
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to fetch setlist - Error: ${
-                    errorResponse.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "setlistFmSearchSetlistIdError"
+            });
         }
 
         res.status(200).json(await response.json()); // Return the fetched setlist data
     } catch (error) {
-        console.error("Error finding setlist: ", error);
-        res.status(500).json({ error: error.message });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

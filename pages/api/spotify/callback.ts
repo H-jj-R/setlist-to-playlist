@@ -15,8 +15,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no authorisation code is provided, return a 400 error
     if (!code) {
-        res.status(400).json({ error: "No code provided" });
-        return;
+        return res.status(400).json({
+            error: "spotifyCallbackError"
+        });
     }
 
     try {
@@ -37,13 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            // Get the error details from the response
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to exchange authorisation code for access token - Error: ${
-                    errorResponse.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "spotifyCallbackError"
+            });
         }
 
         const data = await response.json();
@@ -77,7 +74,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Redirect the user to the original state URL or the home page if none provided
         res.redirect(state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl);
     } catch (error) {
-        console.error("Error in callback: ", error);
-        res.status(500).json({ error: error.message });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

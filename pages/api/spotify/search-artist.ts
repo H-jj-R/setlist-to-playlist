@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) {
-        return res.status(500).json({
+        return res.status(401).json({
             error: "spotifyAccessTokenError"
         });
     }
@@ -54,6 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Respond with the first artist's (best match) data
         res.status(200).json(data.artists.items[0]);
     } catch (error) {
+        console.error("Unexpected error:", error);
         res.status(500).json({
             error: "internalServerError"
         });

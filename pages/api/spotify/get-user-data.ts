@@ -8,9 +8,12 @@ import cookie from "cookie";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
-    
+
+    // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) {
-        return res.status(401).json({ error: "No access token found" });
+        return res.status(401).json({
+            error: "spotifyAccessTokenError"
+        });
     }
 
     try {
@@ -22,13 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (!response.ok) {
-            const errorResponse = await response.json();
-
-            throw new Error(
-                `${response.status}: Failed to get user data - Error: ${
-                    errorResponse.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "spotifyGetUserDataError"
+            });
         }
 
         const userData = await response.json();
@@ -36,7 +35,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ...userData
         });
     } catch (error) {
-        console.error("Error fetching user data:", error);
-        res.status(500).json({ error: error.message });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

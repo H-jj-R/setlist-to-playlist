@@ -1,13 +1,13 @@
 {
-    "exportToSpotify": "Export to Spotify",
-    "playlistName": "Playlist Name",
-    "enterPlaylistName": "Enter playlist name",
-    "playlistDescription": "Playlist Description",
-    "enterPlaylistDescription": "Enter playlist description",
-    "playlistCoverImage": " Playlist Cover Image",
-    "privatePlaylist": "Private Playlist",
-    "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
     "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
-    "removeImage": "Remove Image",
-    "export": "Export"
+    "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
+    "enterPlaylistDescription": "Enter playlist description",
+    "enterPlaylistName": "Enter playlist name",
+    "export": "Export",
+    "exportToSpotify": "Export to Spotify",
+    "playlistCoverImage": " Playlist Cover Image",
+    "playlistDescription": "Playlist Description",
+    "playlistName": "Playlist Name",
+    "privatePlaylist": "Private Playlist",
+    "removeImage": "Remove Image"
 }

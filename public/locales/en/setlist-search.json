@@ -1,12 +1,12 @@
 {
-    "setlistListTitle": "Setlists for {{artistName}}",
-    "searchForSetlist": "Search for an artist/band or setlist.fm link...",
-    "backToList": "Back to List",
     "artistAtVenue": "{{artistName}} at {{location}}",
-    "setlistDate": "Date: {{date}}",
-    "songCount": "{{songCount}} song",
-    "songCount_plural": "{{songCount}} songs",
-    "noSongsFound": "No songs found!",
+    "backToList": "Back to List",
+    "exportToSpotify": "Export to Spotify",
     "loadMore": "Load More",
-    "exportToSpotify": "Export to Spotify"
+    "noSongsFound": "No songs found!",
+    "searchForSetlist": "Search for an artist/band or setlist.fm link...",
+    "setlistDate": "Date: {{date}}",
+    "setlistListTitle": "Setlists for {{artistName}}",
+    "songCount": "{{songCount}} song",
+    "songCount_plural": "{{songCount}} songs"
 }

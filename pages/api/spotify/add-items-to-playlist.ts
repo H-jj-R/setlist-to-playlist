@@ -12,7 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const encryptedAccessToken = cookies.spotify_user_access_token;
 
     if (!encryptedAccessToken) {
-        return res.status(401).json({ error: "No access token found" });
+        return res.status(401).json({
+            error: "spotifyAccessTokenError"
+        });
     }
 
     try {
@@ -26,14 +28,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (!response.ok) {
-            const errorBody = await response.text();
-            console.error("Spotify API error body:", errorBody);
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            return res.status(response.status).json({
+                error: "spotifyAddItemsError"
+            });
         }
 
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error("Error adding tracks:", error);
-        res.status(500).json({ error: error.message });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

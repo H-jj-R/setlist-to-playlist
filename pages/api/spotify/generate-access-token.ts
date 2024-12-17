@@ -24,12 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to generate access token - Error: ${
-                    errorResponse.message || "Unknown error"
-                }`
-            );
+            return res.status(response.status).json({
+                error: "spotifyGenerateAccessTokenError"
+            });
         }
 
         // Extract the access token and expiration time from the response
@@ -62,8 +59,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(200).json({ success: true });
         }
     } catch (error) {
-        // Log any errors and respond with a 500 status
-        console.error("Error generating access token: ", error);
-        res.status(500).json({ error: "Failed to generate access token" });
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }
