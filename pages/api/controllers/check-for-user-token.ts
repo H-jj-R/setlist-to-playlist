@@ -9,14 +9,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const cookies = cookie.parse(req.headers.cookie || "");
         const encryptedRefreshToken = cookies.spotify_user_refresh_token;
 
+        // If no refresh token is found in the cookies, respond with an error
         if (!encryptedRefreshToken) {
-            res.status(401).json({ error: "No refresh token available" });
-            return;
+            return res.status(401).json({
+                error: "spotifyAccessTokenError"
+            });
         }
 
-        res.status(200).json({ message: "Access token valid" });
+        res.status(200).json({ success: true });
     } catch (error) {
-        console.error("Error handling user token: ", error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            error: "internalServerError"
+        });
     }
 }

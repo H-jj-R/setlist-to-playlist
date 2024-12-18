@@ -36,14 +36,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         cookie: req.headers.cookie || "" // Forward client cookies for access token
                     }
                 });
-                if (response.ok) {
-                    return await response.json();
-                } else {
-                    console.error(`Failed to fetch track from URL: ${url}`);
+                if (!response.ok) {
+                    console.error(`${response.status} - Failed to fetch track from URL: ${url}`);
                     return null;
                 }
+                return await response.json();
             } catch (error) {
-                console.error(`Error fetching track:`, error);
+                console.error(`Unexpected error:`, error);
                 return null;
             }
         };

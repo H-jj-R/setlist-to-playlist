@@ -16,7 +16,7 @@ interface ExportDialogHookProps {
 export default function exportDialogHook({ setlist, artistData, isOpen, onClose }: ExportDialogHookProps) {
     const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("export-setlist");
-
+    const { t: i18nErrors } = useTranslation("errors");
     const [state, setState] = useState({
         playlistName: "",
         playlistDescription: "",
@@ -157,29 +157,28 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                 body: JSON.stringify({
                     name: state.playlistName,
                     description: state.playlistDescription,
-                    isprivate: state.isPrivate,
+                    isPrivate: state.isPrivate,
                     image: base64Image,
-                    spotifySongs: JSON.stringify(state.spotifySongs)
+                    tracks: JSON.stringify(state.spotifySongs)
                 })
             });
 
             if (!response.ok) {
                 const errorResponse = await response.json();
-                throw new Error(
-                    `${response.status}: Failed to fetch data - Error: ${
-                        errorResponse.error?.message || "Unknown error"
-                    }`
-                );
+                throw {
+                    status: response.status,
+                    error: errorResponse.error || "Unknown error"
+                };
             }
 
-            console.log(await response.json());
             // Success
-            alert(i18n("exportSuccess"));
+            alert("Export Success!");
             onClose();
             resetState();
         } catch (error) {
             console.error(error);
-            setState((prev) => ({ ...prev, error: i18n("exportFailed") }));
+            alert(`${error.status}: ${i18nErrors(error.error)}`);
+            setState((prev) => ({ ...prev, error: `${error.status}: ${i18nErrors(error.error)}` }));
         }
     };
 

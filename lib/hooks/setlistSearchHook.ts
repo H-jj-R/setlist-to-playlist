@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 import { PageState } from "../constants/setlistSearchPageState";
+import { useTranslation } from "react-i18next";
 
 /**
  * Hook for data handling on setlist-search page.
@@ -9,6 +10,7 @@ import { PageState } from "../constants/setlistSearchPageState";
 export default function setlistSearchHook() {
     const router = useRouter();
     const { resolvedTheme } = useTheme();
+    const { t: i18nErrors } = useTranslation("errors");
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
         searchTriggered: false,
@@ -45,7 +47,6 @@ export default function setlistSearchHook() {
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
-                    //chosenSetlistData: state.chosenSetlistData,
                     pageState: PageState.LosSetlist
                 }));
             }
@@ -68,9 +69,10 @@ export default function setlistSearchHook() {
         const response = await fetch(url);
         if (!response.ok) {
             const errorResponse = await response.json();
-            throw new Error(
-                `${response.status}: Failed to fetch data - Error: ${errorResponse.error?.message || "Unknown error"}`
-            );
+            throw {
+                status: response.status,
+                error: errorResponse.error || "Unknown error"
+            };
         }
         return await response.json();
     };
@@ -105,13 +107,18 @@ export default function setlistSearchHook() {
                     pageState: PageState.ListOfSetlists
                 }));
             } else if (!query && setlist) {
-                const data = await fetchData(
+                const setlistData = await fetchData(
                     `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
                 );
+                const artistData = await fetchData(
+                    `/api/spotify/search-artist?${new URLSearchParams({ query: setlistData.artist.name }).toString()}`
+                );
+                const fullArtistdetails = { setlistfmArtist: setlistData.artist, spotifyArtist: artistData };
                 setState((prev) => ({
                     ...prev,
                     setlistChosen: true,
-                    chosenSetlistData: data,
+                    allSetlistsData: fullArtistdetails,
+                    chosenSetlistData: setlistData,
                     showLoading: false,
                     pageState: PageState.Setlist
                 }));
@@ -135,12 +142,12 @@ export default function setlistSearchHook() {
                     pageState: PageState.LosSetlist
                 }));
             }
-        } catch (err) {
-            console.error("Error during search:", err);
+        } catch (error) {
+            console.error("Error during search:", error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `Something went wrong. Please try again: ${err}`
+                error: `${error.status}: ${i18nErrors(error.error)}`
             }));
         }
     };
