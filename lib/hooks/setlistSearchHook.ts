@@ -200,7 +200,7 @@ export default function setlistSearchHook() {
 
     const handleExport = async () => {
         try {
-            const response = await fetch("/api/controllers/check-for-user-token", {
+            const response = await fetch("/api/controllers/check-for-authentication", {
                 method: "GET",
                 credentials: "include"
             });
@@ -208,10 +208,11 @@ export default function setlistSearchHook() {
             if (response.status === 200) {
                 setState((prev) => ({ ...prev, exportDialogOpen: true }));
             } else if (response.status === 401) {
-                const params = new URLSearchParams({
-                    redirect: window.location.pathname + window.location.search
-                });
-                router.push(`/api/spotify/authorise?${params.toString()}`);
+                router.push(
+                    `/api/spotify/authorise?${new URLSearchParams({
+                        redirect: window.location.pathname + window.location.search
+                    }).toString()}`
+                );
             }
         } catch (error) {
             console.error("Error checking authorisation:", error);

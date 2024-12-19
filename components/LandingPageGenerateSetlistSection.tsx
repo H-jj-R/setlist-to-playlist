@@ -9,7 +9,7 @@ const GenerateSetlistSection = () => {
     const { t: i18n } = useTranslation("landing-page");
 
     return (
-        <div className="h-1/3 flex-shrink-0 bg-gradient-to-r from-sky-400 to-purple-700 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10">
+        <div className="h-1/3 flex-shrink-0 bg-gradient-to-r from-sky-500 to-purple-700 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10">
             <div className="order-last lg:order-first lg:ml-auto lg:mr-auto">
                 <button
                     onClick={() => router.push("/ai-generate-setlist")}

@@ -7,7 +7,7 @@ const InfoSection = () => {
     const { t: i18n } = useTranslation("landing-page");
 
     return (
-        <div className="h-1/3 flex-shrink-0 bg-gradient-to-t from-green-800 to-green-500 text-gray-100 py-6 px-10">
+        <div className="h-1/3 flex-shrink-0 bg-gradient-to-b from-green-500 to-green-600 text-gray-100 py-6 px-10">
             <div className="max-w-4xl mx-auto">
                 <h2 className="text-3xl font-bold text-center mb-6">{i18n("whyCreateAccountTitle")}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

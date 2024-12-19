@@ -17,7 +17,7 @@ const HeroSection = () => {
             <div className="lg:ml-auto lg:mr-auto">
                 <button
                     onClick={() => router.push("/setlist-search")}
-                    className="px-12 py-5 bg-white text-blue-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 focus:outline-none transition text-lg"
+                    className="px-12 py-5 bg-white text-pink-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 focus:outline-none transition text-lg"
                 >
                     {i18n("goToSetlistSearch")}
                 </button>

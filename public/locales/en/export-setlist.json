@@ -8,6 +8,6 @@
     "playlistCoverImage": " Playlist Cover Image",
     "playlistDescription": "Playlist Description",
     "playlistName": "Playlist Name",
-    "privatePlaylist": "Private Playlist",
-    "removeImage": "Remove Image"
+    "removeImage": "Remove Image",
+    "exportSuccess": "Playlist exported successfully!"
 }

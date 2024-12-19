@@ -6,13 +6,14 @@ import ExportDialog from "../components/ExportDialog";
 import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
 import generateSetlistHook from "../lib/hooks/generateSetlistHook";
-import { PageState } from "../lib/constants/setlistSearchPageState";
+import { PageState } from "../lib/constants/generateSetlistPageState";
 
 /**
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
-    const { mounted, state, handleSearch, handleExport, handleExportDialogClosed } = generateSetlistHook();
+    const { mounted, state, handleAuthoriseSpotify, handleSearch, handleExport, handleExportDialogClosed } =
+        generateSetlistHook();
 
     if (!mounted) return null;
 
@@ -26,7 +27,26 @@ export default function SetlistSearch() {
                             state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                         }`}
                     >
-                        <SearchBar onSearch={handleSearch} locked={true} aria-label="Search for setlists" />
+                        <SearchBar
+                            onSearch={handleSearch}
+                            locked={state.searchBarLocked}
+                            aria-label="Search for setlists"
+                        />
+
+                        {/* Authorisation dialog */}
+                        {state.showAuthDialog && (
+                            <div className="mt-4 p-4  bg-green-500 border border-black rounded text-center">
+                                <p className="mb-6 text-black text-xl">
+                                    You need to authorise with Spotify to continue!
+                                </p>
+                                <button
+                                    onClick={handleAuthoriseSpotify}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                    Authorise with Spotify
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Loading indicator */}
@@ -36,7 +56,7 @@ export default function SetlistSearch() {
                         </div>
                     )}
 
-                    {state.pageState !== PageState.Idle && (
+                    {state.pageState === PageState.Idle && (
                         <>
                             {/* Error indicator */}
                             {state.error && (
@@ -44,16 +64,16 @@ export default function SetlistSearch() {
                                     <ErrorMessage message={state.error} />
                                 </div>
                             )}
+                        </>
+                    )}
 
+                    {state.pageState === PageState.Setlist && (
+                        <>
                             <div className="flex gap-4 mt-[3rem]">
                                 {/* Setlist display */}
                                 {state.pageState === PageState.Setlist && (
                                     <div className="w-full animate-fadeIn">
-                                        <Setlist
-                                            setlist={[]}
-                                            onClose={() => {}}
-                                            onExport={handleExport}
-                                        />
+                                        <Setlist setlist={[]} onClose={() => {}} onExport={handleExport} />
                                     </div>
                                 )}
                             </div>

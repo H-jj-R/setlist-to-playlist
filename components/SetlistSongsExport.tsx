@@ -95,6 +95,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                                             (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
                                             "Unknown Song"
                                         }`}
+                                        small={true}
                                     ></ErrorMessage>
                                 </li>
                             )

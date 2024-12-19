@@ -5,7 +5,7 @@ import getBaseUrl from "../../../lib/utils/getBaseUrl";
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { name, description, isPrivate, image, tracks } = req.body;
+    const { name, description, image, tracks } = req.body;
     try {
         const baseUrl = getBaseUrl(req);
 
@@ -36,8 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             body: JSON.stringify({
                 userId: userData.id,
                 name: name,
-                description: description,
-                isPrivate: isPrivate
+                description: description
             })
         });
 

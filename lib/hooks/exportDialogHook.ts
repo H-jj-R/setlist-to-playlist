@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useDropzone } from "react-dropzone";
 
 interface ExportDialogHookProps {
@@ -20,12 +20,11 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
     const [state, setState] = useState({
         playlistName: "",
         playlistDescription: "",
-        isPrivate: false,
         image: null as File | null,
         imagePreview: null as any,
-        spotifySongs: null as any,
-        error: null as string | null
+        spotifySongs: null as any
     });
+    const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
 
     const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
 
@@ -108,16 +107,12 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                     setState((prev) => ({
                         ...prev,
                         image: file,
-                        imagePreview: reader.result,
-                        error: null
+                        imagePreview: reader.result
                     }));
                 };
                 reader.readAsDataURL(file);
             } else {
-                setState((prev) => ({
-                    ...prev,
-                    error: "Please upload a JPEG or PNG image."
-                }));
+                // TODO: Should I show error message if not correct file type?
             }
         }
     }, []);
@@ -132,20 +127,24 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
     });
 
     const handleExport = async () => {
-        if (!state.playlistName.trim()) {
-            setState((prev) => ({ ...prev, error: i18n("playlistNameRequired") }));
-            return;
-        }
-
         try {
             // Reset errors
             setState((prev) => ({ ...prev, error: null }));
+            if (!state.playlistName.trim()) {
+                throw {
+                    status: 400,
+                    error: "No name provided."
+                };
+            }
 
             let base64Image = null;
             if (state.image) {
                 base64Image = await processImage(state.image);
                 if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
-                    throw new Error("Error processing image or file size too large.");
+                    throw {
+                        status: 400,
+                        error: "Error processing image or file size too large."
+                    };
                 }
             }
 
@@ -157,7 +156,6 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                 body: JSON.stringify({
                     name: state.playlistName,
                     description: state.playlistDescription,
-                    isPrivate: state.isPrivate,
                     image: base64Image,
                     tracks: JSON.stringify(state.spotifySongs)
                 })
@@ -172,13 +170,18 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
             }
 
             // Success
-            alert("Export Success!");
-            onClose();
-            resetState();
+            setMessageDialog({
+                isOpen: true,
+                message: i18n("exportSuccess"),
+                type: "success"
+            });
         } catch (error) {
             console.error(error);
-            alert(`${error.status}: ${i18nErrors(error.error)}`);
-            setState((prev) => ({ ...prev, error: `${error.status}: ${i18nErrors(error.error)}` }));
+            setMessageDialog({
+                isOpen: true,
+                message: `${error.status}: ${i18nErrors(error.error)}`,
+                type: "error"
+            });
         }
     };
 
@@ -186,18 +189,19 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
         setState({
             playlistName: "",
             playlistDescription: "",
-            isPrivate: false,
             image: null,
             imagePreview: null,
-            spotifySongs: null,
-            error: null
+            spotifySongs: null
         });
+        setMessageDialog({ isOpen: false, message: "", type: "success" });
     };
 
     return {
         state,
         i18nCommon,
         i18n,
+        messageDialog,
+        setMessageDialog,
         setState,
         getRootProps,
         getInputProps,

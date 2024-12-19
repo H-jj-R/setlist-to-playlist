@@ -13,9 +13,10 @@ export default function generateSetlistHook() {
     const { t: i18nErrors } = useTranslation("errors");
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
+        searchBarLocked: true,
+        showAuthDialog: false,
         searchTriggered: false,
         searchComplete: false,
-        lastQuery: null as string | null,
         allSetlistsData: [] as any,
         predictedSetlists: null as any,
         exportDialogOpen: false,
@@ -28,7 +29,29 @@ export default function generateSetlistHook() {
     useEffect(() => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
+        const checkAuthentication = async () => {
+            const response = await fetch("/api/controllers/check-for-authentication", {
+                method: "GET",
+                credentials: "include"
+            });
+            if (!response.ok) {
+                if (response.status === 401) {
+                    setState((prev) => ({ ...prev, searchBarLocked: true, showAuthDialog: true }));
+                }
+            } else {
+                setState((prev) => ({ ...prev, searchBarLocked: false, showAuthDialog: false }));
+            }
+        };
+        checkAuthentication();
     }, [resolvedTheme]);
+
+    const handleAuthoriseSpotify = () => {
+        router.push(
+            `/api/spotify/authorise?${new URLSearchParams({
+                redirect: window.location.pathname + window.location.search
+            }).toString()}`
+        );
+    };
 
     const handleSearch = async (query: string) => {
         setState((prev) => ({
@@ -36,7 +59,8 @@ export default function generateSetlistHook() {
             searchTriggered: true,
             searchComplete: false,
             showLoading: false,
-            error: null
+            error: null,
+            pageState: PageState.Idle
         }));
 
         if (state.animLoading) {
@@ -62,7 +86,7 @@ export default function generateSetlistHook() {
                 allSetlistsData: setlistData
             }));
 
-            const apiResponse = await fetch("/api/controllers/generate-setlist", {
+            const apiResponse = await fetch("/api/openai/predict-setlist", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -83,9 +107,7 @@ export default function generateSetlistHook() {
                 ...prev,
                 predictedSetlists: apiData.predictedSetlists,
                 searchComplete: true,
-                searchTriggered: true,
                 showLoading: false,
-                isLoading: false,
                 pageState: PageState.Setlist
             }));
             console.log(apiData);
@@ -100,7 +122,7 @@ export default function generateSetlistHook() {
     };
 
     const handleExport = async () => {
-        // TODO: This
+        // TODO: This.
     };
 
     const handleExportDialogClosed = () => {
@@ -110,6 +132,7 @@ export default function generateSetlistHook() {
     return {
         mounted,
         state,
+        handleAuthoriseSpotify,
         handleSearch,
         handleExport,
         handleExportDialogClosed

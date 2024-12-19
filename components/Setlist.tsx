@@ -57,6 +57,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     </button>
 
                     {/* Export to Spotify Button */}
+                    {/* // TODO: Disable this button if no refresh token (and get user to OAuth) */}
                     <button
                         className="px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
                         onClick={onExport}
