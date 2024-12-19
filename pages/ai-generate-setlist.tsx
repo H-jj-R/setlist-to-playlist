@@ -1,27 +1,18 @@
 import React from "react";
 import Layout from "../components/Layout";
 import SearchBar from "../components/SearchBar";
-import ListOfSetlists from "../components/ListOfSetlists";
 import Setlist from "../components/Setlist";
 import ExportDialog from "../components/ExportDialog";
 import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
-import setlistSearchHook from "../lib/hooks/setlistSearchHook";
+import generateSetlistHook from "../lib/hooks/generateSetlistHook";
 import { PageState } from "../lib/constants/setlistSearchPageState";
 
 /**
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
-    const {
-        mounted,
-        state,
-        handleSearchRouterPush,
-        handleBackToList,
-        handleSetlistChosenRouterPush,
-        handleExport,
-        handleExportDialogClosed
-    } = setlistSearchHook();
+    const { mounted, state, handleSearch, handleExport, handleExportDialogClosed } = generateSetlistHook();
 
     if (!mounted) return null;
 
@@ -35,7 +26,7 @@ export default function SetlistSearch() {
                             state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                         }`}
                     >
-                        <SearchBar onSearch={handleSearchRouterPush} locked={false} aria-label="Search for setlists" />
+                        <SearchBar onSearch={handleSearch} locked={true} aria-label="Search for setlists" />
                     </div>
 
                     {/* Loading indicator */}
@@ -55,25 +46,12 @@ export default function SetlistSearch() {
                             )}
 
                             <div className="flex gap-4 mt-[3rem]">
-                                {/* List of setlists */}
-                                {state.searchComplete && !state.animLoading && (
-                                    <div className="w-4/5 max-w-3xl mx-auto animate-fadeIn">
-                                        <ListOfSetlists
-                                            setlistData={state.allSetlistsData}
-                                            onSetlistChosen={handleSetlistChosenRouterPush}
-                                        />
-                                    </div>
-                                )}
-
                                 {/* Setlist display */}
-                                {((state.setlistChosen &&
-                                    !state.animLoading &&
-                                    state.pageState === PageState.LosSetlist) ||
-                                    state.pageState === PageState.Setlist) && (
+                                {state.pageState === PageState.Setlist && (
                                     <div className="w-full animate-fadeIn">
                                         <Setlist
-                                            setlist={state.chosenSetlistData}
-                                            onClose={handleBackToList}
+                                            setlist={[]}
+                                            onClose={() => {}}
                                             onExport={handleExport}
                                         />
                                     </div>
@@ -85,7 +63,7 @@ export default function SetlistSearch() {
             </Layout>
 
             {/* Export Dialog */}
-            {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
+            {/* {(
                 state.pageState === PageState.Setlist) && (
                 <ExportDialog
                     setlist={state.chosenSetlistData}
@@ -96,7 +74,7 @@ export default function SetlistSearch() {
                     isOpen={state.exportDialogOpen}
                     onClose={handleExportDialogClosed}
                 />
-            )}
+            )} */}
         </>
     );
 }
