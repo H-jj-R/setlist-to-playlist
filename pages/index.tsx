@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import Layout from "../components/Layout";
 import HeroSection from "../components/LandingPageHeroSection";
+import GenerateSetlistSection from "../components/LandingPageGenerateSetlistSection";
 import InfoSection from "../components/LandingPageInfoSection";
 
 /**
@@ -20,8 +21,11 @@ export default function Home() {
     return (
         <div className="flex flex-col min-h-screen">
             <Layout>
-                <HeroSection />
-                <InfoSection theme={resolvedTheme} />
+                <div className="flex flex-col flex-grow">
+                    <HeroSection />
+                    <GenerateSetlistSection />
+                    <InfoSection />
+                </div>
             </Layout>
         </div>
     );

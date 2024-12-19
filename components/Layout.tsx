@@ -13,16 +13,6 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
     const { t: i18nCommon } = useTranslation("common");
 
-    useEffect(() => {
-        // Prevent scrolling on the body
-        document.body.style.overflow = "hidden";
-
-        // Cleanup to restore scrolling on component unmount
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
-
     return (
         <div className="h-screen flex flex-col">
             <Head>
@@ -30,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
             </Head>
             <HeaderBar />
             {/* Main content container */}
-            <main className="flex-grow overflow-auto">{children}</main>
+            <main className="flex-grow overflow-auto flex flex-col">{children}</main>
         </div>
     );
 };

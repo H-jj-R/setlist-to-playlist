@@ -13,7 +13,7 @@ const HeaderBar: React.FC = () => {
     const [showSettings, setShowSettings] = useState(false);
 
     return (
-        <header className="bg-gray-800 text-white">
+        <header className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
             <div className="flex items-center justify-between px-4 py-2">
                 <div className="text-lg font-bold space-x-2">
                     <Link href="/" className="hover:text-gray-300 flex items-center">
