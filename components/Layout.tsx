@@ -10,7 +10,7 @@ interface LayoutProps {
 /**
  * Layout for all pages - for common components.
  */
-const Layout = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
     const { t: i18nCommon } = useTranslation("common");
 
     return (

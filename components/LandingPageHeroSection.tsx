@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 /**
  * Hero section for landing page.
  */
-const HeroSection = () => {
+const HeroSection: React.FC = () => {
     const router = useRouter();
     const { t: i18n } = useTranslation("landing-page");
 
