@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
             );
             return NextResponse.redirect(redirectUrl);
         }
-    } else if (pathname.startsWith("/api/controllers/check-for-user-token")) {
+    } else if (pathname.startsWith("/api/controllers/check-for-authentication")) {
         const hasRefreshToken = request.cookies.get("spotify_user_refresh_token");
         const hasAccessToken = request.cookies.get("spotify_user_access_token");
         if (hasRefreshToken && !hasAccessToken) {

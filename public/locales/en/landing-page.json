@@ -9,5 +9,8 @@
     "landingPageDescription": "Effortlessly create Spotify playlists from your favourite artists' live performances.",
     "landingPageTitle": "Transform Setlists into Playlists",
     "whyCreateAccountDescription": "Unlock exclusive features by creating an account. Save playlists, recover deleted playlists, and more!",
-    "whyCreateAccountTitle": "Why Create an Account?"
+    "whyCreateAccountTitle": "Why Create an Account?",
+    "goToAIGenerateSetlist": "AI Generate a Setlist",
+    "generateSetlistTitle": "AI Generated Setlist",
+    "generateSetlistDescription": "Use this AI tool to create the next predicted setlist for any artist."
 }

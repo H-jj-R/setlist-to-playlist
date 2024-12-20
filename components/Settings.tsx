@@ -23,6 +23,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
         <div className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
+                id="background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     isVisible ? "opacity-70" : "opacity-0"
                 }`}
@@ -34,13 +35,17 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             />
             {/* Settings panel */}
             <div
+                id="settings-panel"
                 className={`transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full bg-white shadow-lg p-4 ${
                     isVisible ? "translate-x-0" : "translate-x-full"
                 }`}
             >
-                <div className="flex justify-between items-center mb-4 mr-5">
-                    <h2 className="text-black text-xl font-bold">Settings</h2>
+                <div id="settings-header" className="flex justify-between items-center mb-4 mr-5">
+                    <h2 id="settings-title" className="text-black text-xl font-bold">
+                        Settings
+                    </h2>
                     <button
+                        id="close-settings-btn"
                         onClick={() => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
@@ -52,18 +57,27 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     </button>
                 </div>
                 {/* Theme Setting */}
-                <div className="mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">Theme</h3>
+                <div id="theme-setting" className="mb-4">
+                    <h3 id="theme-title" className="text-lg font-medium text-gray-900">
+                        Theme
+                    </h3>
                     <select
+                        id="theme-select"
                         value={theme}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                             setTheme(event.target.value);
                         }}
                         className="w-full px-4 py-2 border border-gray-400 rounded-md text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                        <option value="system">System</option>
+                        <option id="light-theme" value="light">
+                            Light
+                        </option>
+                        <option id="dark-theme" value="dark">
+                            Dark
+                        </option>
+                        <option id="system-theme" value="system">
+                            System
+                        </option>
                     </select>
                 </div>
             </div>

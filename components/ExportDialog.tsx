@@ -1,6 +1,7 @@
 import React from "react";
 import SetlistSongsExport from "./SetlistSongsExport";
 import exportDialogHook from "../lib/hooks/exportDialogHook";
+import MessageDialog from "./MessageDialog";
 
 interface ExportDialogProps {
     setlist: Record<string, any>; // The setlist data to be exported
@@ -13,15 +14,25 @@ interface ExportDialogProps {
  * Dialog allowing user to export chosen setlist to playlist with custom specification.
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, onClose }) => {
-    const { state, i18nCommon, i18n, setState, getRootProps, getInputProps, handleExport, resetState } =
-        exportDialogHook({ setlist, artistData, isOpen, onClose });
+    const {
+        state,
+        i18nCommon,
+        i18n,
+        messageDialog,
+        setMessageDialog,
+        setState,
+        getRootProps,
+        getInputProps,
+        handleExport,
+        resetState
+    } = exportDialogHook({ setlist, artistData, isOpen, onClose });
 
-    //TODO: Export dialog doesn't currently account for no query (when just setlist)
     return (
         isOpen && (
             <>
                 {/* Background Overlay */}
                 <div
+                    id="background-overlay"
                     className={`z-20 fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-500 ${
                         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
@@ -33,21 +44,31 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
 
                 {/* Dialog Box */}
                 <div
+                    id="dialog-box"
                     className={`z-30 fixed inset-0 flex justify-center items-center transition-all duration-500 ease-in-out ${
                         isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
                     }`}
                 >
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-full flex flex-col md:flex-row gap-6 h-[59vh] overflow-y-auto">
+                    <div
+                        id="export-dialog"
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-full flex flex-col md:flex-row gap-6 h-[52vh] overflow-y-auto"
+                    >
                         {/* Main Export Dialog */}
-                        <div className="flex-1 p-4">
-                            <h3 className="text-xl font-semibold mb-4">{i18n("exportToSpotify")}</h3>
+                        <div id="export-dialog-main" className="flex-1 p-4">
+                            <h3 id="export-dialog-title" className="text-xl font-semibold mb-4">
+                                {i18n("exportToSpotify")}
+                            </h3>
 
                             {/* Playlist Name */}
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div id="playlist-name" className="mb-4">
+                                <label
+                                    htmlFor="playlist-name-input"
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                >
                                     {i18n("playlistName")}
                                 </label>
                                 <input
+                                    id="playlist-name-input"
                                     type="text"
                                     maxLength={100}
                                     className="mt-1 p-2 w-full border rounded-lg"
@@ -60,15 +81,20 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     }}
                                     placeholder={i18n("enterPlaylistName")}
                                     required
+                                    autoComplete="off"
                                 />
                             </div>
 
                             {/* Playlist Description */}
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <div id="playlist-description" className="mb-4">
+                                <label
+                                    htmlFor="playlist-description-input"
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                >
                                     {i18n("playlistDescription")}
                                 </label>
                                 <textarea
+                                    id="playlist-description-input"
                                     className="mt-1 p-2 w-full min-h-24 border rounded-lg overflow-auto resize-none"
                                     maxLength={300}
                                     value={state.playlistDescription}
@@ -79,20 +105,26 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         }));
                                     }}
                                     placeholder={i18n("enterPlaylistDescription")}
+                                    autoComplete="off"
                                 />
                             </div>
 
-                            <div className="flex flex-col md:flex-row items-start gap-4 mb-4">
+                            <div
+                                id="playlist-cover-container"
+                                className="flex flex-col md:flex-row items-start gap-4 mb-4"
+                            >
                                 {/* Playlist Cover Dropzone */}
-                                <div className="flex-1 max-h-40 overflow-hidden">
+                                <div id="playlist-cover" className="flex-1 max-h-40 overflow-hidden">
                                     {state.imagePreview ? (
                                         <div className="flex items-center">
                                             <img
+                                                id="image-preview"
                                                 src={state.imagePreview}
                                                 alt="Playlist Cover"
                                                 className="w-24 h-24 object-cover rounded-lg mr-2"
                                             />
                                             <button
+                                                id="remove-image-button"
                                                 type="button"
                                                 onClick={() => {
                                                     setState((prev) => ({
@@ -108,43 +140,28 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         </div>
                                     ) : (
                                         <div
+                                            id="dropzone"
                                             {...getRootProps({
                                                 className:
                                                     "border-dashed border-2 border-gray-300 p-4 text-center cursor-pointer h-full flex flex-col justify-center overflow-hidden"
                                             })}
                                         >
                                             <input {...getInputProps()} />
-                                            <p className="overflow-hidden text-sm">{i18n("dropzoneMessage")}</p>
-                                            <p className="overflow-hidden text-sm">{i18n("dropzoneFileTypes")}</p>
+                                            <p id="dropzone-message" className="overflow-hidden text-sm">
+                                                {i18n("dropzoneMessage")}
+                                            </p>
+                                            <p id="dropzone-file-types" className="overflow-hidden text-sm">
+                                                {i18n("dropzoneFileTypes")}
+                                            </p>
                                         </div>
                                     )}
-                                </div>
-
-                                {/* Private Playlist Toggle */}
-                                <div className="flex flex-col items-center justify-center">
-                                    <label className="block text-sm font-bold mb-2 text-center">
-                                        {i18n("privatePlaylist")}
-                                    </label>
-                                    <label className="relative inline-flex items-center cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            checked={state.isPrivate}
-                                            onChange={() => {
-                                                setState((prev) => ({
-                                                    ...prev,
-                                                    isPrivate: !state.isPrivate
-                                                }));
-                                            }}
-                                            className="sr-only peer"
-                                        />
-                                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                                    </label>
                                 </div>
                             </div>
 
                             {/* Buttons */}
-                            <div className="mt-4 pt-2 flex justify-end gap-4">
+                            <div id="export-dialog-buttons" className="mt-4 pt-2 flex justify-end gap-4">
                                 <button
+                                    id="cancel-button"
                                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                                     onClick={() => {
                                         onClose();
@@ -154,6 +171,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     {i18nCommon("cancel")}
                                 </button>
                                 <button
+                                    id="export-button"
                                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                                     onClick={handleExport}
                                 >
@@ -175,6 +193,20 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         />
                     </div>
                 </div>
+
+                {/* Message Dialog */}
+                <MessageDialog
+                    isOpen={messageDialog.isOpen}
+                    message={messageDialog.message}
+                    type={messageDialog.type as "success" | "error"}
+                    onClose={() => {
+                        setMessageDialog({ isOpen: false, message: "", type: "success" });
+                        if (messageDialog.type === "success") {
+                            onClose();
+                            resetState();
+                        }
+                    }}
+                />
             </>
         )
     );

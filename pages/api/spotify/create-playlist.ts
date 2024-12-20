@@ -6,7 +6,7 @@ import cookie from "cookie";
  * API handler to create a playlist for a Spotify user.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { userId, name, description, isPrivate } = req.body;
+    const { userId, name, description } = req.body;
 
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
@@ -18,7 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
     }
 
-    // TODO: Private playlist doesn't seem to be working - always public
     try {
         const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
             method: "POST",
@@ -28,8 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             body: JSON.stringify({
                 name: name,
-                description: description,
-                public: !isPrivate
+                description: description
             })
         });
 
@@ -40,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const data = await response.json();
+        console.log(JSON.stringify(data));
         res.status(200).json({ success: true, data: data });
     } catch (error) {
         console.error("Unexpected error:", error);

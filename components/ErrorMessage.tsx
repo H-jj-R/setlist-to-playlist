@@ -3,21 +3,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 interface ErrorMessageProps {
-    message: string; // Error message to display
+    message: string;
+    small?: boolean;
 }
 
-/**
- * Error message box.
- */
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-    if (!message) return null; // Don't render if there's no error message
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
+    if (!message) return null;
 
     return (
         <div
-            className={"flex items-center gap-4 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg shadow-md"}
+            id="error-container"
+            className={`flex ${small ? "items-center gap-4" : "flex-col items-center gap-2"} ${
+                small ? "p-4" : "p-6"
+            } bg-red-100 border border-red-300 text-red-700 rounded-lg shadow-md`}
         >
-            <FontAwesomeIcon icon={faTriangleExclamation} className="h-6 w-6 text-red-500" />
-            <span className="text-sm font-medium">{message}</span>
+            <FontAwesomeIcon
+                id="error-icon"
+                icon={faTriangleExclamation}
+                className={`text-red-500 ${small ? "h-6 w-6" : "h-10 w-10"}`}
+            />
+            <span
+                id="error-message"
+                className={`${small ? "text-sm font-medium" : "text-lg font-semibold"} text-center`}
+            >
+                {message}
+            </span>
         </div>
     );
 };

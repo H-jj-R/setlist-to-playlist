@@ -9,9 +9,10 @@ interface CustomHashLoaderProps {
 /**
  * Custom hash loader.
  */
-const CustomHashLoader = ({ showLoading, size }: CustomHashLoaderProps) => {
+const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }) => {
     return (
         <HashLoader
+            id="hash-loader"
             color="#36d7c0"
             loading={showLoading}
             cssOverride={{} as CSSProperties}

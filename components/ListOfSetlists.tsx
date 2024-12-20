@@ -42,25 +42,30 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     };
 
     return (
-        <div className="h-[calc(100vh-9rem)] overflow-y-auto border border-gray-300 rounded-lg w-full">
-            <div className="p-4 w-full flex flex-col items-center">
-                <div className="flex items-center mb-5 px-4">
+        <div
+            id="setlist-container"
+            className="h-[calc(100vh-9rem)] overflow-y-auto border border-gray-300 rounded-lg w-full"
+        >
+            <div id="setlist-header" className="p-4 w-full flex flex-col items-center">
+                <div id="artist-info" className="flex items-center mb-5 px-4">
                     <img
                         src={setlistData.spotifyArtist.images[0].url}
                         alt={setlistData.spotifyArtist.name}
                         className="w-16 h-16 rounded-full mr-4"
+                        id="artist-image"
                     />
-                    <h2 className="text-3xl font-bold">
+                    <h2 id="setlist-title" className="text-3xl font-bold">
                         {i18n("setlistListTitle", { artistName: setlistData.spotifyArtist.name })}
                     </h2>
                 </div>
-                <ul className="space-y-3 px-4 w-full">
+                <ul id="setlist-list" className="space-y-3 px-4 w-full">
                     {setlists.map((setlist: Record<string, any>) => (
                         <SetlistChoiceBlock key={setlist.id} setlist={setlist} onClick={onSetlistChosen} />
                     ))}
                 </ul>
                 {hasMorePages && (
                     <button
+                        id="load-more-button"
                         onClick={loadMoreSetlists}
                         disabled={isLoading}
                         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

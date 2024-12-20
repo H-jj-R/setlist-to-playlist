@@ -10,27 +10,19 @@ interface LayoutProps {
 /**
  * Layout for all pages - for common components.
  */
-const Layout = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
     const { t: i18nCommon } = useTranslation("common");
 
-    useEffect(() => {
-        // Prevent scrolling on the body
-        document.body.style.overflow = "hidden";
-
-        // Cleanup to restore scrolling on component unmount
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
-
     return (
-        <div className="h-screen flex flex-col">
+        <div id="main-container" className="h-screen flex flex-col">
             <Head>
                 <title>{i18nCommon("siteTitle")}</title>
             </Head>
             <HeaderBar />
             {/* Main content container */}
-            <main className="flex-grow overflow-auto">{children}</main>
+            <main id="main-content" className="flex-grow overflow-auto flex flex-col">
+                {children}
+            </main>
         </div>
     );
 };
