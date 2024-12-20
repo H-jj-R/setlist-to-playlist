@@ -21,8 +21,9 @@ export default function SetlistSearch() {
         <>
             <Layout>
                 {/* Search bar */}
-                <div className="p-5 overflow-hidden">
+                <div id="search-bar-container" className="p-5 overflow-hidden">
                     <div
+                        id="search-bar"
                         className={`fixed left-1/2 transform -translate-x-1/2 transition-all duration-[750ms] ease-in-out ${
                             state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                         }`}
@@ -35,12 +36,16 @@ export default function SetlistSearch() {
 
                         {/* Authorisation dialog */}
                         {state.showAuthDialog && (
-                            <div className="mt-4 p-4  bg-green-500 border border-black rounded text-center">
+                            <div
+                                id="auth-dialog"
+                                className="mt-4 p-4 bg-green-500 border border-black rounded text-center"
+                            >
                                 <p className="mb-6 text-black text-xl">
                                     You need to authorise with Spotify to continue!
                                 </p>
                                 <button
                                     onClick={handleAuthoriseSpotify}
+                                    id="auth-button"
                                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                                 >
                                     Authorise with Spotify
@@ -51,7 +56,7 @@ export default function SetlistSearch() {
 
                     {/* Loading indicator */}
                     {state.showLoading && !state.animLoading && (
-                        <div className="pt-8 mt-16 flex justify-center items-center">
+                        <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
                             <CustomHashLoader showLoading={state.showLoading} size={150} />
                         </div>
                     )}
@@ -60,7 +65,7 @@ export default function SetlistSearch() {
                         <>
                             {/* Error indicator */}
                             {state.error && (
-                                <div className="pt-8 mt-5 max-w-4xl mx-auto">
+                                <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
                                     <ErrorMessage message={state.error} />
                                 </div>
                             )}
@@ -69,10 +74,10 @@ export default function SetlistSearch() {
 
                     {state.pageState === PageState.Setlist && (
                         <>
-                            <div className="flex gap-4 mt-[3rem]">
+                            <div id="setlist-container" className="flex gap-4 mt-[3rem]">
                                 {/* Setlist display */}
                                 {state.pageState === PageState.Setlist && (
-                                    <div className="w-full animate-fadeIn">
+                                    <div id="setlist-display" className="w-full animate-fadeIn">
                                         <Setlist setlist={[]} onClose={() => {}} onExport={handleExport} />
                                     </div>
                                 )}
@@ -83,17 +88,16 @@ export default function SetlistSearch() {
             </Layout>
 
             {/* Export Dialog */}
-            {/* {(
-                state.pageState === PageState.Setlist) && (
-                <ExportDialog
-                    setlist={state.chosenSetlistData}
-                    artistData={{
-                        spotifyArtist: state.allSetlistsData.spotifyArtist,
-                        setlistfmArtist: state.allSetlistsData.setlistfmArtist
-                    }}
-                    isOpen={state.exportDialogOpen}
-                    onClose={handleExportDialogClosed}
-                />
+            {/* {state.pageState === PageState.Setlist && (
+                    <ExportDialog
+                        setlist={state.chosenSetlistData}
+                        artistData={{
+                            spotifyArtist: state.allSetlistsData.spotifyArtist,
+                            setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                        }}
+                        isOpen={state.exportDialogOpen}
+                        onClose={handleExportDialogClosed}
+                    />
             )} */}
         </>
     );

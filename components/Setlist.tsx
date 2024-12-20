@@ -21,7 +21,10 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
     }, ${setlist.venue.city.country.name}`;
 
     const SongListItem = ({ song, isFirst, isLast }: { song: any; isFirst: boolean; isLast: boolean }) => (
-        <li className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}>
+        <li
+            id={`song-item-${song.name || "unknown"}`}
+            className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
+        >
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
@@ -44,12 +47,16 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
     );
 
     return (
-        <div className="px-5 border border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-9rem)] overflow-y-auto">
+        <div
+            id="setlist-container"
+            className="px-5 border border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-9rem)] overflow-y-auto"
+        >
             {/* Container for buttons */}
             <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 w-full">
-                <div className="flex justify-between items-center mb-6 pt-4 pb-2">
+                <div id="setlist-buttons" className="flex justify-between items-center mb-6 pt-4 pb-2">
                     {/* Back Button */}
                     <button
+                        id="back-button"
                         className="px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:ring focus:ring-red-300 w-full sm:w-auto"
                         onClick={onClose}
                     >
@@ -59,6 +66,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     {/* Export to Spotify Button */}
                     {/* // TODO: Disable this button if no refresh token (and get user to OAuth) */}
                     <button
+                        id="export-spotify-button"
                         className="px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
                         onClick={onExport}
                     >
@@ -68,17 +76,21 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
             </div>
 
             {/* Setlist Header */}
-            <div className="mb-4">
-                <h2 className="text-3xl font-bold">{setlist.artist.name}</h2>
-                <p className="text-lg mt-1">{location}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+            <div id="setlist-header" className="mb-4">
+                <h2 id="setlist-artist" className="text-3xl font-bold">
+                    {setlist.artist.name}
+                </h2>
+                <p id="setlist-location" className="text-lg mt-1">
+                    {location}
+                </p>
+                <p id="setlist-date" className="text-sm text-gray-500 dark:text-gray-400">
                     {i18n("setlistDate", { date: formatDate(setlist.eventDate) })}
                 </p>
             </div>
 
             {/* Songs List */}
             {setlist.sets && setlist.sets.set.length > 0 ? (
-                <ul className="space-y-1 pb-6">
+                <ul id="songs-list" className="space-y-1 pb-6">
                     {setlist.sets.set.flatMap((set: any, setIdx: number, setArray: any[]) =>
                         set.song.map((song: any, songIdx: number) => {
                             const isFirst = setIdx === 0 && songIdx === 0;
@@ -95,7 +107,9 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     )}
                 </ul>
             ) : (
-                <p className="italic text-center">{i18n("noSongsFound")}</p>
+                <p id="no-songs-message" className="italic text-center">
+                    {i18n("noSongsFound")}
+                </p>
             )}
         </div>
     );

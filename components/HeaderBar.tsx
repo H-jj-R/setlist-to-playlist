@@ -13,26 +13,23 @@ const HeaderBar: React.FC = () => {
     const [showSettings, setShowSettings] = useState(false);
 
     return (
-        <header className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
-            <div className="flex items-center justify-between px-4 py-2">
-                <div className="text-lg font-bold space-x-2">
-                    <Link href="/" className="hover:text-gray-300 flex items-center">
-                        <img src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
-                        <span className="text-lg font-bold ml-2">{i18nCommon("siteTitle")}</span>
+        <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
+            <div id="header-container" className="flex items-center justify-between px-4 py-2">
+                <div id="logo-container" className="text-lg font-bold space-x-2">
+                    <Link href="/" id="site-logo-link" className="hover:text-gray-300 flex items-center">
+                        <img id="site-logo" src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
+                        <span id="site-title" className="text-lg font-bold ml-2">
+                            {i18nCommon("siteTitle")}
+                        </span>
                     </Link>
                 </div>
-                <div>
-                    <button
-                        className="p-2 rounded text"
-                        onClick={() => setShowSettings(true)}
-                    >
-                        <FontAwesomeIcon icon={faCog} className="text-gray-200 text-xl" />
+                <div id="settings-button-container">
+                    <button id="settings-button" className="p-2 rounded text" onClick={() => setShowSettings(true)}>
+                        <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-gray-200 text-xl" />
                     </button>
                 </div>
             </div>
-            {showSettings && (
-                <Settings onClose={() => setShowSettings(false)} />
-            )}
+            {showSettings && <Settings onClose={() => setShowSettings(false)} />}
         </header>
     );
 };

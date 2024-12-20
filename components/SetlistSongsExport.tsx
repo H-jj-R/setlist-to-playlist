@@ -53,18 +53,23 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
     }, [spotifySongs]);
 
     const SongListItem = ({ spotifySong }: { spotifySong: any }) => (
-        <li className="py-2">
+        <li id={`song-item-${spotifySong?.id}`} className="py-2">
             <div className="flex items-center space-x-4">
                 {spotifySong?.album?.images[0]?.url && (
                     <img
+                        id={`song-cover-${spotifySong?.id}`}
                         src={spotifySong.album.images[0].url}
                         alt={`${spotifySong.name} cover`}
                         className="w-12 h-12 rounded shadow"
                     />
                 )}
                 <div>
-                    <p className="font-medium">{spotifySong?.name}</p>
-                    <p className="text-sm text-gray-500">{spotifySong?.artists?.[0]?.name}</p>
+                    <p id={`song-name-${spotifySong?.id}`} className="font-medium">
+                        {spotifySong?.name}
+                    </p>
+                    <p id={`song-artist-${spotifySong?.id}`} className="text-sm text-gray-500">
+                        {spotifySong?.artists?.[0]?.name}
+                    </p>
                 </div>
             </div>
         </li>

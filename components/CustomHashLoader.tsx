@@ -12,6 +12,7 @@ interface CustomHashLoaderProps {
 const CustomHashLoader = ({ showLoading, size }: CustomHashLoaderProps) => {
     return (
         <HashLoader
+            id="hash-loader"
             color="#36d7c0"
             loading={showLoading}
             cssOverride={{} as CSSProperties}
