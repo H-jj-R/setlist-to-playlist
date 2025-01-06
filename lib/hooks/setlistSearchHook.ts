@@ -147,7 +147,7 @@ export default function setlistSearchHook() {
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${error.status}: ${i18nErrors(error.error)}`
+                error: `${i18nErrors(error.error)}`
             }));
         }
     };

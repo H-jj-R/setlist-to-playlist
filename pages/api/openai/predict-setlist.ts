@@ -10,16 +10,19 @@ const openai = new OpenAI({
 });
 
 // Define the schema for the predicted setlists
-const PredictedSetlistSchema = z.array(
-    z.object({
-        predictedSongs: z.array(
-            z.object({
-                name: z.string(),
-                artist: z.string()
-            })
-        )
-    })
-);
+const PredictedSetlistSchema = z.object({
+    predictedSetlists: z.array(
+        z.object({
+            predictedSongs: z.array(
+                z.object({
+                    name: z.string(),
+                    artist: z.string(),
+                    tape: z.boolean()
+                })
+            )
+        })
+    )
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { pastSetlists } = req.body;
@@ -37,7 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     const songs = setlist.sets.set.flatMap((set: any) =>
                         set.song.map((song: any) => {
                             // Check if the song has a cover and append it to the name
-                            return song.cover ? `${song.name} (${song.cover.name} cover)` : song.name;
+                            return `${song.name}${song.cover ? ` (${song.cover.name} cover)` : ""}${
+                                song.tape ? " (Played on tape)" : ""
+                            }`;
                         })
                     );
 
@@ -59,20 +64,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     {
                         role: "system",
                         content:
-                            "You are a setlist predictor. Based on the past setlists provided, predict the next setlist for the artist. Return each song along with its artist. Provide 3 possible predictions."
+                            "You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist. Return each song name, with its artist, and with a boolean for whether the song is played on tape. Provide 3 possible predictions. The first predicted setlist should be the most likely possible setlist, the second predicted setlist should be a likely setlist but not as likely as the first predicted setlist, and the third predicted setlist should have a bit more variance. None of these setlists should be the same as each other."
                     },
                     {
                         role: "user",
                         content: `Here are the past setlists:\n${input}`
                     }
                 ],
-                response_format: zodResponseFormat(PredictedSetlistSchema, "predicted_setlists")
+                response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
+                temperature: 0.8,
+                top_p: 1
             });
 
             // 3. Parse the structured response
-            const predictedSetlists = completion.choices.map((choice) => choice.message.parsed);
+            const predictedSetlists = completion.choices.map((choice) => choice.message.parsed)[0];
+            console.log(JSON.stringify(predictedSetlists));
 
-            // 4. Respond to the client
             res.status(200).json(predictedSetlists);
         } catch (error) {
             console.error("Error predicting setlist:", error);
