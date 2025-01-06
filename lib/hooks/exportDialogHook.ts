@@ -7,13 +7,20 @@ interface ExportDialogHookProps {
     setlist: Record<string, any>;
     artistData: Record<string, any>;
     isOpen: boolean;
+    predictedSetlist?: boolean;
     onClose: () => void;
 }
 
 /**
  * Hook for data handling on ExportDialog component.
  */
-export default function exportDialogHook({ setlist, artistData, isOpen, onClose }: ExportDialogHookProps) {
+export default function exportDialogHook({
+    setlist,
+    artistData,
+    isOpen,
+    predictedSetlist,
+    onClose
+}: ExportDialogHookProps) {
     const { t: i18nCommon } = useTranslation("common");
     const { t: i18n } = useTranslation("export-setlist");
     const { t: i18nErrors } = useTranslation("errors");
@@ -32,13 +39,15 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
         if (isOpen) {
             setState((prev) => ({
                 ...prev,
-                playlistName: `${artistData.spotifyArtist.name} Setlist - ${format(
-                    ((dateString: string) => {
-                        const [day, month, year] = dateString.split("-");
-                        return new Date(`${year}-${month}-${day}`);
-                    })(setlist.eventDate),
-                    "MMMM dd, yyyy"
-                )}`
+                playlistName: predictedSetlist
+                    ? `${artistData.spotifyArtist.name} Predicted Setlist`
+                    : `${artistData.spotifyArtist.name} Setlist - ${format(
+                          ((dateString: string) => {
+                              const [day, month, year] = dateString.split("-");
+                              return new Date(`${year}-${month}-${day}`);
+                          })(setlist.eventDate),
+                          "MMMM dd, yyyy"
+                      )}`
             }));
         }
     }, [isOpen, artistData, setlist]);
@@ -112,7 +121,7 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
                 };
                 reader.readAsDataURL(file);
             } else {
-                // TODO: Should I show error message if not correct file type?
+                // TODO: Show error message somewhere if not correct file type
             }
         }
     }, []);
@@ -179,7 +188,7 @@ export default function exportDialogHook({ setlist, artistData, isOpen, onClose 
             console.error(error);
             setMessageDialog({
                 isOpen: true,
-                message: `${error.status}: ${i18nErrors(error.error)}`,
+                message: `${i18nErrors(error.error)}`,
                 type: "error"
             });
         }

@@ -7,13 +7,14 @@ interface ExportDialogProps {
     setlist: Record<string, any>; // The setlist data to be exported
     artistData: Record<string, any>;
     isOpen: boolean; // Controls the visibility of the dialog
+    predictedSetlist?: boolean; // Indicates if the setlist is AI-generated
     onClose: () => void; // Close function
 }
 
 /**
  * Dialog allowing user to export chosen setlist to playlist with custom specification.
  */
-const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, onClose }) => {
+const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, predictedSetlist, onClose }) => {
     const {
         state,
         i18nCommon,
@@ -25,7 +26,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
         getInputProps,
         handleExport,
         resetState
-    } = exportDialogHook({ setlist, artistData, isOpen, onClose });
+    } = exportDialogHook({ setlist, artistData, isOpen, predictedSetlist, onClose });
 
     return (
         isOpen && (
@@ -184,6 +185,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         <SetlistSongsExport
                             setlist={setlist}
                             artistData={artistData}
+                            predictedSetlist={predictedSetlist}
                             onSongsFetched={(songs) =>
                                 setState((prev) => ({
                                     ...prev,

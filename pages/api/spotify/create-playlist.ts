@@ -38,7 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const data = await response.json();
-        console.log(JSON.stringify(data));
         res.status(200).json({ success: true, data: data });
     } catch (error) {
         console.error("Unexpected error:", error);

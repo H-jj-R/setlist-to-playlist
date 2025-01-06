@@ -5,13 +5,19 @@ import ErrorMessage from "./ErrorMessage";
 interface SetlistSongsExportProps {
     setlist: Record<string, any>; // The setlist data
     artistData: Record<string, any>; // Artist information
+    predictedSetlist?: boolean; // Whether the setlist is predicted
     onSongsFetched: (songs: Record<string, any>[]) => void; // Callback to pass songs to ExportDialog
 }
 
 /**
  * Displays setlist songs as from Spotify as they will be exported.
  */
-const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artistData, onSongsFetched }) => {
+const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
+    setlist,
+    artistData,
+    predictedSetlist,
+    onSongsFetched
+}) => {
     const [spotifySongs, setSpotifySongs] = useState<Record<string, any>[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -23,7 +29,8 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
             try {
                 const response = await fetch(
                     `/api/controllers/get-spotify-songs?${new URLSearchParams({
-                        artist: artistData.spotifyArtist.name
+                        artist: artistData.spotifyArtist.name,
+                        isPredicted: predictedSetlist ? "true" : "false"
                     }).toString()}`,
                     {
                         method: "POST",
@@ -97,8 +104,10 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({ setlist, artist
                                 <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
                                     <ErrorMessage
                                         message={`Song not found: ${
-                                            (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
-                                            "Unknown Song"
+                                            predictedSetlist
+                                                ? setlist?.predictedSongs?.[idx]?.name || "Unknown Song"
+                                                : (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
+                                                  "Unknown Song"
                                         }`}
                                         small={true}
                                     ></ErrorMessage>

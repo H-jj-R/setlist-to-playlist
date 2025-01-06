@@ -93,14 +93,12 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                 <ul id="songs-list" className="space-y-1 pb-6">
                     {setlist.sets.set.flatMap((set: any, setIdx: number, setArray: any[]) =>
                         set.song.map((song: any, songIdx: number) => {
-                            const isFirst = setIdx === 0 && songIdx === 0;
-                            const isLast = setIdx === setArray.length - 1 && songIdx === set.song.length - 1;
                             return (
                                 <SongListItem
                                     key={`${songIdx}-${song.name || "unknown"}`}
                                     song={song}
-                                    isFirst={isFirst}
-                                    isLast={isLast}
+                                    isFirst={setIdx === 0 && songIdx === 0}
+                                    isLast={setIdx === setArray.length - 1 && songIdx === set.song.length - 1}
                                 />
                             );
                         })

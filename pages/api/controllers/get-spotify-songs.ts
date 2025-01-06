@@ -5,7 +5,7 @@ import getBaseUrl from "../../../lib/utils/getBaseUrl";
  * API handler to get a set of songs from Spotify.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { artist } = req.query;
+    const { artist, isPredicted } = req.query;
     const { setlist } = req.body;
     const baseUrl = getBaseUrl(req);
 
@@ -20,7 +20,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }).toString()}`;
 
         // Construct cover artist search URL if a cover artist exists
-        const coverArtist = song.cover?.name || null;
+        const coverArtist =
+            isPredicted === "true"
+                ? song.artist.toLowerCase() !== (artist as string).toLowerCase()
+                    ? song.artist
+                    : null
+                : song.cover?.name || null;
+
         const coverArtistSearchUrl = coverArtist
             ? `${baseUrl}/api/spotify/search-track?${new URLSearchParams({
                   artist: coverArtist,
@@ -46,7 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return null;
             }
         };
-
         let trackDetails = await fetchTrack(mainArtistSearchUrl);
 
         // If no match for the main artist, try the cover artist
@@ -57,18 +62,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return trackDetails || { error: `No match found for ${song.name}` };
     };
 
-    const spotifyDetails = await Promise.all(
-        setlist.sets.set.flatMap((set: any) =>
-            set.song
-                .filter(
-                    (song: any) =>
-                        song.name.toLowerCase() !== "intro" &&
-                        song.name.toLowerCase() !== "interlude" &&
-                        song.name.toLowerCase() !== ""
-                )
-                .map((song: any) => fetchSongDetails(song))
-        )
-    );
+    try {
+        const spotifyDetails = await Promise.all(
+            (isPredicted === "true"
+                ? setlist.predictedSongs
+                : setlist.sets.set.flatMap((set: any) =>
+                      set.song.filter((song: any) => !["intro", "interlude", ""].includes(song.name.toLowerCase()))
+                  )
+            ).map(fetchSongDetails)
+        );
 
-    res.status(200).json(spotifyDetails);
+        res.status(200).json(spotifyDetails);
+    } catch (error) {
+        console.error("Error fetching Spotify songs:", error);
+        return res.status(500).json({ error: "Failed to load songs" });
+    }
 }

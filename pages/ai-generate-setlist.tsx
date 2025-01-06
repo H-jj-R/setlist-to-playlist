@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../components/Layout";
 import SearchBar from "../components/SearchBar";
-import Setlist from "../components/Setlist";
+import AISetlist from "../components/AISetlist";
 import ExportDialog from "../components/ExportDialog";
 import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
@@ -73,32 +73,30 @@ export default function SetlistSearch() {
                     )}
 
                     {state.pageState === PageState.Setlist && (
-                        <>
-                            <div id="setlist-container" className="flex gap-4 mt-[3rem]">
-                                {/* Setlist display */}
-                                {state.pageState === PageState.Setlist && (
-                                    <div id="setlist-display" className="w-full animate-fadeIn">
-                                        <Setlist setlist={[]} onClose={() => {}} onExport={handleExport} />
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                        <div id="setlist-container" className="flex gap-4 mt-[3rem]">
+                            {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
+                                <div key={index} id="setlist-display" className="w-full animate-fadeIn">
+                                    <AISetlist setlist={[setlist]} predictionNum={index + 1} onExport={handleExport} />
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
             </Layout>
 
             {/* Export Dialog */}
-            {/* {state.pageState === PageState.Setlist && (
-                    <ExportDialog
-                        setlist={state.chosenSetlistData}
-                        artistData={{
-                            spotifyArtist: state.allSetlistsData.spotifyArtist,
-                            setlistfmArtist: state.allSetlistsData.setlistfmArtist
-                        }}
-                        isOpen={state.exportDialogOpen}
-                        onClose={handleExportDialogClosed}
-                    />
-            )} */}
+            {state.pageState === PageState.Setlist && (
+                <ExportDialog
+                    setlist={state.chosenSetlist}
+                    artistData={{
+                        spotifyArtist: state.allSetlistsData.spotifyArtist,
+                        setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                    }}
+                    isOpen={state.exportDialogOpen}
+                    predictedSetlist={true}
+                    onClose={handleExportDialogClosed}
+                />
+            )}
         </>
     );
 }

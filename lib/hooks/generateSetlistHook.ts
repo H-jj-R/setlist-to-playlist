@@ -19,6 +19,7 @@ export default function generateSetlistHook() {
         searchComplete: false,
         allSetlistsData: [] as any,
         predictedSetlists: null as any,
+        chosenSetlist: null as any,
         exportDialogOpen: false,
         animLoading: true,
         showLoading: false,
@@ -70,7 +71,6 @@ export default function generateSetlistHook() {
         setState((prev) => ({ ...prev, showLoading: true }));
 
         try {
-            // TODO: FINISH THIS
             const response = await fetch(`/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`);
             if (!response.ok) {
                 const errorResponse = await response.json();
@@ -91,7 +91,7 @@ export default function generateSetlistHook() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ pastSetlists: "PASTSETLISTS" })
+                body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist })
             });
 
             if (!apiResponse.ok) {
@@ -105,7 +105,10 @@ export default function generateSetlistHook() {
             const apiData = await apiResponse.json();
             setState((prev) => ({
                 ...prev,
-                predictedSetlists: apiData.predictedSetlists,
+                predictedSetlists: apiData.predictedSetlists.map((predictedSetlist, idx) => ({
+                    ...predictedSetlist,
+                    setlistArtist: setlistData.spotifyArtist
+                })),
                 searchComplete: true,
                 showLoading: false,
                 pageState: PageState.Setlist
@@ -116,17 +119,25 @@ export default function generateSetlistHook() {
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${error.status}: ${i18nErrors(error.error)}`
+                error: `${i18nErrors(error.error)}`
             }));
         }
     };
 
-    const handleExport = async () => {
-        // TODO: This.
+    const handleExport = async (setlist) => {
+        setState((prev) => ({
+            ...prev,
+            chosenSetlist: setlist,
+            exportDialogOpen: true
+        }));
     };
 
     const handleExportDialogClosed = () => {
-        setState((prev) => ({ ...prev, exportDialogOpen: false }));
+        setState((prev) => ({
+            ...prev,
+            chosenSetlist: null,
+            exportDialogOpen: false
+        }));
     };
 
     return {
