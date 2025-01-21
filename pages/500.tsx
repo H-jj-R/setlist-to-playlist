@@ -7,14 +7,14 @@ import { useTranslation } from "react-i18next";
  * It displays a friendly error message for server-side issues.
  */
 export default function Custom500() {
-    const { t: i18nErrors } = useTranslation("errors");
+    const { t: i18n } = useTranslation();
     // TODO: Make this page look good
     return (
         <Layout>
             <Head>
-                <title>{i18nErrors("500")}</title>
+                <title>{i18n("errors:500")}</title>
             </Head>
-            <h1>{i18nErrors("500PageMessage")}</h1>
+            <h1>{i18n("errors:500PageMessage")}</h1>
         </Layout>
     );
 }

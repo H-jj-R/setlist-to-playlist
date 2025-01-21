@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
  */
 const HeroSection: React.FC = () => {
     const router = useRouter();
-    const { t: i18n } = useTranslation("landing-page");
+    const { t: i18n } = useTranslation();
 
     return (
         <div
@@ -15,10 +15,10 @@ const HeroSection: React.FC = () => {
         >
             <div id="landing-page-text" className="mb-6 lg:mb-0 lg:w-1/2">
                 <h1 id="landing-page-title" className="text-4xl font-extrabold mb-4">
-                    {i18n("landingPageTitle")}
+                    {i18n("landingPage:landingPageTitle")}
                 </h1>
                 <p id="landing-page-description" className="text-lg mb-8">
-                    {i18n("landingPageDescription")}
+                    {i18n("landingPage:landingPageDescription")}
                 </p>
             </div>
             <div id="setlist-search-button-container" className="lg:ml-auto lg:mr-auto">
@@ -27,7 +27,7 @@ const HeroSection: React.FC = () => {
                     onClick={() => router.push("/setlist-search")}
                     className="px-12 py-5 bg-white text-pink-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 focus:outline-none transition text-lg"
                 >
-                    {i18n("goToSetlistSearch")}
+                    {i18n("landingPage:goToSetlistSearch")}
                 </button>
             </div>
         </div>

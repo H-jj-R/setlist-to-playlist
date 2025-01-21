@@ -1,0 +1,69 @@
+{
+    "common": {
+        "cancel": "Cancel",
+        "loading": "Loading",
+        "search": "Search",
+        "siteTitle": "Setlist to Playlist",
+        "export": "Export",
+        "exportToSpotify": "Export to Spotify"
+    },
+    "errors": {
+        "404PageMessage": "404 - Page Not Found!",
+        "500PageMessage": "500 - Something Went Wrong!",
+        "internalServerError": "Internal server error!",
+        "setlistFmNoSetlistsError": "No setlists found!",
+        "setlistFmSearchArtistError": "Error finding artist on setlist.fm!",
+        "setlistFmSearchSetlistError": "Error searching setlists!",
+        "setlistFmSearchSetlistIdError": "Setlist not found!",
+        "spotifyAccessTokenError": "No Spotify access token found!",
+        "spotifyAddImageError": "Error adding image to playlist!",
+        "spotifyAddItemsError": "Error adding songs to playlist!",
+        "spotifyCallbackError": "Error in Spotify authorisation callback!",
+        "spotifyCreatePlaylistError": "Error creating playlist!",
+        "spotifyGenerateAccessTokenError": "Error generating Spotify access token!",
+        "spotifyGetUserDataError": "Error fetching user data!",
+        "spotifySearchArtistError": "Error finding artist on Spotify!",
+        "spotifySearchTrackError": "Error searching for song on Spotify!"
+    },
+    "exportSetlist": {
+        "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
+        "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
+        "enterPlaylistDescription": "Enter playlist description",
+        "enterPlaylistName": "Enter playlist name",
+        "playlistCoverImage": " Playlist Cover Image",
+        "playlistDescription": "Playlist Description",
+        "playlistName": "Playlist Name",
+        "removeImage": "Remove Image",
+        "exportSuccess": "Playlist exported successfully!"
+    },
+    "landingPage": {
+        "feature1Description": "Keep track of your created playlists and access them anytime.",
+        "feature1Title": "Save Your Playlists",
+        "feature2Description": "Easily integrate with Spotify and save playlists directly to your account.",
+        "feature2Title": "Sync Seamlessly",
+        "feature3Description": "Deleting a playlist on Spotify doesn't mean it's gone forever.",
+        "feature3Title": "Playlist Recovery",
+        "goToSetlistSearch": "Search for Setlists",
+        "landingPageDescription": "Effortlessly create Spotify playlists from your favourite artists' live performances.",
+        "landingPageTitle": "Transform Setlists into Playlists",
+        "whyCreateAccountDescription": "Unlock exclusive features by creating an account. Save playlists, recover deleted playlists, and more!",
+        "whyCreateAccountTitle": "Why Create an Account?",
+        "goToAIGenerateSetlist": "AI Generate a Setlist",
+        "generateSetlistTitle": "AI Generated Setlist",
+        "generateSetlistDescription": "Use this AI tool to create the next predicted setlist for any artist."
+    },
+    "loginSignUp": {
+        "loginSignUp": "Login / Sign Up"
+    },
+    "setlistSearch": {
+        "artistAtVenue": "{{artistName}} at {{location}}",
+        "backToList": "Back to List",
+        "loadMore": "Load More",
+        "noSongsFound": "No songs found!",
+        "searchForSetlist": "Search for an artist/band or setlist.fm link...",
+        "setlistDate": "Date: {{date}}",
+        "setlistListTitle": "Setlists for {{artistName}}",
+        "songCount": "{{songCount}} song",
+        "songCountPlural": "{{songCount}} songs"
+    }
+}

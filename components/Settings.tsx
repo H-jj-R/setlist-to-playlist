@@ -12,7 +12,7 @@ interface SettingsProps {
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme, resolvedTheme } = useTheme();
 
     useEffect(() => {
         // Trigger the slide-in and dimming animation after mounting
@@ -36,12 +36,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             {/* Settings panel */}
             <div
                 id="settings-panel"
-                className={`transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full bg-white shadow-lg p-4 ${
+                className={`transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full shadow-lg p-4 ${
                     isVisible ? "translate-x-0" : "translate-x-full"
-                }`}
+                } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
                 <div id="settings-header" className="flex justify-between items-center mb-4 mr-5">
-                    <h2 id="settings-title" className="text-black text-xl font-bold">
+                    <h2 id="settings-title" className="text-xl font-bold">
                         Settings
                     </h2>
                     <button
@@ -51,14 +51,14 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             setIsVisible(false);
                             setTimeout(onClose, 300); // Match the animation duration
                         }}
-                        className="text-black hover:text-gray-800 text-xl"
+                        className="text-xl"
                     >
                         <FontAwesomeIcon icon={faChevronRight} size="lg" />
                     </button>
                 </div>
                 {/* Theme Setting */}
                 <div id="theme-setting" className="mb-4">
-                    <h3 id="theme-title" className="text-lg font-medium text-gray-900">
+                    <h3 id="theme-title" className="text-lg font-medium">
                         Theme
                     </h3>
                     <select
@@ -67,7 +67,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                             setTheme(event.target.value);
                         }}
-                        className="w-full px-4 py-2 border border-gray-400 rounded-md text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                            resolvedTheme === "dark"
+                                ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
+                                : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
+                        }`}
                     >
                         <option id="light-theme" value="light">
                             Light

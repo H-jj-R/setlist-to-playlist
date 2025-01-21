@@ -11,8 +11,7 @@ interface SearchBarProps {
  * This component allows users to search for artists/bands or setlist.fm links.
  */
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, locked }) => {
-    const { t: i18nCommon } = useTranslation("common");
-    const { t: i18n } = useTranslation("setlist-search");
+    const { t: i18n } = useTranslation();
     const [query, setQuery] = useState("");
 
     return (
@@ -24,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, locked }) => {
                     className={`flex-1 h-12 py-2 px-4 rounded-l-lg text-lg border border-gray-300 ${
                         locked ? "bg-gray-200 cursor-not-allowed" : ""
                     }`}
-                    placeholder={i18n("searchForSetlist")}
+                    placeholder={i18n("setlistSearch:searchForSetlist")}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => {
@@ -43,7 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, locked }) => {
                     }`}
                     disabled={locked}
                 >
-                    {i18nCommon("search")}
+                    {i18n("common:search")}
                 </button>
             </div>
         </div>

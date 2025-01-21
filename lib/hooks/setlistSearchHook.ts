@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 export default function setlistSearchHook() {
     const router = useRouter();
     const { resolvedTheme } = useTheme();
-    const { t: i18nErrors } = useTranslation("errors");
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
         searchTriggered: false,
@@ -147,7 +147,7 @@ export default function setlistSearchHook() {
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${i18nErrors(error.error)}`
+                error: `${i18n(error.error)}`
             }));
         }
     };

@@ -13,7 +13,7 @@ interface AISetlistProps {
  * Displays a setlist from it's predicted AI-generated details.
  */
 const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport }) => {
-    const { t: i18n } = useTranslation("setlist-search");
+    const { t: i18n } = useTranslation();
 
     // Safely access the first element of the setlist array
     const setlistData = Array.isArray(setlist) && setlist.length > 0 ? setlist[0] : {};
@@ -54,7 +54,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
                         className="ml-auto mr-auto px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
                         onClick={() => onExport(setlistData)}
                     >
-                        {i18n("exportToSpotify")}
+                        {i18n("common:exportToSpotify")}
                     </button>
                 </div>
             </div>
@@ -81,7 +81,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
                 </ul>
             ) : (
                 <p id="no-songs-message" className="italic text-center">
-                    {i18n("noSongsFound")}
+                    {i18n("setlistSearch:noSongsFound")}
                 </p>
             )}
         </div>

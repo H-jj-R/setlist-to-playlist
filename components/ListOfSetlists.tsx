@@ -12,8 +12,7 @@ interface ListOfSetlistsProps {
  * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
-    const { t: i18nCommon } = useTranslation("common");
-    const { t: i18n } = useTranslation("setlist-search");
+    const { t: i18n } = useTranslation();
     const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []);
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
     const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +54,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                         id="artist-image"
                     />
                     <h2 id="setlist-title" className="text-3xl font-bold">
-                        {i18n("setlistListTitle", { artistName: setlistData.spotifyArtist.name })}
+                        {i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}
                     </h2>
                 </div>
                 <ul id="setlist-list" className="space-y-3 px-4 w-full">
@@ -70,7 +69,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                         disabled={isLoading}
                         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
-                        {isLoading ? `${i18nCommon("loading")}...` : i18n("loadMore")}
+                        {isLoading ? `${i18n("common:loading")}...` : i18n("setlistSearch:loadMore")}
                     </button>
                 )}
             </div>

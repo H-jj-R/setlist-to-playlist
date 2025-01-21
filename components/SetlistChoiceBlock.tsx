@@ -11,7 +11,7 @@ interface SetlistChoiceBlockProps {
  * Displays information about a setlist, including event date, artist, location, and song count.
  */
 const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) => {
-    const { t: i18n } = useTranslation("setlist-search");
+    const { t: i18n } = useTranslation();
 
     // Calculate the total number of songs in the setlist
     const songCount = setlist.sets.set.reduce(
@@ -37,11 +37,11 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClic
                 {formatDate(setlist.eventDate)}
             </div>
             <div id={`setlist-venue-${setlist.id}`} className={`text-lg ${isDisabled ? "text-sm" : ""}`}>
-                {i18n("artistAtVenue", { artistName: setlist.artist.name, location })}
+                {i18n("setlistSearch:artistAtVenue", { artistName: setlist.artist.name, location })}
             </div>
             {!isDisabled && (
                 <div id={`setlist-song-count-${setlist.id}`} className="text-base italic">
-                    {songCount === 1 ? i18n("songCount", { songCount }) : i18n("songCount_plural", { songCount })}
+                    {songCount === 1 ? i18n("setlistSearch:songCount", { songCount }) : i18n("setlistSearch:songCountPlural", { songCount })}
                 </div>
             )}
         </li>

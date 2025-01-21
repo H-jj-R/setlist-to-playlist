@@ -12,14 +12,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // If no refresh token is found in the cookies, respond with an error
         if (!encryptedRefreshToken) {
             return res.status(401).json({
-                error: "spotifyAccessTokenError"
+                error: "errors:spotifyAccessTokenError"
             });
         }
 
         res.status(200).json({ success: true });
     } catch (error) {
         res.status(500).json({
-            error: "internalServerError"
+            error: "errors:internalServerError"
         });
     }
 }

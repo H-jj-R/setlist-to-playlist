@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If no authorisation code is provided, return a 400 error
     if (!code) {
         return res.status(400).json({
-            error: "spotifyCallbackError"
+            error: "errors:spotifyCallbackError"
         });
     }
 
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "spotifyCallbackError"
+                error: "errors:spotifyCallbackError"
             });
         }
 
@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error("Unexpected error:", error);
         res.status(500).json({
-            error: "internalServerError"
+            error: "errors:internalServerError"
         });
     }
 }

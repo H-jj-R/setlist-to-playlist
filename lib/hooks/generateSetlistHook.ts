@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 export default function generateSetlistHook() {
     const router = useRouter();
     const { resolvedTheme } = useTheme();
-    const { t: i18nErrors } = useTranslation("errors");
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
         searchBarLocked: true,
@@ -119,7 +119,7 @@ export default function generateSetlistHook() {
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${i18nErrors(error.error)}`
+                error: `${i18n(error.error)}`
             }));
         }
     };
