@@ -14,7 +14,7 @@ interface SetlistProps {
  * Displays a setlist from it's setlist.fm details.
  */
 const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
-    const { t: i18n } = useTranslation("setlist-search");
+    const { t: i18n } = useTranslation();
 
     const location: string = `${setlist.venue.name}, ${setlist.venue.city.name}${
         setlist.venue.city.country.code === "US" ? `, ${setlist.venue.city.stateCode}` : ""
@@ -60,7 +60,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                         className="px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:ring focus:ring-red-300 w-full sm:w-auto"
                         onClick={onClose}
                     >
-                        {i18n("backToList")}
+                        {i18n("setlistSearch:backToList")}
                     </button>
 
                     {/* Export to Spotify Button */}
@@ -70,7 +70,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                         className="px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
                         onClick={onExport}
                     >
-                        {i18n("exportToSpotify")}
+                        {i18n("common:exportToSpotify")}
                     </button>
                 </div>
             </div>
@@ -84,7 +84,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     {location}
                 </p>
                 <p id="setlist-date" className="text-sm text-gray-500 dark:text-gray-400">
-                    {i18n("setlistDate", { date: formatDate(setlist.eventDate) })}
+                    {i18n("setlistSearch:setlistDate", { date: formatDate(setlist.eventDate) })}
                 </p>
             </div>
 
@@ -106,7 +106,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                 </ul>
             ) : (
                 <p id="no-songs-message" className="italic text-center">
-                    {i18n("noSongsFound")}
+                    {i18n("setlistSearch:noSongsFound")}
                 </p>
             )}
         </div>

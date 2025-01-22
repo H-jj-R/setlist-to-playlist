@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // If no refresh token is found in the cookies, respond with an error
         if (!encryptedRefreshToken) {
             return res.status(401).json({
-                error: "spotifyAccessTokenError"
+                error: "errors:spotifyAccessTokenError"
             });
         }
 
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "spotifyGenerateAccessTokenError"
+                error: "errors:spotifyGenerateAccessTokenError"
             });
         }
 
@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error("Unexpected error:", error);
         res.status(500).json({
-            error: "internalServerError"
+            error: "errors:internalServerError"
         });
     }
 }

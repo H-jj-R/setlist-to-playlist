@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { useDropzone } from "react-dropzone";
 
 interface ExportDialogHookProps {
@@ -21,9 +21,7 @@ export default function exportDialogHook({
     predictedSetlist,
     onClose
 }: ExportDialogHookProps) {
-    const { t: i18nCommon } = useTranslation("common");
-    const { t: i18n } = useTranslation("export-setlist");
-    const { t: i18nErrors } = useTranslation("errors");
+    const { t: i18n } = useTranslation();
     const [state, setState] = useState({
         playlistName: "",
         playlistDescription: "",
@@ -181,14 +179,14 @@ export default function exportDialogHook({
             // Success
             setMessageDialog({
                 isOpen: true,
-                message: i18n("exportSuccess"),
+                message: i18n("exportSetlist:exportSuccess"),
                 type: "success"
             });
         } catch (error) {
             console.error(error);
             setMessageDialog({
                 isOpen: true,
-                message: `${i18nErrors(error.error)}`,
+                message: `${i18n(error.error)}`,
                 type: "error"
             });
         }
@@ -207,8 +205,6 @@ export default function exportDialogHook({
 
     return {
         state,
-        i18nCommon,
-        i18n,
         messageDialog,
         setMessageDialog,
         setState,

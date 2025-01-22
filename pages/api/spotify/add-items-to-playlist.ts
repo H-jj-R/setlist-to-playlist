@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "spotifyAddItemsError"
+                error: "errors:spotifyAddItemsError"
             });
         }
 
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error("Unexpected error:", error);
         res.status(500).json({
-            error: "internalServerError"
+            error: "errors:internalServerError"
         });
     }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import SetlistSongsExport from "./SetlistSongsExport";
 import exportDialogHook from "../lib/hooks/exportDialogHook";
 import MessageDialog from "./MessageDialog";
@@ -15,10 +16,9 @@ interface ExportDialogProps {
  * Dialog allowing user to export chosen setlist to playlist with custom specification.
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, predictedSetlist, onClose }) => {
+    const { t: i18n } = useTranslation();
     const {
         state,
-        i18nCommon,
-        i18n,
         messageDialog,
         setMessageDialog,
         setState,
@@ -57,7 +57,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         {/* Main Export Dialog */}
                         <div id="export-dialog-main" className="flex-1 p-4">
                             <h3 id="export-dialog-title" className="text-xl font-semibold mb-4">
-                                {i18n("exportToSpotify")}
+                                {i18n("common:exportToSpotify")}
                             </h3>
 
                             {/* Playlist Name */}
@@ -66,7 +66,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     htmlFor="playlist-name-input"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
-                                    {i18n("playlistName")}
+                                    {i18n("exportSetlist:playlistName")}
                                 </label>
                                 <input
                                     id="playlist-name-input"
@@ -80,7 +80,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                             playlistName: e.target.value
                                         }));
                                     }}
-                                    placeholder={i18n("enterPlaylistName")}
+                                    placeholder={i18n("exportSetlist:enterPlaylistName")}
                                     required
                                     autoComplete="off"
                                 />
@@ -92,7 +92,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     htmlFor="playlist-description-input"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
-                                    {i18n("playlistDescription")}
+                                    {i18n("exportSetlist:playlistDescription")}
                                 </label>
                                 <textarea
                                     id="playlist-description-input"
@@ -105,7 +105,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                             playlistDescription: e.target.value
                                         }));
                                     }}
-                                    placeholder={i18n("enterPlaylistDescription")}
+                                    placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                     autoComplete="off"
                                 />
                             </div>
@@ -136,7 +136,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                                 }}
                                                 className="text-red-500 hover:text-red-700 focus:outline-none"
                                             >
-                                                {i18n("removeImage")}
+                                                {i18n("exportSetlist:removeImage")}
                                             </button>
                                         </div>
                                     ) : (
@@ -149,10 +149,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         >
                                             <input {...getInputProps()} />
                                             <p id="dropzone-message" className="overflow-hidden text-sm">
-                                                {i18n("dropzoneMessage")}
+                                                {i18n("exportSetlist:dropzoneMessage")}
                                             </p>
                                             <p id="dropzone-file-types" className="overflow-hidden text-sm">
-                                                {i18n("dropzoneFileTypes")}
+                                                {i18n("exportSetlist:dropzoneFileTypes")}
                                             </p>
                                         </div>
                                     )}
@@ -169,14 +169,14 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         resetState();
                                     }}
                                 >
-                                    {i18nCommon("cancel")}
+                                    {i18n("common:cancel")}
                                 </button>
                                 <button
                                     id="export-button"
                                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                                     onClick={handleExport}
                                 >
-                                    {i18n("export")}
+                                    {i18n("common:export")}
                                 </button>
                             </div>
                         </div>

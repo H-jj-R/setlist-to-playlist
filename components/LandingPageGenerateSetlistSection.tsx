@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
  */
 const GenerateSetlistSection: React.FC = () => {
     const router = useRouter();
-    const { t: i18n } = useTranslation("landing-page");
+    const { t: i18n } = useTranslation();
 
     return (
         <div
@@ -19,15 +19,15 @@ const GenerateSetlistSection: React.FC = () => {
                     onClick={() => router.push("/ai-generate-setlist")}
                     className="px-12 py-5 bg-white text-purple-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 focus:outline-none transition text-lg mb-8 lg:mb-0"
                 >
-                    {i18n("goToAIGenerateSetlist")}
+                    {i18n("landingPage:goToAIGenerateSetlist")}
                 </button>
             </div>
             <div id="generate-setlist-text" className="lg:w-1/2 text-center lg:text-right">
                 <h1 id="generate-setlist-title" className="text-4xl font-extrabold mb-4">
-                    {i18n("generateSetlistTitle")}
+                    {i18n("landingPage:generateSetlistTitle")}
                 </h1>
                 <p id="generate-setlist-description" className="text-lg">
-                    {i18n("generateSetlistDescription")}
+                    {i18n("landingPage:generateSetlistDescription")}
                 </p>
             </div>
         </div>
