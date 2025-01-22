@@ -16,7 +16,7 @@ if (!i18n.isInitialized) {
             interpolation: {
                 escapeValue: false
             },
-            ns: ["common", "errors", "exportSetlist", "landingPage", "loginSignUp", "setlistSearch"],
+            ns: ["common", "account", "errors", "exportSetlist", "landingPage", "setlistSearch"],
             detection: {
                 order: ["querystring", "cookie", "localStorage", "navigator", "htmlTag"],
                 caches: ["cookie"]

@@ -5,7 +5,31 @@
         "search": "Search",
         "siteTitle": "Setlist to Playlist",
         "export": "Export",
-        "exportToSpotify": "Export to Spotify"
+        "exportToSpotify": "Export to Spotify",
+        "areYouSure": "Are you sure?",
+        "close": "Close",
+        "show": "Show",
+        "hide": "Hide"
+    },
+    "account": {
+        "accountSettings": "Account Settings",
+        "logout": "Logout",
+        "deleteAccount": "Delete Account",
+        "permanentAction": "This action is permanent and cannot be undone.",
+        "yesDelete": "Yes, Delete",
+        "loginSignUp": "Login / Sign Up",
+        "signUp": "Sign Up",
+        "login": "Login",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "passwordError": "Password must be 8-32 characters, contain at least one number, one special character, one lowercase and one uppercase letter.",
+        "signUpSuccess": "Sign-up successful! You can now log in.",
+        "signUpFailed": "Sign-up failed: {{message}}",
+        "loginSuccess": "Login successful!",
+        "loginFailed": "Login failed: {{message}}",
+        "alreadyHaveAccount": "Already have an account? Login",
+        "noAccount": "No account? Sign up"
     },
     "errors": {
         "404PageMessage": "404 - Page Not Found!",
@@ -23,7 +47,8 @@
         "spotifyGenerateAccessTokenError": "Error generating Spotify access token!",
         "spotifyGetUserDataError": "Error fetching user data!",
         "spotifySearchArtistError": "Error finding artist on Spotify!",
-        "spotifySearchTrackError": "Error searching for song on Spotify!"
+        "spotifySearchTrackError": "Error searching for song on Spotify!",
+        "unexpectedError": "An unexpected error occurred. Please try again."
     },
     "exportSetlist": {
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
@@ -51,9 +76,6 @@
         "goToAIGenerateSetlist": "AI Generate a Setlist",
         "generateSetlistTitle": "AI Generated Setlist",
         "generateSetlistDescription": "Use this AI tool to create the next predicted setlist for any artist."
-    },
-    "loginSignUp": {
-        "loginSignUp": "Login / Sign Up"
     },
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} at {{location}}",

@@ -40,7 +40,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
-                <div id="settings-header" className="flex justify-between items-center mb-4 mr-5">
+                <div id="settings-header" className="flex justify-between items-center mb-6 mr-5">
                     <h2 id="settings-title" className="text-xl font-bold">
                         Settings
                     </h2>
@@ -67,7 +67,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                             setTheme(event.target.value);
                         }}
-                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
                             resolvedTheme === "dark"
                                 ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
                                 : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"

@@ -89,7 +89,8 @@ export default function generateSetlistHook() {
             const apiResponse = await fetch("/api/openai/predict-setlist", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("authToken")}`
                 },
                 body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist })
             });
