@@ -75,7 +75,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
                 console.error("Error deleting account:", errorData.message);
                 setMessageDialog({
                     isOpen: true,
-                    message: i18n("account:deleteFailed", { message: errorData.message }),
+                    message: i18n("account:deleteFailed"),
                     type: "error"
                 });
             }

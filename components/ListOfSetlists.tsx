@@ -43,7 +43,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     return (
         <div
             id="setlist-container"
-            className="h-[calc(100vh-9rem)] overflow-y-auto border border-gray-300 rounded-lg w-full"
+            className="h-[calc(100vh-9rem)] overflow-y-auto border-4 border-gray-300 rounded-lg w-full"
         >
             <div id="setlist-header" className="p-4 w-full flex flex-col items-center">
                 <div id="artist-info" className="flex items-center mb-5 px-4">

@@ -29,7 +29,8 @@
         "loginSuccess": "Login successful!",
         "loginFailed": "Login failed: {{message}}",
         "alreadyHaveAccount": "Already have an account? Login",
-        "noAccount": "No account? Sign up"
+        "noAccount": "No account? Sign up",
+        "deleteFailed": "Account deletion failed!"
     },
     "errors": {
         "404PageMessage": "404 - Page Not Found!",
