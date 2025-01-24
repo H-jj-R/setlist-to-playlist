@@ -7,6 +7,7 @@ import getBaseUrl from "../../../lib/utils/getBaseUrl";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { name, description, image, tracks } = req.body;
     try {
+        let issue;
         const baseUrl = getBaseUrl(req);
 
         // 1. Get user data
@@ -88,13 +89,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
             if (!addCoverImageResponse.ok) {
                 const errorResponse = await addCoverImageResponse.json();
-                return res.status(addCoverImageResponse.status).json({
-                    error: errorResponse.error
-                });
+                issue = errorResponse.error;
             }
         }
+        
+        // TODO: Save this playlist to the user's account (if logged in)
+        // TODO: Make API route, then send playlistId (can then retrieve all playlist and song details from Spotify API)
 
-        res.status(200).json({ success: true });
+        res.status(200).json({ success: true, issue: issue });
     } catch (error) {
         res.status(500).json({
             error: "errors:internalServerError"

@@ -46,48 +46,44 @@ export default function SetlistSearch() {
                         </div>
                     )}
 
+                    {/* Error indicator */}
+                    {state.error && (
+                        <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
+                            <ErrorMessage message={state.error} />
+                        </div>
+                    )}
+
                     {state.pageState !== PageState.Idle && (
-                        <>
-                            {/* Error indicator */}
-                            {state.error && (
-                                <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
-                                    <ErrorMessage message={state.error} />
+                        <div id="setlists-container" className="flex gap-4 mt-[3rem]">
+                            {/* List of setlists */}
+                            {state.searchComplete && !state.animLoading && (
+                                <div
+                                    id="setlist-list"
+                                    className={`${
+                                        state.setlistChosen
+                                            ? "hidden sm:block w-4/5 max-w-3xl mx-auto animate-fadeIn"
+                                            : "block w-4/5 max-w-3xl mx-auto animate-fadeIn"
+                                    }`}
+                                >
+                                    <ListOfSetlists
+                                        setlistData={state.allSetlistsData}
+                                        onSetlistChosen={handleSetlistChosenRouterPush}
+                                    />
                                 </div>
                             )}
 
-                            <div id="setlists-container" className="flex gap-4 mt-[3rem]">
-                                {/* List of setlists */}
-                                {state.searchComplete && !state.animLoading && (
-                                    <div
-                                        id="setlist-list"
-                                        className={`${
-                                            state.setlistChosen
-                                                ? "hidden sm:block w-4/5 max-w-3xl mx-auto animate-fadeIn"
-                                                : "block w-4/5 max-w-3xl mx-auto animate-fadeIn"
-                                        }`}
-                                    >
-                                        <ListOfSetlists
-                                            setlistData={state.allSetlistsData}
-                                            onSetlistChosen={handleSetlistChosenRouterPush}
-                                        />
-                                    </div>
-                                )}
-
-                                {/* Setlist display */}
-                                {((state.setlistChosen &&
-                                    !state.animLoading &&
-                                    state.pageState === PageState.LosSetlist) ||
-                                    state.pageState === PageState.Setlist) && (
-                                    <div id="setlist-display" className={`w-full animate-fadeIn`}>
-                                        <Setlist
-                                            setlist={state.chosenSetlistData}
-                                            onClose={handleBackToList}
-                                            onExport={handleExport}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                            {/* Setlist display */}
+                            {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
+                                state.pageState === PageState.Setlist) && (
+                                <div id="setlist-display" className={`w-full animate-fadeIn`}>
+                                    <Setlist
+                                        setlist={state.chosenSetlistData}
+                                        onClose={handleBackToList}
+                                        onExport={handleExport}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             </Layout>

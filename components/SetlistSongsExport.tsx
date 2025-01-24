@@ -21,6 +21,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     const [spotifySongs, setSpotifySongs] = useState<Record<string, any>[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [excludedSongs, setExcludedSongs] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         (async () => {
@@ -55,12 +56,28 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
 
     useEffect(() => {
         if (spotifySongs) {
-            onSongsFetched(spotifySongs);
+            onSongsFetched(spotifySongs.filter(song => !excludedSongs.has(song.id)));
         }
-    }, [spotifySongs]);
+    }, [spotifySongs, excludedSongs]);
+
+    const toggleExcludeSong = (songId: string) => {
+        setExcludedSongs(prev => {
+            const newExcludedSongs = new Set(prev);
+            if (newExcludedSongs.has(songId)) {
+                newExcludedSongs.delete(songId);
+            } else {
+                newExcludedSongs.add(songId);
+            }
+            return newExcludedSongs;
+        });
+    };
 
     const SongListItem = ({ spotifySong }: { spotifySong: any }) => (
-        <li id={`song-item-${spotifySong?.id}`} className="py-2">
+        <li
+            id={`song-item-${spotifySong?.id}`}
+            className={`py-2 cursor-pointer ${excludedSongs.has(spotifySong.id) ? "opacity-50" : ""}`}
+            onClick={() => toggleExcludeSong(spotifySong.id)}
+        >
             <div className="flex items-center space-x-4">
                 {spotifySong?.album?.images[0]?.url && (
                     <img

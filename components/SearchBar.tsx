@@ -37,8 +37,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, locked }) => {
                 <button
                     id="search-button"
                     onClick={() => onSearch(query)}
-                    className={`h-12 py-2 px-6 bg-blue-500 text-white font-semibold rounded-r-lg hover:bg-blue-600 ${
-                        locked ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
+                    className={`h-12 py-2 px-6  bg-gradient-to-bl from-blue-400 to-blue-600 text-white font-semibold rounded-r-lg hover:from-blue-500 hover:to-blue-700 ${
+                        locked
+                            ? "from-gray-400 to-gray-600 cursor-not-allowed hover:from-gray-400 hover:to-gray-600"
+                            : ""
                     }`}
                     disabled={locked}
                 >

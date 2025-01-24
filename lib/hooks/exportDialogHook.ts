@@ -167,19 +167,21 @@ export default function exportDialogHook({
                     tracks: JSON.stringify(state.spotifySongs)
                 })
             });
+            const responseJson = await response.json();
 
             if (!response.ok) {
-                const errorResponse = await response.json();
                 throw {
                     status: response.status,
-                    error: errorResponse.error || "Unknown error"
+                    error: responseJson.error || "Unknown error"
                 };
             }
 
             // Success
             setMessageDialog({
                 isOpen: true,
-                message: i18n("exportSetlist:exportSuccess"),
+                message: `${i18n("exportSetlist:exportSuccess")}\n${
+                    responseJson.issue ? `${i18n("common:issue")}: ${i18n(responseJson.issue)}` : ""
+                }`,
                 type: "success"
             });
         } catch (error) {

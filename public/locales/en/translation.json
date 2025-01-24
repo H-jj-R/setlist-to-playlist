@@ -9,7 +9,8 @@
         "areYouSure": "Are you sure?",
         "close": "Close",
         "show": "Show",
-        "hide": "Hide"
+        "hide": "Hide",
+        "issue": "Issue"
     },
     "account": {
         "accountSettings": "Account Settings",
