@@ -58,7 +58,14 @@ export default function SetlistSearch() {
                             <div id="setlists-container" className="flex gap-4 mt-[3rem]">
                                 {/* List of setlists */}
                                 {state.searchComplete && !state.animLoading && (
-                                    <div id="setlist-list" className="w-4/5 max-w-3xl mx-auto animate-fadeIn">
+                                    <div
+                                        id="setlist-list"
+                                        className={`${
+                                            state.setlistChosen
+                                                ? "hidden sm:block w-4/5 max-w-3xl mx-auto animate-fadeIn"
+                                                : "block w-4/5 max-w-3xl mx-auto animate-fadeIn"
+                                        }`}
+                                    >
                                         <ListOfSetlists
                                             setlistData={state.allSetlistsData}
                                             onSetlistChosen={handleSetlistChosenRouterPush}
@@ -71,7 +78,7 @@ export default function SetlistSearch() {
                                     !state.animLoading &&
                                     state.pageState === PageState.LosSetlist) ||
                                     state.pageState === PageState.Setlist) && (
-                                    <div id="setlist-display" className="w-full animate-fadeIn">
+                                    <div id="setlist-display" className={`w-full animate-fadeIn`}>
                                         <Setlist
                                             setlist={state.chosenSetlistData}
                                             onClose={handleBackToList}
