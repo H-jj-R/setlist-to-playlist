@@ -3,13 +3,19 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 import translationEn from "../../public/locales/en/translation.json";
+import translationEs from "../../public/locales/es/translation.json";
+import translationFr from "../../public/locales/fr/translation.json";
+import translationZhcn from "../../public/locales/zh-cn/translation.json";
 
 if (!i18n.isInitialized) {
     i18n.use(LanguageDetector)
         .use(initReactI18next)
         .init({
             resources: {
-                en: translationEn
+                en: translationEn,
+                es: translationEs,
+                fr: translationFr,
+                "zh-cn": translationZhcn
             },
             fallbackLng: "en",
             debug: false,
