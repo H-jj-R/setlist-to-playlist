@@ -3,6 +3,9 @@ import bcrypt from "bcrypt";
 import db from "../../../lib/constants/db";
 import jwt from "jsonwebtoken";
 
+/**
+ * API handler to log in a user.
+ */
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method not allowed" });

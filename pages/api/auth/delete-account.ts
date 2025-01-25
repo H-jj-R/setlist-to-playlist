@@ -2,6 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../lib/constants/db";
 import jwt from "jsonwebtoken";
 
+/**
+ * API handler to delete a user account.
+ */
 export default async function deleteAccount(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
         return res.status(405).json({ message: "Method not allowed" });

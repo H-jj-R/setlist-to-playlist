@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import MessageDialog from "./MessageDialog";
+
+const RECAPTCHA_SITE_KEY = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
 
 interface LoginDialogProps {
     onClose: () => void;
@@ -17,6 +20,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
     const passwordRegex: RegExp =
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,32}$/;
@@ -51,6 +55,37 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
         }
         setPasswordError("");
         const email = formData.get("email") as string;
+
+        if (isSignUp) {
+            // Ensure the reCAPTCHA token exists
+            if (!recaptchaToken) {
+                setMessageDialog({
+                    isOpen: true,
+                    message: i18n("account:recaptchaNotVerified"),
+                    type: "error"
+                });
+                return;
+            }
+
+            // Verify reCAPTCHA token
+            const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ token: recaptchaToken })
+            });
+            const { success } = await recaptchaResponse.json();
+            if (!success) {
+                setMessageDialog({
+                    isOpen: true,
+                    message: i18n("account:recaptchaFailed"),
+                    type: "error"
+                });
+                return;
+            }
+        }
+
         if (isSignUp) {
             const username = formData.get("username") as string;
             await handleSignUp(username, email, password);
@@ -201,6 +236,15 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                                     </button>
                                 </div>
                                 {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+                                {isSignUp && (
+                                    <div className="flex justify-center">
+                                        <ReCAPTCHA
+                                            sitekey={RECAPTCHA_SITE_KEY}
+                                            onChange={(token) => setRecaptchaToken(token)}
+                                            onExpired={() => setRecaptchaToken(null)}
+                                        />
+                                    </div>
+                                )}
                                 <button
                                     type="submit"
                                     className="bg-blue-500 text-white px-4 py-3 rounded-lg text-lg transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"

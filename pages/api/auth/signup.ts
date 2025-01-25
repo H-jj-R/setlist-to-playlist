@@ -2,6 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 import db from "../../../lib/constants/db";
 
+/**
+ * API handler to sign up a new user.
+ */
 export default async function signup(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method not allowed" });
