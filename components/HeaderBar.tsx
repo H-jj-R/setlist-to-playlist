@@ -56,7 +56,13 @@ const HeaderBar: React.FC = () => {
             </div>
             {showSettings && <Settings onClose={() => setShowSettings(false)} />}
             {showAccountSettings && (
-                <AccountSettings onClose={() => setShowAccountSettings(false)} handleLogout={logout} />
+                <AccountSettings
+                    onClose={() => setShowAccountSettings(false)}
+                    handleLogout={() => {
+                        logout();
+                        setShowAccountSettings(false);
+                    }}
+                />
             )}
             {showLoginDialog && <LoginDialog onClose={() => setShowLoginDialog(false)} onLoginSuccess={login} />}
         </header>

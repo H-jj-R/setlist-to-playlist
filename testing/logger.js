@@ -47,7 +47,7 @@ class CustomLogger {
         await this.log(`${this.chalk.red("Failed")} after ${testDuration}`);
 
         const errorMessage = testCaseResult.failureMessages.join("\n");
-        await this.log(`${this.chalk.red("Error")} ${errorMessage}`);
+        await this.log(`${this.chalk.red("Error -")} ${errorMessage}`);
     }
 }
 

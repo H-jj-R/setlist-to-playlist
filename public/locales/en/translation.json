@@ -9,7 +9,8 @@
         "areYouSure": "Are you sure?",
         "close": "Close",
         "show": "Show",
-        "hide": "Hide"
+        "hide": "Hide",
+        "issue": "Issue"
     },
     "account": {
         "accountSettings": "Account Settings",
@@ -29,7 +30,8 @@
         "loginSuccess": "Login successful!",
         "loginFailed": "Login failed: {{message}}",
         "alreadyHaveAccount": "Already have an account? Login",
-        "noAccount": "No account? Sign up"
+        "noAccount": "No account? Sign up",
+        "deleteFailed": "Account deletion failed!"
     },
     "errors": {
         "404PageMessage": "404 - Page Not Found!",

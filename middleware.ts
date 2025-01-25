@@ -17,7 +17,8 @@ export async function middleware(request: NextRequest) {
     // Route-specific middleware logic
     if (
         pathname.startsWith("/api/controllers/get-setlists") ||
-        pathname.startsWith("/api/controllers/get-spotify-songs")
+        pathname.startsWith("/api/controllers/get-spotify-songs") ||
+        pathname.startsWith("/api/spotify/search-artist")
     ) {
         const hasSpotifyAccessToken = request.cookies.get("spotify_access_token");
         if (!hasSpotifyAccessToken) {

@@ -49,7 +49,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
 
     const handleDeleteAccount = async () => {
         try {
-            const token = localStorage.getItem("authToken");
+            const token = localStorage?.getItem("authToken");
             if (!token) {
                 console.error("No authentication token found.");
                 return;
@@ -75,7 +75,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
                 console.error("Error deleting account:", errorData.message);
                 setMessageDialog({
                     isOpen: true,
-                    message: i18n("account:deleteFailed", { message: errorData.message }),
+                    message: i18n("account:deleteFailed"),
                     type: "error"
                 });
             }

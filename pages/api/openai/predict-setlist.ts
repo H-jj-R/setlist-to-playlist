@@ -70,16 +70,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Reset queries_today if the last query date is before today
         const today = new Date().toISOString().split("T")[0];
-        if (last_query_date < today) {
+        const lastQueryDate = new Date(last_query_date).toISOString().split("T")[0];
+        if (lastQueryDate < today) {
             await db.execute(
                 "UPDATE UserQueryLimits SET queries_today = 0, last_query_date = CURRENT_DATE WHERE user_id = ?",
                 [userId]
             );
-        }
-
+        } else {
         // Enforce the query limit
         if (queries_today >= DAILY_QUERY_LIMIT) {
             return res.status(429).json({ error: "Daily query limit reached" });
+            }
         }
 
         // Increment the query count for the user

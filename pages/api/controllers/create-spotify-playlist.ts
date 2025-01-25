@@ -5,8 +5,9 @@ import getBaseUrl from "../../../lib/utils/getBaseUrl";
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { name, description, image, tracks } = req.body;
+    const { name, description, image, tracks, isLoggedIn } = req.body;
     try {
+        let issue;
         const baseUrl = getBaseUrl(req);
 
         // 1. Get user data
@@ -88,13 +89,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
             if (!addCoverImageResponse.ok) {
                 const errorResponse = await addCoverImageResponse.json();
-                return res.status(addCoverImageResponse.status).json({
-                    error: errorResponse.error
-                });
+                issue += errorResponse.error;
             }
         }
 
-        res.status(200).json({ success: true });
+        // TODO: Finish feature: Save this playlist to the user's account (if logged in)
+        // 5. Save playlist to user's account (if logged in)
+        if (isLoggedIn) {
+            const token = req.headers.authorization?.split(" ")[1];
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorised" });
+            }
+
+            const savePlaylistResponse = await fetch(
+                `${baseUrl}/api/controllers/save-playlist-to-account?playlistId=${playlistData.data.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        cookie: req.headers.cookie || "" // Forward client cookies for access token
+                    }
+                }
+            );
+
+            // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
+            if (!savePlaylistResponse.ok) {
+                const errorResponse = await savePlaylistResponse.json();
+                issue += errorResponse.error;
+            }
+        }
+
+        res.status(200).json({ success: true, issue: issue });
     } catch (error) {
         res.status(500).json({
             error: "errors:internalServerError"

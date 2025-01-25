@@ -17,16 +17,8 @@ interface ExportDialogProps {
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, predictedSetlist, onClose }) => {
     const { t: i18n } = useTranslation();
-    const {
-        state,
-        messageDialog,
-        setMessageDialog,
-        setState,
-        getRootProps,
-        getInputProps,
-        handleExport,
-        resetState
-    } = exportDialogHook({ setlist, artistData, isOpen, predictedSetlist, onClose });
+    const { state, messageDialog, setMessageDialog, setState, getRootProps, getInputProps, handleExport, resetState } =
+        exportDialogHook({ setlist, artistData, isOpen, predictedSetlist, onClose });
 
     return (
         isOpen && (
@@ -182,17 +174,19 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         </div>
 
                         {/* Setlist Songs Component */}
-                        <SetlistSongsExport
-                            setlist={setlist}
-                            artistData={artistData}
-                            predictedSetlist={predictedSetlist}
-                            onSongsFetched={(songs) =>
-                                setState((prev) => ({
-                                    ...prev,
-                                    spotifySongs: songs
-                                }))
-                            }
-                        />
+                        <div id="setlist-songs-wrapper" className="flex-1 flex flex-col justify-center items-center h-full">
+                            <SetlistSongsExport
+                                setlist={setlist}
+                                artistData={artistData}
+                                predictedSetlist={predictedSetlist}
+                                onSongsFetched={(songs) =>
+                                    setState((prev) => ({
+                                        ...prev,
+                                        spotifySongs: songs
+                                    }))
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -200,7 +194,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                 <MessageDialog
                     isOpen={messageDialog.isOpen}
                     message={messageDialog.message}
-                    type={messageDialog.type as "success" | "error"}
+                    type={messageDialog.type as "success" | "error" | "loading"}
                     onClose={() => {
                         setMessageDialog({ isOpen: false, message: "", type: "success" });
                         if (messageDialog.type === "success") {

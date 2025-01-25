@@ -9,7 +9,7 @@ const InfoSection: React.FC = () => {
     return (
         <div
             id="why-create-account-section"
-            className="flex-grow min-h-[1/3] bg-gradient-to-b from-green-500 to-green-600 text-gray-100 py-6 px-10"
+            className="flex-grow min-h-[33.333333%] bg-gradient-to-b from-green-500 to-green-600 text-gray-100 py-6 px-10"
         >
             <div id="why-create-account-container" className="max-w-4xl mx-auto">
                 <h2 id="why-create-account-title" className="text-3xl font-bold text-center mb-6">
