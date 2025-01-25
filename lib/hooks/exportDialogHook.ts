@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { useDropzone } from "react-dropzone";
+import { useAuth } from "../../context/AuthContext";
 
 interface ExportDialogHookProps {
     setlist: Record<string, any>;
@@ -22,6 +23,7 @@ export default function exportDialogHook({
     onClose
 }: ExportDialogHookProps) {
     const { t: i18n } = useTranslation();
+    const { isAuthenticated } = useAuth();
     const [state, setState] = useState({
         playlistName: "",
         playlistDescription: "",
@@ -119,7 +121,12 @@ export default function exportDialogHook({
                 };
                 reader.readAsDataURL(file);
             } else {
-                // TODO: Show error message somewhere if not correct file type
+                console.error("Invalid file type");
+                setMessageDialog({
+                    isOpen: true,
+                    message: "Invalid file type",
+                    type: "error"
+                });
             }
         }
     }, []);
@@ -137,10 +144,25 @@ export default function exportDialogHook({
         try {
             // Reset errors
             setState((prev) => ({ ...prev, error: null }));
+
+            // Show the loading dialog
+            setMessageDialog({
+                isOpen: true,
+                message: "",
+                type: "loading"
+            });
+
             if (!state.playlistName.trim()) {
                 throw {
                     status: 400,
                     error: "No name provided."
+                };
+            }
+
+            if (state.spotifySongs.length === 0) {
+                throw {
+                    status: 400,
+                    error: "No songs provided."
                 };
             }
 
@@ -158,13 +180,15 @@ export default function exportDialogHook({
             const response = await fetch(`/api/controllers/create-spotify-playlist`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
                 },
                 body: JSON.stringify({
                     name: state.playlistName,
                     description: state.playlistDescription,
                     image: base64Image,
-                    tracks: JSON.stringify(state.spotifySongs)
+                    tracks: JSON.stringify(state.spotifySongs),
+                    isLoggedIn: isAuthenticated
                 })
             });
             const responseJson = await response.json();

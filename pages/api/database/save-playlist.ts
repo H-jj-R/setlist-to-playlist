@@ -2,8 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../lib/constants/db";
 import jwt from "jsonwebtoken";
 
-export default async function deleteAccount(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "DELETE") {
+/**
+ * API handler to save Spotify playlist details into the database.
+ */
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method !== "POST") {
         return res.status(405).json({ message: "Method not allowed" });
     }
 
@@ -13,17 +16,17 @@ export default async function deleteAccount(req: NextApiRequest, res: NextApiRes
         return res.status(401).json({ message: "Unauthorised" });
     }
 
+    const { playlistDetails } = req.body;
+
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-
         const userId = decoded.userId;
 
-        // Delete the user from the database
-        await db.execute("DELETE FROM Users WHERE user_id = ?", [userId]);
-
-        res.status(200).json({ message: "Account deleted successfully" });
+        // TODO: Save to database
+        
+        res.status(200).json({ message: "Playlist saved successfully" });
     } catch (error) {
-        console.error(error);
+        console.error("Error saving playlist to database:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 }

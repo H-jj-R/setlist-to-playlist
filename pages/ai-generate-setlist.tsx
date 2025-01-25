@@ -7,7 +7,6 @@ import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
 import generateSetlistHook from "../lib/hooks/generateSetlistHook";
 import { PageState } from "../lib/constants/generateSetlistPageState";
-import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../context/AuthContext";
 
 /**

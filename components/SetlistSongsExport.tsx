@@ -75,7 +75,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     const SongListItem = ({ spotifySong }: { spotifySong: any }) => (
         <li
             id={`song-item-${spotifySong?.id}`}
-            className={`py-2 cursor-pointer ${excludedSongs.has(spotifySong.id) ? "opacity-50" : ""}`}
+            className={`py-2 cursor-pointer ${excludedSongs.has(spotifySong.id) ? "opacity-20" : ""}`}
             onClick={() => toggleExcludeSong(spotifySong.id)}
         >
             <div className="flex items-center space-x-4">
@@ -100,7 +100,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     );
 
     return (
-        <div className="flex flex-col bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shadow-md w-full max-w-sm overflow-y-auto">
+        <div className="flex flex-col bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shadow-md w-full h-full overflow-y-auto">
             {loading ? (
                 <div className="flex items-center justify-center h-full">
                     <CustomHashLoader showLoading={true} size={100} />

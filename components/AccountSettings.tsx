@@ -49,7 +49,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
 
     const handleDeleteAccount = async () => {
         try {
-            const token = localStorage.getItem("authToken");
+            const token = localStorage?.getItem("authToken");
             if (!token) {
                 console.error("No authentication token found.");
                 return;
