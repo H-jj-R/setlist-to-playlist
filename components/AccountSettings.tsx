@@ -35,11 +35,9 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
 
         // Decode the JWT to get the username
         const token = localStorage.getItem("authToken"); // Replace with the actual key you're using for the token
-        console.log(token);
         if (token) {
             try {
                 const decoded = jwtDecode<DecodedToken>(token);
-                console.log(decoded);
                 setUsername(decoded.username);
             } catch (error) {
                 console.error("Failed to decode token:", error);

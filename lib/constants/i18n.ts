@@ -4,6 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import translationEn from "../../public/locales/en/translation.json";
 import translationEs from "../../public/locales/es/translation.json";
+import translationFi from "../../public/locales/fi/translation.json";
 import translationFr from "../../public/locales/fr/translation.json";
 import translationZhcn from "../../public/locales/zh-cn/translation.json";
 
@@ -14,6 +15,7 @@ if (!i18n.isInitialized) {
             resources: {
                 en: translationEn,
                 es: translationEs,
+                fi: translationFi,
                 fr: translationFr,
                 "zh-cn": translationZhcn
             },

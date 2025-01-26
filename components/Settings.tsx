@@ -13,6 +13,15 @@ interface SettingsProps {
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
+    const [hideEmptySetlists, setHideEmptySetlists] = useState(
+        () => localStorage.getItem("hideEmptySetlists") === "true"
+    );
+
+    const handleHideEmptySetlistsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = event.target.checked;
+        setHideEmptySetlists(isChecked);
+        localStorage.setItem("hideEmptySetlists", isChecked.toString());
+    };
 
     useEffect(() => {
         // Trigger the slide-in and dimming animation after mounting
@@ -61,28 +70,43 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <h3 id="theme-title" className="text-lg font-medium">
                         Theme
                     </h3>
-                    <select
-                        id="theme-select"
-                        value={theme}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                            setTheme(event.target.value);
-                        }}
-                        className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
-                            resolvedTheme === "dark"
-                                ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
-                                : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
-                        }`}
-                    >
-                        <option id="light-theme" value="light">
-                            Light
-                        </option>
-                        <option id="dark-theme" value="dark">
-                            Dark
-                        </option>
-                        <option id="system-theme" value="system">
-                            System
-                        </option>
-                    </select>
+                    <label className="flex items-center space-x-2 p-2">
+                        <select
+                            id="theme-select"
+                            value={theme}
+                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                                setTheme(event.target.value);
+                            }}
+                            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
+                                resolvedTheme === "dark"
+                                    ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
+                                    : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
+                            }`}
+                        >
+                            <option id="light-theme" value="light">
+                                Light
+                            </option>
+                            <option id="dark-theme" value="dark">
+                                Dark
+                            </option>
+                            <option id="system-theme" value="system">
+                                System
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div className="mb-4">
+                    <h3 className="text-lg font-medium">Setlists</h3>
+                    <label className="flex items-center space-x-2 p-2">
+                        <input
+                            type="checkbox"
+                            checked={hideEmptySetlists}
+                            onChange={handleHideEmptySetlistsChange}
+                            style={{ width: "25px", height: "25px" }}
+                            className="cursor-pointer"
+                        />
+                        <span>Hide empty setlists</span>
+                    </label>
                 </div>
             </div>
         </div>

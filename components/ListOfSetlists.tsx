@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SetlistChoiceBlock from "./SetlistChoiceBlock";
 
@@ -17,10 +17,29 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
     const [isLoading, setIsLoading] = useState(false);
 
+    const hideEmptySetlists = localStorage.getItem("hideEmptySetlists") === "true";
+
+    const filterEmptySetlists = (data: Record<string, any>) => {
+        return (data.setlist || []).filter((setlist: Record<string, any>) => {
+            const songCount = setlist.sets.set.reduce(
+                (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
+                0
+            );
+            return songCount > 0;
+        });
+    };
+
+    useEffect(() => {
+        const filteredSetlists = hideEmptySetlists
+            ? filterEmptySetlists(setlistData.setlists)
+            : setlistData.setlists.setlist || [];
+
+        setSetlists(filteredSetlists);
+    }, [hideEmptySetlists, setlistData]);
+
     const hasMorePages = currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
     const loadMoreSetlists = async () => {
         setIsLoading(true);
-
         try {
             const response = await fetch(
                 `/api/setlist-fm/search-setlists?${new URLSearchParams({
@@ -31,7 +50,9 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             if (!response.ok) throw new Error("Failed to load more setlists");
 
             const newData = await response.json();
-            setSetlists((prevSetlists) => [...prevSetlists, ...newData.setlist]);
+            const filteredNewSetlists = hideEmptySetlists ? filterEmptySetlists(newData) : newData.setlist;
+
+            setSetlists((prevSetlists) => [...prevSetlists, ...filteredNewSetlists]);
             setCurrentPage((prevPage) => prevPage + 1);
         } catch (error) {
             console.error("Error loading more setlists:", error);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faEnvelope, faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import MessageDialog from "./MessageDialog";
 
@@ -197,27 +197,39 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
 
                         {/* Login/Sign Up Form */}
                         <div>
-                            <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-200">
+                            <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">
                                 {isSignUp ? i18n("account:signUp") : i18n("account:login")}
                             </h2>
                             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                                 {isSignUp && (
-                                    <input
-                                        name="username"
-                                        type="text"
-                                        placeholder={i18n("account:username")}
-                                        maxLength={24}
-                                        required
-                                        className="px-4 py-3 border border-gray-300 rounded-lg text-lg transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            name="username"
+                                            type="text"
+                                            placeholder={i18n("account:username")}
+                                            maxLength={24}
+                                            required
+                                            className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
+                                        />
+                                        <FontAwesomeIcon
+                                            icon={faUserCircle}
+                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
+                                        />
+                                    </div>
                                 )}
-                                <input
-                                    name="email"
-                                    type="email"
-                                    placeholder={i18n("account:email")}
-                                    required
-                                    className="px-4 py-3 border border-gray-300 rounded-lg text-lg transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
-                                />
+                                <div className="relative">
+                                    <input
+                                        name="email"
+                                        type="email"
+                                        placeholder={i18n("account:email")}
+                                        required
+                                        className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
+                                    />
+                                    <FontAwesomeIcon
+                                        icon={faEnvelope}
+                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
+                                    />
+                                </div>
                                 <div className="relative">
                                     <input
                                         name="password"
@@ -225,12 +237,16 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                                         placeholder={i18n("account:password")}
                                         maxLength={32}
                                         required
-                                        className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
+                                        className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
+                                    />
+                                    <FontAwesomeIcon
+                                        icon={faLock}
+                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setPasswordVisible((prev) => !prev)}
-                                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-500 pr-2"
                                     >
                                         {passwordVisible ? i18n("common:hide") : i18n("common:show")}
                                     </button>
@@ -247,7 +263,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                                 )}
                                 <button
                                     type="submit"
-                                    className="bg-blue-500 text-white px-4 py-3 rounded-lg text-lg transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+                                    className="bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white px-4 py-3 rounded-lg text-lg transition duration-300 focus:outline-none focus:ring focus:ring-blue-200"
                                 >
                                     {isSignUp ? i18n("account:signUp") : i18n("account:login")}
                                 </button>
