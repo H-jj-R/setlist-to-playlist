@@ -61,14 +61,20 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                     page: currentPage + 1
                 }).toString()}`
             );
-            if (!response.ok) throw new Error("Failed to load more setlists");
+            const responseJson = await response.json();
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    error: responseJson.error || i18n("errors:unexpectedError")
+                };
+            }
 
-            const newData = await response.json();
+            const newData = responseJson;
             const newSetlists = newData.setlist || [];
             setLoadedSetlists((prevSetlists) => [...prevSetlists, ...newSetlists]);
             setCurrentPage((prevPage) => prevPage + 1);
         } catch (error) {
-            console.error("Error loading more setlists:", error);
+            console.error(error);
         } finally {
             setIsLoading(false);
         }
@@ -82,10 +88,10 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             <div id="setlist-header" className="p-4 w-full flex flex-col items-center">
                 <div id="artist-info" className="flex items-center mb-5 px-4">
                     <img
+                        id="artist-image"
+                        className="w-16 h-16 rounded-full mr-4"
                         src={setlistData.spotifyArtist.images[0].url}
                         alt={setlistData.spotifyArtist.name}
-                        className="w-16 h-16 rounded-full mr-4"
-                        id="artist-image"
                     />
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}

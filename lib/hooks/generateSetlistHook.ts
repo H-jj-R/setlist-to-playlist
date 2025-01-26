@@ -76,7 +76,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await response.json();
                 throw {
                     status: response.status,
-                    error: errorResponse.error || "Unknown error"
+                    error: errorResponse.error || i18n("errors:unexpectedError")
                 };
             }
             const setlistData = await response.json();
@@ -99,7 +99,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await apiResponse.json();
                 throw {
                     status: apiResponse.status,
-                    error: errorResponse.error || "Unknown error"
+                    error: errorResponse.error || i18n("errors:unexpectedError")
                 };
             }
 
@@ -116,7 +116,7 @@ export default function generateSetlistHook() {
             }));
             console.log(apiData);
         } catch (error) {
-            console.error("Error during search:", error);
+            console.error(error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,

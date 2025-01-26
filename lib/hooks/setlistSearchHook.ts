@@ -71,7 +71,7 @@ export default function setlistSearchHook() {
             const errorResponse = await response.json();
             throw {
                 status: response.status,
-                error: errorResponse.error || "Unknown error"
+                error: errorResponse.error || i18n("errors:unexpectedError")
             };
         }
         return await response.json();
@@ -143,7 +143,7 @@ export default function setlistSearchHook() {
                 }));
             }
         } catch (error) {
-            console.error("Error during search:", error);
+            console.error(error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
@@ -215,7 +215,7 @@ export default function setlistSearchHook() {
                 );
             }
         } catch (error) {
-            console.error("Error checking authorisation:", error);
+            console.error(error);
         }
     };
 

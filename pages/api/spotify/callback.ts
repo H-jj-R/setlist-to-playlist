@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Redirect the user to the original state URL or the home page if none provided
         res.redirect(state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl);
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

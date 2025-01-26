@@ -40,7 +40,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
                 const decoded = jwtDecode<DecodedToken>(token);
                 setUsername(decoded.username);
             } catch (error) {
-                console.error("Failed to decode token:", error);
+                console.error(error);
             }
         }
     }, []);
@@ -49,7 +49,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
         try {
             const token = localStorage?.getItem("authToken");
             if (!token) {
-                console.error("No authentication token found.");
+                console.error(i18n("errors:authorisationError"));
                 return;
             }
 
@@ -70,7 +70,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
                 handleLogout(); // Log out after account deletion
             } else {
                 const errorData = await response.json();
-                console.error("Error deleting account:", errorData.message);
+                console.error(errorData.message);
                 setMessageDialog({
                     isOpen: true,
                     message: i18n("account:deleteFailed"),
@@ -78,7 +78,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
                 });
             }
         } catch (error) {
-            console.error("Unexpected error:", error);
+            console.error(error);
             setMessageDialog({
                 isOpen: true,
                 message: i18n("errors:unexpectedError"),

@@ -8,9 +8,9 @@ import { useTheme } from "next-themes";
  * Main page for viewing setlists.
  */
 export default function AIGenerateSetlist() {
+    const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { resolvedTheme } = useTheme();
-    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({});
 
@@ -27,8 +27,8 @@ export default function AIGenerateSetlist() {
                 // Dialog displayed when the user is not authenticated
                 <div className="flex items-center justify-center">
                     <div className="relative top-2/3 p-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg shadow-lg text-center text-white">
-                        <h2 className="text-2xl font-bold mb-4">Authentication Required</h2>
-                        <p className="text-lg mb-6">You need to log in to access this feature.</p>
+                        <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
+                        <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
                     </div>
                 </div>
             ) : (

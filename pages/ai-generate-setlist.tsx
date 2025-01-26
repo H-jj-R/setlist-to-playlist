@@ -8,11 +8,13 @@ import ErrorMessage from "../components/ErrorMessage";
 import generateSetlistHook from "../lib/hooks/generateSetlistHook";
 import { PageState } from "../lib/constants/generateSetlistPageState";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
  */
 export default function AIGenerateSetlist() {
+    const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { mounted, state, handleAuthoriseSpotify, handleSearch, handleExport, handleExportDialogClosed } =
         generateSetlistHook();
@@ -25,8 +27,8 @@ export default function AIGenerateSetlist() {
                 // Dialog displayed when the user is not authenticated
                 <div className="flex items-center justify-center">
                     <div className="relative top-2/3 p-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg shadow-lg text-center text-white">
-                        <h2 className="text-2xl font-bold mb-4">Authentication Required</h2>
-                        <p className="text-lg mb-6">You need to log in to access this feature.</p>
+                        <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
+                        <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
                     </div>
                 </div>
             ) : (
@@ -43,7 +45,7 @@ export default function AIGenerateSetlist() {
                             <SearchBar
                                 onSearch={handleSearch}
                                 locked={state.searchBarLocked}
-                                aria-label="Search for setlists"
+                                aria-label={i18n("generateSetlist:searchForArtist")}
                             />
 
                             {/* Authorisation dialog */}
@@ -53,14 +55,14 @@ export default function AIGenerateSetlist() {
                                     className="mt-4 p-4 bg-green-500 border border-black rounded text-center"
                                 >
                                     <p className="mb-6 text-black text-xl">
-                                        You need to authorise with Spotify to continue!
+                                        {i18n("common:spotifyAuthorisationRequired")}
                                     </p>
                                     <button
                                         onClick={handleAuthoriseSpotify}
                                         id="auth-button"
                                         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                                     >
-                                        Authorise with Spotify
+                                        {i18n("common:spotifyAuthorise")}
                                     </button>
                                 </div>
                             )}

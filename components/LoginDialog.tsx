@@ -79,7 +79,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
             if (!success) {
                 setMessageDialog({
                     isOpen: true,
-                    message: i18n("account:recaptchaFailed"),
+                    message: i18n("account:recaptchaNotVerified"),
                     type: "error"
                 });
                 return;
@@ -116,12 +116,12 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                 const errorData = await response.json();
                 setMessageDialog({
                     isOpen: true,
-                    message: i18n("account:signUpFailed", { message: errorData.message }),
+                    message: i18n("account:signUpFailed", { message: i18n(errorData.message) }),
                     type: "error"
                 });
             }
         } catch (error) {
-            console.error("Error during sign-up:", error);
+            console.error(error);
             setMessageDialog({
                 isOpen: true,
                 message: i18n("errors:unexpectedError"),
@@ -154,7 +154,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                 });
             }
         } catch (error) {
-            console.error("Error during login:", error);
+            console.error(error);
             setMessageDialog({
                 isOpen: true,
                 message: i18n("errors:unexpectedError"),

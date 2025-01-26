@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "next-themes";
+import { useTranslation } from "react-i18next";
 
 interface SettingsProps {
     onClose: () => void; // Close handler
@@ -11,6 +12,7 @@ interface SettingsProps {
  * The settings overlay component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
+    const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
     const [hideEmptySetlists, setHideEmptySetlists] = useState(
@@ -52,7 +54,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             >
                 <div id="settings-header" className="flex justify-between items-center mb-6 mr-5">
                     <h2 id="settings-title" className="text-xl font-bold">
-                        Settings
+                        {i18n("settings:settingsTitle")}
                     </h2>
                     <button
                         id="close-settings-btn"
@@ -69,7 +71,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                 {/* Theme Setting */}
                 <div id="theme-setting" className="mb-4">
                     <h3 id="theme-title" className="text-lg font-medium">
-                        Theme
+                        {i18n("settings:themeTitle")}
                     </h3>
                     <label className="flex items-center space-x-2 p-2">
                         <select
@@ -85,19 +87,19 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             }`}
                         >
                             <option id="light-theme" value="light">
-                                Light
+                                {i18n("settings:lightTheme")}
                             </option>
                             <option id="dark-theme" value="dark">
-                                Dark
+                                {i18n("settings:darkTheme")}
                             </option>
                             <option id="system-theme" value="system">
-                                System
+                                {i18n("settings:systemTheme")}
                             </option>
                         </select>
                     </label>
                 </div>
                 <div className="mb-4">
-                    <h3 className="text-lg font-medium">Setlists</h3>
+                    <h3 className="text-lg font-medium">{i18n("settings:setlistsTitle")}</h3>
                     <label className="flex items-center space-x-2 p-2">
                         <input
                             type="checkbox"
@@ -106,7 +108,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             style={{ width: "25px", height: "25px" }}
                             className="cursor-pointer"
                         />
-                        <span>Hide empty setlists</span>
+                        <span>{i18n("settings:hideEmptySetlists")}</span>
                     </label>
                 </div>
             </div>

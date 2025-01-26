@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { jwtDecode } from "jwt-decode";
 
-const ISACTIVE = false;
+const ISACTIVE = true;
 const DAILY_QUERY_LIMIT = 5;
 
 const openai = new OpenAI({
@@ -30,13 +30,13 @@ const PredictedSetlistSchema = z.object({
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!ISACTIVE) {
         res.status(500).json({
-            error: "OpenAI API currently disabled"
+            error: "errors:openaiDisabled"
         });
     }
 
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Authorisation token missing or invalid" });
+        return res.status(401).json({ error: "errors:authorisationError" });
     }
     const userToken = authHeader.split(" ")[1];
 
@@ -77,9 +77,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 [userId]
             );
         } else {
-        // Enforce the query limit
-        if (queries_today >= DAILY_QUERY_LIMIT) {
-            return res.status(429).json({ error: "Daily query limit reached" });
+            // Enforce the query limit
+            if (queries_today >= DAILY_QUERY_LIMIT) {
+                return res.status(429).json({ error: "generateSetlist:queryLimitReached" });
             }
         }
 
@@ -123,7 +123,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {
                     role: "system",
                     content:
-                        "You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist. Return each song name, with its artist, and with a boolean for whether the song is played on tape. Provide 3 possible predictions. The first predicted setlist should be the most likely possible setlist, the second predicted setlist should be a likely setlist but not as likely as the first predicted setlist, and the third predicted setlist should have a bit more variance. None of these setlists should be the same as each other."
+                        "You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist. Return each song name, with its artist, and with a boolean for whether the song is played on tape. Provide 3 possible predictions. The first predicted setlist should be the most likely possible setlist, the second predicted setlist should be a likely setlist but not as likely as the first predicted setlist, and the third predicted setlist should have a lot more variance. None of these setlists should be the same as each other."
                 },
                 {
                     role: "user",
@@ -131,7 +131,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             ],
             response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
-            temperature: 0.7,
+            temperature: 0.6,
             top_p: 1
         });
 
@@ -141,9 +141,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json(predictedSetlists);
     } catch (error) {
-        console.error("Error predicting setlist:", error);
+        console.error(error);
         res.status(500).json({
-            error: "Failed to predict setlist"
+            error: "errors:predictSetlistFailed"
         });
     }
 }
