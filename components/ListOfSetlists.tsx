@@ -13,14 +13,15 @@ interface ListOfSetlistsProps {
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
     const { t: i18n } = useTranslation();
-    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []);
+    const [loadedSetlists, setLoadedSetlists] = useState(setlistData.setlists.setlist || []); // All loaded setlists
+    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []); // Displayed setlists
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
     const [isLoading, setIsLoading] = useState(false);
+    const [hiddenSetlistsCount, setHiddenSetlistsCount] = useState(0);
+    const [hideEmptySetlists, setHideEmptySetlists] = useState(localStorage.getItem("hideEmptySetlists") === "true");
 
-    const hideEmptySetlists = localStorage.getItem("hideEmptySetlists") === "true";
-
-    const filterEmptySetlists = (data: Record<string, any>) => {
-        return (data.setlist || []).filter((setlist: Record<string, any>) => {
+    const filterEmptySetlists = (data: Record<string, any>[]) => {
+        return data.filter((setlist: Record<string, any>) => {
             const songCount = setlist.sets.set.reduce(
                 (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
                 0
@@ -29,13 +30,26 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
         });
     };
 
-    useEffect(() => {
-        const filteredSetlists = hideEmptySetlists
-            ? filterEmptySetlists(setlistData.setlists)
-            : setlistData.setlists.setlist || [];
-
+    const updateSetlists = () => {
+        const filteredSetlists = hideEmptySetlists ? filterEmptySetlists(loadedSetlists) : loadedSetlists;
         setSetlists(filteredSetlists);
-    }, [hideEmptySetlists, setlistData]);
+        setHiddenSetlistsCount(loadedSetlists.length - filteredSetlists.length);
+    };
+
+    useEffect(() => {
+        updateSetlists();
+    }, [hideEmptySetlists, loadedSetlists]);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setHideEmptySetlists(localStorage.getItem("hideEmptySetlists") === "true");
+        };
+
+        window.addEventListener("hideEmptySetlists", handleStorageChange);
+        return () => {
+            window.removeEventListener("hideEmptySetlists", handleStorageChange);
+        };
+    }, []);
 
     const hasMorePages = currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
     const loadMoreSetlists = async () => {
@@ -50,9 +64,8 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             if (!response.ok) throw new Error("Failed to load more setlists");
 
             const newData = await response.json();
-            const filteredNewSetlists = hideEmptySetlists ? filterEmptySetlists(newData) : newData.setlist;
-
-            setSetlists((prevSetlists) => [...prevSetlists, ...filteredNewSetlists]);
+            const newSetlists = newData.setlist || [];
+            setLoadedSetlists((prevSetlists) => [...prevSetlists, ...newSetlists]);
             setCurrentPage((prevPage) => prevPage + 1);
         } catch (error) {
             console.error("Error loading more setlists:", error);
@@ -80,9 +93,21 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                 </div>
                 <ul id="setlist-list" className="space-y-3 px-4 w-full">
                     {setlists.map((setlist: Record<string, any>) => (
-                        <SetlistChoiceBlock key={setlist.id} setlist={setlist} onClick={onSetlistChosen} />
+                        <SetlistChoiceBlock
+                            key={setlist.id}
+                            setlist={setlist}
+                            onClick={onSetlistChosen}
+                            hideEmpty={hideEmptySetlists}
+                        />
                     ))}
                 </ul>
+                {hiddenSetlistsCount > 0 && hideEmptySetlists === true && (
+                    <p className="mt-4 text-gray-500">
+                        {hiddenSetlistsCount === 1
+                            ? i18n("setlistSearch:hiddenSetlistsMessage", { count: hiddenSetlistsCount })
+                            : i18n("setlistSearch:hiddenSetlistsMessagePlural", { count: hiddenSetlistsCount })}
+                    </p>
+                )}
                 {hasMorePages && (
                     <button
                         id="load-more-button"

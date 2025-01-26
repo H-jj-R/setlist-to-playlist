@@ -21,6 +21,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
         const isChecked = event.target.checked;
         setHideEmptySetlists(isChecked);
         localStorage.setItem("hideEmptySetlists", isChecked.toString());
+        window.dispatchEvent(new StorageEvent("hideEmptySetlists")); // Trigger storage event manually
     };
 
     useEffect(() => {

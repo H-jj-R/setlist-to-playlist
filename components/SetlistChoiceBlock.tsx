@@ -5,12 +5,13 @@ import formatDate from "../lib/utils/formatDate";
 interface SetlistChoiceBlockProps {
     setlist: Record<string, any>; // The setlist data to be displayed
     onClick: (setlist: Record<string, any>) => void; // The function to be triggered when the setlist block is clicked
+    hideEmpty: boolean; // Whether to hide empty setlists
 }
 
 /**
  * Displays information about a setlist, including event date, artist, location, and song count.
  */
-const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick }) => {
+const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClick, hideEmpty }) => {
     const { t: i18n } = useTranslation();
 
     // Calculate the total number of songs in the setlist
@@ -29,7 +30,7 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ setlist, onClic
         <li
             id={`setlist-item-${setlist.id}`}
             className={`p-4 rounded-lg transition-shadow border border-gray-200 shadow-sm ${
-                isDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-md cursor-pointer"
+                isDisabled && hideEmpty ? "hidden" : isDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-md cursor-pointer"
             }`}
             onClick={() => !isDisabled && onClick(setlist)}
         >

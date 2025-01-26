@@ -89,6 +89,8 @@
         "setlistDate": "Date: {{date}}",
         "setlistListTitle": "Setlists for {{artistName}}",
         "songCount": "{{songCount}} song",
-        "songCountPlural": "{{songCount}} songs"
+        "songCountPlural": "{{songCount}} songs",
+        "hiddenSetlistsMessage": "{{count}} empty setlist is hidden",
+        "hiddenSetlistsMessagePlural": "{{count}} empty setlists are hidden"
     }
 }
