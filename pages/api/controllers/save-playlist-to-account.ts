@@ -30,10 +30,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const playlistDetails = await playlistDetailsResponse.json();
 
-        // TODO: Filter important details from the playlistDetails object
-        // Should filter to spotifyPlaylistID, name, description, tracks
-        // The tracks should be filtered to songID, and position
-        const filteredPlaylistDetails = playlistDetails;
+        // Filter details for the database from the playlistDetails object
+        const filteredPlaylistDetails = {
+            spotifyPlaylistID: playlistDetails.id,
+            name: playlistDetails.name,
+            description: playlistDetails.description,
+            tracks: playlistDetails.tracks.items.map((item: any, index: number) => ({
+                songID: item.track.id,
+                position: index
+            }))
+        };
 
         // 2. Send playlist details to the database API
         const savePlaylistResponse = await fetch(`${baseUrl}/api/database/save-playlist`, {
