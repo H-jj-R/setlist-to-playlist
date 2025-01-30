@@ -27,14 +27,19 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
                 <div className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
                     {song.tape && (
-                        <FontAwesomeIcon icon={faRecordVinyl} className="opacity-80" title="Played from tape" />
+                        <FontAwesomeIcon
+                            icon={faRecordVinyl}
+                            className="opacity-80"
+                            title={i18n("setlistSearch:playedFromTape")}
+                        />
                     )}
                     {/* Song name */}
                     <span className={"font-medium"}>{song.name}</span>
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400 text-right max-w-[60%]">
                     {/* Additional song details */}
-                    {song.cover && `${song.cover.name} ${song.tape ? "song" : "cover"}`}
+                    {song.cover &&
+                        `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}`}
                 </div>
             </div>
         </li>
@@ -62,7 +67,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
             {/* Setlist Header */}
             <div id="setlist-header" className="mb-4">
                 <h2 id="setlist-artist" className="text-3xl font-bold">
-                    {"Setlist Prediction " + predictionNum}
+                    {i18n("setlistSearch:setlistPrediction", { predictionNum })}
                 </h2>
             </div>
 

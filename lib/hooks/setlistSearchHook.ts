@@ -71,7 +71,7 @@ export default function setlistSearchHook() {
             const errorResponse = await response.json();
             throw {
                 status: response.status,
-                error: errorResponse.error || "Unknown error"
+                error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
             };
         }
         return await response.json();
@@ -143,11 +143,10 @@ export default function setlistSearchHook() {
                 }));
             }
         } catch (error) {
-            console.error("Error during search:", error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${i18n(error.error)}`
+                error: error.error
             }));
         }
     };
@@ -215,7 +214,7 @@ export default function setlistSearchHook() {
                 );
             }
         } catch (error) {
-            console.error("Error checking authorisation:", error);
+            console.error(error);
         }
     };
 

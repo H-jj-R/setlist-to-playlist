@@ -97,10 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // 5. Save playlist to user's account (if logged in)
         if (isLoggedIn) {
             const token = req.headers.authorization?.split(" ")[1];
-            if (!token) {
-                return res.status(401).json({ message: "Unauthorised" });
-            }
-
             const savePlaylistResponse = await fetch(
                 `${baseUrl}/api/controllers/save-playlist-to-account?playlistId=${playlistData.data.id}`,
                 {

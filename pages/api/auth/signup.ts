@@ -2,16 +2,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 import db from "../../../lib/constants/db";
 
+/**
+ * API handler to sign up a new user.
+ */
 export default async function signup(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        return res.status(405).json({ message: "Method not allowed" });
+        return res.status(405).json({ error: "errors:methodNotAllowed" });
     }
 
     const { username, email, password } = req.body;
 
     // Validate input fields
     if (!username || !email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        return res.status(400).json({ error: "account:allFieldsRequired" });
     }
 
     try {
@@ -19,7 +22,7 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         const [existingUser] = await db.execute("SELECT * FROM Users WHERE email = ?", [email]);
 
         if ((existingUser as any[]).length > 0) {
-            return res.status(400).json({ message: "Email is already in use" });
+            return res.status(400).json({ error: "account:emailInUse" });
         }
 
         // Hash the password
@@ -33,9 +36,9 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
             hashedPassword
         ]);
 
-        res.status(201).json({ message: "User created successfully", userId: (result as any).insertId });
+        res.status(201).json({ message: "account:userCreatedSuccessfully", userId: (result as any).insertId });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ error: "errors:internalServerError" });
     }
 }

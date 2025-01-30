@@ -68,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json(artist);
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

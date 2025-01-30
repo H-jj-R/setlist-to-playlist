@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SetlistChoiceBlock from "./SetlistChoiceBlock";
 
@@ -13,14 +13,47 @@ interface ListOfSetlistsProps {
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
     const { t: i18n } = useTranslation();
-    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []);
+    const [loadedSetlists, setLoadedSetlists] = useState(setlistData.setlists.setlist || []); // All loaded setlists
+    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []); // Displayed setlists
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
     const [isLoading, setIsLoading] = useState(false);
+    const [hiddenSetlistsCount, setHiddenSetlistsCount] = useState(0);
+    const [hideEmptySetlists, setHideEmptySetlists] = useState(localStorage?.getItem("hideEmptySetlists") === "true");
+
+    const filterEmptySetlists = (data: Record<string, any>[]) => {
+        return data.filter((setlist: Record<string, any>) => {
+            const songCount = setlist.sets.set.reduce(
+                (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
+                0
+            );
+            return songCount > 0;
+        });
+    };
+
+    const updateSetlists = () => {
+        const filteredSetlists = hideEmptySetlists ? filterEmptySetlists(loadedSetlists) : loadedSetlists;
+        setSetlists(filteredSetlists);
+        setHiddenSetlistsCount(loadedSetlists.length - filteredSetlists.length);
+    };
+
+    useEffect(() => {
+        updateSetlists();
+    }, [hideEmptySetlists, loadedSetlists]);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setHideEmptySetlists(localStorage?.getItem("hideEmptySetlists") === "true");
+        };
+
+        window.addEventListener("hideEmptySetlists", handleStorageChange);
+        return () => {
+            window.removeEventListener("hideEmptySetlists", handleStorageChange);
+        };
+    }, []);
 
     const hasMorePages = currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
     const loadMoreSetlists = async () => {
         setIsLoading(true);
-
         try {
             const response = await fetch(
                 `/api/setlist-fm/search-setlists?${new URLSearchParams({
@@ -28,13 +61,20 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                     page: currentPage + 1
                 }).toString()}`
             );
-            if (!response.ok) throw new Error("Failed to load more setlists");
+            const responseJson = await response.json();
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                };
+            }
 
-            const newData = await response.json();
-            setSetlists((prevSetlists) => [...prevSetlists, ...newData.setlist]);
+            const newData = responseJson;
+            const newSetlists = newData.setlist || [];
+            setLoadedSetlists((prevSetlists) => [...prevSetlists, ...newSetlists]);
             setCurrentPage((prevPage) => prevPage + 1);
         } catch (error) {
-            console.error("Error loading more setlists:", error);
+            console.error(error);
         } finally {
             setIsLoading(false);
         }
@@ -48,10 +88,10 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             <div id="setlist-header" className="p-4 w-full flex flex-col items-center">
                 <div id="artist-info" className="flex items-center mb-5 px-4">
                     <img
+                        id="artist-image"
+                        className="w-16 h-16 rounded-full mr-4"
                         src={setlistData.spotifyArtist.images[0].url}
                         alt={setlistData.spotifyArtist.name}
-                        className="w-16 h-16 rounded-full mr-4"
-                        id="artist-image"
                     />
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}
@@ -59,9 +99,21 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                 </div>
                 <ul id="setlist-list" className="space-y-3 px-4 w-full">
                     {setlists.map((setlist: Record<string, any>) => (
-                        <SetlistChoiceBlock key={setlist.id} setlist={setlist} onClick={onSetlistChosen} />
+                        <SetlistChoiceBlock
+                            key={setlist.id}
+                            setlist={setlist}
+                            onClick={onSetlistChosen}
+                            hideEmpty={hideEmptySetlists}
+                        />
                     ))}
                 </ul>
+                {hiddenSetlistsCount > 0 && hideEmptySetlists === true && (
+                    <p className="mt-4 text-gray-500">
+                        {hiddenSetlistsCount === 1
+                            ? i18n("setlistSearch:hiddenSetlistsMessage", { count: hiddenSetlistsCount })
+                            : i18n("setlistSearch:hiddenSetlistsMessagePlural", { count: hiddenSetlistsCount })}
+                    </p>
+                )}
                 {hasMorePages && (
                     <button
                         id="load-more-button"

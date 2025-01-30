@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const data = await response.json();
         res.status(200).json({ success: true, data: data });
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

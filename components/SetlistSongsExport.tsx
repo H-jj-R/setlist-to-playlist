@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CustomHashLoader from "./CustomHashLoader";
 import ErrorMessage from "./ErrorMessage";
+import { useTranslation } from "react-i18next";
 
 interface SetlistSongsExportProps {
     setlist: Record<string, any>; // The setlist data
@@ -18,6 +19,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     predictedSetlist,
     onSongsFetched
 }) => {
+    const { t: i18n } = useTranslation();
     const [spotifySongs, setSpotifySongs] = useState<Record<string, any>[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -39,15 +41,17 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         body: JSON.stringify({ setlist })
                     }
                 );
-
+                const responseJson = await response.json();
                 if (!response.ok) {
-                    throw new Error("Failed to fetch Spotify song details");
+                    throw {
+                        status: response.status,
+                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                    };
                 }
 
-                setSpotifySongs(await response.json());
-            } catch (err) {
-                console.error("Error fetching Spotify songs:", err);
-                setError("Failed to load songs. Error: " + err);
+                setSpotifySongs(responseJson);
+            } catch (error) {
+                setError(error);
             } finally {
                 setLoading(false);
             }
@@ -56,12 +60,12 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
 
     useEffect(() => {
         if (spotifySongs) {
-            onSongsFetched(spotifySongs.filter(song => !excludedSongs.has(song.id)));
+            onSongsFetched(spotifySongs.filter((song) => !excludedSongs.has(song.id)));
         }
     }, [spotifySongs, excludedSongs]);
 
     const toggleExcludeSong = (songId: string) => {
-        setExcludedSongs(prev => {
+        setExcludedSongs((prev) => {
             const newExcludedSongs = new Set(prev);
             if (newExcludedSongs.has(songId)) {
                 newExcludedSongs.delete(songId);
@@ -83,7 +87,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                     <img
                         id={`song-cover-${spotifySong?.id}`}
                         src={spotifySong.album.images[0].url}
-                        alt={`${spotifySong.name} cover`}
+                        alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
                         className="w-12 h-12 rounded shadow"
                     />
                 )}
@@ -109,7 +113,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                 <ErrorMessage message={error} />
             ) : (
                 <>
-                    <h4 className="text-lg font-semibold mb-2">Songs</h4>
+                    <h4 className="text-lg font-semibold mb-2">{i18n("exportSetlist:songs")}</h4>
                     <ul className="space-y-1">
                         {spotifySongs?.map((spotifySong, idx) =>
                             spotifySong?.name ? (
@@ -120,11 +124,12 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                             ) : (
                                 <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
                                     <ErrorMessage
-                                        message={`Song not found: ${
+                                        message={`${i18n("exportSetlist:songNotFound")}: ${
                                             predictedSetlist
-                                                ? setlist?.predictedSongs?.[idx]?.name || "Unknown Song"
+                                                ? setlist?.predictedSongs?.[idx]?.name ||
+                                                  i18n("exportSetlist:unknownSong")
                                                 : (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
-                                                  "Unknown Song"
+                                                  i18n("exportSetlist:unknownSong")
                                         }`}
                                         small={true}
                                     ></ErrorMessage>

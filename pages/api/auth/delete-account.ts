@@ -2,15 +2,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../lib/constants/db";
 import jwt from "jsonwebtoken";
 
+/**
+ * API handler to delete a user account.
+ */
 export default async function deleteAccount(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
-        return res.status(405).json({ message: "Method not allowed" });
+        return res.status(405).json({ error: "errors:methodNotAllowed" });
     }
 
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-        return res.status(401).json({ message: "Unauthorised" });
+        return res.status(401).json({ error: "errors:authorisationError" });
     }
 
     try {
@@ -21,9 +24,9 @@ export default async function deleteAccount(req: NextApiRequest, res: NextApiRes
         // Delete the user from the database
         await db.execute("DELETE FROM Users WHERE user_id = ?", [userId]);
 
-        res.status(200).json({ message: "Account deleted successfully" });
+        res.status(200).json({ message: "account:deleteSuccess" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ error: "errors:internalServerError" });
     }
 }

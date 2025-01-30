@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Respond with the first artist's (best match) data
         res.status(200).json(data.artists.items[0]);
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

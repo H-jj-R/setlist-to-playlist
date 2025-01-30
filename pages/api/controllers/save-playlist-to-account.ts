@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { playlistId } = req.query;
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-        return res.status(401).json({ message: "Unauthorised" });
+        return res.status(401).json({ error: "errors:authorisationError" });
     }
 
     try {
@@ -30,10 +30,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const playlistDetails = await playlistDetailsResponse.json();
 
-        // TODO: Filter important details from the playlistDetails object
-        // Should filter to spotifyPlaylistID, name, description, tracks
-        // The tracks should be filtered to songID, and position
-        const filteredPlaylistDetails = playlistDetails;
+        // Filter details for the database from the playlistDetails object
+        const filteredPlaylistDetails = {
+            spotifyPlaylistID: playlistDetails.id,
+            name: playlistDetails.name,
+            description: playlistDetails.description,
+            tracks: playlistDetails.tracks.items.map((item: any, index: number) => ({
+                songID: item.track.id,
+                position: index
+            }))
+        };
 
         // 2. Send playlist details to the database API
         const savePlaylistResponse = await fetch(`${baseUrl}/api/database/save-playlist`, {
@@ -56,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

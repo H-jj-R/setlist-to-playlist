@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!encryptedAccessToken) {
         return res.status(401).json({
-            error: "spotifyAccessTokenError"
+            error: "errors:spotifyAccessTokenError"
         });
     }
 
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json({ success: true });
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

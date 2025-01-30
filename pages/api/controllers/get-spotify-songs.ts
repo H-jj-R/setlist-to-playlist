@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const baseUrl = getBaseUrl(req);
 
     if (!setlist) {
-        return res.status(400).json({ error: "Setlist data is required" });
+        return res.status(400).json({ error: "errors:noSetlistProvided" });
     }
 
     const fetchSongDetails = async (song: any) => {
@@ -43,12 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 });
                 if (!response.ok) {
-                    console.error(`${response.status} - Failed to fetch track from URL: ${url}`);
+                    console.error(`${response.status} - ${url}`);
                     return null;
                 }
                 return await response.json();
             } catch (error) {
-                console.error(`Unexpected error:`, error);
+                console.error(error);
                 return null;
             }
         };
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json(spotifyDetails);
     } catch (error) {
-        console.error("Error fetching Spotify songs:", error);
-        return res.status(500).json({ error: "Failed to load songs" });
+        console.error(error);
+        return res.status(500).json({ error: "errors:loadSongsFailed" });
     }
 }

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import Settings from "./Settings";
 import LoginDialog from "./LoginDialog";
-import AccountSettings from "./AccountSettings";
+import AccountSidebar from "./AccountSidebar";
 import { useAuth } from "../context/AuthContext";
 
 /**
@@ -15,7 +15,7 @@ const HeaderBar: React.FC = () => {
     const { t: i18n } = useTranslation();
     const [showSettings, setShowSettings] = useState(false);
     const [showLoginDialog, setShowLoginDialog] = useState(false); // State for showing login dialog
-    const [showAccountSettings, setShowAccountSettings] = useState(false); // State for showing account menu
+    const [showAccountSidebar, setShowAccountSidebar] = useState(false); // State for showing account menu
     const { isAuthenticated, login, logout } = useAuth();
 
     return (
@@ -35,7 +35,7 @@ const HeaderBar: React.FC = () => {
                             <button
                                 id="account-button"
                                 className="p-2 rounded text"
-                                onClick={() => setShowAccountSettings(true)}
+                                onClick={() => setShowAccountSidebar(true)}
                             >
                                 <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl" />
                             </button>
@@ -55,12 +55,12 @@ const HeaderBar: React.FC = () => {
                 </div>
             </div>
             {showSettings && <Settings onClose={() => setShowSettings(false)} />}
-            {showAccountSettings && (
-                <AccountSettings
-                    onClose={() => setShowAccountSettings(false)}
+            {showAccountSidebar && (
+                <AccountSidebar
+                    onClose={() => setShowAccountSidebar(false)}
                     handleLogout={() => {
                         logout();
-                        setShowAccountSettings(false);
+                        setShowAccountSidebar(false);
                     }}
                 />
             )}

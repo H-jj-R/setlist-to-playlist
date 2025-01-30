@@ -18,7 +18,8 @@ export async function middleware(request: NextRequest) {
     if (
         pathname.startsWith("/api/controllers/get-setlists") ||
         pathname.startsWith("/api/controllers/get-spotify-songs") ||
-        pathname.startsWith("/api/spotify/search-artist")
+        pathname.startsWith("/api/spotify/search-artist") ||
+        pathname.startsWith("/api/spotify/get-tracks")
     ) {
         const hasSpotifyAccessToken = request.cookies.get("spotify_access_token");
         if (!hasSpotifyAccessToken) {

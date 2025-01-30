@@ -8,11 +8,13 @@ import CustomHashLoader from "../components/CustomHashLoader";
 import ErrorMessage from "../components/ErrorMessage";
 import setlistSearchHook from "../lib/hooks/setlistSearchHook";
 import { PageState } from "../lib/constants/setlistSearchPageState";
+import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
  */
 export default function SetlistSearch() {
+    const { t: i18n } = useTranslation();
     const {
         mounted,
         state,
@@ -36,7 +38,10 @@ export default function SetlistSearch() {
                             state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                         }`}
                     >
-                        <SearchBar onSearch={handleSearchRouterPush} aria-label="Search for setlists" />
+                        <SearchBar
+                            onSearch={handleSearchRouterPush}
+                            aria-label={i18n("setlistSearch:searchForSetlist")}
+                        />
                     </div>
 
                     {/* Loading indicator */}

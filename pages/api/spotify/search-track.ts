@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Parse the JSON response
         const data = await response.json();
 
-        // TODO: Ensure that track actually is the right track (better algorithm?)
+        // TODO: Better algorithm? to ensure that track actually is the right track
         // Check if there is a perfectly matching track from the top 5 results
         const trackMatch = data.tracks.items.find(
             (trackList) =>
@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
         }
     } catch (error) {
-        console.error("Unexpected error:", error);
+        console.error(error);
         res.status(500).json({
             error: "errors:internalServerError"
         });

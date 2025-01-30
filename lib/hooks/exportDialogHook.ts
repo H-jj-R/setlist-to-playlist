@@ -40,8 +40,8 @@ export default function exportDialogHook({
             setState((prev) => ({
                 ...prev,
                 playlistName: predictedSetlist
-                    ? `${artistData.spotifyArtist.name} Predicted Setlist`
-                    : `${artistData.spotifyArtist.name} Setlist - ${format(
+                    ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
+                    : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${format(
                           ((dateString: string) => {
                               const [day, month, year] = dateString.split("-");
                               return new Date(`${year}-${month}-${day}`);
@@ -121,10 +121,9 @@ export default function exportDialogHook({
                 };
                 reader.readAsDataURL(file);
             } else {
-                console.error("Invalid file type");
                 setMessageDialog({
                     isOpen: true,
-                    message: "Invalid file type",
+                    message: i18n("errors:invalidFileType"),
                     type: "error"
                 });
             }
@@ -155,14 +154,14 @@ export default function exportDialogHook({
             if (!state.playlistName.trim()) {
                 throw {
                     status: 400,
-                    error: "No name provided."
+                    error: i18n("errors:noNameProvided")
                 };
             }
 
             if (state.spotifySongs.length === 0) {
                 throw {
                     status: 400,
-                    error: "No songs provided."
+                    error: i18n("errors:noSongsProvided")
                 };
             }
 
@@ -172,7 +171,7 @@ export default function exportDialogHook({
                 if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
                     throw {
                         status: 400,
-                        error: "Error processing image or file size too large."
+                        error: i18n("errors:errorProcessingImage")
                     };
                 }
             }
@@ -196,7 +195,7 @@ export default function exportDialogHook({
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: responseJson.error || "Unknown error"
+                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
                 };
             }
 
@@ -209,10 +208,9 @@ export default function exportDialogHook({
                 type: "success"
             });
         } catch (error) {
-            console.error(error);
             setMessageDialog({
                 isOpen: true,
-                message: `${i18n(error.error)}`,
+                message: error.error,
                 type: "error"
             });
         }
