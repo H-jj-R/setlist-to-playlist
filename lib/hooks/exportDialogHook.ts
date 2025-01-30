@@ -195,7 +195,7 @@ export default function exportDialogHook({
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: responseJson.error || i18n("errors:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
                 };
             }
 
@@ -208,10 +208,9 @@ export default function exportDialogHook({
                 type: "success"
             });
         } catch (error) {
-            console.error(error);
             setMessageDialog({
                 isOpen: true,
-                message: `${i18n(error.error)}`,
+                message: error.error,
                 type: "error"
             });
         }

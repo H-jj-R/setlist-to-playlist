@@ -3,21 +3,63 @@ import Layout from "../components/Layout";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
+import ErrorMessage from "../components/ErrorMessage";
+import UserPlaylist from "../components/UserPlaylist";
+import CustomHashLoader from "../components/CustomHashLoader";
 
 /**
- * Main page for viewing setlists.
+ * Main page for viewing user playlists.
  */
-export default function AIGenerateSetlist() {
+export default function UserPlaylists() {
     const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    const [state, setState] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [playlists, setPlaylists] = useState<any[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchPlaylists();
+        }
+    }, [isAuthenticated]);
+
+    const fetchPlaylists = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("/api/database/get-user-playlists", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
+                }
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                };
+            }
+
+            setPlaylists(data.playlists);
+        } catch (error) {
+            setError(error.error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePlaylistDelete = (playlistId: number) => {
+        setPlaylists((prevPlaylists) => prevPlaylists.filter((playlist) => playlist.playlistId !== playlistId));
+    };
 
     if (!mounted) return null;
 
@@ -31,11 +73,32 @@ export default function AIGenerateSetlist() {
                         <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
                     </div>
                 </div>
+            ) : error ? (
+                <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
+                    <ErrorMessage message={error} />
+                </div>
+            ) : loading ? (
+                <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
+                    <CustomHashLoader showLoading={loading} size={120} />
+                </div>
             ) : (
-                <>
-                    <div>CONTENT HERE</div>
-                    <div>TODO: Get user playlists from DB</div>
-                </>
+                <div className="p-4">
+                    <h1 className="flex justify-center text-2xl font-bold mb-4">
+                        {i18n("userPlaylists:yourExportedSetlists")}
+                    </h1>
+                    {playlists.length === 0 ? (
+                        // TODO: Make this look better when no playlists
+                        <p>{i18n("userPlaylists:noPlaylistsFound")}</p>
+                    ) : (
+                        <ul className="space-y-4">
+                            {playlists.map((playlist, idx) => (
+                                <div key={`${idx}-${playlist.playlistId}`} className="flex justify-center items-center">
+                                    <UserPlaylist playlist={playlist} onDelete={handlePlaylistDelete} />
+                                </div>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             )}
         </Layout>
     );

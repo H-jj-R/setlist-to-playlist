@@ -5,8 +5,9 @@ import { useTheme } from "next-themes";
 import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
 import MessageDialog from "./MessageDialog";
+import { useRouter } from "next/router";
 
-interface AccountSettingsProps {
+interface AccountSidebarProps {
     onClose: () => void; // Close handler
     handleLogout: () => void; // Logout handler
 }
@@ -21,7 +22,8 @@ interface DecodedToken {
 /**
  * The settings overlay component.
  */
-const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => {
+const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }) => {
+    const router = useRouter();
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const { resolvedTheme } = useTheme();
@@ -34,7 +36,7 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
         setIsVisible(true);
 
         // Decode the JWT to get the username
-        const token = localStorage.getItem("authToken"); // Replace with the actual key you're using for the token
+        const token = localStorage?.getItem("authToken"); // Replace with the actual key you're using for the token
         if (token) {
             try {
                 const decoded = jwtDecode<DecodedToken>(token);
@@ -49,7 +51,6 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
         try {
             const token = localStorage?.getItem("authToken");
             if (!token) {
-                console.error(i18n("errors:authorisationError"));
                 return;
             }
 
@@ -110,44 +111,60 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
             >
                 <div id="settings-header" className="flex justify-between items-center mb-6 mr-5">
                     <h2 id="settings-title" className="text-xl font-bold">
-                        {i18n("account:accountSettings")}
+                        {i18n("account:account")}
                     </h2>
                     <button
                         id="close-settings-btn"
                         onClick={() => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
-                            setTimeout(onClose, 300); // Match the animation duration
+                            setTimeout(onClose, 300);
                         }}
                         className="text-xl"
                     >
                         <FontAwesomeIcon icon={faChevronRight} size="lg" />
                     </button>
                 </div>
-                {/* Username */}
-                <div className="text-center mb-6">
-                    <h3 className="text-lg font-semibold">
-                        {username ? (
-                            <>
-                                <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl mr-2" />
-                                {username}
-                            </>
-                        ) : (
-                            "Loading..."
-                        )}
-                    </h3>
+                <div className="p-4 border-4 rounded-lg m-4">
+                    {/* Username */}
+                    <div className="text-center mb-2">
+                        <h3 className="text-lg font-semibold">
+                            {username ? (
+                                <>
+                                    <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl mr-2" />
+                                    {username}
+                                </>
+                            ) : (
+                                "Loading..."
+                            )}
+                        </h3>
+                    </div>
+                    {/* Logout */}
+                    <div className="mt-4 flex justify-center">
+                        <button
+                            id="logout-btn"
+                            onClick={() => {
+                                setIsVisible(false);
+                                setTimeout(handleLogout, 300);
+                            }}
+                            className="w-3/4 bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded hover:from-red-600 hover:to-orange-600 transition-colors duration-300"
+                        >
+                            {i18n("account:logout")}
+                        </button>
+                    </div>
                 </div>
-                {/* Logout */}
+                {/* Link to Created Playlists */}
                 <div className="mt-4 flex justify-center">
                     <button
-                        id="logout-btn"
+                        id="go-to-ai-generate-setlist-button"
                         onClick={() => {
                             setIsVisible(false);
-                            setTimeout(handleLogout, 300);
+                            setTimeout(onClose, 300);
+                            router.push("/user-playlists");
                         }}
-                        className="w-3/4 bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded hover:from-red-600 hover:to-orange-600 transition-colors duration-300"
+                        className="px-12 py-5 bg-violet-500 text-white font-semibold rounded-full shadow-lg hover:bg-violet-600 focus:outline-none transition mt-4"
                     >
-                        {i18n("account:logout")}
+                        {i18n("userPlaylists:createdPlaylists")}
                     </button>
                 </div>
                 {/* Delete Account */}
@@ -199,4 +216,4 @@ const Settings: React.FC<AccountSettingsProps> = ({ onClose, handleLogout }) => 
     );
 };
 
-export default Settings;
+export default AccountSidebar;

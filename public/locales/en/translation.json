@@ -4,6 +4,7 @@
         "authenticationRequired": "Authentication Required",
         "cancel": "Cancel",
         "close": "Close",
+        "delete": "Delete",
         "error": "Error!",
         "export": "Export",
         "exportToSpotify": "Export to Spotify",
@@ -11,6 +12,7 @@
         "issue": "Issue",
         "loading": "Loading",
         "needToLogIn": "You need to log in to access this feature!",
+        "save": "Save",
         "search": "Search",
         "setlist": "Setlist",
         "show": "Show",
@@ -20,7 +22,7 @@
         "success": "Success!"
     },
     "account": {
-        "accountSettings": "Account Settings",
+        "account": "Account",
         "allfieldsRequired": "All fields are required.",
         "alreadyHaveAccount": "Already have an account? Login",
         "deleteAccount": "Delete Account",
@@ -127,7 +129,7 @@
         "noSongsFound": "No songs found!",
         "playedFromTape": "Played from tape",
         "searchForSetlist": "Search for an artist/band or setlist.fm link...",
-        "Setlist Prediction": "Setlist Prediction {{count}}",
+        "setlistPrediction": "Setlist Prediction {{count}}",
         "setlistDate": "Date: {{date}}",
         "setlistListTitle": "Setlists for {{artistName}}",
         "song": "song",
@@ -146,6 +148,9 @@
         "themeTitle": "Theme"
     },
     "userPlaylists": {
-        "playlistSaved": "Playlist saved successfully!"
+        "createdPlaylists": "Created Playlists",
+        "playlistSaved": "Playlist saved successfully!",
+        "recover": "Recover",
+        "yourExportedSetlists": "Your Exported Setlists"
     }
 }

@@ -18,7 +18,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
     const [isLoading, setIsLoading] = useState(false);
     const [hiddenSetlistsCount, setHiddenSetlistsCount] = useState(0);
-    const [hideEmptySetlists, setHideEmptySetlists] = useState(localStorage.getItem("hideEmptySetlists") === "true");
+    const [hideEmptySetlists, setHideEmptySetlists] = useState(localStorage?.getItem("hideEmptySetlists") === "true");
 
     const filterEmptySetlists = (data: Record<string, any>[]) => {
         return data.filter((setlist: Record<string, any>) => {
@@ -42,7 +42,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
 
     useEffect(() => {
         const handleStorageChange = () => {
-            setHideEmptySetlists(localStorage.getItem("hideEmptySetlists") === "true");
+            setHideEmptySetlists(localStorage?.getItem("hideEmptySetlists") === "true");
         };
 
         window.addEventListener("hideEmptySetlists", handleStorageChange);
@@ -65,7 +65,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: responseJson.error || i18n("errors:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
                 };
             }
 

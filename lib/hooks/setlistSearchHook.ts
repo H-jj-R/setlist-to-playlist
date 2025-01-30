@@ -71,7 +71,7 @@ export default function setlistSearchHook() {
             const errorResponse = await response.json();
             throw {
                 status: response.status,
-                error: errorResponse.error || i18n("errors:unexpectedError")
+                error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
             };
         }
         return await response.json();
@@ -143,11 +143,10 @@ export default function setlistSearchHook() {
                 }));
             }
         } catch (error) {
-            console.error(error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${i18n(error.error)}`
+                error: error.error
             }));
         }
     };

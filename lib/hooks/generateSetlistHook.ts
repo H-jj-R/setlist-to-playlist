@@ -76,7 +76,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await response.json();
                 throw {
                     status: response.status,
-                    error: errorResponse.error || i18n("errors:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
                 };
             }
             const setlistData = await response.json();
@@ -90,7 +90,7 @@ export default function generateSetlistHook() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("authToken")}`
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
                 },
                 body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist })
             });
@@ -99,7 +99,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await apiResponse.json();
                 throw {
                     status: apiResponse.status,
-                    error: errorResponse.error || i18n("errors:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
                 };
             }
 
@@ -116,11 +116,10 @@ export default function generateSetlistHook() {
             }));
             console.log(apiData);
         } catch (error) {
-            console.error(error);
             setState((prev) => ({
                 ...prev,
                 showLoading: false,
-                error: `${i18n(error.error)}`
+                error: error.error
             }));
         }
     };

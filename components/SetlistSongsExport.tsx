@@ -45,13 +45,13 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                 if (!response.ok) {
                     throw {
                         status: response.status,
-                        error: responseJson.error || i18n("errors:unexpectedError")
+                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
                     };
                 }
 
                 setSpotifySongs(responseJson);
-            } catch (err) {
-                setError(err);
+            } catch (error) {
+                setError(error);
             } finally {
                 setLoading(false);
             }

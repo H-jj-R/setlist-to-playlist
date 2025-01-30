@@ -16,7 +16,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const [isVisible, setIsVisible] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
     const [hideEmptySetlists, setHideEmptySetlists] = useState(
-        () => localStorage.getItem("hideEmptySetlists") === "true"
+        () => localStorage?.getItem("hideEmptySetlists") === "true"
     );
 
     const handleHideEmptySetlistsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
