@@ -16,7 +16,7 @@ const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }
     return (
         <HashLoader
             id="hash-loader"
-            color="#36d7c0"
+            color="#3DDAFA"
             loading={showLoading}
             cssOverride={{} as CSSProperties}
             size={size}

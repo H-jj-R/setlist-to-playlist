@@ -65,41 +65,46 @@ export default function UserPlaylists() {
 
     return (
         <Layout>
-            {!isAuthenticated ? (
-                // Dialog displayed when the user is not authenticated
-                <div className="flex items-center justify-center">
-                    <div className="relative top-2/3 p-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg shadow-lg text-center text-white">
-                        <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
-                        <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
+            <div className="h-screen overflow-y-scroll">
+                {!isAuthenticated ? (
+                    // Dialog displayed when the user is not authenticated
+                    <div className="flex items-center justify-center mt-8">
+                        <div className="relative top-2/3 p-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg shadow-lg text-center text-white">
+                            <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
+                            <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
+                        </div>
                     </div>
-                </div>
-            ) : error ? (
-                <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
-                    <ErrorMessage message={error} />
-                </div>
-            ) : loading ? (
-                <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
-                    <CustomHashLoader showLoading={loading} size={120} />
-                </div>
-            ) : (
-                <div className="p-4">
-                    <h1 className="flex justify-center text-2xl font-bold mb-4">
-                        {i18n("userPlaylists:yourExportedSetlists")}
-                    </h1>
-                    {playlists.length === 0 ? (
-                        // TODO: Make this look better when no playlists
-                        <p>{i18n("userPlaylists:noPlaylistsFound")}</p>
-                    ) : (
-                        <ul className="space-y-4">
-                            {playlists.map((playlist, idx) => (
-                                <div key={`${idx}-${playlist.playlistId}`} className="flex justify-center items-center">
-                                    <UserPlaylist playlist={playlist} onDelete={handlePlaylistDelete} />
-                                </div>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            )}
+                ) : error ? (
+                    <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
+                        <ErrorMessage message={error} />
+                    </div>
+                ) : loading ? (
+                    <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
+                        <CustomHashLoader showLoading={loading} size={120} />
+                    </div>
+                ) : (
+                    <div className="p-4">
+                        <h1 className="flex justify-center text-2xl font-bold mb-4">
+                            {i18n("userPlaylists:yourExportedSetlists")}
+                        </h1>
+                        {playlists.length === 0 ? (
+                            // TODO: Make this look better when no playlists
+                            <p>{i18n("userPlaylists:noPlaylistsFound")}</p>
+                        ) : (
+                            <ul className="space-y-4">
+                                {playlists.map((playlist, idx) => (
+                                    <div
+                                        key={`${idx}-${playlist.playlistId}`}
+                                        className="flex justify-center items-center"
+                                    >
+                                        <UserPlaylist playlist={playlist} onDelete={handlePlaylistDelete} />
+                                    </div>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
+            </div>
         </Layout>
     );
 }

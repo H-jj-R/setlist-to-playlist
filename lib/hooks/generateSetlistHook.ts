@@ -23,6 +23,7 @@ export default function generateSetlistHook() {
         exportDialogOpen: false,
         animLoading: true,
         showLoading: false,
+        progress: 0,
         error: null as string | null,
         pageState: PageState.Idle
     });
@@ -60,6 +61,7 @@ export default function generateSetlistHook() {
             searchTriggered: true,
             searchComplete: false,
             showLoading: false,
+            progress: 0,
             error: null,
             pageState: PageState.Idle
         }));
@@ -71,22 +73,51 @@ export default function generateSetlistHook() {
         setState((prev) => ({ ...prev, showLoading: true }));
 
         try {
-            const response = await fetch(`/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`);
-            if (!response.ok) {
-                const errorResponse = await response.json();
+            const queryLimitResponse = await fetch(`/api/database/check-query-limit`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
+                }
+            });
+            if (!queryLimitResponse.ok) {
+                const errorResponse = await queryLimitResponse.json();
                 throw {
-                    status: response.status,
+                    status: queryLimitResponse.status,
                     error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
                 };
             }
-            const setlistData = await response.json();
-
             setState((prev) => ({
                 ...prev,
-                allSetlistsData: setlistData
+                progress: 10
             }));
 
-            const apiResponse = await fetch("/api/openai/predict-setlist", {
+            const setlistResponse = await fetch(
+                `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
+            );
+            if (!setlistResponse.ok) {
+                const errorResponse = await setlistResponse.json();
+                throw {
+                    status: setlistResponse.status,
+                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                };
+            }
+            const setlistData = await setlistResponse.json();
+            setState((prev) => ({
+                ...prev,
+                allSetlistsData: setlistData,
+                progress: 25
+            }));
+
+            // Simulate gradual progress while waiting for AI response
+            let simulatedProgress = 25;
+            const interval = setInterval(() => {
+                simulatedProgress += 5;
+                setState((prev) => ({ ...prev, progress: simulatedProgress }));
+                if (simulatedProgress >= 95) clearInterval(interval);
+            }, 600);
+
+            const openAIResponse = await fetch("/api/openai/predict-setlist", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -95,31 +126,35 @@ export default function generateSetlistHook() {
                 body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist })
             });
 
-            if (!apiResponse.ok) {
-                const errorResponse = await apiResponse.json();
+            if (!openAIResponse.ok) {
+                const errorResponse = await openAIResponse.json();
                 throw {
-                    status: apiResponse.status,
+                    status: openAIResponse.status,
                     error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
                 };
             }
 
-            const apiData = await apiResponse.json();
+            const openAIData = await openAIResponse.json();
+            clearInterval(interval);
             setState((prev) => ({
                 ...prev,
-                predictedSetlists: apiData.predictedSetlists.map((predictedSetlist, idx) => ({
+                predictedSetlists: openAIData.predictedSetlists.map((predictedSetlist, idx) => ({
                     ...predictedSetlist,
                     setlistArtist: setlistData.spotifyArtist
                 })),
                 searchComplete: true,
-                showLoading: false,
                 pageState: PageState.Setlist
             }));
-            console.log(apiData);
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                showLoading: false,
                 error: error.error
+            }));
+        } finally {
+            setState((prev) => ({
+                ...prev,
+                showLoading: false,
+                progress: 0
             }));
         }
     };

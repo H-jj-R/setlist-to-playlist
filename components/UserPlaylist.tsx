@@ -118,12 +118,17 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                 value={name}
                                 maxLength={100}
                                 onChange={(e) => setName(e.target.value)}
+                                placeholder={i18n("exportSetlist:enterPlaylistName")}
+                                required
+                                autoComplete="off"
                             />
                             <textarea
                                 className="w-full p-2 border rounded-md h-32"
                                 value={description}
                                 maxLength={300}
                                 onChange={(e) => setDescription(e.target.value)}
+                                placeholder={i18n("exportSetlist:enterPlaylistDescription")}
+                                autoComplete="off"
                             />
                             <div className="flex justify-center mt-2 space-x-2 p-2">
                                 <button
@@ -145,9 +150,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                             <div className="w-10/12 flex items-center">
                                 <div className="w-full break-words">
                                     <h2 className="text-xl font-bold">{name}</h2>
-                                    <p className="text-gray-400">
-                                        {description || i18n("userPlaylists:noDescription")}
-                                    </p>
+                                    <p className="text-gray-400">{description}</p>
                                 </div>
                             </div>
 

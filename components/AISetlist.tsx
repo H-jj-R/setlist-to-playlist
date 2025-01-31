@@ -67,7 +67,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
             {/* Setlist Header */}
             <div id="setlist-header" className="mb-4">
                 <h2 id="setlist-artist" className="text-3xl font-bold">
-                    {i18n("setlistSearch:setlistPrediction", { predictionNum })}
+                    {i18n("setlistSearch:setlistPrediction", { count: predictionNum })}
                 </h2>
             </div>
 
