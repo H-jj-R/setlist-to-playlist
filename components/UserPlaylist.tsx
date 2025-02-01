@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -16,10 +17,13 @@ interface UserPlaylistProps {
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     const { t: i18n } = useTranslation();
+    const router = useRouter();
     const [expanded, setExpanded] = useState(false);
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(playlist.name);
     const [description, setDescription] = useState(playlist.description || "");
+    const [initialName, setInitialName] = useState(playlist.name);
+    const [initialDescription, setInitialDescription] = useState(playlist.description || "");
     const [tracks, setTracks] = useState<any[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +32,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     const toggleExpand = async () => {
         setExpanded(!expanded);
         if (!tracks && !loading) {
-            fetchTrackDetails();
+            setTracks(await fetchTrackDetails());
         }
     };
 
@@ -51,20 +55,103 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                 };
             }
 
-            setTracks(data.tracks);
-        } catch (err) {
-            setError(err.error);
+            return data.tracks;
+        } catch (error) {
+            setError(error.error);
         } finally {
             setLoading(false);
         }
     };
 
     const handleSave = async () => {
-        // TODO: Update on database
+        setLoading(true);
+        setError(null);
+        try {
+            if (!name.trim()) {
+                throw {
+                    status: 400,
+                    error: i18n("errors:noNameProvided")
+                };
+            }
+
+            const token = localStorage?.getItem("authToken");
+            if (!token) {
+                return;
+            }
+
+            const response = await fetch(
+                `/api/database/update-playlist-details?${new URLSearchParams({
+                    playlistId: playlist.playlistId
+                }).toString()}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ playlistName: name, playlistDescription: description })
+                }
+            );
+            const data = await response.json();
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                };
+            }
+
+            setInitialName(name);
+            setInitialDescription(description);
+            setEditing(false);
+        } catch (error) {
+            setError(error.error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleRecover = async () => {
-        // TODO: Recover on Spotify
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch("/api/controllers/check-for-authentication", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            if (response.status === 401) {
+                router.push(
+                    `/api/spotify/authorise?${new URLSearchParams({
+                        redirect: window.location.pathname + window.location.search
+                    }).toString()}`
+                );
+            } else if (response.status == 200) {
+                const response = await fetch(`/api/controllers/create-spotify-playlist`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage?.getItem("authToken")}`
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        description: description,
+                        tracks: JSON.stringify(tracks ? tracks : await fetchTrackDetails())
+                    })
+                });
+                const responseJson = await response.json();
+
+                if (!response.ok) {
+                    throw {
+                        status: response.status,
+                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                    };
+                }
+            }
+        } catch (error) {
+            setError(error.error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDelete = async () => {
@@ -96,18 +183,64 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
             }
 
             onDelete(playlist.playlistId);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (error) {
+            setError(error.error);
         } finally {
             setLoading(false);
         }
     };
 
+    // TODO: Error display
     return (
         <>
             <li className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
                 <div className="flex justify-between items-center">
-                    {editing ? (
+                    {!editing ? (
+                        <>
+                            <div className="w-10/12 flex items-center">
+                                <div className="w-full break-words">
+                                    <h2 className="text-xl font-bold">{name}</h2>
+                                    <p className="text-gray-400">{description}</p>
+                                </div>
+                            </div>
+
+                            {/* Wrap edit button and recovery/delete buttons in a flex container */}
+                            <div className="flex items-center space-x-4">
+                                {/* Edit Button */}
+                                <button
+                                    onClick={() => setEditing(true)}
+                                    className="text-gray-600 hover:text-gray-900 p-1"
+                                >
+                                    <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
+                                </button>
+
+                                {/* Recovery & Delete Buttons */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <button
+                                        onClick={handleRecover}
+                                        className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+                                    >
+                                        {i18n("userPlaylists:recover")}
+                                    </button>
+                                    <button
+                                        onClick={() => setShowConfirmation(true)}
+                                        className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                                    >
+                                        {i18n("common:delete")}
+                                    </button>
+                                </div>
+
+                                {/* Expand/Collapse Button */}
+                                <button onClick={toggleExpand} className="p-1">
+                                    {expanded ? (
+                                        <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
+                                    )}
+                                </button>
+                            </div>
+                        </>
+                    ) : (
                         <div className="w-10/12">
                             <input
                                 className="w-full p-2 border rounded-md mb-2"
@@ -134,55 +267,17 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                     {i18n("common:save")}
                                 </button>
                                 <button
-                                    onClick={() => setEditing(false)}
+                                    onClick={() => {
+                                        setEditing(false);
+                                        setName(initialName);
+                                        setDescription(initialDescription);
+                                    }}
                                     className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
                             </div>
                         </div>
-                    ) : (
-                        <>
-                            <div className="w-10/12 flex items-center">
-                                <div className="w-full break-words">
-                                    <h2 className="text-xl font-bold">{name}</h2>
-                                    <p className="text-gray-400">{description}</p>
-                                </div>
-                            </div>
-
-                            {/* Wrap edit button and recovery/delete buttons in a flex container */}
-                            <div className="flex items-center space-x-4">
-                                {/* Edit Button */}
-                                <button onClick={() => setEditing(true)} className="text-gray-600 hover:text-gray-900">
-                                    <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
-                                </button>
-
-                                {/* Recovery & Delete Buttons in a Column */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <button
-                                        onClick={handleRecover}
-                                        className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
-                                    >
-                                        {i18n("userPlaylists:recover")}
-                                    </button>
-                                    <button
-                                        onClick={() => setShowConfirmation(true)}
-                                        className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
-                                    >
-                                        {i18n("common:delete")}
-                                    </button>
-                                </div>
-
-                                {/* Expand/Collapse Button */}
-                                <button onClick={toggleExpand} className="p-2">
-                                    {expanded ? (
-                                        <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
-                                    ) : (
-                                        <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
-                                    )}
-                                </button>
-                            </div>
-                        </>
                     )}
                 </div>
 

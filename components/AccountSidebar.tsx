@@ -58,7 +58,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
             const response = await fetch("/api/auth/delete-account", {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
                 }
             });

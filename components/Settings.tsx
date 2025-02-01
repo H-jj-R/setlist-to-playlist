@@ -18,12 +18,40 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const [hideEmptySetlists, setHideEmptySetlists] = useState(
         () => localStorage?.getItem("hideEmptySetlists") === "true"
     );
+    const [hideSongsNotFound, setHideSongsNotFound] = useState(
+        () => localStorage?.getItem("hideSongsNotFound") === "true"
+    );
+    const [excludeCovers, setExcludeCovers] = useState(() => localStorage?.getItem("excludeCovers") === "true");
+    const [excludeDuplicateSongs, setExcludeDuplicateSongs] = useState(
+        () => localStorage?.getItem("excludeDuplicateSongs") === "true"
+    );
 
     const handleHideEmptySetlistsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = event.target.checked;
         setHideEmptySetlists(isChecked);
         localStorage.setItem("hideEmptySetlists", isChecked.toString());
         window.dispatchEvent(new StorageEvent("hideEmptySetlists")); // Trigger storage event manually
+    };
+
+    const handleHideSongsNotFound = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = event.target.checked;
+        setHideSongsNotFound(isChecked);
+        localStorage.setItem("hideSongsNotFound", isChecked.toString());
+        window.dispatchEvent(new StorageEvent("hideSongsNotFound")); // Trigger storage event manually
+    };
+
+    const handleExcludeCoversChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = event.target.checked;
+        setExcludeCovers(isChecked);
+        localStorage.setItem("excludeCovers", isChecked.toString());
+        window.dispatchEvent(new StorageEvent("excludeCovers")); // Trigger storage event manually
+    };
+
+    const handleExcludeDuplicateSongs = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const isChecked = event.target.checked;
+        setExcludeDuplicateSongs(isChecked);
+        localStorage.setItem("excludeDuplicateSongs", isChecked.toString());
+        window.dispatchEvent(new StorageEvent("excludeDuplicateSongs")); // Trigger storage event manually
     };
 
     useEffect(() => {
@@ -105,10 +133,40 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={hideEmptySetlists}
                             onChange={handleHideEmptySetlistsChange}
-                            style={{ width: "25px", height: "25px" }}
-                            className="cursor-pointer"
+                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
                         />
                         <span>{i18n("settings:hideEmptySetlists")}</span>
+                    </label>
+                </div>
+
+                <div className="mb-4">
+                    <h3 className="text-lg font-medium">{i18n("settings:exportTitle")}</h3>
+                    <label className="flex items-center space-x-2 p-2">
+                        <input
+                            type="checkbox"
+                            checked={hideSongsNotFound}
+                            onChange={handleHideSongsNotFound}
+                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                        />
+                        <span>{i18n("settings:hideSongsNotFound")}</span>
+                    </label>
+                    <label className="flex items-center space-x-2 p-2">
+                        <input
+                            type="checkbox"
+                            checked={excludeCovers}
+                            onChange={handleExcludeCoversChange}
+                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                        />
+                        <span>{i18n("settings:excludeCovers")}</span>
+                    </label>
+                    <label className="flex items-center space-x-2 p-2">
+                        <input
+                            type="checkbox"
+                            checked={excludeDuplicateSongs}
+                            onChange={handleExcludeDuplicateSongs}
+                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                        />
+                        <span>{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
                 </div>
             </div>

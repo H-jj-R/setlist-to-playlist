@@ -217,13 +217,14 @@ export default function exportDialogHook({
     };
 
     const resetState = () => {
-        setState({
+        setState((prev) => ({
+            ...prev,
             playlistName: "",
             playlistDescription: "",
             image: null,
             imagePreview: null,
             spotifySongs: null
-        });
+        }));
         setMessageDialog({ isOpen: false, message: "", type: "success" });
     };
 

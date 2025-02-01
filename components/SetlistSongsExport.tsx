@@ -24,6 +24,41 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [excludedSongs, setExcludedSongs] = useState<Set<string>>(new Set());
+    const [settingsStates, setSettingsStates] = useState({
+        hideSongsNotFound: localStorage?.getItem("hideSongsNotFound") === "true",
+        excludeCovers: localStorage?.getItem("excludeCovers") === "true",
+        excludeDuplicateSongs: localStorage?.getItem("excludeDuplicateSongs") === "true"
+    });
+
+    useEffect(() => {
+        const handleHideSongsNotFoundChange = () => {
+            setSettingsStates((prev) => ({
+                ...prev,
+                hideSongsNotFound: localStorage?.getItem("hideSongsNotFound") === "true"
+            }));
+        };
+        const handleExcludeCoversChange = () => {
+            setSettingsStates((prev) => ({
+                ...prev,
+                excludeCovers: localStorage?.getItem("excludeCovers") === "true"
+            }));
+        };
+        const handleExcludeDuplicateSongs = () => {
+            setSettingsStates((prev) => ({
+                ...prev,
+                excludeDuplicateSongs: localStorage?.getItem("excludeDuplicateSongs") === "true"
+            }));
+        };
+
+        window.addEventListener("hideSongsNotFound", handleHideSongsNotFoundChange);
+        window.addEventListener("excludeCovers", handleExcludeCoversChange);
+        window.addEventListener("excludeDuplicateSongs", handleExcludeDuplicateSongs);
+        return () => {
+            window.removeEventListener("hideSongsNotFound", handleHideSongsNotFoundChange);
+            window.removeEventListener("excludeCovers", handleExcludeCoversChange);
+            window.removeEventListener("excludeDuplicateSongs", handleExcludeDuplicateSongs);
+        };
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -50,6 +85,25 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                 }
 
                 setSpotifySongs(responseJson);
+
+                if (settingsStates.excludeCovers) {
+                    responseJson.forEach((song: any, idx: number) => {
+                        if (song.artists?.[0]?.name !== artistData.spotifyArtist.name) {
+                            toggleExcludeSong(song.id, idx);
+                        }
+                    });
+                }
+
+                if (settingsStates.excludeDuplicateSongs) {
+                    const seenSongs = new Set();
+                    responseJson.forEach((song: any, idx: number) => {
+                        if (seenSongs.has(song.id)) {
+                            toggleExcludeSong(song.id, idx);
+                        } else {
+                            seenSongs.add(song.id);
+                        }
+                    });
+                }
             } catch (error) {
                 setError(error);
             } finally {
@@ -60,27 +114,28 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
 
     useEffect(() => {
         if (spotifySongs) {
-            onSongsFetched(spotifySongs.filter((song) => !excludedSongs.has(song.id)));
+            onSongsFetched(spotifySongs.filter((song, idx) => !excludedSongs.has(`${song.id}-${idx}`)));
         }
     }, [spotifySongs, excludedSongs]);
 
-    const toggleExcludeSong = (songId: string) => {
+    const toggleExcludeSong = (songId: string, songIndex: number) => {
         setExcludedSongs((prev) => {
             const newExcludedSongs = new Set(prev);
-            if (newExcludedSongs.has(songId)) {
-                newExcludedSongs.delete(songId);
+            const songKey = `${songId}-${songIndex}`;
+            if (newExcludedSongs.has(songKey)) {
+                newExcludedSongs.delete(songKey);
             } else {
-                newExcludedSongs.add(songId);
+                newExcludedSongs.add(songKey);
             }
             return newExcludedSongs;
         });
     };
 
-    const SongListItem = ({ spotifySong }: { spotifySong: any }) => (
+    const SongListItem = ({ spotifySong, idx }: { spotifySong: any; idx: number }) => (
         <li
             id={`song-item-${spotifySong?.id}`}
-            className={`py-2 cursor-pointer ${excludedSongs.has(spotifySong.id) ? "opacity-20" : ""}`}
-            onClick={() => toggleExcludeSong(spotifySong.id)}
+            className={`py-2 cursor-pointer ${excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""}`}
+            onClick={() => toggleExcludeSong(spotifySong.id, idx)}
         >
             <div className="flex items-center space-x-4">
                 {spotifySong?.album?.images[0]?.url && (
@@ -120,20 +175,23 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                 <SongListItem
                                     key={`${idx}-${spotifySong.name || "unknown"}`}
                                     spotifySong={spotifySong}
+                                    idx={idx}
                                 />
                             ) : (
-                                <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
-                                    <ErrorMessage
-                                        message={`${i18n("exportSetlist:songNotFound")}: ${
-                                            predictedSetlist
-                                                ? setlist?.predictedSongs?.[idx]?.name ||
-                                                  i18n("exportSetlist:unknownSong")
-                                                : (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]?.name ||
-                                                  i18n("exportSetlist:unknownSong")
-                                        }`}
-                                        small={true}
-                                    ></ErrorMessage>
-                                </li>
+                                !settingsStates.hideSongsNotFound && (
+                                    <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
+                                        <ErrorMessage
+                                            message={`${i18n("exportSetlist:songNotFound")}: ${
+                                                predictedSetlist
+                                                    ? setlist?.predictedSongs?.[idx]?.name ||
+                                                      i18n("exportSetlist:unknownSong")
+                                                    : (setlist?.sets?.set.flatMap((set) => set.song) || [])[idx]
+                                                          ?.name || i18n("exportSetlist:unknownSong")
+                                            }`}
+                                            small={true}
+                                        ></ErrorMessage>
+                                    </li>
+                                )
                             )
                         )}
                     </ul>

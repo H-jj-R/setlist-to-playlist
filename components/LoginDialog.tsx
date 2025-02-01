@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faEnvelope, faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import MessageDialog from "@components/MessageDialog";
 
-const RECAPTCHA_SITE_KEY = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
-
 interface LoginDialogProps {
     onClose: () => void;
     onLoginSuccess: () => void;
@@ -18,11 +16,13 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
     const [isDialogVisible, setIsDialogVisible] = useState(true);
     const [isSignUp, setIsSignUp] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
     const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
-    const passwordRegex: RegExp =
+    const RECAPTCHA_SITE_KEY = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
+    const PASSWORD_REGEX: RegExp =
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,32}$/;
 
     useEffect(() => {
@@ -45,52 +45,79 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
-        const password = formData.get("password") as string;
-        if (isSignUp) {
-            // Password validation
-            if (!passwordRegex.test(password)) {
-                setPasswordError(i18n("account:passwordError"));
-                return;
-            }
-        }
-        setPasswordError("");
-        const email = formData.get("email") as string;
+        if (isForgotPassword) {
+            const email = formData.get("email") as string;
+            // TODO: Forgot Password
 
-        if (isSignUp) {
-            // Ensure the reCAPTCHA token exists
-            if (!recaptchaToken) {
-                setMessageDialog({
-                    isOpen: true,
-                    message: i18n("account:recaptchaNotVerified"),
-                    type: "error"
-                });
-                return;
-            }
+            // const response = await fetch("/api/auth/forgot-password", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ email })
+            // });
 
-            // Verify reCAPTCHA token
-            const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ token: recaptchaToken })
+            // if (!response.ok) {
+            //     const data = await response.json();
+            //     setMessageDialog({
+            //         isOpen: true,
+            //         message: i18n(data.error),
+            //         type: "error"
+            //     });
+            // } else {
+            setMessageDialog({
+                isOpen: true,
+                message: i18n("account:passwordResetEmailSent"),
+                type: "success"
             });
-            const { success } = await recaptchaResponse.json();
-            if (!success) {
-                setMessageDialog({
-                    isOpen: true,
-                    message: i18n("account:recaptchaNotVerified"),
-                    type: "error"
-                });
-                return;
-            }
-        }
-
-        if (isSignUp) {
-            const username = formData.get("username") as string;
-            await handleSignUp(username, email, password);
+            setIsForgotPassword(false);
+            // }
         } else {
-            await handleLogin(email, password);
+            const password = formData.get("password") as string;
+            if (isSignUp) {
+                // Password validation
+                if (!PASSWORD_REGEX.test(password)) {
+                    setPasswordError(i18n("account:passwordError"));
+                    return;
+                }
+            }
+            setPasswordError("");
+            const email = formData.get("email") as string;
+
+            if (isSignUp) {
+                // Ensure the reCAPTCHA token exists
+                if (!recaptchaToken) {
+                    setMessageDialog({
+                        isOpen: true,
+                        message: i18n("account:recaptchaNotVerified"),
+                        type: "error"
+                    });
+                    return;
+                }
+
+                // Verify reCAPTCHA token
+                const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ token: recaptchaToken })
+                });
+                const { success } = await recaptchaResponse.json();
+                if (!success) {
+                    setMessageDialog({
+                        isOpen: true,
+                        message: i18n("account:recaptchaNotVerified"),
+                        type: "error"
+                    });
+                    return;
+                }
+            }
+
+            if (isSignUp) {
+                const username = formData.get("username") as string;
+                await handleSignUp(username, email, password);
+            } else {
+                await handleLogin(email, password);
+            }
         }
     };
 
@@ -105,7 +132,6 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
             });
 
             if (response.ok) {
-                const data = await response.json();
                 setMessageDialog({
                     isOpen: true,
                     message: i18n("account:signUpSuccess"),
@@ -194,11 +220,13 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                         >
                             <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
                         </button>
-
-                        {/* Login/Sign Up Form */}
                         <div>
                             <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">
-                                {isSignUp ? i18n("account:signUp") : i18n("account:login")}
+                                {isSignUp
+                                    ? i18n("account:signUp")
+                                    : isForgotPassword
+                                    ? i18n("account:forgotPasswordTitle")
+                                    : i18n("account:login")}
                             </h2>
                             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                                 {isSignUp && (
@@ -230,28 +258,40 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                                         className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                                     />
                                 </div>
-                                <div className="relative">
-                                    <input
-                                        name="password"
-                                        type={passwordVisible ? "text" : "password"}
-                                        placeholder={i18n("account:password")}
-                                        maxLength={32}
-                                        required
-                                        className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
-                                    />
-                                    <FontAwesomeIcon
-                                        icon={faLock}
-                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setPasswordVisible((prev) => !prev)}
-                                        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-500 pr-2"
-                                    >
-                                        {passwordVisible ? i18n("common:hide") : i18n("common:show")}
-                                    </button>
-                                </div>
+                                {!isForgotPassword && (
+                                    <div className="relative">
+                                        <input
+                                            name="password"
+                                            type={passwordVisible ? "text" : "password"}
+                                            placeholder={i18n("account:password")}
+                                            maxLength={32}
+                                            required
+                                            className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
+                                        />
+                                        <FontAwesomeIcon
+                                            icon={faLock}
+                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setPasswordVisible((prev) => !prev)}
+                                            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-500 pr-2"
+                                        >
+                                            {passwordVisible ? i18n("common:hide") : i18n("common:show")}
+                                        </button>
+                                    </div>
+                                )}
                                 {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+                                {!isSignUp && !isForgotPassword && (
+                                    <div className="flex justify-center">
+                                        <p
+                                            className="inline-block text-md text-center cursor-pointer text-blue-500 hover:underline"
+                                            onClick={() => setIsForgotPassword(true)}
+                                        >
+                                            {i18n("account:forgotPassword")}
+                                        </p>
+                                    </div>
+                                )}
                                 {isSignUp && (
                                     <div className="flex justify-center">
                                         <ReCAPTCHA
@@ -265,16 +305,30 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                                     type="submit"
                                     className="bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white px-4 py-3 rounded-lg text-lg transition duration-300 focus:outline-none focus:ring focus:ring-blue-200"
                                 >
-                                    {isSignUp ? i18n("account:signUp") : i18n("account:login")}
+                                    {isSignUp
+                                        ? i18n("account:signUp")
+                                        : isForgotPassword
+                                        ? i18n("account:resetPassword")
+                                        : i18n("account:login")}
                                 </button>
                             </form>
-
-                            <p
-                                className="text-sm text-center mt-2 pt-2 cursor-pointer text-blue-500 hover:underline"
-                                onClick={() => setIsSignUp(!isSignUp)}
-                            >
-                                {isSignUp ? i18n("account:alreadyHaveAccount") : i18n("account:noAccount")}
-                            </p>
+                            <div className="flex justify-center">
+                                {isForgotPassword ? (
+                                    <p
+                                        className="inline-block text-md text-center mt-2 pt-2 cursor-pointer text-blue-500 hover:underline"
+                                        onClick={() => setIsForgotPassword(false)}
+                                    >
+                                        {i18n("account:backToLogin")}
+                                    </p>
+                                ) : (
+                                    <p
+                                        className="inline-block text-md text-center mt-2 pt-2 cursor-pointer text-blue-500 hover:underline"
+                                        onClick={() => setIsSignUp(!isSignUp)}
+                                    >
+                                        {isSignUp ? i18n("account:alreadyHaveAccount") : i18n("account:noAccount")}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
