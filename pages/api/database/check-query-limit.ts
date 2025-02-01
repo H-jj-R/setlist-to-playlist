@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../lib/constants/db";
 import { jwtDecode } from "jwt-decode";
+import db from "@constants/db";
 
 const DAILY_QUERY_LIMIT = 5;
 

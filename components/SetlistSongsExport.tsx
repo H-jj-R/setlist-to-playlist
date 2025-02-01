@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CustomHashLoader from "./CustomHashLoader";
-import ErrorMessage from "./ErrorMessage";
 import { useTranslation } from "react-i18next";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
 
 interface SetlistSongsExportProps {
     setlist: Record<string, any>; // The setlist data

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import decryptToken from "../../../lib/utils/decryptToken";
 import cookie from "cookie";
+import decryptToken from "@utils/decryptToken";
 
 /**
  * API handler for searching an artist on Spotify using the Spotify API.
@@ -44,7 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Parse the JSON response
         const data = await response.json();
 
-        // TODO: Better algorithm? to ensure that track actually is the right track
         // Check if there is a perfectly matching track from the top 5 results
         const trackMatch = data.tracks.items.find(
             (trackList) =>

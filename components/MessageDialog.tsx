@@ -1,7 +1,7 @@
 import React from "react";
-import CustomHashLoader from "./CustomHashLoader";
-import ErrorMessage from "./ErrorMessage";
 import { useTranslation } from "react-i18next";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
 
 interface MessageDialogProps {
     isOpen: boolean;

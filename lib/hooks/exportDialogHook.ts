@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { useDropzone } from "react-dropzone";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 
 interface ExportDialogHookProps {
     setlist: Record<string, any>;

@@ -1,5 +1,5 @@
-import { useTranslation } from "next-i18next";
 import React, { CSSProperties } from "react";
+import { useTranslation } from "next-i18next";
 import HashLoader from "react-spinners/HashLoader";
 
 interface CustomHashLoaderProps {

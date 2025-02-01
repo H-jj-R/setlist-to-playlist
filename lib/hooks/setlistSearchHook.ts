@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
-import { PageState } from "../constants/setlistSearchPageState";
 import { useTranslation } from "react-i18next";
+import { PageState } from "@constants/setlistSearchPageState";
 
 /**
  * Hook for data handling on setlist-search page.

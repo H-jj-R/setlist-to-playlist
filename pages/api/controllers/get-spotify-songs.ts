@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import getBaseUrl from "../../../lib/utils/getBaseUrl";
+import getBaseUrl from "@utils/getBaseUrl";
 
 /**
  * API handler to get a set of songs from Spotify.

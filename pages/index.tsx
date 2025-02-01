@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import Layout from "../components/Layout";
-import HeroSection from "../components/LandingPageHeroSection";
-import GenerateSetlistSection from "../components/LandingPageGenerateSetlistSection";
-import InfoSection from "../components/LandingPageInfoSection";
+import GenerateSetlistSection from "@components/LandingPageGenerateSetlistSection";
+import HeroSection from "@components/LandingPageHeroSection";
+import InfoSection from "@components/LandingPageInfoSection";
+import Layout from "@components/Layout";
 
 /**
  * The landing page of the site.
  */
 export default function Home() {
-    const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

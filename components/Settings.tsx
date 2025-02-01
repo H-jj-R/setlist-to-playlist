@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 interface SettingsProps {
     onClose: () => void; // Close handler

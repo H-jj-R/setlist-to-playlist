@@ -1,6 +1,6 @@
-import Layout from "../components/Layout";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
+import Layout from "@components/Layout";
 
 /**
  * Renders a custom 500 error page.

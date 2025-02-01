@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faEnvelope, faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { useTranslation } from "react-i18next";
-import MessageDialog from "./MessageDialog";
+import MessageDialog from "@components/MessageDialog";
 
 const RECAPTCHA_SITE_KEY = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
 

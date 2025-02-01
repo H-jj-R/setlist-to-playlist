@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import { useAuth } from "../context/AuthContext";
-import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
-import ErrorMessage from "../components/ErrorMessage";
-import UserPlaylist from "../components/UserPlaylist";
-import CustomHashLoader from "../components/CustomHashLoader";
+import { useTranslation } from "react-i18next";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
+import Layout from "@components/Layout";
+import UserPlaylist from "@components/UserPlaylist";
+import { useAuth } from "@context/AuthContext";
 
 /**
  * Main page for viewing user playlists.
@@ -88,8 +88,9 @@ export default function UserPlaylists() {
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
                         {playlists.length === 0 ? (
-                            // TODO: Make this look better when no playlists
-                            <p>{i18n("userPlaylists:noPlaylistsFound")}</p>
+                            <h2 className="flex justify-center text-xl font-bold pt-5">
+                                {i18n("userPlaylists:noPlaylistsCreated")}
+                            </h2>
                         ) : (
                             <ul className="space-y-4">
                                 {playlists.map((playlist, idx) => (

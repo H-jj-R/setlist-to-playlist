@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import SetlistChoiceBlock from "./SetlistChoiceBlock";
+import SetlistChoiceBlock from "@components/SetlistChoiceBlock";
 
 interface ListOfSetlistsProps {
     setlistData: Record<string, any>; // The setlist data containing Spotify artist details and associated setlists

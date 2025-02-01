@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import SearchBar from "../components/SearchBar";
-import AISetlist from "../components/AISetlist";
-import ExportDialog from "../components/ExportDialog";
-import CustomHashLoader from "../components/CustomHashLoader";
-import ErrorMessage from "../components/ErrorMessage";
-import generateSetlistHook from "../lib/hooks/generateSetlistHook";
-import { PageState } from "../lib/constants/generateSetlistPageState";
-import { useAuth } from "../context/AuthContext";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import Layout from "@components/Layout";
+import SearchBar from "@components/SearchBar";
+import AISetlist from "@components/AISetlist";
+import ExportDialog from "@components/ExportDialog";
+import ErrorMessage from "@components/ErrorMessage";
+import { PageState } from "@constants/generateSetlistPageState";
+import { useAuth } from "@context/AuthContext";
+import generateSetlistHook from "@hooks/generateSetlistHook";
 
 /**
  * Main page for viewing setlists.

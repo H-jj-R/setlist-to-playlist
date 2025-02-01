@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "next-themes";
-import { jwtDecode } from "jwt-decode";
-import { useTranslation } from "react-i18next";
-import MessageDialog from "./MessageDialog";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
+import { jwtDecode } from "jwt-decode";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight, faUserCircle, faRightFromBracket, faTrash } from "@fortawesome/free-solid-svg-icons";
+import ConfirmationModal from "@components/ConfirmationModal";
+import MessageDialog from "@components/MessageDialog";
 
 interface AccountSidebarProps {
     onClose: () => void; // Close handler
@@ -25,8 +26,8 @@ interface DecodedToken {
 const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }) => {
     const router = useRouter();
     const { t: i18n } = useTranslation();
-    const [isVisible, setIsVisible] = useState(false);
     const { resolvedTheme } = useTheme();
+    const [isVisible, setIsVisible] = useState(false);
     const [username, setUsername] = useState<string | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
@@ -149,6 +150,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                             }}
                             className="w-3/4 bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded hover:from-red-600 hover:to-orange-600 transition-colors duration-300"
                         >
+                            <FontAwesomeIcon icon={faRightFromBracket} className="text-gray-200 text-l mr-2" />
                             {i18n("account:logout")}
                         </button>
                     </div>
@@ -162,7 +164,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                             setTimeout(onClose, 300);
                             router.push("/user-playlists");
                         }}
-                        className="px-12 py-5 bg-violet-500 text-white font-semibold rounded-full shadow-lg hover:bg-violet-600 focus:outline-none transition mt-4"
+                        className="px-2 py-5 w-3/4 bg-violet-500 text-white font-semibold rounded-md shadow-lg hover:bg-violet-600 focus:outline-none transition mt-4"
                     >
                         {i18n("userPlaylists:createdPlaylists")}
                     </button>
@@ -173,35 +175,16 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                         onClick={() => setShowConfirmation(true)}
                         className="w-full bg-gradient-to-r from-red-700 to-red-500 text-white py-2 px-4 rounded hover:from-red-800 hover:to-red-600 transition-colors duration-300"
                     >
+                        <FontAwesomeIcon icon={faTrash} className="text-gray-200 text-l mr-2" />
                         {i18n("account:deleteAccount")}
                     </button>
                 </div>
                 {/* Confirmation Modal */}
                 {showConfirmation && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div
-                            className={`w-3/4 max-w-sm rounded-lg shadow-lg p-6 ${
-                                resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
-                            }`}
-                        >
-                            <h2 className="text-xl font-bold mb-4">{i18n("common:areYouSure")}</h2>
-                            <p className="mb-6">{i18n("account:permanentAction")}</p>
-                            <div className="flex justify-between">
-                                <button
-                                    onClick={handleDeleteAccount}
-                                    className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors duration-300"
-                                >
-                                    {i18n("account:yesDelete")}
-                                </button>
-                                <button
-                                    onClick={() => setShowConfirmation(false)}
-                                    className="bg-gray-300 text-gray-800 py-2 px-4 rounded hover:bg-gray-400 transition-colors duration-300"
-                                >
-                                    {i18n("common:cancel")}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <ConfirmationModal
+                        onConfirm={handleDeleteAccount}
+                        onCancel={() => setShowConfirmation(false)}
+                    ></ConfirmationModal>
                 )}
             </div>
 

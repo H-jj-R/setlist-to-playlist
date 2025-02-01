@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import getBaseUrl from "../../../lib/utils/getBaseUrl";
+import getBaseUrl from "@utils/getBaseUrl";
 
 /**
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
@@ -93,7 +93,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        // TODO: Finish feature: Save this playlist to the user's account (if logged in)
         // 5. Save playlist to user's account (if logged in)
         if (isLoggedIn) {
             const token = req.headers.authorization?.split(" ")[1];

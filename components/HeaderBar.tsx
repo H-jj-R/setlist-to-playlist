@@ -3,10 +3,10 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Settings from "./Settings";
-import LoginDialog from "./LoginDialog";
-import AccountSidebar from "./AccountSidebar";
-import { useAuth } from "../context/AuthContext";
+import Settings from "@components/Settings";
+import LoginDialog from "@components/LoginDialog";
+import AccountSidebar from "@components/AccountSidebar";
+import { useAuth } from "@context/AuthContext";
 
 /**
  * The header bar at the top of the page.

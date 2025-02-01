@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import ErrorMessage from "../components/ErrorMessage";
-import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
-import CustomHashLoader from "./CustomHashLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
+import ConfirmationModal from "@components/ConfirmationModal";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
 
 interface UserPlaylistProps {
     playlist: any;
@@ -22,6 +23,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     const [tracks, setTracks] = useState<any[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const toggleExpand = async () => {
         setExpanded(!expanded);
@@ -41,9 +43,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     query: trackIds
                 }).toString()}`
             );
-
             const data = await response.json();
-
             if (!response.ok) {
                 throw {
                     status: response.status,
@@ -68,10 +68,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     };
 
     const handleDelete = async () => {
-        // TODO: Display confirmation dialog before proceeding.
         setLoading(true);
         setError(null);
-
         try {
             const token = localStorage?.getItem("authToken");
             if (!token) {
@@ -89,9 +87,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     }
                 }
             );
-
             const data = await response.json();
-
             if (!response.ok) {
                 throw {
                     status: response.status,
@@ -170,7 +166,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                         {i18n("userPlaylists:recover")}
                                     </button>
                                     <button
-                                        onClick={handleDelete}
+                                        onClick={() => setShowConfirmation(true)}
                                         className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                                     >
                                         {i18n("common:delete")}
@@ -218,6 +214,13 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     </div>
                 )}
             </li>
+            {/* Confirmation Modal */}
+            {showConfirmation && (
+                <ConfirmationModal
+                    onConfirm={handleDelete}
+                    onCancel={() => setShowConfirmation(false)}
+                ></ConfirmationModal>
+            )}
         </>
     );
 };

@@ -149,6 +149,7 @@
     },
     "userPlaylists": {
         "createdPlaylists": "Created Playlists",
+        "noPlaylistsCreated": "You haven't created any playlists yet!",
         "playlistSaved": "Playlist saved successfully!",
         "recover": "Recover",
         "yourExportedSetlists": "Your Exported Setlists"

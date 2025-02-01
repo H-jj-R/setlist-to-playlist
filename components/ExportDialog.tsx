@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import SetlistSongsExport from "./SetlistSongsExport";
-import exportDialogHook from "../lib/hooks/exportDialogHook";
-import MessageDialog from "./MessageDialog";
+import MessageDialog from "@components/MessageDialog";
+import SetlistSongsExport from "@components/SetlistSongsExport";
+import exportDialogHook from "@hooks/exportDialogHook";
 
 interface ExportDialogProps {
     setlist: Record<string, any>; // The setlist data to be exported
@@ -174,7 +174,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         </div>
 
                         {/* Setlist Songs Component */}
-                        <div id="setlist-songs-wrapper" className="flex-1 flex flex-col justify-center items-center h-full">
+                        <div
+                            id="setlist-songs-wrapper"
+                            className="flex-1 flex flex-col justify-center items-center h-full"
+                        >
                             <SetlistSongsExport
                                 setlist={setlist}
                                 artistData={artistData}
