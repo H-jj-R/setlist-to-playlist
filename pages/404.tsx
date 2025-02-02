@@ -1,6 +1,5 @@
-import Layout from "../components/Layout";
-import Head from "next/head";
 import { useTranslation } from "react-i18next";
+import Layout from "@components/Layout";
 
 /**
  * Renders a custom 404 error page.
@@ -8,13 +7,12 @@ import { useTranslation } from "react-i18next";
  */
 export default function Custom404() {
     const { t: i18n } = useTranslation();
-    // TODO: Make this page look good
     return (
         <Layout>
-            <Head>
-                <title>{i18n("errors:404")}</title>
-            </Head>
-            <h1>{i18n("errors:404PageMessage")}</h1>
+            <div className="flex flex-col items-center justify-center h-1/3 text-center">
+                <h1 className="text-4xl font-bold mb-4">{i18n("errors:404PageTitle")}</h1>
+                <h2 className="text-xl mb-6">{i18n("errors:404PageMessage")}</h2>
+            </div>
         </Layout>
     );
 }

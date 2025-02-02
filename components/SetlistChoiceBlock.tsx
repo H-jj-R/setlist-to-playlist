@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import formatDate from "../lib/utils/formatDate";
-import formatLocation from "../lib/utils/formatLocation";
+import formatDate from "@utils/formatDate";
+import formatLocation from "@utils/formatLocation";
 
 interface SetlistChoiceBlockProps {
     setlist: Record<string, any>; // The setlist data to be displayed

@@ -1,14 +1,14 @@
 import React from "react";
-import Layout from "../components/Layout";
-import SearchBar from "../components/SearchBar";
-import ListOfSetlists from "../components/ListOfSetlists";
-import Setlist from "../components/Setlist";
-import ExportDialog from "../components/ExportDialog";
-import CustomHashLoader from "../components/CustomHashLoader";
-import ErrorMessage from "../components/ErrorMessage";
-import setlistSearchHook from "../lib/hooks/setlistSearchHook";
-import { PageState } from "../lib/constants/setlistSearchPageState";
 import { useTranslation } from "react-i18next";
+import Layout from "@components/Layout";
+import SearchBar from "@components/SearchBar";
+import ListOfSetlists from "@components/ListOfSetlists";
+import Setlist from "@components/Setlist";
+import ExportDialog from "@components/ExportDialog";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
+import { PageState } from "@constants/setlistSearchPageState";
+import setlistSearchHook from "@hooks/setlistSearchHook";
 
 /**
  * Main page for viewing setlists.

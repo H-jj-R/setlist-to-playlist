@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { useDropzone } from "react-dropzone";
-import { useAuth } from "../../context/AuthContext";
+import { MessageDialogState } from "@constants/messageDialogState";
+import { useAuth } from "@context/AuthContext";
 
 interface ExportDialogHookProps {
     setlist: Record<string, any>;
@@ -13,7 +14,7 @@ interface ExportDialogHookProps {
 }
 
 /**
- * Hook for data handling on ExportDialog component.
+ * Hook for data handling on the ExportDialog component.
  */
 export default function exportDialogHook({
     setlist,
@@ -25,13 +26,13 @@ export default function exportDialogHook({
     const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const [state, setState] = useState({
-        playlistName: "",
-        playlistDescription: "",
+        playlistName: "" as string,
+        playlistDescription: "" as string,
         image: null as File | null,
-        imagePreview: null as any,
-        spotifySongs: null as any
+        imagePreview: null as string | ArrayBuffer | null,
+        spotifySongs: null as Record<string, any> | null,
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
     });
-    const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
 
     const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
 
@@ -121,11 +122,14 @@ export default function exportDialogHook({
                 };
                 reader.readAsDataURL(file);
             } else {
-                setMessageDialog({
-                    isOpen: true,
-                    message: i18n("errors:invalidFileType"),
-                    type: "error"
-                });
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("errors:invalidFileType"),
+                        type: MessageDialogState.Error
+                    }
+                }));
             }
         }
     }, []);
@@ -145,11 +149,14 @@ export default function exportDialogHook({
             setState((prev) => ({ ...prev, error: null }));
 
             // Show the loading dialog
-            setMessageDialog({
-                isOpen: true,
-                message: "",
-                type: "loading"
-            });
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: "",
+                    type: MessageDialogState.Loading
+                }
+            }));
 
             if (!state.playlistName.trim()) {
                 throw {
@@ -200,37 +207,46 @@ export default function exportDialogHook({
             }
 
             // Success
-            setMessageDialog({
-                isOpen: true,
-                message: `${i18n("exportSetlist:exportSuccess")}\n${
-                    responseJson.issue ? `${i18n("common:issue")}: ${i18n(responseJson.issue)}` : ""
-                }`,
-                type: "success"
-            });
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: `${i18n("exportSetlist:exportSuccess")}\n${
+                        responseJson.issue ? `${i18n("common:issue")}: ${i18n(responseJson.issue)}` : ""
+                    }`,
+                    type: MessageDialogState.Success
+                }
+            }));
         } catch (error) {
-            setMessageDialog({
-                isOpen: true,
-                message: error.error,
-                type: "error"
-            });
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n(error.error),
+                    type: MessageDialogState.Error
+                }
+            }));
         }
     };
 
     const resetState = () => {
-        setState({
+        setState((prev) => ({
+            ...prev,
             playlistName: "",
             playlistDescription: "",
             image: null,
             imagePreview: null,
-            spotifySongs: null
-        });
-        setMessageDialog({ isOpen: false, message: "", type: "success" });
+            spotifySongs: null,
+            messageDialog: {
+                isOpen: false,
+                message: "",
+                type: MessageDialogState.Success
+            }
+        }));
     };
 
     return {
         state,
-        messageDialog,
-        setMessageDialog,
         setState,
         getRootProps,
         getInputProps,

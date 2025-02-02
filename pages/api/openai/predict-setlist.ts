@@ -1,12 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../lib/constants/db";
 import OpenAI from "openai";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
-import { jwtDecode } from "jwt-decode";
 
 const ISACTIVE = true;
-const DAILY_QUERY_LIMIT = 5;
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY!
@@ -34,58 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
     }
 
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ error: "errors:authorisationError" });
-    }
-    const userToken = authHeader.split(" ")[1];
-
     try {
-        const userId = (jwtDecode(userToken) as any).userId;
-
-        // Check if the user exists in the UserQueryLimits table
-        const [rows]: [any[], any] = await db.execute("SELECT * FROM UserQueryLimits WHERE user_id = ? LIMIT 1", [
-            userId
-        ]);
-
-        let userQueryLimit = rows[0]; // Extract the first row
-
-        if (!userQueryLimit) {
-            // If the user does not exist in the table, insert a new record
-            await db.execute(
-                "INSERT INTO UserQueryLimits (user_id, queries_today, last_query_date) VALUES (?, 0, CURRENT_DATE)",
-                [userId]
-            );
-
-            // Fetch the newly inserted row
-            const [newRows]: [any[], any] = await db.execute(
-                "SELECT * FROM UserQueryLimits WHERE user_id = ? LIMIT 1",
-                [userId]
-            );
-
-            userQueryLimit = newRows[0];
-        }
-
-        const { queries_today, last_query_date } = userQueryLimit;
-
-        // Reset queries_today if the last query date is before today
-        const today = new Date().toISOString().split("T")[0];
-        const lastQueryDate = new Date(last_query_date).toISOString().split("T")[0];
-        if (lastQueryDate < today) {
-            await db.execute(
-                "UPDATE UserQueryLimits SET queries_today = 0, last_query_date = CURRENT_DATE WHERE user_id = ?",
-                [userId]
-            );
-        } else {
-            // Enforce the query limit
-            if (queries_today >= DAILY_QUERY_LIMIT) {
-                return res.status(429).json({ error: "generateSetlist:queryLimitReached" });
-            }
-        }
-
-        // Increment the query count for the user
-        await db.execute("UPDATE UserQueryLimits SET queries_today = queries_today + 1 WHERE user_id = ?", [userId]);
-
         // Filter and format the past setlists for input
         const { pastSetlists } = req.body;
         const input = pastSetlists
@@ -122,8 +68,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             messages: [
                 {
                     role: "system",
-                    content:
-                        "You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist. Return each song name, with its artist, and with a boolean for whether the song is played on tape. Provide 3 possible predictions. The first predicted setlist should be the most likely possible setlist, the second predicted setlist should be a likely setlist but not as likely as the first predicted setlist, and the third predicted setlist should have a lot more variance. None of these setlists should be the same as each other."
+                    content: `You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist.
+                    Return exactly 3 possible predictions as an array. Each setlist must be distinct:
+                    - The first predicted setlist should be the most likely.
+                    - The second predicted setlist should be slightly less likely but still plausible.
+                    - The third predicted setlist should have significant variance.
+                    Ensure all 3 setlists are different from each other.`
                 },
                 {
                     role: "user",
@@ -131,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             ],
             response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
-            temperature: 0.6,
+            temperature: 0.7,
             top_p: 1
         });
 

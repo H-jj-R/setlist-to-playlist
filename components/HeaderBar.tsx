@@ -3,20 +3,22 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Settings from "./Settings";
-import LoginDialog from "./LoginDialog";
-import AccountSidebar from "./AccountSidebar";
-import { useAuth } from "../context/AuthContext";
+import Settings from "@components/Settings";
+import LoginDialog from "@components/LoginDialog";
+import AccountSidebar from "@components/AccountSidebar";
+import { useAuth } from "@context/AuthContext";
 
 /**
  * The header bar at the top of the page.
  */
 const HeaderBar: React.FC = () => {
     const { t: i18n } = useTranslation();
-    const [showSettings, setShowSettings] = useState(false);
-    const [showLoginDialog, setShowLoginDialog] = useState(false); // State for showing login dialog
-    const [showAccountSidebar, setShowAccountSidebar] = useState(false); // State for showing account menu
     const { isAuthenticated, login, logout } = useAuth();
+    const [state, setState] = useState({
+        showSettings: false,
+        showLoginDialog: false,
+        showAccountSidebar: false
+    });
 
     return (
         <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
@@ -35,7 +37,12 @@ const HeaderBar: React.FC = () => {
                             <button
                                 id="account-button"
                                 className="p-2 rounded text"
-                                onClick={() => setShowAccountSidebar(true)}
+                                onClick={() => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        showAccountSidebar: true
+                                    }));
+                                }}
                             >
                                 <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl" />
                             </button>
@@ -44,27 +51,68 @@ const HeaderBar: React.FC = () => {
                         <button
                             id="login-button"
                             className="bg-gradient-to-br from-green-500 to-green-600 text-white py-2 px-4 rounded-full hover:from-green-600 hover:to-green-700"
-                            onClick={() => setShowLoginDialog(true)}
+                            onClick={() => {
+                                setState((prev) => ({
+                                    ...prev,
+                                    showLoginDialog: true
+                                }));
+                            }}
                         >
                             {i18n("account:loginSignUp")}
                         </button>
                     )}
-                    <button id="settings-button" className="p-2 rounded text" onClick={() => setShowSettings(true)}>
+                    <button
+                        id="settings-button"
+                        className="p-2 rounded text"
+                        onClick={() => {
+                            setState((prev) => ({
+                                ...prev,
+                                showSettings: true
+                            }));
+                        }}
+                    >
                         <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-gray-200 text-xl" />
                     </button>
                 </div>
             </div>
-            {showSettings && <Settings onClose={() => setShowSettings(false)} />}
-            {showAccountSidebar && (
-                <AccountSidebar
-                    onClose={() => setShowAccountSidebar(false)}
-                    handleLogout={() => {
-                        logout();
-                        setShowAccountSidebar(false);
+            {state.showSettings && (
+                <Settings
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showSettings: false
+                        }));
                     }}
                 />
             )}
-            {showLoginDialog && <LoginDialog onClose={() => setShowLoginDialog(false)} onLoginSuccess={login} />}
+            {state.showAccountSidebar && (
+                <AccountSidebar
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showAccountSidebar: false
+                        }));
+                    }}
+                    handleLogout={() => {
+                        logout();
+                        setState((prev) => ({
+                            ...prev,
+                            showAccountSidebar: false
+                        }));
+                    }}
+                />
+            )}
+            {state.showLoginDialog && (
+                <LoginDialog
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showLoginDialog: false
+                        }));
+                    }}
+                    onLoginSuccess={login}
+                />
+            )}
         </header>
     );
 };

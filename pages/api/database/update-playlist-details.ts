@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import db from "@constants/db";
 
 /**
- * API handler to delete a user playlist (soft delete by setting deleted to true).
+ * API handler to update playlist details (name and description).
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
@@ -19,27 +19,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Verify and decode the JWT token
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
-
         const { playlistId } = req.query;
-        if (!playlistId) {
-            return res.status(400).json({ error: "errors:missingPlaylistId" });
+
+        const { playlistName, playlistDescription } = req.body;
+
+        if (!playlistId || !playlistName) {
+            return res.status(400).json({ error: "errors:missingParameters" });
         }
 
-        // Update the playlist to set deleted = true
-        const [result]: any = await db.execute(
+        // Update the playlist details in the database
+        const [result] = await db.execute(
             `
-            UPDATE Playlists 
-            SET deleted = 1
+            UPDATE Playlists
+            SET playlist_name = ?, playlist_description = ?
             WHERE playlist_id = ? AND user_id = ?
             `,
-            [playlistId, userId]
+            [playlistName, playlistDescription || "", playlistId, userId]
         );
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "errors:playlistNotFoundOrUnauthorized" });
+        if ((result as any).affectedRows === 0) {
+            return res.status(404).json({ error: "errors:playlistNotFound" });
         }
 
-        res.status(200).json({ success: true });
+        res.status(200).json({ sucess: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "errors:internalServerError" });

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import ErrorMessage from "../components/ErrorMessage";
-import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
-import CustomHashLoader from "./CustomHashLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
+import ConfirmationModal from "@components/ConfirmationModal";
+import CustomHashLoader from "@components/CustomHashLoader";
+import ErrorMessage from "@components/ErrorMessage";
+import userPlaylistHook from "@hooks/userPlaylistHook";
 
 interface UserPlaylistProps {
     playlist: any;
@@ -15,115 +17,99 @@ interface UserPlaylistProps {
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     const { t: i18n } = useTranslation();
-    const [expanded, setExpanded] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [name, setName] = useState(playlist.name);
-    const [description, setDescription] = useState(playlist.description || "");
-    const [tracks, setTracks] = useState<any[] | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { state, setState, toggleExpand, handleSave, handleRecover, handleDelete } = userPlaylistHook(
+        playlist,
+        onDelete
+    );
 
-    const toggleExpand = async () => {
-        setExpanded(!expanded);
-        if (!tracks && !loading) {
-            fetchTrackDetails();
-        }
-    };
-
-    const fetchTrackDetails = async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const trackIds = playlist.tracks.map((track: any) => track.songID).join(",");
-            const response = await fetch(
-                `/api/spotify/get-tracks?${new URLSearchParams({
-                    query: trackIds
-                }).toString()}`
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
-                };
-            }
-
-            setTracks(data.tracks);
-        } catch (err) {
-            setError(err.error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSave = async () => {
-        // TODO: Update on database
-    };
-
-    const handleRecover = async () => {
-        // TODO: Recover on Spotify
-    };
-
-    const handleDelete = async () => {
-        // TODO: Display confirmation dialog before proceeding.
-        setLoading(true);
-        setError(null);
-
-        try {
-            const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
-
-            const response = await fetch(
-                `/api/database/delete-user-playlist?${new URLSearchParams({
-                    playlistId: playlist.playlistId
-                }).toString()}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
-                };
-            }
-
-            onDelete(playlist.playlistId);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
+    // TODO: Error and loading display (Use MessageDialog)
     return (
         <>
             <li className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
                 <div className="flex justify-between items-center">
-                    {editing ? (
+                    {!state.editing ? (
+                        <>
+                            <div className="w-10/12 flex items-center">
+                                <div className="w-full break-words">
+                                    <h2 className="text-xl font-bold">{state.name}</h2>
+                                    <p className="text-gray-400">{state.description}</p>
+                                </div>
+                            </div>
+
+                            {/* Wrap edit button and recovery/delete buttons in a flex container */}
+                            <div className="flex items-center space-x-4">
+                                {/* Edit Button */}
+                                <button
+                                    onClick={() => {
+                                        setState((prev) => ({
+                                            ...prev,
+                                            editing: true
+                                        }));
+                                    }}
+                                    className="text-gray-600 hover:text-gray-900 p-1"
+                                >
+                                    <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
+                                </button>
+
+                                {/* Recovery & Delete Buttons */}
+                                <div className="flex flex-col items-center gap-2">
+                                    <button
+                                        onClick={handleRecover}
+                                        className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+                                    >
+                                        {i18n("userPlaylists:recover")}
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setState((prev) => ({
+                                                ...prev,
+                                                showConfirmation: true
+                                            }));
+                                        }}
+                                        className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                                    >
+                                        {i18n("common:delete")}
+                                    </button>
+                                </div>
+
+                                {/* Expand/Collapse Button */}
+                                <button onClick={toggleExpand} className="p-1">
+                                    {state.expanded ? (
+                                        <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
+                                    )}
+                                </button>
+                            </div>
+                        </>
+                    ) : (
                         <div className="w-10/12">
                             <input
                                 className="w-full p-2 border rounded-md mb-2"
-                                value={name}
+                                value={state.name}
                                 maxLength={100}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        name: e.target.value
+                                    }));
+                                }}
+                                placeholder={i18n("exportSetlist:enterPlaylistName")}
+                                required
+                                autoComplete="off"
                             />
                             <textarea
                                 className="w-full p-2 border rounded-md h-32"
-                                value={description}
+                                value={state.description}
                                 maxLength={300}
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(e) => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        description: e.target.value
+                                    }));
+                                }}
+                                placeholder={i18n("exportSetlist:enterPlaylistDescription")}
+                                autoComplete="off"
                             />
                             <div className="flex justify-center mt-2 space-x-2 p-2">
                                 <button
@@ -133,71 +119,34 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                     {i18n("common:save")}
                                 </button>
                                 <button
-                                    onClick={() => setEditing(false)}
+                                    onClick={() => {
+                                        setState((prev) => ({
+                                            ...prev,
+                                            editing: false,
+                                            name: state.initialName,
+                                            description: state.initialDescription
+                                        }));
+                                    }}
                                     className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
                             </div>
                         </div>
-                    ) : (
-                        <>
-                            <div className="w-10/12 flex items-center">
-                                <div className="w-full break-words">
-                                    <h2 className="text-xl font-bold">{name}</h2>
-                                    <p className="text-gray-400">
-                                        {description || i18n("userPlaylists:noDescription")}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Wrap edit button and recovery/delete buttons in a flex container */}
-                            <div className="flex items-center space-x-4">
-                                {/* Edit Button */}
-                                <button onClick={() => setEditing(true)} className="text-gray-600 hover:text-gray-900">
-                                    <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
-                                </button>
-
-                                {/* Recovery & Delete Buttons in a Column */}
-                                <div className="flex flex-col items-center gap-2">
-                                    <button
-                                        onClick={handleRecover}
-                                        className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
-                                    >
-                                        {i18n("userPlaylists:recover")}
-                                    </button>
-                                    <button
-                                        onClick={handleDelete}
-                                        className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
-                                    >
-                                        {i18n("common:delete")}
-                                    </button>
-                                </div>
-
-                                {/* Expand/Collapse Button */}
-                                <button onClick={toggleExpand} className="p-2">
-                                    {expanded ? (
-                                        <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
-                                    ) : (
-                                        <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
-                                    )}
-                                </button>
-                            </div>
-                        </>
                     )}
                 </div>
 
-                {expanded && (
+                {state.expanded && (
                     <div className="mt-4 border-t border-gray-200 dark:border-gray-700">
-                        {loading ? (
+                        {state.loading ? (
                             <div className="flex justify-center p-6">
                                 <CustomHashLoader showLoading={true} size={80} />
                             </div>
-                        ) : error ? (
-                            <ErrorMessage message={error} />
+                        ) : state.error ? (
+                            <ErrorMessage message={state.error} />
                         ) : (
                             <ul className="space-y-2">
-                                {tracks?.map((track, idx) => (
+                                {state.tracks?.map((track, idx) => (
                                     <li key={`${idx}-${track.id}`} className="flex items-center space-x-4 mt-4">
                                         <img
                                             src={track.album.images[0]?.url}
@@ -215,6 +164,18 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     </div>
                 )}
             </li>
+            {/* Confirmation Modal */}
+            {state.showConfirmation && (
+                <ConfirmationModal
+                    onConfirm={handleDelete}
+                    onCancel={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showConfirmation: false
+                        }));
+                    }}
+                ></ConfirmationModal>
+            )}
         </>
     );
 };

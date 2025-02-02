@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import getBaseUrl from "../../../lib/utils/getBaseUrl";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
+import getBaseUrl from "@utils/getBaseUrl";
 
 /**
  * API route to handle Spotify OAuth callback.

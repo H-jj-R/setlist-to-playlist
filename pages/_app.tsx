@@ -1,8 +1,8 @@
-import "../styles/globals.css";
-import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
-import "../lib/constants/i18n";
-import { AuthProvider } from "../context/AuthContext";
+import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "@context/AuthContext";
+import "@/styles/globals.css";
+import "@constants/i18n";
 
 /**
  * Custom App component for Next.js.
@@ -14,7 +14,7 @@ import { AuthProvider } from "../context/AuthContext";
  */
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
             <AuthProvider>
                 <Component {...pageProps} />
             </AuthProvider>

@@ -5,9 +5,8 @@ import getBaseUrl from "@utils/getBaseUrl";
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { name, description, image, tracks, isLoggedIn } = req.body;
+    const { name, description, tracks } = req.body;
     try {
-        let issue;
         const baseUrl = getBaseUrl(req);
 
         // 1. Get user data
@@ -72,49 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
         }
 
-        // 4. Add cover image (if provided)
-        if (image) {
-            const addCoverImageResponse = await fetch(`${baseUrl}/api/spotify/custom-playlist-image`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    cookie: req.headers.cookie || "" // Forward client cookies for access token
-                },
-                body: JSON.stringify({
-                    playlistId: playlistData.data.id,
-                    image: image
-                })
-            });
-
-            // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
-            if (!addCoverImageResponse.ok) {
-                const errorResponse = await addCoverImageResponse.json();
-                issue += errorResponse.error;
-            }
-        }
-
-        // 5. Save playlist to user's account (if logged in)
-        if (isLoggedIn) {
-            const token = req.headers.authorization?.split(" ")[1];
-            const savePlaylistResponse = await fetch(
-                `${baseUrl}/api/controllers/save-playlist-to-account?playlistId=${playlistData.data.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        cookie: req.headers.cookie || "" // Forward client cookies for access token
-                    }
-                }
-            );
-
-            // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
-            if (!savePlaylistResponse.ok) {
-                const errorResponse = await savePlaylistResponse.json();
-                issue += errorResponse.error;
-            }
-        }
-
-        res.status(200).json({ success: true, issue: issue });
+        res.status(200).json({ success: true });
     } catch (error) {
         res.status(500).json({
             error: "errors:internalServerError"

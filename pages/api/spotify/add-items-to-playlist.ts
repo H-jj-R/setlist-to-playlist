@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import decryptToken from "../../../lib/utils/decryptToken";
 import cookie from "cookie";
+import decryptToken from "@utils/decryptToken";
 
 /**
  * API handler to add tracks to a Spotify playlist.

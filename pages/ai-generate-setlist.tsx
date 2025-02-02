@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import SearchBar from "../components/SearchBar";
-import AISetlist from "../components/AISetlist";
-import ExportDialog from "../components/ExportDialog";
-import CustomHashLoader from "../components/CustomHashLoader";
-import ErrorMessage from "../components/ErrorMessage";
-import generateSetlistHook from "../lib/hooks/generateSetlistHook";
-import { PageState } from "../lib/constants/generateSetlistPageState";
-import { useAuth } from "../context/AuthContext";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import Layout from "@components/Layout";
+import SearchBar from "@components/SearchBar";
+import AISetlist from "@components/AISetlist";
+import ExportDialog from "@components/ExportDialog";
+import ErrorMessage from "@components/ErrorMessage";
+import { PageState } from "@constants/generateSetlistPageState";
+import { useAuth } from "@context/AuthContext";
+import generateSetlistHook from "@hooks/generateSetlistHook";
 
 /**
  * Main page for viewing setlists.
@@ -49,6 +48,7 @@ export default function AIGenerateSetlist() {
                             />
 
                             {/* Authorisation dialog */}
+                            {/* // TODO: Make this dialog look better */}
                             {state.showAuthDialog && (
                                 <div
                                     id="auth-dialog"
@@ -69,9 +69,20 @@ export default function AIGenerateSetlist() {
                         </div>
 
                         {/* Loading indicator */}
+                        {/* // TODO: Make this loading bar look better */}
                         {state.showLoading && !state.animLoading && (
-                            <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
-                                <CustomHashLoader showLoading={state.showLoading} size={150} />
+                            <div id="progress-indicator" className="pt-8 mt-16 flex flex-col items-center">
+                                <p className="mb-2 text-lg font-medium text-gray-700">
+                                    {state.progress < 100
+                                        ? `Generating setlist... (${state.progress}%)`
+                                        : "Finalising..."}
+                                </p>
+                                <div className="w-64 h-2 bg-gray-300 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-blue-600 transition-all duration-300"
+                                        style={{ width: `${state.progress}%` }}
+                                    />
+                                </div>
                             </div>
                         )}
 
@@ -86,6 +97,7 @@ export default function AIGenerateSetlist() {
                             </>
                         )}
 
+                        {/* // TODO: Make a button to export all (combine predicted setlists) */}
                         {state.pageState === PageState.Setlist && (
                             <div id="setlist-container" className="flex gap-4 mt-[3rem]">
                                 {state.predictedSetlists.slice(0, 3).map((setlist, index) => (

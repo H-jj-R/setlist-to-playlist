@@ -2,8 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
-import formatDate from "../lib/utils/formatDate";
-import formatLocation from "../lib/utils/formatLocation";
+import formatDate from "@utils/formatDate";
+import formatLocation from "@utils/formatLocation";
 
 interface SetlistProps {
     setlist: Record<string, any>; // The setlist data to be displayed

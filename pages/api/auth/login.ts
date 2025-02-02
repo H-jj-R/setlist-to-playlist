@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
-import db from "../../../lib/constants/db";
 import jwt from "jsonwebtoken";
+import db from "@constants/db";
 
 /**
  * API handler to log in a user.

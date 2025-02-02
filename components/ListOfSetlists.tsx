@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import SetlistChoiceBlock from "./SetlistChoiceBlock";
+import SetlistChoiceBlock from "@components/SetlistChoiceBlock";
+import { SettingsKeys } from "@constants/settingsKeys";
 
 interface ListOfSetlistsProps {
     setlistData: Record<string, any>; // The setlist data containing Spotify artist details and associated setlists
@@ -13,12 +14,14 @@ interface ListOfSetlistsProps {
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistChosen }) => {
     const { t: i18n } = useTranslation();
-    const [loadedSetlists, setLoadedSetlists] = useState(setlistData.setlists.setlist || []); // All loaded setlists
-    const [setlists, setSetlists] = useState(setlistData.setlists.setlist || []); // Displayed setlists
-    const [currentPage, setCurrentPage] = useState(setlistData.setlists.page || 1);
-    const [isLoading, setIsLoading] = useState(false);
-    const [hiddenSetlistsCount, setHiddenSetlistsCount] = useState(0);
-    const [hideEmptySetlists, setHideEmptySetlists] = useState(localStorage?.getItem("hideEmptySetlists") === "true");
+    const [state, setState] = useState({
+        loadedSetlists: (setlistData.setlists.setlist || []) as Record<string, any>[] | [],
+        setlists: (setlistData.setlists.setlist || []) as Record<string, any>[] | [],
+        currentPage: ((setlistData.setlists.page as number) || 1) as number,
+        isLoading: false,
+        hiddenSetlistsCount: 0,
+        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true"
+    });
 
     const filterEmptySetlists = (data: Record<string, any>[]) => {
         return data.filter((setlist: Record<string, any>) => {
@@ -30,35 +33,43 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
         });
     };
 
-    const updateSetlists = () => {
-        const filteredSetlists = hideEmptySetlists ? filterEmptySetlists(loadedSetlists) : loadedSetlists;
-        setSetlists(filteredSetlists);
-        setHiddenSetlistsCount(loadedSetlists.length - filteredSetlists.length);
-    };
-
+    // Update setlists
     useEffect(() => {
-        updateSetlists();
-    }, [hideEmptySetlists, loadedSetlists]);
+        const filteredSetlists = state.hideEmptySetlists
+            ? filterEmptySetlists(state.loadedSetlists)
+            : state.loadedSetlists;
+        setState((prev) => ({
+            ...prev,
+            setlists: filteredSetlists,
+            hiddenSetlistsCount: state.loadedSetlists.length - filteredSetlists.length
+        }));
+    }, [state.hideEmptySetlists, state.loadedSetlists]);
 
     useEffect(() => {
         const handleStorageChange = () => {
-            setHideEmptySetlists(localStorage?.getItem("hideEmptySetlists") === "true");
+            setState((prev) => ({
+                ...prev,
+                hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true"
+            }));
         };
 
-        window.addEventListener("hideEmptySetlists", handleStorageChange);
+        window.addEventListener(SettingsKeys.HideEmptySetlists, handleStorageChange);
         return () => {
-            window.removeEventListener("hideEmptySetlists", handleStorageChange);
+            window.removeEventListener(SettingsKeys.HideEmptySetlists, handleStorageChange);
         };
     }, []);
 
-    const hasMorePages = currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    const hasMorePages = state.currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
     const loadMoreSetlists = async () => {
-        setIsLoading(true);
+        setState((prev) => ({
+            ...prev,
+            isLoading: true
+        }));
         try {
             const response = await fetch(
                 `/api/setlist-fm/search-setlists?${new URLSearchParams({
                     artistMbid: setlistData.setlistfmArtist.mbid,
-                    page: currentPage + 1
+                    page: (state.currentPage + 1).toString()
                 }).toString()}`
             );
             const responseJson = await response.json();
@@ -71,12 +82,18 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
 
             const newData = responseJson;
             const newSetlists = newData.setlist || [];
-            setLoadedSetlists((prevSetlists) => [...prevSetlists, ...newSetlists]);
-            setCurrentPage((prevPage) => prevPage + 1);
+            setState((prev) => ({
+                ...prev,
+                loadedSetlists: [...prev.loadedSetlists, ...newSetlists] as Record<string, any>[],
+                currentPage: prev.currentPage + 1
+            }));
         } catch (error) {
             console.error(error);
         } finally {
-            setIsLoading(false);
+            setState((prev) => ({
+                ...prev,
+                isLoading: false
+            }));
         }
     };
 
@@ -98,30 +115,30 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
                     </h2>
                 </div>
                 <ul id="setlist-list" className="space-y-3 px-4 w-full">
-                    {setlists.map((setlist: Record<string, any>) => (
+                    {state.setlists.map((setlist: Record<string, any>) => (
                         <SetlistChoiceBlock
                             key={setlist.id}
                             setlist={setlist}
                             onClick={onSetlistChosen}
-                            hideEmpty={hideEmptySetlists}
+                            hideEmpty={state.hideEmptySetlists}
                         />
                     ))}
                 </ul>
-                {hiddenSetlistsCount > 0 && hideEmptySetlists === true && (
+                {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
                     <p className="mt-4 text-gray-500">
-                        {hiddenSetlistsCount === 1
-                            ? i18n("setlistSearch:hiddenSetlistsMessage", { count: hiddenSetlistsCount })
-                            : i18n("setlistSearch:hiddenSetlistsMessagePlural", { count: hiddenSetlistsCount })}
+                        {state.hiddenSetlistsCount === 1
+                            ? i18n("setlistSearch:hiddenSetlistsMessage", { count: state.hiddenSetlistsCount })
+                            : i18n("setlistSearch:hiddenSetlistsMessagePlural", { count: state.hiddenSetlistsCount })}
                     </p>
                 )}
                 {hasMorePages && (
                     <button
                         id="load-more-button"
                         onClick={loadMoreSetlists}
-                        disabled={isLoading}
+                        disabled={state.isLoading}
                         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
-                        {isLoading ? `${i18n("common:loading")}...` : i18n("setlistSearch:loadMore")}
+                        {state.isLoading ? `${i18n("common:loading")}...` : i18n("setlistSearch:loadMore")}
                     </button>
                 )}
             </div>

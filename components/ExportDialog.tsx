@@ -1,8 +1,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import SetlistSongsExport from "./SetlistSongsExport";
-import exportDialogHook from "../lib/hooks/exportDialogHook";
-import MessageDialog from "./MessageDialog";
+import MessageDialog from "@components/MessageDialog";
+import SetlistSongsExport from "@components/SetlistSongsExport";
+import { MessageDialogState } from "@constants/messageDialogState";
+import exportDialogHook from "@hooks/exportDialogHook";
 
 interface ExportDialogProps {
     setlist: Record<string, any>; // The setlist data to be exported
@@ -17,8 +18,13 @@ interface ExportDialogProps {
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, predictedSetlist, onClose }) => {
     const { t: i18n } = useTranslation();
-    const { state, messageDialog, setMessageDialog, setState, getRootProps, getInputProps, handleExport, resetState } =
-        exportDialogHook({ setlist, artistData, isOpen, predictedSetlist, onClose });
+    const { state, setState, getRootProps, getInputProps, handleExport, resetState } = exportDialogHook({
+        setlist,
+        artistData,
+        isOpen,
+        predictedSetlist,
+        onClose
+    });
 
     return (
         isOpen && (
@@ -112,7 +118,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                         <div className="flex items-center">
                                             <img
                                                 id="image-preview"
-                                                src={state.imagePreview}
+                                                src={state.imagePreview as string}
                                                 alt="Playlist Cover"
                                                 className="w-24 h-24 object-cover rounded-lg mr-2"
                                             />
@@ -174,7 +180,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         </div>
 
                         {/* Setlist Songs Component */}
-                        <div id="setlist-songs-wrapper" className="flex-1 flex flex-col justify-center items-center h-full">
+                        <div
+                            id="setlist-songs-wrapper"
+                            className="flex-1 flex flex-col justify-center items-center h-full"
+                        >
                             <SetlistSongsExport
                                 setlist={setlist}
                                 artistData={artistData}
@@ -191,18 +200,26 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                 </div>
 
                 {/* Message Dialog */}
-                <MessageDialog
-                    isOpen={messageDialog.isOpen}
-                    message={messageDialog.message}
-                    type={messageDialog.type as "success" | "error" | "loading"}
-                    onClose={() => {
-                        setMessageDialog({ isOpen: false, message: "", type: "success" });
-                        if (messageDialog.type === "success") {
-                            onClose();
-                            resetState();
-                        }
-                    }}
-                />
+                {state.messageDialog.isOpen && (
+                    <MessageDialog
+                        message={state.messageDialog.message}
+                        type={state.messageDialog.type}
+                        onClose={() => {
+                            setState((prev) => ({
+                                ...prev,
+                                messageDialog: {
+                                    isOpen: false,
+                                    message: "",
+                                    type: MessageDialogState.Success
+                                }
+                            }));
+                            if (state.messageDialog.type === MessageDialogState.Success) {
+                                onClose();
+                                resetState();
+                            }
+                        }}
+                    />
+                )}
             </>
         )
     );

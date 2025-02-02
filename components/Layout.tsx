@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
-import HeaderBar from "./HeaderBar";
+import HeaderBar from "@components/HeaderBar";
 
 interface LayoutProps {
     children: ReactNode; // All child components for the page
@@ -19,7 +19,6 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 <title>{i18n("common:siteTitle")}</title>
             </Head>
             <HeaderBar />
-            {/* Main content container */}
             <main id="main-content" className="flex-grow overflow-auto flex flex-col">
                 {children}
             </main>

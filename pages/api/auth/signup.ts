@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
-import db from "../../../lib/constants/db";
+import db from "@constants/db";
 
 /**
  * API handler to sign up a new user.
