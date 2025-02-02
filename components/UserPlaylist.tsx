@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "@components/ConfirmationModal";
 import CustomHashLoader from "@components/CustomHashLoader";
 import ErrorMessage from "@components/ErrorMessage";
+import userPlaylistHook from "@hooks/userPlaylistHook";
 
 interface UserPlaylistProps {
     playlist: any;
@@ -17,190 +17,22 @@ interface UserPlaylistProps {
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
     const { t: i18n } = useTranslation();
-    const router = useRouter();
-    const [expanded, setExpanded] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [name, setName] = useState(playlist.name);
-    const [description, setDescription] = useState(playlist.description || "");
-    const [initialName, setInitialName] = useState(playlist.name);
-    const [initialDescription, setInitialDescription] = useState(playlist.description || "");
-    const [tracks, setTracks] = useState<any[] | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+    const { state, setState, toggleExpand, handleSave, handleRecover, handleDelete } = userPlaylistHook(
+        playlist,
+        onDelete
+    );
 
-    const toggleExpand = async () => {
-        setExpanded(!expanded);
-        if (!tracks && !loading) {
-            setTracks(await fetchTrackDetails());
-        }
-    };
-
-    const fetchTrackDetails = async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const trackIds = playlist.tracks.map((track: any) => track.songID).join(",");
-            const response = await fetch(
-                `/api/spotify/get-tracks?${new URLSearchParams({
-                    query: trackIds
-                }).toString()}`
-            );
-            const data = await response.json();
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
-                };
-            }
-
-            return data.tracks;
-        } catch (error) {
-            setError(error.error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSave = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            if (!name.trim()) {
-                throw {
-                    status: 400,
-                    error: i18n("errors:noNameProvided")
-                };
-            }
-
-            const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
-
-            const response = await fetch(
-                `/api/database/update-playlist-details?${new URLSearchParams({
-                    playlistId: playlist.playlistId
-                }).toString()}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ playlistName: name, playlistDescription: description })
-                }
-            );
-            const data = await response.json();
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
-                };
-            }
-
-            setInitialName(name);
-            setInitialDescription(description);
-            setEditing(false);
-        } catch (error) {
-            setError(error.error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleRecover = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch("/api/controllers/check-for-authentication", {
-                method: "GET",
-                credentials: "include"
-            });
-
-            if (response.status === 401) {
-                router.push(
-                    `/api/spotify/authorise?${new URLSearchParams({
-                        redirect: window.location.pathname + window.location.search
-                    }).toString()}`
-                );
-            } else if (response.status == 200) {
-                const response = await fetch(`/api/controllers/create-spotify-playlist`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        description: description,
-                        tracks: JSON.stringify(tracks ? tracks : await fetchTrackDetails())
-                    })
-                });
-                const responseJson = await response.json();
-
-                if (!response.ok) {
-                    throw {
-                        status: response.status,
-                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
-                    };
-                }
-            }
-        } catch (error) {
-            setError(error.error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDelete = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
-
-            const response = await fetch(
-                `/api/database/delete-user-playlist?${new URLSearchParams({
-                    playlistId: playlist.playlistId
-                }).toString()}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-            const data = await response.json();
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
-                };
-            }
-
-            onDelete(playlist.playlistId);
-        } catch (error) {
-            setError(error.error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // TODO: Error display
+    // TODO: Error and loading display (Use MessageDialog)
     return (
         <>
             <li className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
                 <div className="flex justify-between items-center">
-                    {!editing ? (
+                    {!state.editing ? (
                         <>
                             <div className="w-10/12 flex items-center">
                                 <div className="w-full break-words">
-                                    <h2 className="text-xl font-bold">{name}</h2>
-                                    <p className="text-gray-400">{description}</p>
+                                    <h2 className="text-xl font-bold">{state.name}</h2>
+                                    <p className="text-gray-400">{state.description}</p>
                                 </div>
                             </div>
 
@@ -208,7 +40,12 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                             <div className="flex items-center space-x-4">
                                 {/* Edit Button */}
                                 <button
-                                    onClick={() => setEditing(true)}
+                                    onClick={() => {
+                                        setState((prev) => ({
+                                            ...prev,
+                                            editing: true
+                                        }));
+                                    }}
                                     className="text-gray-600 hover:text-gray-900 p-1"
                                 >
                                     <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
@@ -223,7 +60,12 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                         {i18n("userPlaylists:recover")}
                                     </button>
                                     <button
-                                        onClick={() => setShowConfirmation(true)}
+                                        onClick={() => {
+                                            setState((prev) => ({
+                                                ...prev,
+                                                showConfirmation: true
+                                            }));
+                                        }}
                                         className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                                     >
                                         {i18n("common:delete")}
@@ -232,7 +74,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
 
                                 {/* Expand/Collapse Button */}
                                 <button onClick={toggleExpand} className="p-1">
-                                    {expanded ? (
+                                    {state.expanded ? (
                                         <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
                                     ) : (
                                         <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
@@ -244,18 +86,28 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                         <div className="w-10/12">
                             <input
                                 className="w-full p-2 border rounded-md mb-2"
-                                value={name}
+                                value={state.name}
                                 maxLength={100}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        name: e.target.value
+                                    }));
+                                }}
                                 placeholder={i18n("exportSetlist:enterPlaylistName")}
                                 required
                                 autoComplete="off"
                             />
                             <textarea
                                 className="w-full p-2 border rounded-md h-32"
-                                value={description}
+                                value={state.description}
                                 maxLength={300}
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(e) => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        description: e.target.value
+                                    }));
+                                }}
                                 placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                 autoComplete="off"
                             />
@@ -268,9 +120,12 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                 </button>
                                 <button
                                     onClick={() => {
-                                        setEditing(false);
-                                        setName(initialName);
-                                        setDescription(initialDescription);
+                                        setState((prev) => ({
+                                            ...prev,
+                                            editing: false,
+                                            name: state.initialName,
+                                            description: state.initialDescription
+                                        }));
                                     }}
                                     className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                                 >
@@ -281,17 +136,17 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     )}
                 </div>
 
-                {expanded && (
+                {state.expanded && (
                     <div className="mt-4 border-t border-gray-200 dark:border-gray-700">
-                        {loading ? (
+                        {state.loading ? (
                             <div className="flex justify-center p-6">
                                 <CustomHashLoader showLoading={true} size={80} />
                             </div>
-                        ) : error ? (
-                            <ErrorMessage message={error} />
+                        ) : state.error ? (
+                            <ErrorMessage message={state.error} />
                         ) : (
                             <ul className="space-y-2">
-                                {tracks?.map((track, idx) => (
+                                {state.tracks?.map((track, idx) => (
                                     <li key={`${idx}-${track.id}`} className="flex items-center space-x-4 mt-4">
                                         <img
                                             src={track.album.images[0]?.url}
@@ -310,10 +165,15 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                 )}
             </li>
             {/* Confirmation Modal */}
-            {showConfirmation && (
+            {state.showConfirmation && (
                 <ConfirmationModal
                     onConfirm={handleDelete}
-                    onCancel={() => setShowConfirmation(false)}
+                    onCancel={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showConfirmation: false
+                        }));
+                    }}
                 ></ConfirmationModal>
             )}
         </>

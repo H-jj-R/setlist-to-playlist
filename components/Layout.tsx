@@ -19,7 +19,6 @@ const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
                 <title>{i18n("common:siteTitle")}</title>
             </Head>
             <HeaderBar />
-            {/* Main content container */}
             <main id="main-content" className="flex-grow overflow-auto flex flex-col">
                 {children}
             </main>

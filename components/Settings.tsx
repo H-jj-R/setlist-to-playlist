@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { SettingsKeys } from "@constants/settingsKeys";
 
 interface SettingsProps {
     onClose: () => void; // Close handler
@@ -15,43 +17,19 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
-    const [hideEmptySetlists, setHideEmptySetlists] = useState(
-        () => localStorage?.getItem("hideEmptySetlists") === "true"
-    );
-    const [hideSongsNotFound, setHideSongsNotFound] = useState(
-        () => localStorage?.getItem("hideSongsNotFound") === "true"
-    );
-    const [excludeCovers, setExcludeCovers] = useState(() => localStorage?.getItem("excludeCovers") === "true");
-    const [excludeDuplicateSongs, setExcludeDuplicateSongs] = useState(
-        () => localStorage?.getItem("excludeDuplicateSongs") === "true"
-    );
+    const [settings, setSettings] = useState(() => ({
+        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
+        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
+        excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
+        excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
+        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true"
+    }));
 
-    const handleHideEmptySetlistsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSettingChange = (key: keyof typeof settings) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const isChecked = event.target.checked;
-        setHideEmptySetlists(isChecked);
-        localStorage.setItem("hideEmptySetlists", isChecked.toString());
-        window.dispatchEvent(new StorageEvent("hideEmptySetlists")); // Trigger storage event manually
-    };
-
-    const handleHideSongsNotFound = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const isChecked = event.target.checked;
-        setHideSongsNotFound(isChecked);
-        localStorage.setItem("hideSongsNotFound", isChecked.toString());
-        window.dispatchEvent(new StorageEvent("hideSongsNotFound")); // Trigger storage event manually
-    };
-
-    const handleExcludeCoversChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const isChecked = event.target.checked;
-        setExcludeCovers(isChecked);
-        localStorage.setItem("excludeCovers", isChecked.toString());
-        window.dispatchEvent(new StorageEvent("excludeCovers")); // Trigger storage event manually
-    };
-
-    const handleExcludeDuplicateSongs = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const isChecked = event.target.checked;
-        setExcludeDuplicateSongs(isChecked);
-        localStorage.setItem("excludeDuplicateSongs", isChecked.toString());
-        window.dispatchEvent(new StorageEvent("excludeDuplicateSongs")); // Trigger storage event manually
+        setSettings((prev) => ({ ...prev, [key]: isChecked }));
+        localStorage?.setItem(key, isChecked.toString());
+        window.dispatchEvent(new StorageEvent(key));
     };
 
     useEffect(() => {
@@ -76,7 +54,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             {/* Settings panel */}
             <div
                 id="settings-panel"
-                className={`transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full shadow-lg p-4 ${
+                className={`transform transition-transform duration-300 ease-in-out w-2/5 max-w-md h-full shadow-lg p-4 ${
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
@@ -126,48 +104,64 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                         </select>
                     </label>
                 </div>
+                {/* Setlists Settings */}
                 <div className="mb-4">
                     <h3 className="text-lg font-medium">{i18n("settings:setlistsTitle")}</h3>
                     <label className="flex items-center space-x-2 p-2">
                         <input
                             type="checkbox"
-                            checked={hideEmptySetlists}
-                            onChange={handleHideEmptySetlistsChange}
-                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                            checked={settings.hideEmptySetlists}
+                            onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
+                            className="cursor-pointer flex-shrink-0 w-7 h-7"
                         />
                         <span>{i18n("settings:hideEmptySetlists")}</span>
                     </label>
                 </div>
-
+                {/* Export Settings */}
                 <div className="mb-4">
-                    <h3 className="text-lg font-medium">{i18n("settings:exportTitle")}</h3>
+                    <h3 className="text-lg font-medium">{i18n("common:export")}</h3>
                     <label className="flex items-center space-x-2 p-2">
                         <input
                             type="checkbox"
-                            checked={hideSongsNotFound}
-                            onChange={handleHideSongsNotFound}
-                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                            checked={settings.hideSongsNotFound}
+                            onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
+                            className="cursor-pointer flex-shrink-0 w-7 h-7"
                         />
                         <span>{i18n("settings:hideSongsNotFound")}</span>
                     </label>
                     <label className="flex items-center space-x-2 p-2">
                         <input
                             type="checkbox"
-                            checked={excludeCovers}
-                            onChange={handleExcludeCoversChange}
-                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                            checked={settings.excludeCovers}
+                            onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
+                            className="cursor-pointer flex-shrink-0 w-7 h-7"
                         />
                         <span>{i18n("settings:excludeCovers")}</span>
                     </label>
                     <label className="flex items-center space-x-2 p-2">
                         <input
                             type="checkbox"
-                            checked={excludeDuplicateSongs}
-                            onChange={handleExcludeDuplicateSongs}
-                            className="cursor-pointer flex-shrink-0 w-[25px] h-[25px]"
+                            checked={settings.excludeDuplicateSongs}
+                            onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
+                            className="cursor-pointer flex-shrink-0 w-7 h-7"
                         />
                         <span>{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
+                    <label className="flex items-center space-x-2 p-2">
+                        <input
+                            type="checkbox"
+                            checked={settings.excludePlayedOnTape}
+                            onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
+                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                        />
+                        <span>{i18n("settings:excludePlayedOnTape")}</span>
+                    </label>
+                </div>
+                {/* About + Support Link */}
+                <div className="text-lg absolute bottom-8 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
+                    <Link href="/about" className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer">
+                        {i18n("about:aboutSupport")}
+                    </Link>
                 </div>
             </div>
         </div>

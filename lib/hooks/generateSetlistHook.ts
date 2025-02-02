@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { PageState } from "@constants/generateSetlistPageState";
 
 /**
- * Hook for data handling on setlist-search page.
+ * Hook for data handling on the setlist-search page.
  */
 export default function generateSetlistHook() {
     const router = useRouter();
@@ -17,9 +17,9 @@ export default function generateSetlistHook() {
         showAuthDialog: false,
         searchTriggered: false,
         searchComplete: false,
-        allSetlistsData: [] as any,
-        predictedSetlists: null as any,
-        chosenSetlist: null as any,
+        allSetlistsData: [] as Record<string, any>,
+        predictedSetlists: null as Record<string, any> | null,
+        chosenSetlist: null as Record<string, any> | null,
         exportDialogOpen: false,
         animLoading: true,
         showLoading: false,

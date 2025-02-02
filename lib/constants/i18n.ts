@@ -26,6 +26,7 @@ if (!i18n.isInitialized) {
             },
             ns: [
                 "common",
+                "about",
                 "account",
                 "errors",
                 "exportSetlist",

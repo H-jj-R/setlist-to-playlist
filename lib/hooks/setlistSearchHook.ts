@@ -5,20 +5,20 @@ import { useTranslation } from "react-i18next";
 import { PageState } from "@constants/setlistSearchPageState";
 
 /**
- * Hook for data handling on setlist-search page.
+ * Hook for data handling on the setlist-search page.
  */
 export default function setlistSearchHook() {
-    const router = useRouter();
-    const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
+    const { resolvedTheme } = useTheme();
+    const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
         searchTriggered: false,
         searchComplete: false,
         lastQuery: null as string | null,
-        allSetlistsData: [] as any,
+        allSetlistsData: [] as Record<string, any>,
         setlistChosen: false,
-        chosenSetlistData: null as any,
+        chosenSetlistData: null as Record<string, any> | null,
         exportDialogOpen: false,
         animLoading: true,
         showLoading: false,

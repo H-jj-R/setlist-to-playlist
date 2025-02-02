@@ -14,7 +14,7 @@ import "@constants/i18n";
  */
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
             <AuthProvider>
                 <Component {...pageProps} />
             </AuthProvider>

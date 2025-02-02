@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faUserCircle, faRightFromBracket, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "@components/ConfirmationModal";
 import MessageDialog from "@components/MessageDialog";
+import { MessageDialogState } from "@constants/messageDialogState";
 
 interface AccountSidebarProps {
     onClose: () => void; // Close handler
@@ -21,27 +22,35 @@ interface DecodedToken {
 }
 
 /**
- * The settings overlay component.
+ * The account sidebar overlay component.
  */
 const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }) => {
     const router = useRouter();
     const { t: i18n } = useTranslation();
     const { resolvedTheme } = useTheme();
-    const [isVisible, setIsVisible] = useState(false);
-    const [username, setUsername] = useState<string | null>(null);
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [messageDialog, setMessageDialog] = useState({ isOpen: false, message: "", type: "success" });
+    const [state, setState] = useState({
+        isVisible: false,
+        username: null as string | null,
+        showConfirmation: false,
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+    });
 
     useEffect(() => {
         // Trigger the slide-in and dimming animation after mounting
-        setIsVisible(true);
+        setState((prev) => ({
+            ...prev,
+            isVisible: true
+        }));
 
         // Decode the JWT to get the username
-        const token = localStorage?.getItem("authToken"); // Replace with the actual key you're using for the token
+        const token = localStorage?.getItem("authToken");
         if (token) {
             try {
                 const decoded = jwtDecode<DecodedToken>(token);
-                setUsername(decoded.username);
+                setState((prev) => ({
+                    ...prev,
+                    username: decoded.username
+                }));
             } catch (error) {
                 console.error(error);
             }
@@ -63,28 +72,34 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
             });
 
             if (response.ok) {
-                setMessageDialog({
-                    isOpen: true,
-                    message: i18n("account:deleteSuccess"),
-                    type: "success"
-                });
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:deleteSuccess"),
+                        type: MessageDialogState.Success
+                    }
+                }));
                 handleLogout(); // Log out after account deletion
             } else {
-                const errorData = await response.json();
-                console.error(errorData.message);
-                setMessageDialog({
-                    isOpen: true,
-                    message: i18n("account:deleteFailed"),
-                    type: "error"
-                });
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:deleteFailed"),
+                        type: MessageDialogState.Error
+                    }
+                }));
             }
         } catch (error) {
-            console.error(error);
-            setMessageDialog({
-                isOpen: true,
-                message: i18n("errors:unexpectedError"),
-                type: "error"
-            });
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("errors:unexpectedError"),
+                    type: MessageDialogState.Error
+                }
+            }));
         }
     };
 
@@ -94,19 +109,21 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
             <div
                 id="background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-                    isVisible ? "opacity-70" : "opacity-0"
+                    state.isVisible ? "opacity-70" : "opacity-0"
                 }`}
                 onClick={() => {
-                    // Trigger the slide-out and undimming animation before unmounting
-                    setIsVisible(false);
-                    setTimeout(onClose, 300); // Match the animation duration
+                    setState((prev) => ({
+                        ...prev,
+                        isVisible: false
+                    }));
+                    setTimeout(onClose, 300);
                 }}
             />
             {/* Settings panel */}
             <div
                 id="settings-panel"
                 className={`relative transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full shadow-lg p-4 ${
-                    isVisible ? "translate-x-0" : "translate-x-full"
+                    state.isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
                 <div id="settings-header" className="flex justify-between items-center mb-6 mr-5">
@@ -116,8 +133,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                     <button
                         id="close-settings-btn"
                         onClick={() => {
-                            // Trigger the slide-out and undimming animation before unmounting
-                            setIsVisible(false);
+                            setState((prev) => ({
+                                ...prev,
+                                isVisible: false
+                            }));
                             setTimeout(onClose, 300);
                         }}
                         className="text-xl"
@@ -129,10 +148,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                     {/* Username */}
                     <div className="text-center mb-2">
                         <h3 className="text-lg font-semibold">
-                            {username ? (
+                            {state.username ? (
                                 <>
                                     <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl mr-2" />
-                                    {username}
+                                    {state.username}
                                 </>
                             ) : (
                                 "Loading..."
@@ -144,7 +163,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                         <button
                             id="logout-btn"
                             onClick={() => {
-                                setIsVisible(false);
+                                setState((prev) => ({
+                                    ...prev,
+                                    isVisible: false
+                                }));
                                 setTimeout(handleLogout, 300);
                             }}
                             className="w-3/4 bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded hover:from-red-600 hover:to-orange-600 transition-colors duration-300"
@@ -159,7 +181,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                     <button
                         id="go-to-ai-generate-setlist-button"
                         onClick={() => {
-                            setIsVisible(false);
+                            setState((prev) => ({
+                                ...prev,
+                                isVisible: false
+                            }));
                             setTimeout(onClose, 300);
                             router.push("/user-playlists");
                         }}
@@ -171,7 +196,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 {/* Delete Account */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
                     <button
-                        onClick={() => setShowConfirmation(true)}
+                        onClick={() => {
+                            setState((prev) => ({
+                                ...prev,
+                                showConfirmation: true
+                            }));
+                        }}
                         className="w-full bg-gradient-to-r from-red-700 to-red-500 text-white py-2 px-4 rounded hover:from-red-800 hover:to-red-600 transition-colors duration-300"
                     >
                         <FontAwesomeIcon icon={faTrash} className="text-gray-200 text-l mr-2" />
@@ -179,21 +209,32 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                     </button>
                 </div>
                 {/* Confirmation Modal */}
-                {showConfirmation && (
+                {state.showConfirmation && (
                     <ConfirmationModal
                         onConfirm={handleDeleteAccount}
-                        onCancel={() => setShowConfirmation(false)}
+                        onCancel={() => {
+                            setState((prev) => ({
+                                ...prev,
+                                showConfirmation: false
+                            }));
+                        }}
                     ></ConfirmationModal>
                 )}
             </div>
 
             {/* Message Dialog */}
-            <MessageDialog
-                isOpen={messageDialog.isOpen}
-                message={messageDialog.message}
-                type={messageDialog.type as "success" | "error"}
-                onClose={() => setMessageDialog({ isOpen: false, message: "", type: "success" })}
-            />
+            {state.messageDialog.isOpen && (
+                <MessageDialog
+                    message={state.messageDialog.message}
+                    type={state.messageDialog.type}
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+                        }));
+                    }}
+                />
+            )}
         </div>
     );
 };

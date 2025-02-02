@@ -4,7 +4,7 @@ export default function Document() {
     return (
         <Html lang="en">
             <Head>
-                {/* Google AdSense Auto Ads */}
+                {/* Google AdSense Auto Ads (TODO) */}
                 <script
                     async
                     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1631429488585748"
