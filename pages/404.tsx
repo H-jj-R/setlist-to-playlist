@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import Layout from "@components/Layout";
+import Layout from "@components/Shared/Layout";
 
 /**
  * Renders a custom 404 error page.

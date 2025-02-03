@@ -43,7 +43,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             { expiresIn: "1000h" }
         );
 
-        res.status(200).json({ message: "account:loginSuccess", token });
+        res.status(200).json({ success: true, token });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "errors:internalServerError" });

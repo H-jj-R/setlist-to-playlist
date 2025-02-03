@@ -2,9 +2,11 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
-import ConfirmationModal from "@components/ConfirmationModal";
-import CustomHashLoader from "@components/CustomHashLoader";
-import ErrorMessage from "@components/ErrorMessage";
+import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
+import CustomHashLoader from "@components/Shared/CustomHashLoader";
+import ErrorMessage from "@components/Shared/ErrorMessage";
+import MessageDialog from "@components/Dialogs/MessageDialog";
+import { MessageDialogState } from "@constants/messageDialogState";
 import userPlaylistHook from "@hooks/userPlaylistHook";
 
 interface UserPlaylistProps {
@@ -22,7 +24,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
         onDelete
     );
 
-    // TODO: Error and loading display (Use MessageDialog)
     return (
         <>
             <li className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
@@ -138,12 +139,12 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
 
                 {state.expanded && (
                     <div className="mt-4 border-t border-gray-200 dark:border-gray-700">
-                        {state.loading ? (
+                        {state.songsLoading ? (
                             <div className="flex justify-center p-6">
                                 <CustomHashLoader showLoading={true} size={80} />
                             </div>
-                        ) : state.error ? (
-                            <ErrorMessage message={state.error} />
+                        ) : state.songError ? (
+                            <ErrorMessage message={state.songError} />
                         ) : (
                             <ul className="space-y-2">
                                 {state.tracks?.map((track, idx) => (
@@ -175,6 +176,26 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                         }));
                     }}
                 ></ConfirmationModal>
+            )}
+            {/* Message Dialog */}
+            {state.messageDialog.isOpen && (
+                <MessageDialog
+                    message={state.messageDialog.message}
+                    type={state.messageDialog.type}
+                    onClose={() => {
+                        state.messageDialog.onClose === null
+                            ? setState((prev) => ({
+                                  ...prev,
+                                  messageDialog: {
+                                      isOpen: false,
+                                      message: "",
+                                      type: MessageDialogState.Success,
+                                      onClose: null
+                                  }
+                              }))
+                            : state.messageDialog.onClose();
+                    }}
+                ></MessageDialog>
             )}
         </>
     );

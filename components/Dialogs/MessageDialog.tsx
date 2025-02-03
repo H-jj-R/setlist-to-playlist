@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import CustomHashLoader from "@components/CustomHashLoader";
-import ErrorMessage from "@components/ErrorMessage";
+import CustomHashLoader from "@components/Shared/CustomHashLoader";
+import ErrorMessage from "@components/Shared/ErrorMessage";
 import { MessageDialogState } from "@constants/messageDialogState";
 
 interface MessageDialogProps {

@@ -56,32 +56,33 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         const formData = new FormData(e.target as HTMLFormElement);
         if (state.dialogState === LoginDialogState.ForgotPassword) {
             const email = formData.get("email") as string;
-            // TODO: Forgot Password
 
-            // const response = await fetch("/api/auth/forgot-password", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ email })
-            // });
-
-            // if (!response.ok) {
-            //     const data = await response.json();
-            //     setMessageDialog({
-            //         isOpen: true,
-            //         message: i18n(data.error),
-            //         type: "error"
-            //     });
-            // } else {
-            setState((prev) => ({
-                ...prev,
-                messageDialog: {
-                    isOpen: true,
-                    message: i18n("account:passwordResetEmailSent"),
-                    type: MessageDialogState.Success
-                },
-                dialogState: LoginDialogState.Login
-            }));
-            // }
+            const response = await fetch("/api/auth/forgot-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email })
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n(data.error),
+                        type: MessageDialogState.Error
+                    }
+                }));
+            } else {
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:passwordResetEmailSent"),
+                        type: MessageDialogState.Success
+                    },
+                    dialogState: LoginDialogState.Login
+                }));
+            }
         } else {
             const password = formData.get("password") as string;
             if (state.dialogState === LoginDialogState.SignUp) {
@@ -171,7 +172,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     ...prev,
                     messageDialog: {
                         isOpen: true,
-                        message: i18n("account:signUpFailed", { message: i18n(errorData.message) }),
+                        message: i18n("account:signUpFailed", { message: i18n(errorData.error) }),
                         type: MessageDialogState.Error
                     }
                 }));
@@ -209,7 +210,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     ...prev,
                     messageDialog: {
                         isOpen: true,
-                        message: i18n("account:loginFailed", { message: errorData.error }),
+                        message: i18n("account:loginFailed", { message: i18n(errorData.error) }),
                         type: MessageDialogState.Error
                     }
                 }));

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import GenerateSetlistSection from "@components/LandingPageGenerateSetlistSection";
-import HeroSection from "@components/LandingPageHeroSection";
-import InfoSection from "@components/LandingPageInfoSection";
-import Layout from "@components/Layout";
+import GenerateSetlistSection from "@components/LandingPage/LandingPageGenerateSetlistSection";
+import HeroSection from "@components/LandingPage/LandingPageHeroSection";
+import InfoSection from "@components/LandingPage/LandingPageInfoSection";
+import Layout from "@components/Shared/Layout";
 
 /**
  * The landing page of the site.

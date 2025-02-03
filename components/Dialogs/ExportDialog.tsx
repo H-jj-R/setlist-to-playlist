@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import MessageDialog from "@components/MessageDialog";
-import SetlistSongsExport from "@components/SetlistSongsExport";
+import MessageDialog from "@components/Dialogs/MessageDialog";
+import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
 import { MessageDialogState } from "@constants/messageDialogState";
 import exportDialogHook from "@hooks/exportDialogHook";
 

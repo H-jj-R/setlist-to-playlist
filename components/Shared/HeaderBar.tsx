@@ -3,9 +3,9 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Settings from "@components/Settings";
-import LoginDialog from "@components/LoginDialog";
-import AccountSidebar from "@components/AccountSidebar";
+import Settings from "@components/Shared/Settings";
+import LoginDialog from "@components/Dialogs/LoginDialog";
+import AccountSidebar from "@components/Account/AccountSidebar";
 import { useAuth } from "@context/AuthContext";
 
 /**
