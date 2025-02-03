@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
-import CustomHashLoader from "@components/CustomHashLoader";
-import ErrorMessage from "@components/ErrorMessage";
-import Layout from "@components/Layout";
-import UserPlaylist from "@components/UserPlaylist";
+import CustomHashLoader from "@components/Shared/CustomHashLoader";
+import ErrorMessage from "@components/Shared/ErrorMessage";
+import Layout from "@components/Shared/Layout";
+import UserPlaylist from "@components/Account/UserPlaylist";
 import { useAuth } from "@context/AuthContext";
 
 /**

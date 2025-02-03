@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
-import HeaderBar from "@components/HeaderBar";
+import HeaderBar from "@components/Shared/HeaderBar";
 
 interface LayoutProps {
     children: ReactNode; // All child components for the page

@@ -3,7 +3,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faEnvelope, faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import MessageDialog from "@components/MessageDialog";
+import MessageDialog from "@components/Dialogs/MessageDialog";
 import { LoginDialogState } from "@constants/loginDialogState";
 import { MessageDialogState } from "@constants/messageDialogState";
 import loginDialogHook from "@hooks/loginDialogHook";

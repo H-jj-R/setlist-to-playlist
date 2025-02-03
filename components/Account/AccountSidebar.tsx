@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faUserCircle, faRightFromBracket, faTrash } from "@fortawesome/free-solid-svg-icons";
-import ConfirmationModal from "@components/ConfirmationModal";
-import MessageDialog from "@components/MessageDialog";
+import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
+import MessageDialog from "@components/Dialogs/MessageDialog";
 import { MessageDialogState } from "@constants/messageDialogState";
 
 interface AccountSidebarProps {

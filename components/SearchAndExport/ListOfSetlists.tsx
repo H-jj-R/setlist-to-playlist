@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import SetlistChoiceBlock from "@components/SetlistChoiceBlock";
+import SetlistChoiceBlock from "@components/SearchAndExport/SetlistChoiceBlock";
 import { SettingsKeys } from "@constants/settingsKeys";
 
 interface ListOfSetlistsProps {

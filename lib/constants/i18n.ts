@@ -30,6 +30,7 @@ if (!i18n.isInitialized) {
                 "account",
                 "errors",
                 "exportSetlist",
+                "generateSetlist",
                 "landingPage",
                 "setlistSearch",
                 "settings",

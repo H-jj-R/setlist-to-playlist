@@ -1,10 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Layout from "@components/Layout";
-import SearchBar from "@components/SearchBar";
-import AISetlist from "@components/AISetlist";
-import ExportDialog from "@components/ExportDialog";
-import ErrorMessage from "@components/ErrorMessage";
+import Layout from "@components/Shared/Layout";
+import SearchBar from "@components/SearchAndExport/SearchBar";
+import AISetlist from "@components/SearchAndExport/AISetlist";
+import ExportDialog from "@components/Dialogs/ExportDialog";
+import ErrorMessage from "@components/Shared/ErrorMessage";
 import { PageState } from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
 import generateSetlistHook from "@hooks/generateSetlistHook";

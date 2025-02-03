@@ -1,12 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Layout from "@components/Layout";
-import SearchBar from "@components/SearchBar";
-import ListOfSetlists from "@components/ListOfSetlists";
-import Setlist from "@components/Setlist";
-import ExportDialog from "@components/ExportDialog";
-import CustomHashLoader from "@components/CustomHashLoader";
-import ErrorMessage from "@components/ErrorMessage";
+import Layout from "@components/Shared/Layout";
+import SearchBar from "@components/SearchAndExport/SearchBar";
+import ListOfSetlists from "@components/SearchAndExport/ListOfSetlists";
+import Setlist from "@components/SearchAndExport/Setlist";
+import ExportDialog from "@components/Dialogs/ExportDialog";
+import CustomHashLoader from "@components/Shared/CustomHashLoader";
+import ErrorMessage from "@components/Shared/ErrorMessage";
 import { PageState } from "@constants/setlistSearchPageState";
 import setlistSearchHook from "@hooks/setlistSearchHook";
 

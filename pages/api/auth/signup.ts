@@ -26,17 +26,16 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         }
 
         // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
 
         // Insert user into the database
-        const [result] = await db.execute("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)", [
+        await db.execute("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)", [
             username,
             email,
             hashedPassword
         ]);
 
-        res.status(201).json({ message: "account:userCreatedSuccessfully", userId: (result as any).insertId });
+        res.status(201).json({ success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "errors:internalServerError" });

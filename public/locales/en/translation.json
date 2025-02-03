@@ -34,6 +34,7 @@
         "messageSent": "Your message has been sent!",
         "setlistFmAPIDisclaimer": "Setlist.fm is a trademark of Better Than Nothing GmbH. This app is not endorsed by or affiliated with Setlist.fm.",
         "spotifyAPIDisclaimer": "Spotify is a trademark of Spotify AB. This app is not endorsed by or affiliated with Spotify.",
+        "submitAnother": "Submit Another",
         "supportAndFeedback": "Support & Feedback",
         "usesAPIs": "This application uses the Spotify API and Setlist.fm API.",
         "whatIsThisApp": "What is This App?",
@@ -58,6 +59,7 @@
         "loginSuccess": "Login successful!",
         "logout": "Logout",
         "noAccount": "No account? Sign up",
+        "noAccountLinkedToEmail": "No account linked to this email!",
         "password": "Password",
         "passwordError": "Password must be 8-32 characters, contain at least one number, one special character, one lowercase and one uppercase letter.",
         "passwordResetEmailSent": "An email has been sent for you to reset your password.",
@@ -135,7 +137,7 @@
         "goToAIGenerateSetlist": "AI Generate a Setlist",
         "goToSetlistSearch": "Search for Setlists",
         "landingPageDescription": "Effortlessly create Spotify playlists from your favourite artists' live performances.",
-        "landingPageTitle": "Transform Setlists into Playlists",
+        "landingPageTitle": "Export Setlists to Playlists",
         "whyCreateAccountDescription": "Unlock exclusive features by creating an account. Save playlists, recover deleted playlists, and more!",
         "whyCreateAccountTitle": "Why Create an Account?"
     },
@@ -177,7 +179,10 @@
     },
     "userPlaylists": {
         "createdPlaylists": "Created Playlists",
+        "detailsUpdated": "Playlist details updated successfully!",
         "noPlaylistsCreated": "You haven't created any playlists yet!",
+        "playlistDeleted": "This playlist has been deleted.",
+        "playlistRecovered": "Playlist successfully recovered to your Spotify account!",
         "playlistSaved": "Playlist saved successfully!",
         "recover": "Recover",
         "yourExportedSetlists": "Your Exported Setlists"

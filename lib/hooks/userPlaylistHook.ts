@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { MessageDialogState } from "@constants/messageDialogState";
 
 /**
  * Hook for data handling on the user-playlist page.
@@ -16,9 +17,15 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
         initialName: playlist.name as string,
         initialDescription: (playlist.description || "") as string,
         tracks: null as Record<string, any> | null,
-        loading: false,
-        error: null as string | null,
-        showConfirmation: false
+        songsLoading: false,
+        songError: null as string | null,
+        showConfirmation: false,
+        messageDialog: {
+            isOpen: false,
+            message: "",
+            type: MessageDialogState.Success,
+            onClose: null as (() => void) | null
+        }
     });
 
     const toggleExpand = async () => {
@@ -26,7 +33,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             ...prev,
             expanded: !state.expanded
         }));
-        if (!state.tracks && !state.loading) {
+        if (!state.tracks && !state.songsLoading) {
             const trackDetails = await fetchTrackDetails();
             setState((prev) => ({
                 ...prev,
@@ -38,8 +45,8 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
     const fetchTrackDetails = async () => {
         setState((prev) => ({
             ...prev,
-            loading: true,
-            error: null
+            songsLoading: true,
+            songError: null
         }));
 
         try {
@@ -61,12 +68,12 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                error: error.error
+                songError: error.error
             }));
         } finally {
             setState((prev) => ({
                 ...prev,
-                loading: false
+                songsLoading: false
             }));
         }
     };
@@ -74,8 +81,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
     const handleSave = async () => {
         setState((prev) => ({
             ...prev,
-            loading: true,
-            error: null
+            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
         }));
 
         try {
@@ -116,17 +122,13 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                 ...prev,
                 initialName: state.name,
                 initialDescription: state.description,
-                editing: false
+                editing: false,
+                messageDialog: { isOpen: true, message: i18n("userPlaylists:detailsUpdated"), type: MessageDialogState.Success, onClose: null }
             }));
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                error: error.error
-            }));
-        } finally {
-            setState((prev) => ({
-                ...prev,
-                loading: false
+                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
             }));
         }
     };
@@ -134,8 +136,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
     const handleRecover = async () => {
         setState((prev) => ({
             ...prev,
-            loading: true,
-            error: null
+            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
         }));
 
         try {
@@ -149,7 +150,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                         redirect: window.location.pathname + window.location.search
                     }).toString()}`
                 );
-            } else if (response.status == 200) {
+            } else if (response.status === 200) {
                 const response = await fetch(`/api/controllers/create-spotify-playlist`, {
                     method: "POST",
                     headers: {
@@ -169,16 +170,15 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                         error: i18n(responseJson.error) || i18n("errors:unexpectedError")
                     };
                 }
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: { isOpen: true, message: i18n("userPlaylists:playlistRecovered"), type: MessageDialogState.Success, onClose: null }
+                }));
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                error: error.error
-            }));
-        } finally {
-            setState((prev) => ({
-                ...prev,
-                loading: false
+                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
             }));
         }
     };
@@ -186,8 +186,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
     const handleDelete = async () => {
         setState((prev) => ({
             ...prev,
-            loading: true,
-            error: null
+            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
         }));
 
         try {
@@ -215,16 +214,31 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                 };
             }
 
-            onDelete(playlist.playlistId);
+            setState((prev) => ({
+                ...prev,
+                showConfirmation: false,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("userPlaylists:playlistDeleted"),
+                    type: MessageDialogState.Success,
+                    onClose: () => {
+                        setState((prev) => ({
+                            ...prev,
+                            messageDialog: {
+                                isOpen: false,
+                                message: "",
+                                type: MessageDialogState.Success,
+                                onClose: null
+                            }
+                        }));
+                        onDelete(playlist.playlistId);
+                    }
+                }
+            }));
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                error: error.error
-            }));
-        } finally {
-            setState((prev) => ({
-                ...prev,
-                loading: false
+                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
             }));
         }
     };
