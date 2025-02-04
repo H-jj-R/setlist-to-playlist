@@ -7,6 +7,7 @@ import Setlist from "@components/SearchAndExport/Setlist";
 import ExportDialog from "@components/Dialogs/ExportDialog";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
+import SpotifyAuthDialog from "@components/Dialogs/SpotifyAuthDialog";
 import { PageState } from "@constants/setlistSearchPageState";
 import setlistSearchHook from "@hooks/setlistSearchHook";
 
@@ -18,11 +19,11 @@ export default function SetlistSearch() {
     const {
         mounted,
         state,
+        setState,
         handleSearchRouterPush,
         handleBackToList,
         handleSetlistChosenRouterPush,
-        handleExport,
-        handleExportDialogClosed
+        handleExport
     } = setlistSearchHook();
 
     if (!mounted) return null;
@@ -93,6 +94,18 @@ export default function SetlistSearch() {
                 </div>
             </Layout>
 
+            {/* Spotify Authorisation Dialog */}
+            {state.showAuthDialog && (
+                <SpotifyAuthDialog
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showAuthDialog: false
+                        }));
+                    }}
+                ></SpotifyAuthDialog>
+            )}
+
             {/* Export Dialog */}
             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                 state.pageState === PageState.Setlist) && (
@@ -103,7 +116,9 @@ export default function SetlistSearch() {
                         setlistfmArtist: state.allSetlistsData.setlistfmArtist
                     }}
                     isOpen={state.exportDialogOpen}
-                    onClose={handleExportDialogClosed}
+                    onClose={() => {
+                        setState((prev) => ({ ...prev, exportDialogOpen: false }));
+                    }}
                 />
             )}
         </>

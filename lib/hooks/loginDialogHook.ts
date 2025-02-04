@@ -53,6 +53,14 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setState((prev) => ({
+            ...prev,
+            messageDialog: {
+                isOpen: true,
+                message: "",
+                type: MessageDialogState.Loading
+            }
+        }));
         const formData = new FormData(e.target as HTMLFormElement);
         if (state.dialogState === LoginDialogState.ForgotPassword) {
             const email = formData.get("email") as string;

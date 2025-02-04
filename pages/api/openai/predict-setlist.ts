@@ -11,8 +11,26 @@ const openai = new OpenAI({
 
 // Define the schema for the predicted setlists
 const PredictedSetlistSchema = z.object({
-    predictedSetlists: z.array(
-        z.object({
+    predictedSetlists: z.object({
+        setlist1: z.object({
+            predictedSongs: z.array(
+                z.object({
+                    name: z.string(),
+                    artist: z.string(),
+                    tape: z.boolean()
+                })
+            )
+        }),
+        setlist2: z.object({
+            predictedSongs: z.array(
+                z.object({
+                    name: z.string(),
+                    artist: z.string(),
+                    tape: z.boolean()
+                })
+            )
+        }),
+        setlist3: z.object({
             predictedSongs: z.array(
                 z.object({
                     name: z.string(),
@@ -21,7 +39,7 @@ const PredictedSetlistSchema = z.object({
                 })
             )
         })
-    )
+    })
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -68,12 +86,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             messages: [
                 {
                     role: "system",
-                    content: `You are a setlist predictor. Using the past setlists provided, predict the next setlist for the artist.
-                    Return exactly 3 possible predictions as an array. Each setlist must be distinct:
-                    - The first predicted setlist should be the most likely.
-                    - The second predicted setlist should be slightly less likely but still plausible.
-                    - The third predicted setlist should have significant variance.
-                    Ensure all 3 setlists are different from each other.`
+                    content: `You are a setlist predictor. Based on the past setlists provided, predict exactly three possible future setlists for the artist. 
+                    **Rules for the Predictions:**
+                    - You **must** return exactly **three** predicted setlists.
+                    - Each setlist **must** contain a list of predicted songs.
+                    - Each setlist **must** be distinct:
+                    1. **Setlist 1** should be the most likely prediction, closely following recent setlist trends.
+                    2. **Setlist 2** should be slightly different but still realistic based on historical patterns.
+                    3. **Setlist 3** should introduce significant variation, such as rare songs or surprises.
+                    **Formatting & Constraints:**
+                    - Do **not** repeat identical setlists.
+                    - If a song is a cover, include the original artist's name in the 'artist' field and **not** in the song name.
+                    - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**.
+                    **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`
                 },
                 {
                     role: "user",

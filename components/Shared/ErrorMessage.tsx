@@ -7,6 +7,9 @@ interface ErrorMessageProps {
     small?: boolean;
 }
 
+/**
+ * 
+ */
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
     if (!message) return null;
 

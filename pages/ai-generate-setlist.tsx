@@ -8,6 +8,7 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import { PageState } from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
 import generateSetlistHook from "@hooks/generateSetlistHook";
+import SpotifyAuthDialog from "@/components/Dialogs/SpotifyAuthDialog";
 
 /**
  * Main page for viewing setlists.
@@ -15,8 +16,7 @@ import generateSetlistHook from "@hooks/generateSetlistHook";
 export default function AIGenerateSetlist() {
     const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
-    const { mounted, state, handleAuthoriseSpotify, handleSearch, handleExport, handleExportDialogClosed } =
-        generateSetlistHook();
+    const { mounted, state, setState, handleSearch, handleExport, handleExportDialogClosed } = generateSetlistHook();
 
     if (!mounted) return null;
 
@@ -41,31 +41,7 @@ export default function AIGenerateSetlist() {
                                 state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                             }`}
                         >
-                            <SearchBar
-                                onSearch={handleSearch}
-                                locked={state.searchBarLocked}
-                                aria-label={i18n("generateSetlist:searchForArtist")}
-                            />
-
-                            {/* Authorisation dialog */}
-                            {/* // TODO: Make this dialog look better */}
-                            {state.showAuthDialog && (
-                                <div
-                                    id="auth-dialog"
-                                    className="mt-4 p-4 bg-green-500 border border-black rounded text-center"
-                                >
-                                    <p className="mb-6 text-black text-xl">
-                                        {i18n("common:spotifyAuthorisationRequired")}
-                                    </p>
-                                    <button
-                                        onClick={handleAuthoriseSpotify}
-                                        id="auth-button"
-                                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                    >
-                                        {i18n("common:spotifyAuthorise")}
-                                    </button>
-                                </div>
-                            )}
+                            <SearchBar onSearch={handleSearch} aria-label={i18n("generateSetlist:searchForArtist")} />
                         </div>
 
                         {/* Loading indicator */}
@@ -112,6 +88,18 @@ export default function AIGenerateSetlist() {
                             </div>
                         )}
                     </div>
+
+                    {/* Spotify Authorisation Dialog */}
+                    {state.showAuthDialog && (
+                        <SpotifyAuthDialog
+                            onClose={() => {
+                                setState((prev) => ({
+                                    ...prev,
+                                    showAuthDialog: false
+                                }));
+                            }}
+                        ></SpotifyAuthDialog>
+                    )}
 
                     {/* Export Dialog */}
                     {state.pageState === PageState.Setlist && (

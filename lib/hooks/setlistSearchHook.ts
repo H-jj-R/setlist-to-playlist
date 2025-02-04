@@ -20,6 +20,7 @@ export default function setlistSearchHook() {
         setlistChosen: false,
         chosenSetlistData: null as Record<string, any> | null,
         exportDialogOpen: false,
+        showAuthDialog: false,
         animLoading: true,
         showLoading: false,
         error: null as string | null,
@@ -207,28 +208,20 @@ export default function setlistSearchHook() {
             if (response.status === 200) {
                 setState((prev) => ({ ...prev, exportDialogOpen: true }));
             } else if (response.status === 401) {
-                router.push(
-                    `/api/spotify/authorise?${new URLSearchParams({
-                        redirect: window.location.pathname + window.location.search
-                    }).toString()}`
-                );
+                setState((prev) => ({ ...prev, showAuthDialog: true }));
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleExportDialogClosed = () => {
-        setState((prev) => ({ ...prev, exportDialogOpen: false }));
-    };
-
     return {
         mounted,
         state,
+        setState,
         handleSearchRouterPush,
         handleSetlistChosenRouterPush,
         handleBackToList,
-        handleExport,
-        handleExportDialogClosed
+        handleExport
     };
 }

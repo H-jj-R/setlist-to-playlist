@@ -13,6 +13,9 @@ interface LoginDialogProps {
     onLoginSuccess: () => void;
 }
 
+/**
+ * 
+ */
 const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) => {
     const { t: i18n } = useTranslation();
     const { state, setState, handleClose, handleSubmit } = loginDialogHook(onClose, onLoginSuccess);

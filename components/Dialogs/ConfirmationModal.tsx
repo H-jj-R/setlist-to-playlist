@@ -7,6 +7,9 @@ interface ConfirmationModalProps {
     onCancel: () => void;
 }
 
+/**
+ * 
+ */
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onConfirm, onCancel }) => {
     const { t: i18n } = useTranslation();
     const { resolvedTheme } = useTheme();

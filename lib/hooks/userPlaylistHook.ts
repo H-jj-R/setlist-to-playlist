@@ -20,6 +20,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
         songsLoading: false,
         songError: null as string | null,
         showConfirmation: false,
+        showAuthDialog: false,
         messageDialog: {
             isOpen: false,
             message: "",
@@ -123,7 +124,12 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                 initialName: state.name,
                 initialDescription: state.description,
                 editing: false,
-                messageDialog: { isOpen: true, message: i18n("userPlaylists:detailsUpdated"), type: MessageDialogState.Success, onClose: null }
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("userPlaylists:detailsUpdated"),
+                    type: MessageDialogState.Success,
+                    onClose: null
+                }
             }));
         } catch (error) {
             setState((prev) => ({
@@ -134,23 +140,18 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
     };
 
     const handleRecover = async () => {
-        setState((prev) => ({
-            ...prev,
-            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
-        }));
-
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
                 method: "GET",
                 credentials: "include"
             });
             if (response.status === 401) {
-                router.push(
-                    `/api/spotify/authorise?${new URLSearchParams({
-                        redirect: window.location.pathname + window.location.search
-                    }).toString()}`
-                );
+                setState((prev) => ({ ...prev, showAuthDialog: true }));
             } else if (response.status === 200) {
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
+                }));
                 const response = await fetch(`/api/controllers/create-spotify-playlist`, {
                     method: "POST",
                     headers: {
@@ -172,7 +173,12 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                 }
                 setState((prev) => ({
                     ...prev,
-                    messageDialog: { isOpen: true, message: i18n("userPlaylists:playlistRecovered"), type: MessageDialogState.Success, onClose: null }
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("userPlaylists:playlistRecovered"),
+                        type: MessageDialogState.Success,
+                        onClose: null
+                    }
                 }));
             }
         } catch (error) {

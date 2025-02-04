@@ -107,6 +107,7 @@
         "unexpectedError": "An unexpected error occurred. Please try again."
     },
     "exportSetlist": {
+        "authoriseWithSpotify": "Authorise with Spotify",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
         "enterPlaylistDescription": "Enter playlist description",
@@ -119,6 +120,8 @@
         "removeImage": "Remove Image",
         "songNotFound": "Song not found",
         "songs": "Songs",
+        "spotifyAuthMessage": "You need to authorise with Spotify to continue.",
+        "spotifyAuthRequired": "Spotify Authorisation Required",
         "unknownSong": "Unknown Song"
     },
     "generateSetlist": {

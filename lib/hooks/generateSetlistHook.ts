@@ -13,7 +13,6 @@ export default function generateSetlistHook() {
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
-        searchBarLocked: true,
         showAuthDialog: false,
         searchTriggered: false,
         searchComplete: false,
@@ -31,20 +30,6 @@ export default function generateSetlistHook() {
     useEffect(() => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
-        const checkAuthentication = async () => {
-            const response = await fetch("/api/controllers/check-for-authentication", {
-                method: "GET",
-                credentials: "include"
-            });
-            if (!response.ok) {
-                if (response.status === 401) {
-                    setState((prev) => ({ ...prev, searchBarLocked: true, showAuthDialog: true }));
-                }
-            } else {
-                setState((prev) => ({ ...prev, searchBarLocked: false, showAuthDialog: false }));
-            }
-        };
-        checkAuthentication();
     }, [resolvedTheme]);
 
     const handleAuthoriseSpotify = () => {
@@ -56,6 +41,17 @@ export default function generateSetlistHook() {
     };
 
     const handleSearch = async (query: string) => {
+        const response = await fetch("/api/controllers/check-for-authentication", {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) {
+            if (response.status === 401) {
+                setState((prev) => ({ ...prev, showAuthDialog: true }));
+                return;
+            }
+        }
+
         setState((prev) => ({
             ...prev,
             searchTriggered: true,
@@ -138,10 +134,12 @@ export default function generateSetlistHook() {
             clearInterval(interval);
             setState((prev) => ({
                 ...prev,
-                predictedSetlists: openAIData.predictedSetlists.map((predictedSetlist, idx) => ({
-                    ...predictedSetlist,
-                    setlistArtist: setlistData.spotifyArtist
-                })),
+                predictedSetlists: Object.values(openAIData.predictedSetlists).map(
+                    (predictedSetlist: Record<string, any>) => ({
+                        ...predictedSetlist,
+                        setlistArtist: setlistData.spotifyArtist
+                    })
+                ),
                 searchComplete: true,
                 pageState: PageState.Setlist
             }));
@@ -178,7 +176,7 @@ export default function generateSetlistHook() {
     return {
         mounted,
         state,
-        handleAuthoriseSpotify,
+        setState,
         handleSearch,
         handleExport,
         handleExportDialogClosed
