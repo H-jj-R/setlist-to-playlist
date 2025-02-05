@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 import { PageState } from "@constants/generateSetlistPageState";
-import testJson from "@utils/test1.json";
 
 /**
  * Hook for data handling on the setlist-search page.
