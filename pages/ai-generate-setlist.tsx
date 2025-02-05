@@ -5,10 +5,10 @@ import SearchBar from "@components/SearchAndExport/SearchBar";
 import AISetlist from "@components/SearchAndExport/AISetlist";
 import ExportDialog from "@components/Dialogs/ExportDialog";
 import ErrorMessage from "@components/Shared/ErrorMessage";
+import SpotifyAuthDialog from "@components/Dialogs/SpotifyAuthDialog";
 import { PageState } from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
 import generateSetlistHook from "@hooks/generateSetlistHook";
-import SpotifyAuthDialog from "@/components/Dialogs/SpotifyAuthDialog";
 
 /**
  * Main page for viewing setlists.
@@ -16,7 +16,7 @@ import SpotifyAuthDialog from "@/components/Dialogs/SpotifyAuthDialog";
 export default function AIGenerateSetlist() {
     const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
-    const { mounted, state, setState, handleSearch, handleExport, handleExportDialogClosed } = generateSetlistHook();
+    const { mounted, state, setState, handleSearch, handleExport, handleCombineSetlists } = generateSetlistHook();
 
     if (!mounted) return null;
 
@@ -45,7 +45,6 @@ export default function AIGenerateSetlist() {
                         </div>
 
                         {/* Loading indicator */}
-                        {/* // TODO: Make this loading bar look better */}
                         {state.showLoading && !state.animLoading && (
                             <div id="progress-indicator" className="pt-8 mt-16 flex flex-col items-center">
                                 <p className="mb-2 text-lg font-medium text-gray-700">
@@ -73,19 +72,30 @@ export default function AIGenerateSetlist() {
                             </>
                         )}
 
-                        {/* // TODO: Make a button to export all (combine predicted setlists) */}
                         {state.pageState === PageState.Setlist && (
-                            <div id="setlist-container" className="flex gap-4 mt-[3rem]">
-                                {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
-                                    <div key={index} id="setlist-display" className="w-full animate-fadeIn">
-                                        <AISetlist
-                                            setlist={[setlist]}
-                                            predictionNum={index + 1}
-                                            onExport={handleExport}
-                                        />
+                            <>
+                                <div className="pt-5 overflow-hidden">
+                                    <div className="flex justify-center mt-6">
+                                        <button
+                                            className="px-6 py-3 text-white font-semibold rounded-lg shadow-mdtransition duration-300 bg-gradient-to-bl from-green-400 to-green-600 hover:from-green-500 hover:to-green-700"
+                                            onClick={handleCombineSetlists}
+                                        >
+                                            {i18n("generateSetlist:combineExportAll")}
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                                <div id="setlist-container" className="flex gap-4 mt-2">
+                                    {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
+                                        <div key={index} id="setlist-display" className="w-full animate-fadeIn">
+                                            <AISetlist
+                                                setlist={[setlist]}
+                                                predictionNum={index + 1}
+                                                onExport={handleExport}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
                         )}
                     </div>
 
@@ -111,7 +121,13 @@ export default function AIGenerateSetlist() {
                             }}
                             isOpen={state.exportDialogOpen}
                             predictedSetlist={true}
-                            onClose={handleExportDialogClosed}
+                            onClose={() => {
+                                setState((prev) => ({
+                                    ...prev,
+                                    chosenSetlist: null,
+                                    exportDialogOpen: false
+                                }));
+                            }}
                         />
                     )}
                 </>

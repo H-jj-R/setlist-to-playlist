@@ -125,6 +125,7 @@
         "unknownSong": "Unknown Song"
     },
     "generateSetlist": {
+        "combineExportAll": "Combine & Export All Predicted Setlists",
         "queryLimitReached": "Daily query limit reached. Please try again later.",
         "searchForArtist": "Search for an artist"
     },

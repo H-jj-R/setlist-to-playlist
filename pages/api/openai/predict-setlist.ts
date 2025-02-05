@@ -93,11 +93,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     - Each setlist **must** be distinct:
                     1. **Setlist 1** should be the most likely prediction, closely following recent setlist trends.
                     2. **Setlist 2** should be slightly different but still realistic based on historical patterns.
-                    3. **Setlist 3** should introduce significant variation, such as rare songs or surprises.
+                    3. **Setlist 3** should introduce significant variation, such as rare songs or surprises, but should still be realistically possible.
                     **Formatting & Constraints:**
                     - Do **not** repeat identical setlists.
                     - If a song is a cover, include the original artist's name in the 'artist' field and **not** in the song name.
-                    - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**.
+                    - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**. Do **not** include this in the song name.
                     **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`
                 },
                 {
@@ -106,7 +106,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             ],
             response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
-            temperature: 0.7,
+            temperature: 0.6,
             top_p: 1
         });
 

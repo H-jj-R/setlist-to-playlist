@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 import { PageState } from "@constants/generateSetlistPageState";
+import testJson from "@utils/test1.json";
 
 /**
  * Hook for data handling on the setlist-search page.
  */
 export default function generateSetlistHook() {
-    const router = useRouter();
     const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
@@ -16,6 +15,7 @@ export default function generateSetlistHook() {
         showAuthDialog: false,
         searchTriggered: false,
         searchComplete: false,
+        previousQuery: null as string | null,
         allSetlistsData: [] as Record<string, any>,
         predictedSetlists: null as Record<string, any> | null,
         chosenSetlist: null as Record<string, any> | null,
@@ -32,15 +32,11 @@ export default function generateSetlistHook() {
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    const handleAuthoriseSpotify = () => {
-        router.push(
-            `/api/spotify/authorise?${new URLSearchParams({
-                redirect: window.location.pathname + window.location.search
-            }).toString()}`
-        );
-    };
-
     const handleSearch = async (query: string) => {
+        if (query === state.previousQuery) {
+            return;
+        }
+        setState((prev) => ({ ...prev, previousQuery: query }));
         const response = await fetch("/api/controllers/check-for-authentication", {
             method: "GET",
             credentials: "include"
@@ -69,6 +65,8 @@ export default function generateSetlistHook() {
         setState((prev) => ({ ...prev, showLoading: true }));
 
         try {
+            setState((prev) => ({ ...prev, progress: 0 }));
+            await new Promise((t) => setTimeout(t, 500));
             const queryLimitResponse = await fetch(`/api/database/check-query-limit`, {
                 method: "POST",
                 headers: {
@@ -83,10 +81,7 @@ export default function generateSetlistHook() {
                     error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
                 };
             }
-            setState((prev) => ({
-                ...prev,
-                progress: 10
-            }));
+            setState((prev) => ({ ...prev, progress: 10 }));
 
             const setlistResponse = await fetch(
                 `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
@@ -99,18 +94,16 @@ export default function generateSetlistHook() {
                 };
             }
             const setlistData = await setlistResponse.json();
-            setState((prev) => ({
-                ...prev,
-                allSetlistsData: setlistData,
-                progress: 25
-            }));
+            setState((prev) => ({ ...prev, allSetlistsData: setlistData, progress: 15 }));
 
-            // Simulate gradual progress while waiting for AI response
-            let simulatedProgress = 25;
+            // Simulate gradual progress while waiting for OpenAI API response
+            let simulatedProgress = 15;
             const interval = setInterval(() => {
                 simulatedProgress += 5;
                 setState((prev) => ({ ...prev, progress: simulatedProgress }));
-                if (simulatedProgress >= 95) clearInterval(interval);
+                if (simulatedProgress >= 95) {
+                    clearInterval(interval);
+                }
             }, 600);
 
             const openAIResponse = await fetch("/api/openai/predict-setlist", {
@@ -132,6 +125,8 @@ export default function generateSetlistHook() {
 
             const openAIData = await openAIResponse.json();
             clearInterval(interval);
+            setState((prev) => ({ ...prev, progress: 100 }));
+            await new Promise((t) => setTimeout(t, 500));
             setState((prev) => ({
                 ...prev,
                 predictedSetlists: Object.values(openAIData.predictedSetlists).map(
@@ -165,12 +160,30 @@ export default function generateSetlistHook() {
         }));
     };
 
-    const handleExportDialogClosed = () => {
-        setState((prev) => ({
-            ...prev,
-            chosenSetlist: null,
-            exportDialogOpen: false
-        }));
+    const handleCombineSetlists = async () => {
+        const seenSongs = new Set<string>();
+        const mergedSongs: { name: string; artist: string; tape: boolean }[] = [];
+        const setlistArtist = state.predictedSetlists[0].setlistArtist;
+        const setlistsArray = state.predictedSetlists as Array<{
+            predictedSongs: { name: string; artist: string; tape: boolean }[];
+            setlistArtist: any;
+        }>;
+        const maxLength = Math.max(...state.predictedSetlists.map((s) => s.predictedSongs.length));
+        for (let i = 0; i < maxLength; i++) {
+            for (const setlist of setlistsArray) {
+                if (i < setlist.predictedSongs.length) {
+                    const song = setlist.predictedSongs[i];
+                    if (!seenSongs.has(song.name)) {
+                        seenSongs.add(song.name);
+                        mergedSongs.push(song);
+                    }
+                }
+            }
+        }
+        handleExport({
+            predictedSongs: mergedSongs,
+            setlistArtist
+        });
     };
 
     return {
@@ -179,6 +192,6 @@ export default function generateSetlistHook() {
         setState,
         handleSearch,
         handleExport,
-        handleExportDialogClosed
+        handleCombineSetlists
     };
 }
