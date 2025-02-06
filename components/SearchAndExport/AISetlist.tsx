@@ -48,7 +48,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
     return (
         <div
             id="setlist-container"
-            className="px-5 border-4 border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-9rem)] overflow-y-auto"
+            className="px-5 border-4 border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-12rem)] overflow-y-auto"
         >
             {/* Container for buttons */}
             <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 w-full">

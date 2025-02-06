@@ -6,6 +6,7 @@ import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialog from "@components/Dialogs/MessageDialog";
+import SpotifyAuthDialog from "@components/Dialogs/SpotifyAuthDialog";
 import { MessageDialogState } from "@constants/messageDialogState";
 import userPlaylistHook from "@hooks/userPlaylistHook";
 
@@ -165,6 +166,19 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     </div>
                 )}
             </li>
+
+            {/* Spotify Authorisation dialog */}
+            {state.showAuthDialog && (
+                <SpotifyAuthDialog
+                    onClose={() => {
+                        setState((prev) => ({
+                            ...prev,
+                            showAuthDialog: false
+                        }));
+                    }}
+                ></SpotifyAuthDialog>
+            )}
+
             {/* Confirmation Modal */}
             {state.showConfirmation && (
                 <ConfirmationModal
@@ -177,6 +191,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     }}
                 ></ConfirmationModal>
             )}
+
             {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog

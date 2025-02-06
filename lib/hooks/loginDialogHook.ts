@@ -15,6 +15,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         passwordError: null as string | null,
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
         recaptchaToken: null as string | null,
+        codeInput: null as string | null,
         dialogState: LoginDialogState.Login
     });
 
@@ -53,96 +54,81 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setState((prev) => ({
+            ...prev,
+            messageDialog: {
+                isOpen: true,
+                message: "",
+                type: MessageDialogState.Loading
+            }
+        }));
         const formData = new FormData(e.target as HTMLFormElement);
+
         if (state.dialogState === LoginDialogState.ForgotPassword) {
             const email = formData.get("email") as string;
-
-            const response = await fetch("/api/auth/forgot-password", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email })
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n(data.error),
-                        type: MessageDialogState.Error
-                    }
-                }));
-            } else {
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:passwordResetEmailSent"),
-                        type: MessageDialogState.Success
-                    },
-                    dialogState: LoginDialogState.Login
-                }));
-            }
+            handleForgotPassword(email);
+        } else if (state.dialogState === LoginDialogState.ResetPassword) {
+            handleResetPassword(formData.get("password") as string);
         } else {
             const password = formData.get("password") as string;
             if (state.dialogState === LoginDialogState.SignUp) {
-                // Password validation
-                if (!PASSWORD_REGEX.test(password)) {
-                    setState((prev) => ({
-                        ...prev,
-                        passwordError: i18n("account:passwordError")
-                    }));
+                if (!(await validatePassword(password))) {
                     return;
                 }
             }
-            setState((prev) => ({
-                ...prev,
-                passwordError: null
-            }));
-            const email = formData.get("email") as string;
 
             if (state.dialogState === LoginDialogState.SignUp) {
-                // Ensure the reCAPTCHA token exists
-                if (!state.recaptchaToken) {
-                    setState((prev) => ({
-                        ...prev,
-                        messageDialog: {
-                            isOpen: true,
-                            message: i18n("account:recaptchaNotVerified"),
-                            type: MessageDialogState.Error
-                        }
-                    }));
-                    return;
-                }
-
-                // Verify reCAPTCHA token
-                const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ token: state.recaptchaToken })
-                });
-                const { success } = await recaptchaResponse.json();
-                if (!success) {
-                    setState((prev) => ({
-                        ...prev,
-                        messageDialog: {
-                            isOpen: true,
-                            message: i18n("account:recaptchaNotVerified"),
-                            type: MessageDialogState.Error
-                        }
-                    }));
+                // Verify ReCAPTCHA
+                if (!(await verifyRecaptcha())) {
                     return;
                 }
             }
 
+            const email = formData.get("email") as string;
             if (state.dialogState === LoginDialogState.SignUp) {
                 const username = formData.get("username") as string;
                 await handleSignUp(username, email, password);
             } else {
                 await handleLogin(email, password);
             }
+        }
+    };
+
+    const handleLogin = async (email: string, password: string) => {
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const { token } = await response.json();
+                localStorage?.setItem("authToken", token);
+                onLoginSuccess();
+                onClose();
+            } else {
+                const errorData = await response.json();
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:loginFailed", { message: i18n(errorData.error) }),
+                        type: MessageDialogState.Error
+                    }
+                }));
+            }
+        } catch (error) {
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("errors:unexpectedError"),
+                    type: MessageDialogState.Error
+                }
+            }));
         }
     };
 
@@ -189,42 +175,105 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         }
     };
 
-    const handleLogin = async (email: string, password: string) => {
-        try {
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
+    const validatePassword = async (password: string) => {
+        if (!PASSWORD_REGEX.test(password)) {
+            setState((prev) => ({
+                ...prev,
+                passwordError: i18n("account:passwordError"),
+                messageDialog: {
+                    isOpen: false,
+                    message: "",
+                    type: MessageDialogState.Success
+                }
+            }));
+            return false;
+        }
+        setState((prev) => ({
+            ...prev,
+            passwordError: null
+        }));
+        return true;
+    };
 
-            if (response.ok) {
-                const { token } = await response.json();
-                localStorage?.setItem("authToken", token);
-                onLoginSuccess();
-                onClose();
-            } else {
-                const errorData = await response.json();
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:loginFailed", { message: i18n(errorData.error) }),
-                        type: MessageDialogState.Error
-                    }
-                }));
-            }
-        } catch (error) {
+    const verifyRecaptcha = async () => {
+        // Ensure the reCAPTCHA token exists
+        if (!state.recaptchaToken) {
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("errors:unexpectedError"),
+                    message: i18n("account:recaptchaNotVerified"),
                     type: MessageDialogState.Error
                 }
             }));
+            return false;
         }
+        // Verify reCAPTCHA token
+        const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ token: state.recaptchaToken })
+        });
+        const { success } = await recaptchaResponse.json();
+        if (!success) {
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("account:recaptchaNotVerified"),
+                    type: MessageDialogState.Error
+                }
+            }));
+            return false;
+        }
+        return true;
+    };
+
+    const handleForgotPassword = async (email: string) => {
+        const response = await fetch("/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+        if (!response.ok) {
+            const data = await response.json();
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n(data.error),
+                    type: MessageDialogState.Error
+                }
+            }));
+        } else {
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: false,
+                    message: "",
+                    type: MessageDialogState.Success
+                },
+                dialogState: LoginDialogState.ResetPassword
+            }));
+        }
+    };
+
+    const handleResetPassword = async (newPassword: string) => {
+        // TODO
+        if (!(await validatePassword(newPassword))) {
+            return;
+        }
+        setState((prev) => ({
+            ...prev,
+            messageDialog: {
+                isOpen: true,
+                message: state.codeInput,
+                type: MessageDialogState.Success
+            },
+            dialogState: LoginDialogState.Login
+        }));
     };
 
     return {
