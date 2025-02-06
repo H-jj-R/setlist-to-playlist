@@ -4,5 +4,6 @@
 export enum LoginDialogState {
     Login = "login",
     SignUp = "signUp",
-    ForgotPassword = "forgotPassword"
+    ForgotPassword = "forgotPassword",
+    ResetPassword = "resetPassword"
 }
