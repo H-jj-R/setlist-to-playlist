@@ -85,7 +85,10 @@ export default function About() {
                                 {i18n("about:messageSent")}
                             </p>
                             <button
-                                onClick={() => setSubmitted(false)}
+                                onClick={() => {
+                                    setSubmitted(false);
+                                    setFormData({ name: "", email: "", message: "" });
+                                }}
                                 className="mx-4 px-6 py-3 text-md font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                             >
                                 {i18n("about:submitAnother")}

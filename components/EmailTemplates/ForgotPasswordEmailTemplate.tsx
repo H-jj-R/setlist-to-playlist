@@ -1,21 +1,49 @@
-import React from "react";
+import { Html, Head, Body, Container, Heading, Text } from "@react-email/components";
 
 interface ForgotPasswordEmailTemplateProps {
     code: string;
 }
 
+/**
+ * 
+ */
 const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ code }) => {
     return (
-        <div className="font-sans max-w-lg mx-auto p-6 border border-gray-300 rounded-lg bg-gray-100">
-            <h1 className="text-xl font-bold text-gray-800">Reset Your Password</h1>
-            <p className="text-gray-700 mt-2">You requested a password reset. Use the following code to reset your password:</p>
-            // TODO: Make code bigger on email
-            <div className="text-center my-4 p-3 text-4xl font-mono font-bold text-white bg-blue-600 rounded-lg">
-                {code}
-            </div>
-            <p className="text-gray-700">If you didn't request this, you can safely ignore this email.</p>
-            <p className="text-gray-500 mt-4">This code will expire in 10 minutes.</p>
-        </div>
+        <Html>
+            <Head />
+            <Body style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f3f4f6", padding: "20px" }}>
+                <Container
+                    style={{
+                        maxWidth: "600px",
+                        margin: "0 auto",
+                        backgroundColor: "#ffffff",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        border: "1px solid #ddd"
+                    }}
+                >
+                    <Heading style={{ fontSize: "20px", color: "#333" }}>Reset Your Password</Heading>
+                    <Text style={{ color: "#555" }}>
+                        You requested a password reset. Use the following code to reset your password:
+                    </Text>
+                    <div
+                        style={{
+                            textAlign: "center",
+                            fontSize: "24px",
+                            fontWeight: "bold",
+                            color: "#ffffff",
+                            backgroundColor: "#2563eb",
+                            padding: "10px",
+                            borderRadius: "5px"
+                        }}
+                    >
+                        {code}
+                    </div>
+                    <Text style={{ color: "#555" }}>If you didn't request this, you can safely ignore this email.</Text>
+                    <Text style={{ fontSize: "12px", color: "#888" }}>This code will expire in 10 minutes.</Text>
+                </Container>
+            </Body>
+        </Html>
     );
 };
 

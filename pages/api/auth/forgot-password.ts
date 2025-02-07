@@ -26,10 +26,10 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         if ((existingUser as any[]).length === 0) {
             return res.status(400).json({ error: "account:noAccountLinkedToEmail" });
         }
-        
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // TODO: Put code into database for 10 minutes.
+        // Generate code and put in the database
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        await db.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, code]);
 
         // Send Email
         const { error } = await resend.emails.send({
