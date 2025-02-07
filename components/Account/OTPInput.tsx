@@ -1,13 +1,13 @@
 import React, { useState, ChangeEvent, KeyboardEvent, FocusEvent } from "react";
 
 interface OTPInputProps {
-    setCodeInput: (code: string) => void;
+    setOtpInput: (otp: string) => void;
 }
 
 /**
  *
  */
-const OTPInput: React.FC<OTPInputProps> = ({ setCodeInput }) => {
+const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
     const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number): void => {
@@ -19,7 +19,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setCodeInput }) => {
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
-        setCodeInput(newOtp.join(""));
+        setOtpInput(newOtp.join(""));
 
         // Move focus to next input if current one is filled
         if (value && index < otp.length - 1) {
@@ -50,6 +50,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setCodeInput }) => {
                     onFocus={(e) => handleFocus(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     maxLength={1}
+                    required
                     className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     autoComplete="one-time-code"
                 />

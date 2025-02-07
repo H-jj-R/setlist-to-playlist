@@ -15,7 +15,8 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         passwordError: null as string | null,
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
         recaptchaToken: null as string | null,
-        codeInput: null as string | null,
+        otpInput: null as string | null,
+        storedEmail: null as string | null,
         dialogState: LoginDialogState.Login
     });
 
@@ -255,6 +256,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     message: "",
                     type: MessageDialogState.Success
                 },
+                storedEmail: email,
                 dialogState: LoginDialogState.ResetPassword
             }));
         }
@@ -265,17 +267,47 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
             return;
         }
 
-        // TODO
-        
-        setState((prev) => ({
-            ...prev,
-            messageDialog: {
-                isOpen: true,
-                message: state.codeInput,
-                type: MessageDialogState.Success
-            },
-            dialogState: LoginDialogState.Login
-        }));
+        try {
+            const response = await fetch("/api/auth/reset-password", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: state.storedEmail, otp: state.otpInput, newPassword })
+            });
+
+            if (response.ok) {
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:resetPasswordSuccess"),
+                        type: MessageDialogState.Success
+                    },
+                    storedEmail: null,
+                    dialogState: LoginDialogState.Login
+                }));
+            } else {
+                const errorData = await response.json();
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: {
+                        isOpen: true,
+                        message: i18n("account:resetPasswordFailed", { message: i18n(errorData.error) }),
+                        type: MessageDialogState.Error
+                    }
+                }));
+            }
+        } catch (error) {
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: i18n("errors:unexpectedError"),
+                    type: MessageDialogState.Error
+                }
+            }));
+        }
     };
 
     return {

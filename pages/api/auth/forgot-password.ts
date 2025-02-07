@@ -3,12 +3,10 @@ import { Resend } from "resend";
 import ForgotPasswordEmailTemplate from "@components/EmailTemplates/ForgotPasswordEmailTemplate";
 import db from "@constants/db";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 /**
  * API handler to send email to a user who has forgotten their password.
  */
-export default async function signup(req: NextApiRequest, res: NextApiResponse) {
+export default async function forgotPassword(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "errors:methodNotAllowed" });
     }
@@ -27,11 +25,17 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
             return res.status(400).json({ error: "account:noAccountLinkedToEmail" });
         }
 
-        // Generate code and put in the database
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        await db.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, code]);
+        // Generate random 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Remove any existing OTP for this email
+        await db.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
+
+        // Insert new OTP into the database
+        await db.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
 
         // Send Email
+        const resend = new Resend(process.env.RESEND_API_KEY!);
         const { error } = await resend.emails.send({
             headers: {
                 "X-Entity-Ref-ID": `ref-${Date.now()}`
@@ -39,7 +43,7 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
             from: "Setlist to Playlist <account.management@setlist-to-playlist.com>",
             to: [email],
             subject: "Forgot Password - Setlist to Playlist",
-            react: ForgotPasswordEmailTemplate({ code })
+            react: ForgotPasswordEmailTemplate({ otp })
         });
 
         if (error) {

@@ -1,13 +1,13 @@
 import { Html, Head, Body, Container, Heading, Text } from "@react-email/components";
 
 interface ForgotPasswordEmailTemplateProps {
-    code: string;
+    otp: string;
 }
 
 /**
- * 
+ *
  */
-const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ code }) => {
+const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ otp }) => {
     return (
         <Html>
             <Head />
@@ -37,7 +37,7 @@ const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = 
                             borderRadius: "5px"
                         }}
                     >
-                        {code}
+                        {otp}
                     </div>
                     <Text style={{ color: "#555" }}>If you didn't request this, you can safely ignore this email.</Text>
                     <Text style={{ fontSize: "12px", color: "#888" }}>This code will expire in 10 minutes.</Text>

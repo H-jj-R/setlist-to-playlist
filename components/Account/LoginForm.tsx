@@ -102,10 +102,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                     <>
                         <p className="flex justify-center text-center">{i18n("account:resetPasswordMessage")}</p>
                         <OTPInput
-                            setCodeInput={(code) => {
+                            setOtpInput={(otp) => {
                                 setState((prev) => ({
                                     ...prev,
-                                    codeInput: code
+                                    otpInput: otp
                                 }));
                             }}
                         ></OTPInput>
