@@ -261,10 +261,12 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     };
 
     const handleResetPassword = async (newPassword: string) => {
-        // TODO
         if (!(await validatePassword(newPassword))) {
             return;
         }
+
+        // TODO
+        
         setState((prev) => ({
             ...prev,
             messageDialog: {
