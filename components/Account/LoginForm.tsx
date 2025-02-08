@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React from "react";
 import { useTranslation } from "react-i18next";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -22,21 +28,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
 
     return (
         <>
-            <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">
+            <h2 id="login-form-title" className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">
                 {state.dialogState === LoginDialogState.Login
                     ? i18n("account:login")
                     : state.dialogState === LoginDialogState.SignUp
-                    ? i18n("account:signUp")
-                    : state.dialogState === LoginDialogState.ForgotPassword
-                    ? i18n("account:forgotPasswordTitle")
-                    : state.dialogState === LoginDialogState.ResetPassword
-                    ? i18n("account:resetPassword")
-                    : ""}
+                      ? i18n("account:signUp")
+                      : state.dialogState === LoginDialogState.ForgotPassword
+                        ? i18n("account:forgotPasswordTitle")
+                        : state.dialogState === LoginDialogState.ResetPassword
+                          ? i18n("account:resetPassword")
+                          : ""}
             </h2>
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <form id="login-form" className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 {state.dialogState === LoginDialogState.SignUp && (
-                    <div className="relative">
+                    <div id="username-input-container" className="relative">
                         <input
+                            id="username-input"
                             name="username"
                             type="text"
                             placeholder={i18n("account:username")}
@@ -46,6 +53,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                             className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
                         />
                         <FontAwesomeIcon
+                            id="fa-user-circle-icon"
                             icon={faUserCircle}
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                         />
@@ -54,8 +62,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                 {(state.dialogState === LoginDialogState.Login ||
                     state.dialogState === LoginDialogState.SignUp ||
                     state.dialogState === LoginDialogState.ForgotPassword) && (
-                    <div className="relative">
+                    <div id="email-input-container" className="relative">
                         <input
+                            id="email-input"
                             name="email"
                             type="email"
                             placeholder={i18n("common:email")}
@@ -65,14 +74,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                             className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
                         />
                         <FontAwesomeIcon
+                            id="fa-envelope-icon"
                             icon={faEnvelope}
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                         />
                     </div>
                 )}
                 {(state.dialogState === LoginDialogState.Login || state.dialogState === LoginDialogState.SignUp) && (
-                    <div className="relative">
+                    <div id="password-input-container" className="relative">
                         <input
+                            id="password-input"
                             name="password"
                             type={state.passwordVisible ? "text" : "password"}
                             placeholder={i18n("account:password")}
@@ -81,16 +92,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                             className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
                         />
                         <FontAwesomeIcon
+                            id="fa-lock-icon"
                             icon={faLock}
                             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                         />
                         <button
+                            id="toggle-password-visibility-btn"
                             type="button"
                             onClick={() => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    passwordVisible: !state.passwordVisible
-                                }));
+                                setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                             }}
                             className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-500 pr-2"
                         >
@@ -100,17 +110,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                 )}
                 {state.dialogState === LoginDialogState.ResetPassword && (
                     <>
-                        <p className="flex justify-center text-center">{i18n("account:resetPasswordMessage")}</p>
+                        <p id="reset-password-message" className="flex justify-center text-center">
+                            {i18n("account:resetPasswordMessage")}
+                        </p>
                         <OTPInput
-                            setCodeInput={(code) => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    codeInput: code
-                                }));
+                            setOtpInput={(otp) => {
+                                setState((prev) => ({ ...prev, otpInput: otp }));
                             }}
-                        ></OTPInput>
-                        <div className="relative">
+                        />
+                        <div id="new-password-input-container" className="relative">
                             <input
+                                id="new-password-input"
                                 name="password"
                                 type={state.passwordVisible ? "text" : "password"}
                                 placeholder={i18n("account:newPassword")}
@@ -119,10 +129,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                                 className="px-4 py-3 border border-gray-300 rounded-lg text-lg w-full transition duration-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none pl-10"
                             />
                             <FontAwesomeIcon
+                                id="fa-lock-icon"
                                 icon={faLock}
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pl-1"
                             />
                             <button
+                                id="toggle-new-password-visibility"
                                 type="button"
                                 onClick={() => {
                                     setState((prev) => ({
@@ -137,25 +149,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                         </div>
                     </>
                 )}
-                {state.passwordError && <div className="text-red-500 text-sm">{state.passwordError}</div>}
-                {state.dialogState === LoginDialogState.Login && (
-                    <div className="flex justify-center">
-                        <p
-                            className="inline-block text-md text-center cursor-pointer text-blue-500 hover:underline"
-                            onClick={() => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    dialogState: LoginDialogState.ForgotPassword
-                                }));
-                            }}
-                        >
-                            {i18n("account:forgotPassword")}
-                        </p>
+                {state.passwordError && (
+                    <div id="password-error" className="text-red-500 text-sm">
+                        {state.passwordError}
                     </div>
                 )}
                 {state.dialogState === LoginDialogState.SignUp && (
-                    <div className="flex justify-center">
+                    <div id="recaptcha-container" className="flex justify-center">
                         <ReCAPTCHA
+                            id="recaptcha"
                             sitekey={RECAPTCHA_SITE_KEY}
                             onChange={(token) => {
                                 setState((prev) => ({
@@ -172,21 +174,39 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                         />
                     </div>
                 )}
+                {state.dialogState === LoginDialogState.Login && (
+                    <div id="forgot-password-link-container" className="flex justify-center">
+                        <p
+                            id="forgot-password-link"
+                            className="inline-block text-md text-center cursor-pointer text-blue-500 hover:underline"
+                            onClick={() => {
+                                setState((prev) => ({
+                                    ...prev,
+                                    dialogState: LoginDialogState.ForgotPassword
+                                }));
+                            }}
+                        >
+                            {i18n("account:forgotPassword")}
+                        </p>
+                    </div>
+                )}
                 <button
+                    id="submit-btn"
                     type="submit"
                     className="bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white px-4 py-3 rounded-lg text-lg transition duration-300 focus:outline-none"
                 >
                     {state.dialogState === LoginDialogState.Login
                         ? i18n("account:login")
                         : state.dialogState === LoginDialogState.SignUp
-                        ? i18n("account:signUp")
-                        : i18n("account:resetPassword")}
+                          ? i18n("account:signUp")
+                          : i18n("account:resetPassword")}
                 </button>
             </form>
-            <div className="flex justify-center">
+            <div id="back-to-login-container" className="flex justify-center">
                 {(state.dialogState === LoginDialogState.ForgotPassword ||
                     state.dialogState === LoginDialogState.ResetPassword) && (
                     <p
+                        id="back-to-login-link"
                         className="inline-block text-md text-center mt-2 pt-2 cursor-pointer text-blue-500 hover:underline"
                         onClick={() => {
                             setState((prev) => ({
@@ -200,17 +220,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, state, setState }) 
                 )}
                 {(state.dialogState === LoginDialogState.Login || state.dialogState === LoginDialogState.SignUp) && (
                     <p
+                        id="switch-login-signup-link"
                         className="inline-block text-md text-center mt-2 pt-2 cursor-pointer text-blue-500 hover:underline"
                         onClick={() => {
                             state.dialogState === LoginDialogState.Login
-                                ? setState((prev) => ({
-                                      ...prev,
-                                      dialogState: LoginDialogState.SignUp
-                                  }))
-                                : setState((prev) => ({
-                                      ...prev,
-                                      dialogState: LoginDialogState.Login
-                                  }));
+                                ? setState((prev) => ({ ...prev, dialogState: LoginDialogState.SignUp }))
+                                : setState((prev) => ({ ...prev, dialogState: LoginDialogState.Login }));
                         }}
                     >
                         {state.dialogState === LoginDialogState.SignUp

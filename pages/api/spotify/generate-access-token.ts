@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
@@ -25,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "errors:spotifyGenerateAccessTokenError"
+                error: "common:spotifyGenerateAccessTokenError"
             });
         }
 
@@ -61,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

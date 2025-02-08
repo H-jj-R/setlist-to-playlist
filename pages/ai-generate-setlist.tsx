@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Layout from "@components/Shared/Layout";
@@ -108,7 +114,7 @@ export default function AIGenerateSetlist() {
                                     showAuthDialog: false
                                 }));
                             }}
-                        ></SpotifyAuthDialog>
+                        />
                     )}
 
                     {/* Export Dialog */}

@@ -1,16 +1,20 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 import ForgotPasswordEmailTemplate from "@components/EmailTemplates/ForgotPasswordEmailTemplate";
 import db from "@constants/db";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 /**
  * API handler to send email to a user who has forgotten their password.
  */
-export default async function signup(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "errors:methodNotAllowed" });
+        return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
     const { email } = req.body;
@@ -27,17 +31,25 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
             return res.status(400).json({ error: "account:noAccountLinkedToEmail" });
         }
 
-        // TODO: Send link / code that allows password reset.
+        // Generate random 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Remove any existing OTP for this email
+        await db.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
+
+        // Insert new OTP into the database
+        await db.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
 
         // Send Email
+        const resend = new Resend(process.env.RESEND_API_KEY!);
         const { error } = await resend.emails.send({
             headers: {
-                "X-Entity-Ref-ID": `${Date.now()}`
+                "X-Entity-Ref-ID": `ref-${Date.now()}`
             },
             from: "Setlist to Playlist <account.management@setlist-to-playlist.com>",
             to: [email],
             subject: "Forgot Password - Setlist to Playlist",
-            react: ForgotPasswordEmailTemplate({ email })
+            react: ForgotPasswordEmailTemplate({ otp })
         });
 
         if (error) {
@@ -47,6 +59,6 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "errors:internalServerError" });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
@@ -45,7 +51,7 @@ export default function UserPlaylists() {
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError")
                 };
             }
 

@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
@@ -12,13 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!encryptedAccessToken) {
         return res.status(401).json({
-            error: "errors:spotifyAccessTokenError"
+            error: "common:spotifyAccessTokenError"
         });
     }
 
     if (!trackIds) {
         return res.status(400).json({
-            error: "errors:missingTrackIds"
+            error: "userPlaylists:missingTrackIds"
         });
     }
 
@@ -36,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "errors:spotifyFetchTracksError",
+                error: "common:spotifyFetchTracksError",
                 message: await response.json()
             });
         }
@@ -46,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

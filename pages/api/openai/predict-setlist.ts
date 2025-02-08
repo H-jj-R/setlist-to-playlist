@@ -1,13 +1,15 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
 
 const ISACTIVE = true;
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY!
-});
 
 // Define the schema for the predicted setlists
 const PredictedSetlistSchema = z.object({
@@ -45,7 +47,7 @@ const PredictedSetlistSchema = z.object({
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!ISACTIVE) {
         res.status(500).json({
-            error: "errors:openaiDisabled"
+            error: "generateSetlist:openaiDisabled"
         });
     }
 
@@ -81,6 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .join("\n");
 
         // Send the request to GPT-4o-mini with a structured response format
+        const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
         const completion = await openai.beta.chat.completions.parse({
             model: "gpt-4o-mini",
             messages: [
@@ -118,7 +121,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:predictSetlistFailed"
+            error: "generateSetlist:predictSetlistFailed"
         });
     }
 }

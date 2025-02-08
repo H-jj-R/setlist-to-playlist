@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React from "react";
 import { useTranslation } from "react-i18next";
 import MessageDialog from "@components/Dialogs/MessageDialog";
@@ -39,7 +45,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         onClose();
                         resetState();
                     }}
-                ></div>
+                />
 
                 {/* Dialog Box */}
                 <div

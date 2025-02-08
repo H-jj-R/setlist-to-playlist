@@ -1,4 +1,10 @@
 /**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
+/**
  * Formats location data into a human-readable string.
  *
  * @param {Record<string, any>} setlist - The setlist, which will contain the location info.

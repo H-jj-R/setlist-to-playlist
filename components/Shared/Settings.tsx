@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -158,9 +164,18 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     </label>
                 </div>
                 {/* About + Support Link */}
-                <div className="text-lg absolute bottom-8 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
+                <div className="text-lg absolute bottom-16 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
                     <Link href="/about" className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer">
                         {i18n("about:aboutSupport")}
+                    </Link>
+                </div>
+                {/* Privacy Policy Link */}
+                <div className="text-lg absolute bottom-6 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
+                    <Link
+                        href="/privacy-policy"
+                        className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+                    >
+                        {i18n("privacyPolicy:privacyPolicy")}
                     </Link>
                 </div>
             </div>

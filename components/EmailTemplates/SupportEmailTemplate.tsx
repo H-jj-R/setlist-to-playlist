@@ -1,4 +1,10 @@
-import React from "react";
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
+import { Html, Head, Body, Container, Heading, Text, Section } from "@react-email/components";
 
 interface SupportEmailTemplateProps {
     email: string;
@@ -10,17 +16,55 @@ interface SupportEmailTemplateProps {
  */
 const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }) => {
     return (
-        <div className="font-sans max-w-lg mx-auto p-5 border border-gray-300 rounded-lg bg-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-blue-500 pb-2">Support/Feedback</h2>
-            <p className="text-md text-gray-700 mt-4">
-                <strong>From:</strong> {email}
-            </p>
-            <div className="bg-white p-5 rounded-lg shadow-md mt-3">
-                <p className="text-md text-gray-900 whitespace-pre-wrap">
-                    <strong>Message:</strong> {message}
-                </p>
-            </div>
-        </div>
+        <Html>
+            <Head />
+            <Body
+                style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f3f4f6", padding: "20px" }}
+                role="document"
+            >
+                <Container
+                    style={{
+                        maxWidth: "600px",
+                        margin: "0 auto",
+                        backgroundColor: "#ffffff",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        border: "1px solid #ddd"
+                    }}
+                >
+                    <Heading
+                        as="h2"
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "600",
+                            color: "#333",
+                            borderBottom: "2px solid #2563eb",
+                            paddingBottom: "8px"
+                        }}
+                    >
+                        Support/Feedback
+                    </Heading>
+
+                    <Text style={{ fontSize: "16px", color: "#555", marginTop: "16px" }}>
+                        <strong>From:</strong> {email}
+                    </Text>
+
+                    <Section
+                        style={{
+                            backgroundColor: "#ffffff",
+                            padding: "16px",
+                            borderRadius: "6px",
+                            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                            marginTop: "12px"
+                        }}
+                    >
+                        <Text style={{ fontSize: "16px", color: "#333", whiteSpace: "pre-wrap" }}>
+                            <strong>Message:</strong> {message}
+                        </Text>
+                    </Section>
+                </Container>
+            </Body>
+        </Html>
     );
 };
 

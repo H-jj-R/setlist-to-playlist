@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -27,7 +33,7 @@ const HeaderBar: React.FC = () => {
                     <Link href="/" id="site-logo-link" className="hover:text-gray-300 flex items-center">
                         <img id="site-logo" src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
                         <span id="site-title" className="text-lg font-bold ml-2">
-                            {i18n("common:siteTitle")}
+                            Setlist to Playlist
                         </span>
                     </Link>
                 </div>

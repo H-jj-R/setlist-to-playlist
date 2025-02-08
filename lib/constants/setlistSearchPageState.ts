@@ -1,9 +1,15 @@
 /**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
+/**
  * Enum for handling state of setlist-search page.
  */
 export enum PageState {
-    Idle = "idle",
-    ListOfSetlists = "listOfSetlists",
-    LosSetlist = "losSetlist",
-    Setlist = "setlist"
+    Idle,
+    ListOfSetlists,
+    LosSetlist,
+    Setlist
 }

@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { SettingsKeys } from "@constants/settingsKeys";
@@ -69,7 +75,7 @@ export default function setlistSongsExportHook(
                 if (!response.ok) {
                     throw {
                         status: response.status,
-                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                        error: i18n(responseJson.error) || i18n("common:unexpectedError")
                     };
                 }
                 setState((prev) => ({

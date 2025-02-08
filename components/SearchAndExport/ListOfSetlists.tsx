@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SetlistChoiceBlock from "@components/SearchAndExport/SetlistChoiceBlock";
@@ -60,6 +66,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     }, []);
 
     const hasMorePages = state.currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    
     const loadMoreSetlists = async () => {
         setState((prev) => ({
             ...prev,
@@ -76,7 +83,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
                 };
             }
 

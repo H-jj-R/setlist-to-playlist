@@ -1,6 +1,11 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { ReactNode } from "react";
 import Head from "next/head";
-import { useTranslation } from "react-i18next";
 import HeaderBar from "@components/Shared/HeaderBar";
 
 interface LayoutProps {
@@ -11,12 +16,10 @@ interface LayoutProps {
  * Layout for all pages - for common components.
  */
 const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
-    const { t: i18n } = useTranslation();
-
     return (
         <div id="main-container" className="h-screen flex flex-col">
             <Head>
-                <title>{i18n("common:siteTitle")}</title>
+                <title>Setlist to Playlist</title>
             </Head>
             <HeaderBar />
             <main id="main-content" className="flex-grow overflow-auto flex flex-col">

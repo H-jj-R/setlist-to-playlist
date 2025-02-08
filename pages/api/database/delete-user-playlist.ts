@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import db from "@constants/db";
@@ -7,12 +13,12 @@ import db from "@constants/db";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "errors:methodNotAllowed" });
+        return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-        return res.status(401).json({ error: "errors:authorisationError" });
+        return res.status(401).json({ error: "common:authorisationError" });
     }
 
     try {
@@ -22,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const { playlistId } = req.query;
         if (!playlistId) {
-            return res.status(400).json({ error: "errors:missingPlaylistId" });
+            return res.status(400).json({ error: "userPlaylists:missingParameters" });
         }
 
         // Update the playlist to set deleted = true
@@ -36,12 +42,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "errors:playlistNotFoundOrUnauthorized" });
+            return res.status(404).json({ error: "userPlaylists:playlistNotFound" });
         }
 
         res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "errors:internalServerError" });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

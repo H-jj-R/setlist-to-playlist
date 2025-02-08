@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
@@ -72,7 +78,7 @@ export default function setlistSearchHook() {
             const errorResponse = await response.json();
             throw {
                 status: response.status,
-                error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                error: i18n(errorResponse.error) || i18n("common:unexpectedError")
             };
         }
         return await response.json();

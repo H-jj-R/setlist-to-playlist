@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
@@ -126,7 +132,7 @@ export default function exportDialogHook({
                     ...prev,
                     messageDialog: {
                         isOpen: true,
-                        message: i18n("errors:invalidFileType"),
+                        message: i18n("exportSetlist:invalidFileType"),
                         type: MessageDialogState.Error
                     }
                 }));
@@ -161,14 +167,14 @@ export default function exportDialogHook({
             if (!state.playlistName.trim()) {
                 throw {
                     status: 400,
-                    error: i18n("errors:noNameProvided")
+                    error: i18n("exportSetlist:noNameProvided")
                 };
             }
 
             if (state.spotifySongs.length === 0) {
                 throw {
                     status: 400,
-                    error: i18n("errors:noSongsProvided")
+                    error: i18n("exportSetlist:noSongsProvided")
                 };
             }
 
@@ -178,7 +184,7 @@ export default function exportDialogHook({
                 if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
                     throw {
                         status: 400,
-                        error: i18n("errors:errorProcessingImage")
+                        error: i18n("exportSetlist:errorProcessingImage")
                     };
                 }
             }
@@ -202,7 +208,7 @@ export default function exportDialogHook({
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
                 };
             }
 
