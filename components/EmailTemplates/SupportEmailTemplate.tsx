@@ -18,7 +18,10 @@ const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ e
     return (
         <Html>
             <Head />
-            <Body style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f3f4f6", padding: "20px" }}>
+            <Body
+                style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f3f4f6", padding: "20px" }}
+                role="document"
+            >
                 <Container
                     style={{
                         maxWidth: "600px",

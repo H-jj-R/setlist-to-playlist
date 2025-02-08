@@ -33,8 +33,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
 
     return (
         <>
-            <li className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
-                <div className="flex justify-between items-center">
+            <li id="user-playlist-item" className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
+                <div id="user-playlist-container" className="flex justify-between items-center">
                     {!state.editing ? (
                         <>
                             <div className="w-10/12 flex items-center">
@@ -43,8 +43,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                     <p className="text-gray-400">{state.description}</p>
                                 </div>
                             </div>
-
-                            {/* Wrap edit button and recovery/delete buttons in a flex container */}
                             <div className="flex items-center space-x-4">
                                 {/* Edit Button */}
                                 <button
@@ -182,7 +180,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                             showAuthDialog: false
                         }));
                     }}
-                ></SpotifyAuthDialog>
+                />
             )}
 
             {/* Confirmation Modal */}
@@ -195,7 +193,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                             showConfirmation: false
                         }));
                     }}
-                ></ConfirmationModal>
+                />
             )}
 
             {/* Message Dialog */}
@@ -216,7 +214,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                               }))
                             : state.messageDialog.onClose();
                     }}
-                ></MessageDialog>
+                />
             )}
         </>
     );

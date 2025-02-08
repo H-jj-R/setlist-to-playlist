@@ -85,14 +85,14 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                                 predictedSetlist
                                                     ? setlist?.predictedSongs?.[idx]?.name ||
                                                       i18n("exportSetlist:unknownSong")
-                                                    : (setlist?.sets?.set?.flatMap((set) => set.song) ?? [])[
+                                                    : ((setlist?.sets?.set?.flatMap((set) => set.song) ?? [])[
                                                           setlist?.sets?.set?.[0]?.song?.[0]?.name !== ""
                                                               ? idx
                                                               : idx + 1
-                                                      ]?.name ?? i18n("exportSetlist:unknownSong")
+                                                      ]?.name ?? i18n("exportSetlist:unknownSong"))
                                             }`}
                                             small={true}
-                                        ></ErrorMessage>
+                                        />
                                     </li>
                                 )
                             )

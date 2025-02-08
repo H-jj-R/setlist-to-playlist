@@ -35,7 +35,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                         state.isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
                     onClick={handleClose}
-                ></div>
+                />
 
                 {/* Dialog Box */}
                 <div
@@ -59,7 +59,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
 
                         {/* Login Form */}
                         <div id="login-form-container">
-                            <LoginForm handleSubmit={handleSubmit} state={state} setState={setState}></LoginForm>
+                            <LoginForm handleSubmit={handleSubmit} state={state} setState={setState} />
                         </div>
                     </div>
                 </div>

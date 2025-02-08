@@ -114,7 +114,7 @@ export default function AIGenerateSetlist() {
                                     showAuthDialog: false
                                 }));
                             }}
-                        ></SpotifyAuthDialog>
+                        />
                     )}
 
                     {/* Export Dialog */}

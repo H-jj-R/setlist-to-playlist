@@ -22,18 +22,18 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, type, onClose })
     return (
         <div id="dialog-container" className="fixed inset-0 flex items-center justify-center z-50">
             <div
-                id="overlay"
+                id="background-overlay"
                 className="absolute inset-0 bg-black bg-opacity-50"
                 onClick={type === MessageDialogState.Loading ? undefined : onClose}
-            ></div>
+            />
             <div
                 id="dialog-box"
                 className={`relative bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-1/3 max-w-md text-center ${
                     type === MessageDialogState.Success
                         ? "border-green-500"
                         : type === MessageDialogState.Error
-                        ? "border-red-500"
-                        : "border-blue-500"
+                          ? "border-red-500"
+                          : "border-blue-500"
                 } border`}
             >
                 <h2
@@ -42,15 +42,15 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, type, onClose })
                         type === MessageDialogState.Success
                             ? "text-green-500"
                             : type === MessageDialogState.Error
-                            ? "text-red-500"
-                            : "text-blue-500"
+                              ? "text-red-500"
+                              : "text-blue-500"
                     }`}
                 >
                     {type === MessageDialogState.Success
                         ? i18n("common:success")
                         : type === MessageDialogState.Error
-                        ? i18n("common:error")
-                        : `${i18n("common:loading")}...`}
+                          ? i18n("common:error")
+                          : `${i18n("common:loading")}...`}
                 </h2>
                 <span id="dialog-message" className="text-gray-700 dark:text-gray-300">
                     {type === MessageDialogState.Loading ? (

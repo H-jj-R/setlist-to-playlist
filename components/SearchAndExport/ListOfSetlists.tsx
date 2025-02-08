@@ -66,6 +66,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
     }, []);
 
     const hasMorePages = state.currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    
     const loadMoreSetlists = async () => {
         setState((prev) => ({
             ...prev,

@@ -45,7 +45,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         onClose();
                         resetState();
                     }}
-                ></div>
+                />
 
                 {/* Dialog Box */}
                 <div

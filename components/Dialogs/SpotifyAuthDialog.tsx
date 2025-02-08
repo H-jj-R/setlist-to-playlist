@@ -15,7 +15,7 @@ interface SpotifyAuthDialogProps {
 }
 
 /**
- * 
+ *
  */
 const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
     const { t: i18n } = useTranslation();
@@ -31,7 +31,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
 
     return (
         <div id="dialog-container" className="fixed inset-0 flex items-center justify-center z-50">
-            <div id="overlay" className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+            <div id="background-overlay" className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
             <div
                 id="dialog-box"
                 className={

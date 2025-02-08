@@ -42,6 +42,8 @@ const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = 
                             padding: "10px",
                             borderRadius: "5px"
                         }}
+                        role="alert"
+                        aria-live="assertive"
                     >
                         {otp}
                     </div>

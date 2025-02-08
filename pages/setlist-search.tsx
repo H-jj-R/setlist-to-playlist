@@ -109,7 +109,7 @@ export default function SetlistSearch() {
                             showAuthDialog: false
                         }));
                     }}
-                ></SpotifyAuthDialog>
+                />
             )}
 
             {/* Export Dialog */}

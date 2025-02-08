@@ -17,7 +17,7 @@ const HeroSection: React.FC = () => {
     return (
         <div
             id="landing-page-hero"
-            className="h-1/3 flex-shrink-0 bg-gradient-to-r from-pink-600 to-orange-500 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10"
+            className="flex-grow min-h-[33.333333%] bg-gradient-to-r from-pink-600 to-orange-500 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10"
         >
             <div id="landing-page-text" className="mb-6 lg:mb-0 text-center lg:text-left lg:w-1/2">
                 <h1 id="landing-page-title" className="text-4xl font-extrabold mb-4">

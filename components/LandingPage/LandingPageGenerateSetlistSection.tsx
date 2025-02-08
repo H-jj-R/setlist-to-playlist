@@ -17,7 +17,7 @@ const GenerateSetlistSection: React.FC = () => {
     return (
         <div
             id="generate-setlist-hero"
-            className="h-1/3 flex-shrink-0 bg-gradient-to-r from-sky-500 to-purple-700 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10"
+            className="flex-grow min-h-[33.333333%] bg-gradient-to-r from-sky-500 to-purple-700 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10"
         >
             <div id="generate-setlist-button-container" className="order-last lg:order-first lg:ml-auto lg:mr-auto">
                 <button

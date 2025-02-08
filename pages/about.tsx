@@ -137,7 +137,7 @@ export default function About() {
                                     className="w-full p-2 mt-1 border rounded bg-gray-100 dark:bg-gray-800 dark:text-white resize-none overflow-hidden"
                                     rows={4}
                                     required
-                                ></textarea>
+                                />
                                 <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
                                     {formData.message.length}/{MAX_MESSAGE_LENGTH}
                                 </div>
