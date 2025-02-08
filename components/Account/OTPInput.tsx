@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import React, { useState, ChangeEvent, KeyboardEvent, FocusEvent } from "react";
+import React, { useState, ChangeEvent, KeyboardEvent, FocusEvent, ClipboardEvent } from "react";
 
 interface OTPInputProps {
     setOtpInput: (otp: string) => void;
@@ -33,35 +33,60 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
         }
     };
 
-    const handleFocus = (e: FocusEvent<HTMLInputElement>, index: number): void => {
-        // TODO: Prevent focus if the previous input is empty
+    const handlePaste = (e: ClipboardEvent<HTMLInputElement>, index: number): void => {
+        e.preventDefault();
+        if (index !== 0) {
+            return;
+        }
+        const pastedData = e.clipboardData.getData("text").trim();
+        if (!/^\d{6}$/.test(pastedData)) {
+            return;
+        }
+
+        const newOtp = pastedData.split("");
+        setOtp(newOtp);
+        setOtpInput(newOtp.join(""));
+
+        // Move focus to the last filled input
+        document.getElementById(`otp-input-${newOtp.length - 1}`)?.focus();
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number): void => {
         // Move focus to previous input if current is empty
         if (e.key === "Backspace" && !otp[index] && index > 0) {
             document.getElementById(`otp-input-${index - 1}`)?.focus();
+        } else if (e.key === "ArrowLeft" && index > 0) {
+            e.preventDefault();
+            document.getElementById(`otp-input-${index - 1}`)?.focus();
+        } else if (e.key === "ArrowRight" && index < otp.length - 1) {
+            e.preventDefault();
+            document.getElementById(`otp-input-${index + 1}`)?.focus();
         }
     };
 
     return (
-        <div className="flex justify-center space-x-2">
-            {otp.map((digit, index) => (
-                <input
-                    key={index}
-                    id={`otp-input-${index}`}
-                    type="text"
-                    value={digit}
-                    onChange={(e) => handleChange(e, index)}
-                    onFocus={(e) => handleFocus(e, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    maxLength={1}
-                    required
-                    className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    autoComplete="one-time-code"
-                />
-            ))}
-        </div>
+        <fieldset>
+            <legend className="sr-only">Enter the OTP code</legend>
+            <div className="flex justify-center space-x-2">
+                {otp.map((digit, index) => (
+                    <input
+                        key={index}
+                        id={`otp-input-${index}`}
+                        type="tel"
+                        value={digit}
+                        onChange={(e) => handleChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onPaste={(e) => handlePaste(e, index)}
+                        maxLength={1}
+                        required
+                        className="w-12 h-12 text-center text-xl border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoComplete="one-time-code"
+                        aria-label={`Digit ${index + 1} of OTP`}
+                        aria-required="true"
+                    />
+                ))}
+            </div>
+        </fieldset>
     );
 };
 
