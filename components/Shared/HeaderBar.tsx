@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";

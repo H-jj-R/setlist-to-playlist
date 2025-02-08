@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 import ForgotPasswordEmailTemplate from "@components/EmailTemplates/ForgotPasswordEmailTemplate";
@@ -6,7 +12,7 @@ import db from "@constants/db";
 /**
  * API handler to send email to a user who has forgotten their password.
  */
-export default async function forgotPassword(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "common:methodNotAllowed" });
     }

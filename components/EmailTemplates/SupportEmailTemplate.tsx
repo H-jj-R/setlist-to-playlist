@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { Html, Head, Body, Container, Heading, Text, Section } from "@react-email/components";
 
 interface SupportEmailTemplateProps {

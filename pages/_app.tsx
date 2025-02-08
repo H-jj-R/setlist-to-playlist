@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@context/AuthContext";

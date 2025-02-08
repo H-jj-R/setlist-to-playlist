@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { useEffect, useState } from "react";
 import Layout from "@components/Shared/Layout";
 import { useTheme } from "next-themes";

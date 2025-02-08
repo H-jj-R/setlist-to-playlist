@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React from "react";
 import { useTranslation } from "react-i18next";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";

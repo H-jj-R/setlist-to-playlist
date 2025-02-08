@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "@utils/getBaseUrl";
 

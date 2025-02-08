@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { useState, ChangeEvent, KeyboardEvent, FocusEvent } from "react";
 
 interface OTPInputProps {

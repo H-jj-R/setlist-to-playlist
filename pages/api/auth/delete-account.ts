@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import db from "@constants/db";
@@ -5,7 +11,7 @@ import db from "@constants/db";
 /**
  * API handler to delete a user account.
  */
-export default async function deleteAccount(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
         return res.status(405).json({ error: "common:methodNotAllowed" });
     }

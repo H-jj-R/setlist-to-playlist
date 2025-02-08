@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import HeaderBar from "@components/Shared/HeaderBar";

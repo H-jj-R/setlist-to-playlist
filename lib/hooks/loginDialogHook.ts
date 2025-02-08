@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { LoginDialogState } from "@constants/loginDialogState";
@@ -111,22 +117,18 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 onLoginSuccess();
                 onClose();
             } else {
-                const errorData = await response.json();
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:loginFailed", { message: i18n(errorData.error) }),
-                        type: MessageDialogState.Error
-                    }
-                }));
+                const data = await response.json();
+                throw {
+                    status: data.status,
+                    error: i18n("account:loginFailed", { message: i18n(data.error) })
+                };
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("common:unexpectedError"),
+                    message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
@@ -154,22 +156,18 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     dialogState: LoginDialogState.Login
                 }));
             } else {
-                const errorData = await response.json();
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:signUpFailed", { message: i18n(errorData.error) }),
-                        type: MessageDialogState.Error
-                    }
-                }));
+                const data = await response.json();
+                throw {
+                    status: data.status,
+                    error: i18n("account:signUpFailed", { message: i18n(data.error) })
+                };
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("common:unexpectedError"),
+                    message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
@@ -288,22 +286,18 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     dialogState: LoginDialogState.Login
                 }));
             } else {
-                const errorData = await response.json();
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:resetPasswordFailed", { message: i18n(errorData.error) }),
-                        type: MessageDialogState.Error
-                    }
-                }));
+                const data = await response.json();
+                throw {
+                    status: data.status,
+                    error: i18n("account:resetPasswordFailed", { message: i18n(data.error) })
+                };
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("common:unexpectedError"),
+                    message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
