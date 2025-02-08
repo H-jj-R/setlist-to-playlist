@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!encryptedAccessToken) {
         return res.status(401).json({
-            error: "errors:spotifyAccessTokenError"
+            error: "common:spotifyAccessTokenError"
         });
     }
 
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "errors:spotifyFetchPlaylistError",
+                error: "common:spotifyFetchPlaylistError",
                 message: await response.json()
             });
         }
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

@@ -96,7 +96,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("errors:unexpectedError"),
+                    message: i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));

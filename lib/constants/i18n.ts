@@ -28,10 +28,10 @@ if (!i18n.isInitialized) {
                 "common",
                 "about",
                 "account",
-                "errors",
                 "exportSetlist",
                 "generateSetlist",
                 "landingPage",
+                "privacyPolicy",
                 "setlistSearch",
                 "settings",
                 "userPlaylists"

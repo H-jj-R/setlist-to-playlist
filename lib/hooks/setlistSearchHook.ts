@@ -72,7 +72,7 @@ export default function setlistSearchHook() {
             const errorResponse = await response.json();
             throw {
                 status: response.status,
-                error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                error: i18n(errorResponse.error) || i18n("common:unexpectedError")
             };
         }
         return await response.json();

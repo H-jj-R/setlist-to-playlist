@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "@components/Shared/Layout";
 import { useTheme } from "next-themes";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import { MessageDialogState } from "@constants/messageDialogState";
+import Link from "next/link";
 
 /**
  * About page, containing details about the site, and a support/feedback form.
@@ -70,7 +71,7 @@ export default function About() {
 
     return (
         <Layout>
-            <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900">
+            <div className="max-w-4xl mx-auto p-6">
                 <h1 className="flex justify-center text-3xl font-bold mb-4">{i18n("about:aboutThisSite")}</h1>
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold">{i18n("about:whatIsThisApp")}</h2>
@@ -152,8 +153,32 @@ export default function About() {
                     <section className="mb-6">
                         <p className="text-gray-700 dark:text-gray-300 mt-2">{i18n("about:usesAPIs")}</p>
                         <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mt-2">
-                            <li>{i18n("about:spotifyAPIDisclaimer")}</li>
-                            <li>{i18n("about:setlistFmAPIDisclaimer")}</li>
+                            <li>
+                                <Trans
+                                    i18nKey="about:spotifyAPIDisclaimer"
+                                    components={{
+                                        spotifyLink: (
+                                            <Link
+                                                href="https://spotify.com/"
+                                                className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+                                            />
+                                        )
+                                    }}
+                                />
+                            </li>
+                            <li>
+                                <Trans
+                                    i18nKey="about:setlistFmAPIDisclaimer"
+                                    components={{
+                                        setlistFmLink: (
+                                            <Link
+                                                href="https://www.setlist.fm/"
+                                                className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+                                            />
+                                        )
+                                    }}
+                                />
+                            </li>
                             <li>{i18n("about:apiUsageDisclaimer")}</li>
                         </ul>
                     </section>

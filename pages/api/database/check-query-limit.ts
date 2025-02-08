@@ -7,7 +7,7 @@ const DAILY_QUERY_LIMIT = 5;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ error: "errors:authorisationError" });
+        return res.status(401).json({ error: "common:authorisationError" });
     }
     const userToken = authHeader.split(" ")[1];
 
@@ -61,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

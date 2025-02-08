@@ -45,7 +45,7 @@ const PredictedSetlistSchema = z.object({
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!ISACTIVE) {
         res.status(500).json({
-            error: "errors:openaiDisabled"
+            error: "generateSetlist:openaiDisabled"
         });
     }
 
@@ -118,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:predictSetlistFailed"
+            error: "generateSetlist:predictSetlistFailed"
         });
     }
 }

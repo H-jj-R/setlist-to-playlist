@@ -77,7 +77,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await queryLimitResponse.json();
                 throw {
                     status: queryLimitResponse.status,
-                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
                 };
             }
             setState((prev) => ({ ...prev, progress: 10 }));
@@ -89,7 +89,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await setlistResponse.json();
                 throw {
                     status: setlistResponse.status,
-                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
                 };
             }
             const setlistData = await setlistResponse.json();
@@ -118,7 +118,7 @@ export default function generateSetlistHook() {
                 const errorResponse = await openAIResponse.json();
                 throw {
                     status: openAIResponse.status,
-                    error: i18n(errorResponse.error) || i18n("errors:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
                 };
             }
 

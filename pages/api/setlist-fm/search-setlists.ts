@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "errors:setlistFmSearchSetlistError"
+                error: "setlistSearch:setlistFmSearchSetlistError"
             });
         }
 
@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!data.setlist || data.setlist.length === 0) {
             return res.status(404).json({
-                error: "errors:setlistFmNoSetlistsError"
+                error: "setlistSearch:setlistFmNoSetlistsError"
             });
         }
 
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

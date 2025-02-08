@@ -7,7 +7,7 @@ import db from "@constants/db";
  */
 export default async function resetPassword(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "errors:methodNotAllowed" });
+        return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
     const { email, otp, newPassword } = req.body;
@@ -40,6 +40,6 @@ export default async function resetPassword(req: NextApiRequest, res: NextApiRes
         res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "errors:internalServerError" });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

@@ -6,14 +6,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Check if the request method is POST
     if (req.method !== "POST") {
-        return res.status(405).json({ success: false, error: "errors:methodNotAllowed" });
+        return res.status(405).json({ success: false, error: "common:methodNotAllowed" });
     }
 
     const { token } = req.body;
 
     // Check if the reCAPTCHA token is provided in the request body
     if (!token) {
-        return res.status(400).json({ success: false, error: "errors:missingRecaptchaToken" });
+        return res.status(400).json({ success: false, error: "account:missingRecaptchaToken" });
     }
 
     try {
@@ -41,6 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ success: false, error: "errors:internalServerError" });
+        return res.status(500).json({ success: false, error: "common:internalServerError" });
     }
 }

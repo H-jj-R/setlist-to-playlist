@@ -8,7 +8,7 @@ import db from "@constants/db";
  */
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "errors:methodNotAllowed" });
+        return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
     const { email, password } = req.body;
@@ -46,6 +46,6 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
         res.status(200).json({ success: true, token });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "errors:internalServerError" });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

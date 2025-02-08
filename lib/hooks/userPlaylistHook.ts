@@ -61,7 +61,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError")
                 };
             }
 
@@ -89,7 +89,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             if (!state.name.trim()) {
                 throw {
                     status: 400,
-                    error: i18n("errors:noNameProvided")
+                    error: i18n("exportSetlist:noNameProvided")
                 };
             }
 
@@ -115,7 +115,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError")
                 };
             }
 
@@ -168,7 +168,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                 if (!response.ok) {
                     throw {
                         status: response.status,
-                        error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                        error: i18n(responseJson.error) || i18n("common:unexpectedError")
                     };
                 }
                 setState((prev) => ({
@@ -216,7 +216,7 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(data.error) || i18n("errors:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError")
                 };
             }
 

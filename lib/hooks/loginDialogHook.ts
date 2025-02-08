@@ -126,7 +126,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("errors:unexpectedError"),
+                    message: i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
@@ -169,7 +169,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("errors:unexpectedError"),
+                    message: i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
@@ -303,7 +303,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("errors:unexpectedError"),
+                    message: i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));

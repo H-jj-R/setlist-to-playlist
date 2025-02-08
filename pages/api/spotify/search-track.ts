@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) {
         return res.status(401).json({
-            error: "errors:spotifyAccessTokenError"
+            error: "common:spotifyAccessTokenError"
         });
     }
 
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             return res.status(response.status).json({
-                error: "errors:spotifySearchTrackError"
+                error: "exportSetlist:spotifySearchTrackError"
             });
         }
 
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "errors:internalServerError"
+            error: "common:internalServerError"
         });
     }
 }

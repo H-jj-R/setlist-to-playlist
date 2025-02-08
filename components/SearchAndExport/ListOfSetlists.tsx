@@ -76,7 +76,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ setlistData, onSetlistC
             if (!response.ok) {
                 throw {
                     status: response.status,
-                    error: i18n(responseJson.error) || i18n("errors:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
                 };
             }
 
