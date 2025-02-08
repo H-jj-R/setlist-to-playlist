@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
     return (
-        <Html lang="en">
+        <Html>
             <Head>
                 {/* Google AdSense Auto Ads (TODO) */}
                 <script
