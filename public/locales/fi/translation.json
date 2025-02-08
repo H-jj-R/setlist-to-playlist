@@ -24,7 +24,6 @@
         "search": "Hae",
         "setlist": "Setlist",
         "show": "Näytä",
-        "siteTitle": "Setlist to Playlist",
         "spotifyAccessTokenError": "Spotify-käyttöoikeustunnusta ei löytynyt!",
         "spotifyAuthorisationRequired": "Sinun täytyy valtuuttaa Spotify jatkaaksesi!",
         "spotifyAuthorise": "Valtuuta Spotify",

@@ -24,7 +24,6 @@
         "search": "Buscar",
         "setlist": "Lista de canciones",
         "show": "Mostrar",
-        "siteTitle": "De Setlist a Playlist",
         "spotifyAccessTokenError": "¡No se encontró un token de acceso de Spotify!",
         "spotifyAuthorisationRequired": "¡Necesitas autorizarte con Spotify para continuar!",
         "spotifyAuthorise": "Autorizar con Spotify",

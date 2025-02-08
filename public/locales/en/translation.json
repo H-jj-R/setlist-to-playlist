@@ -24,7 +24,6 @@
         "search": "Search",
         "setlist": "Setlist",
         "show": "Show",
-        "siteTitle": "Setlist to Playlist",
         "spotifyAccessTokenError": "No Spotify access token found!",
         "spotifyAuthorisationRequired": "You need to authorise with Spotify to continue!",
         "spotifyAuthorise": "Authorise with Spotify",

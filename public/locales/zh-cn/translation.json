@@ -24,7 +24,6 @@
         "search": "搜索",
         "setlist": "演出歌单",
         "show": "显示",
-        "siteTitle": "从Setlist到播放列表",
         "spotifyAccessTokenError": "未找到Spotify访问令牌!",
         "spotifyAuthorisationRequired": "你需要授权Spotify才能继续!",
         "spotifyAuthorise": "授权与Spotify",
