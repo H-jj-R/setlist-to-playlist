@@ -31,14 +31,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
             <h2 id="login-form-title" className="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {(() => {
                     switch (state.dialogState) {
-                        case LoginDialogState.Login:
-                            return i18n("account:login");
-                        case LoginDialogState.SignUp:
-                            return i18n("account:signUp");
                         case LoginDialogState.ForgotPassword:
                             return i18n("account:forgotPasswordTitle");
+                        case LoginDialogState.Login:
+                            return i18n("account:login");
                         case LoginDialogState.ResetPassword:
                             return i18n("account:resetPassword");
+                        case LoginDialogState.SignUp:
+                            return i18n("account:signUp");
                     }
                 })()}
             </h2>
@@ -78,8 +78,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                         />
                         <FontAwesomeIcon
                             id="fa-envelope-icon"
-                            icon={faEnvelope}
                             className="absolute left-3 top-1/2 -translate-y-1/2 transform pl-1 text-gray-200"
+                            icon={faEnvelope}
                         />
                     </div>
                 )}
@@ -96,16 +96,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                         />
                         <FontAwesomeIcon
                             id="fa-lock-icon"
-                            icon={faLock}
                             className="absolute left-3 top-1/2 -translate-y-1/2 transform pl-1 text-gray-200"
+                            icon={faLock}
                         />
                         <button
                             id="toggle-password-visibility-btn"
-                            type="button"
+                            className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
                             onClick={() => {
                                 setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                             }}
-                            className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
+                            type="button"
                         >
                             {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
                         </button>
@@ -124,28 +124,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                         <div id="new-password-input-container" className="relative">
                             <input
                                 id="new-password-input"
-                                name="password"
-                                type={state.passwordVisible ? "text" : "password"}
-                                placeholder={i18n("account:newPassword")}
-                                maxLength={32}
-                                required
                                 className="w-full rounded-lg border border-gray-300 px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-200"
+                                maxLength={32}
+                                name="password"
+                                placeholder={i18n("account:newPassword")}
+                                required
+                                type={state.passwordVisible ? "text" : "password"}
                             />
                             <FontAwesomeIcon
                                 id="fa-lock-icon"
-                                icon={faLock}
                                 className="absolute left-3 top-1/2 -translate-y-1/2 transform pl-1 text-gray-200"
+                                icon={faLock}
                             />
                             <button
                                 id="toggle-new-password-visibility"
-                                type="button"
+                                className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
                                 onClick={() => {
                                     setState((prev) => ({
                                         ...prev,
                                         passwordVisible: !state.passwordVisible
                                     }));
                                 }}
-                                className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
+                                type="button"
                             >
                                 {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
                             </button>
@@ -161,7 +161,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                     <div id="recaptcha-container" className="flex justify-center">
                         <ReCAPTCHA
                             id="recaptcha"
-                            sitekey={RECAPTCHA_SITE_KEY}
                             onChange={(token) => {
                                 setState((prev) => ({
                                     ...prev,
@@ -174,6 +173,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                                     recaptchaToken: null
                                 }));
                             }}
+                            sitekey={RECAPTCHA_SITE_KEY}
                         />
                     </div>
                 )}
@@ -195,8 +195,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                 )}
                 <button
                     id="submit-btn"
-                    type="submit"
                     className="rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 px-4 py-3 text-lg text-white transition duration-300 hover:from-purple-600 hover:to-blue-700 focus:outline-none"
+                    type="submit"
                 >
                     {state.dialogState === LoginDialogState.Login
                         ? i18n("account:login")

@@ -26,11 +26,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const accessToken = decryptToken(encryptedAccessToken);
 
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
-            method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json"
-            }
+            },
+            method: "GET"
         });
 
         if (!response.ok) {

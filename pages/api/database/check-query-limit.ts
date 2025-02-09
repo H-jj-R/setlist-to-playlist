@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             userQueryLimit = newRows[0];
         }
 
-        const { queries_today, last_query_date } = userQueryLimit;
+        const { last_query_date, queries_today } = userQueryLimit;
 
         // Reset queries_today if the last query date is before today
         const today = new Date().toISOString().split("T")[0];

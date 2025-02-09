@@ -17,15 +17,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
+            body: new URLSearchParams({
+                client_id: process.env.SPOTIFY_API_C_ID!,
+                client_secret: process.env.SPOTIFY_API_C_SECRET!,
+                grant_type: "client_credentials"
+            }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: new URLSearchParams({
-                grant_type: "client_credentials",
-                client_id: process.env.SPOTIFY_API_C_ID!,
-                client_secret: process.env.SPOTIFY_API_C_SECRET!
-            })
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -46,9 +46,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             "Set-Cookie",
             cookie.serialize("spotify_access_token", encryptedAccessToken, {
                 httpOnly: true,
-                secure: true,
                 maxAge: expires_in,
-                path: "/"
+                path: "/",
+                secure: true
             })
         );
 

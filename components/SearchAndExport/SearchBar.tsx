@@ -25,30 +25,30 @@ const SearchBar: React.FC<SearchBarProps> = ({ locked, onSearch }) => {
             <div id="search-input-wrapper" className="flex w-full max-w-xl sm:w-[70vw]">
                 <input
                     id="search-input"
-                    type="text"
                     className={`h-12 flex-1 rounded-l-lg border border-gray-300 px-4 py-2 text-lg ${
                         locked ? "cursor-not-allowed bg-gray-200" : ""
                     }`}
-                    placeholder={i18n("setlistSearch:searchForSetlist")}
-                    value={query}
+                    autoComplete="off"
+                    disabled={locked}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !locked) {
                             onSearch(query);
                         }
                     }}
-                    disabled={locked}
-                    autoComplete="off"
+                    placeholder={i18n("setlistSearch:searchForSetlist")}
+                    type="text"
+                    value={query}
                 />
                 <button
                     id="search-button"
-                    onClick={() => onSearch(query)}
                     className={`h-12 rounded-r-lg bg-gradient-to-bl from-blue-400 to-blue-600 px-6 py-2 font-semibold text-white hover:from-blue-500 hover:to-blue-700 ${
                         locked
                             ? "cursor-not-allowed from-gray-400 to-gray-600 hover:from-gray-400 hover:to-gray-600"
                             : ""
                     }`}
                     disabled={locked}
+                    onClick={() => onSearch(query)}
                 >
                     {i18n("common:search")}
                 </button>

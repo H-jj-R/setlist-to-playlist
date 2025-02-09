@@ -19,7 +19,7 @@ export default function About() {
     const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
-    const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+    const [formData, setFormData] = useState({ email: "", message: "", name: "" });
     const [submitted, setSubmitted] = useState(false);
     const [messageDialog, setMessageDialog] = useState({
         isOpen: false,
@@ -48,15 +48,15 @@ export default function About() {
             const email = formData.get("email") as string;
             const message = formData.get("message") as string;
             const response = await fetch("/api/controllers/submit-feedback", {
-                method: "POST",
+                body: JSON.stringify({ email, message }),
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, message })
+                method: "POST"
             });
             if (!response.ok) {
                 const data = await response.json();
                 throw {
-                    status: response.status,
-                    error: i18n(data.error)
+                    error: i18n(data.error),
+                    status: response.status
                 };
             } else {
                 setMessageDialog({
@@ -92,30 +92,30 @@ export default function About() {
                                 {i18n("about:messageSent")}
                             </p>
                             <button
+                                className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                                 onClick={() => {
                                     setSubmitted(false);
-                                    setFormData({ name: "", email: "", message: "" });
+                                    setFormData({ email: "", message: "", name: "" });
                                 }}
-                                className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                             >
                                 {i18n("about:submitAnother")}
                             </button>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="mt-4">
+                        <form className="mt-4" onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label className="block text-gray-700 dark:text-gray-300">{i18n("common:email")}</label>
                                 <input
-                                    type="email"
+                                    className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                    autoComplete="email"
+                                    maxLength={320}
                                     name="email"
-                                    value={formData.email}
                                     onChange={(e) => {
                                         setFormData({ ...formData, [e.target.name]: e.target.value });
                                     }}
-                                    maxLength={320}
-                                    autoComplete="email"
-                                    className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
                                     required
+                                    type="email"
+                                    value={formData.email}
                                 />
                             </div>
                             <div className="relative mb-4">
@@ -123,8 +123,9 @@ export default function About() {
                                     {i18n("about:message")}
                                 </label>
                                 <textarea
+                                    className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                    maxLength={MAX_MESSAGE_LENGTH}
                                     name="message"
-                                    value={formData.message}
                                     onChange={(e) => {
                                         setFormData({ ...formData, [e.target.name]: e.target.value });
                                     }}
@@ -133,10 +134,9 @@ export default function About() {
                                         target.style.height = "auto";
                                         target.style.height = `${target.scrollHeight}px`;
                                     }}
-                                    maxLength={MAX_MESSAGE_LENGTH}
-                                    className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
-                                    rows={4}
                                     required
+                                    rows={4}
+                                    value={formData.message}
                                 />
                                 <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
                                     {formData.message.length}/{MAX_MESSAGE_LENGTH}
@@ -144,8 +144,8 @@ export default function About() {
                             </div>
                             <div className="flex">
                                 <button
-                                    type="submit"
                                     className="rounded-md bg-blue-600 px-8 py-3 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                    type="submit"
                                 >
                                     {i18n("common:submit")}
                                 </button>
@@ -161,28 +161,28 @@ export default function About() {
                         <ul className="mt-2 list-inside list-disc text-gray-700 dark:text-gray-300">
                             <li>
                                 <Trans
-                                    i18nKey="about:spotifyAPIDisclaimer"
                                     components={{
                                         spotifyLink: (
                                             <Link
-                                                href="https://spotify.com/"
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                                                href="https://spotify.com/"
                                             />
                                         )
                                     }}
+                                    i18nKey="about:spotifyAPIDisclaimer"
                                 />
                             </li>
                             <li>
                                 <Trans
-                                    i18nKey="about:setlistFmAPIDisclaimer"
                                     components={{
                                         setlistFmLink: (
                                             <Link
-                                                href="https://www.setlist.fm/"
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                                                href="https://www.setlist.fm/"
                                             />
                                         )
                                     }}
+                                    i18nKey="about:setlistFmAPIDisclaimer"
                                 />
                             </li>
                             <li>{i18n("about:apiUsageDisclaimer")}</li>
@@ -194,8 +194,8 @@ export default function About() {
             {messageDialog.isOpen && (
                 <MessageDialog
                     message={messageDialog.message}
-                    type={messageDialog.type}
                     onClose={() => setMessageDialog({ isOpen: false, message: "", type: MessageDialogState.Success })}
+                    type={messageDialog.type}
                 />
             )}
         </Layout>

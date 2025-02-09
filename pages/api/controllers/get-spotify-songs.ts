@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             (isPredicted === "true"
                 ? setlist.predictedSongs
                 : setlist.sets.set.flatMap((set: any) =>
-                      set.song.filter((song: any) => !["intro", "interlude", ""].includes(song.name.toLowerCase()))
+                      set.song.filter((song: any) => !["", "interlude", "intro"].includes(song.name.toLowerCase()))
                   )
             ).map(fetchSongDetails)
         );

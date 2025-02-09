@@ -23,7 +23,7 @@ export default function UserPlaylists() {
     const [mounted, setMounted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [playlists, setPlaylists] = useState<any[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<null | string>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -40,18 +40,18 @@ export default function UserPlaylists() {
         setLoading(true);
         try {
             const response = await fetch("/api/database/get-user-playlists", {
-                method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                }
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                method: "POST"
             });
             const data = await response.json();
 
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("common:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
@@ -97,11 +97,10 @@ export default function UserPlaylists() {
                             <ul className="space-y-4">
                                 {playlists.map((playlist, idx) => (
                                     <div
-                                        key={`${idx}-${playlist.playlistId}`}
                                         className="flex items-center justify-center"
+                                        key={`${idx}-${playlist.playlistId}`}
                                     >
                                         <UserPlaylist
-                                            playlist={playlist}
                                             onDelete={(playlistId: number): void => {
                                                 setPlaylists((prevPlaylists) =>
                                                     prevPlaylists.filter(
@@ -109,6 +108,7 @@ export default function UserPlaylists() {
                                                     )
                                                 );
                                             }}
+                                            playlist={playlist}
                                         />
                                     </div>
                                 ))}

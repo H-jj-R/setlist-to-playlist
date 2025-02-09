@@ -22,13 +22,13 @@ import { useTranslation } from "react-i18next";
  */
 export default function SetlistSearch() {
     const {
-        mounted,
-        state,
-        setState,
-        handleSearchRouterPush,
         handleBackToList,
+        handleExport,
+        handleSearchRouterPush,
         handleSetlistChosenRouterPush,
-        handleExport
+        mounted,
+        setState,
+        state
     } = setlistSearchHook();
     const { t: i18n } = useTranslation();
 
@@ -46,8 +46,8 @@ export default function SetlistSearch() {
                         }`}
                     >
                         <SearchBar
-                            onSearch={handleSearchRouterPush}
                             aria-label={i18n("setlistSearch:searchForSetlist")}
+                            onSearch={handleSearchRouterPush}
                         />
                     </div>
 
@@ -78,8 +78,8 @@ export default function SetlistSearch() {
                                     }`}
                                 >
                                     <ListOfSetlists
-                                        setlistData={state.allSetlistsData}
                                         onSetlistChosen={handleSetlistChosenRouterPush}
+                                        setlistData={state.allSetlistsData}
                                     />
                                 </div>
                             )}
@@ -89,9 +89,9 @@ export default function SetlistSearch() {
                                 state.pageState === PageState.Setlist) && (
                                 <div id="setlist-display" className={`w-full animate-fadeIn`}>
                                     <Setlist
-                                        setlist={state.chosenSetlistData}
                                         onClose={handleBackToList}
                                         onExport={handleExport}
+                                        setlist={state.chosenSetlistData}
                                     />
                                 </div>
                             )}
@@ -116,15 +116,15 @@ export default function SetlistSearch() {
             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                 state.pageState === PageState.Setlist) && (
                 <ExportDialog
-                    setlist={state.chosenSetlistData}
                     artistData={{
-                        spotifyArtist: state.allSetlistsData.spotifyArtist,
-                        setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                        setlistfmArtist: state.allSetlistsData.setlistfmArtist,
+                        spotifyArtist: state.allSetlistsData.spotifyArtist
                     }}
                     isOpen={state.exportDialogOpen}
                     onClose={() => {
                         setState((prev) => ({ ...prev, exportDialogOpen: false }));
                     }}
+                    setlist={state.chosenSetlistData}
                 />
             )}
         </>

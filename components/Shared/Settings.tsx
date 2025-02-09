@@ -20,15 +20,15 @@ interface SettingsProps {
  * The settings overlay component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
-    const { theme, setTheme, resolvedTheme } = useTheme();
+    const { resolvedTheme, setTheme, theme } = useTheme();
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const [settings, setSettings] = useState(() => ({
-        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
-        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
         excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
         excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
-        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true"
+        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true",
+        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
+        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true"
     }));
 
     const handleSettingChange = (key: keyof typeof settings) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,12 +76,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     </h2>
                     <button
                         id="close-settings-btn"
+                        className="text-xl"
                         onClick={() => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
                             setTimeout(onClose, 300); // Match the animation duration
                         }}
-                        className="text-xl"
                     >
                         <FontAwesomeIcon icon={faChevronRight} size="lg" />
                     </button>
@@ -94,15 +94,15 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <label className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
-                            value={theme}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                                setTheme(event.target.value);
-                            }}
                             className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
                                 resolvedTheme === "dark"
                                     ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
                                     : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
                             }`}
+                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                                setTheme(event.target.value);
+                            }}
+                            value={theme}
                         >
                             <option id="light-theme" value="light">
                                 {i18n("settings:lightTheme")}
@@ -121,10 +121,10 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <h3 className="text-lg font-medium">{i18n("settings:setlistsTitle")}</h3>
                     <label className="flex items-center space-x-2 p-2">
                         <input
-                            type="checkbox"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            type="checkbox"
                         />
                         <span>{i18n("settings:hideEmptySetlists")}</span>
                     </label>
@@ -134,52 +134,52 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <h3 className="text-lg font-medium">{i18n("common:export")}</h3>
                     <label className="flex items-center space-x-2 p-2">
                         <input
-                            type="checkbox"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            type="checkbox"
                         />
                         <span>{i18n("settings:hideSongsNotFound")}</span>
                     </label>
                     <label className="flex items-center space-x-2 p-2">
                         <input
-                            type="checkbox"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            type="checkbox"
                         />
                         <span>{i18n("settings:excludeCovers")}</span>
                     </label>
                     <label className="flex items-center space-x-2 p-2">
                         <input
-                            type="checkbox"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            type="checkbox"
                         />
                         <span>{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
                     <label className="flex items-center space-x-2 p-2">
                         <input
-                            type="checkbox"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            type="checkbox"
                         />
                         <span>{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
                 {/* About + Support Link */}
                 <div className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
-                    <Link href="/about" className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline">
+                    <Link className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline" href="/about">
                         {i18n("about:aboutSupport")}
                     </Link>
                 </div>
                 {/* Privacy Policy Link */}
                 <div className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
                     <Link
-                        href="/privacy-policy"
                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                        href="/privacy-policy"
                     >
                         {i18n("privacyPolicy:privacyPolicy")}
                     </Link>

@@ -73,9 +73,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Return a combined response containing full artist details and their setlists
         res.status(200).json({
-            spotifyArtist,
             setlistfmArtist,
-            setlists: await setlistsResponse.json()
+            setlists: await setlistsResponse.json(),
+            spotifyArtist
         });
     } catch (error) {
         res.status(500).json({

@@ -17,9 +17,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.redirect(
         `https://accounts.spotify.com/authorize?${new URLSearchParams({
             client_id: process.env.SPOTIFY_API_C_ID!,
-            response_type: "code",
             redirect_uri: process.env.SPOTIFY_API_REDIRECT_URI!,
-            state: redirect.toString(), // Pass the redirect state to identify where to redirect after authoriation
+            response_type: "code",
             scope: [
                 "playlist-modify-private", // Allows modifying the user's private playlists (e.g. adding/removing tracks)
                 "playlist-modify-public", // Allows modifying the user's public playlists (e.g. adding/removing tracks)
@@ -28,7 +27,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 "ugc-image-upload", // Allows uploading user-generated images to Spotify
                 "user-follow-read", // Read access to a user's followers and followed artists
                 "user-read-private" // Grants access to the user's information (username required for playlist creation)
-            ].join(" ")
+            ].join(" "),
+            state: redirect.toString() // Pass the redirect state to identify where to redirect after authoriation
         }).toString()}`
     );
 }

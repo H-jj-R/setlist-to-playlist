@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { setTimeout } from "timers/promises";
 import { NextApiRequest, NextApiResponse } from "next";
+import { setTimeout } from "timers/promises";
 
 /**
  * API handler to fetch a setlist by specific id from the Setlist.fm API.
@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      */
     async function fetchSetlist(retries: number = 0): Promise<Response> {
         const response = await fetch(`https://api.setlist.fm/rest/1.0/setlist/${setlistId}`, {
-            method: "GET",
             headers: {
                 Accept: "application/json",
                 "x-api-key": process.env.SETLIST_FM_API_KEY!
-            }
+            },
+            method: "GET"
         });
 
         // If the API rate limits (429 status) and we haven't exceeded max retries, retry after a delay

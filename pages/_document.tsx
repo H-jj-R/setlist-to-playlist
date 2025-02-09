@@ -13,8 +13,8 @@ export default function Document() {
                 {/* Google AdSense Auto Ads (TODO) */}
                 <script
                     async
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1631429488585748"
                     crossOrigin="anonymous"
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1631429488585748"
                 />
             </Head>
             <body>

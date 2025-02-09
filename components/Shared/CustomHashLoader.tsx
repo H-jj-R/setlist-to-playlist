@@ -21,12 +21,12 @@ const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }
 
     return (
         <HashLoader
+            cssOverride={{} as CSSProperties}
             id="hash-loader"
+            aria-label={i18n("common:loading")}
             color="#3DDAFA"
             loading={showLoading}
-            cssOverride={{} as CSSProperties}
             size={size}
-            aria-label={i18n("common:loading")}
         />
     );
 };

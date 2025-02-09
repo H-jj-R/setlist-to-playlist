@@ -20,7 +20,7 @@ interface ListOfSetlistsProps {
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }) => {
     const { t: i18n } = useTranslation();
-    const { state, hasMorePages, loadMoreSetlists } = listOfSetlistsHook({ ...setlistData });
+    const { hasMorePages, loadMoreSetlists, state } = listOfSetlistsHook({ ...setlistData });
 
     return (
         <div
@@ -32,8 +32,8 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                     <img
                         id="artist-image"
                         className="mr-4 h-16 w-16 rounded-full"
-                        src={setlistData.spotifyArtist.images[0].url}
                         alt={setlistData.spotifyArtist.name}
+                        src={setlistData.spotifyArtist.images[0].url}
                     />
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}
@@ -42,10 +42,10 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                 <ul id="setlist-list" className="w-full space-y-3 px-4">
                     {state.setlists.map((setlist: Record<string, any>) => (
                         <SetlistChoiceBlock
-                            key={setlist.id}
-                            setlist={setlist}
-                            onClick={onSetlistChosen}
                             hideEmpty={state.hideEmptySetlists}
+                            key={setlist.id}
+                            onClick={onSetlistChosen}
+                            setlist={setlist}
                         />
                     ))}
                 </ul>
@@ -59,9 +59,9 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                 {hasMorePages && (
                     <button
                         id="load-more-button"
-                        onClick={loadMoreSetlists}
-                        disabled={state.isLoading}
                         className="mt-4 rounded bg-blue-500 px-6 py-2 text-white hover:bg-blue-600"
+                        disabled={state.isLoading}
+                        onClick={loadMoreSetlists}
                     >
                         {state.isLoading ? `${i18n("common:loading")}...` : i18n("setlistSearch:loadMore")}
                     </button>

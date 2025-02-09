@@ -17,19 +17,19 @@ export default function generateSetlistHook() {
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
-        showAuthDialog: false,
-        searchTriggered: false,
-        searchComplete: false,
-        previousQuery: null as string | null,
         allSetlistsData: [] as Record<string, any>,
-        predictedSetlists: null as Record<string, any> | null,
-        chosenSetlist: null as Record<string, any> | null,
-        exportDialogOpen: false,
         animLoading: true,
-        showLoading: false,
+        chosenSetlist: null as null | Record<string, any>,
+        error: null as null | string,
+        exportDialogOpen: false,
+        pageState: PageState.Idle,
+        predictedSetlists: null as null | Record<string, any>,
+        previousQuery: null as null | string,
         progress: 0,
-        error: null as string | null,
-        pageState: PageState.Idle
+        searchComplete: false,
+        searchTriggered: false,
+        showAuthDialog: false,
+        showLoading: false
     });
 
     useEffect(() => {
@@ -43,8 +43,8 @@ export default function generateSetlistHook() {
         }
         setState((prev) => ({ ...prev, previousQuery: query }));
         const response = await fetch("/api/controllers/check-for-authentication", {
-            method: "GET",
-            credentials: "include"
+            credentials: "include",
+            method: "GET"
         });
         if (!response.ok) {
             if (response.status === 401) {
@@ -55,12 +55,12 @@ export default function generateSetlistHook() {
 
         setState((prev) => ({
             ...prev,
-            searchTriggered: true,
-            searchComplete: false,
-            showLoading: false,
-            progress: 0,
             error: null,
-            pageState: PageState.Idle
+            pageState: PageState.Idle,
+            progress: 0,
+            searchComplete: false,
+            searchTriggered: true,
+            showLoading: false
         }));
 
         if (state.animLoading) {
@@ -73,17 +73,17 @@ export default function generateSetlistHook() {
             setState((prev) => ({ ...prev, progress: 0 }));
             await new Promise((t) => setTimeout(t, 500));
             const queryLimitResponse = await fetch(`/api/database/check-query-limit`, {
-                method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                }
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                method: "POST"
             });
             if (!queryLimitResponse.ok) {
                 const errorResponse = await queryLimitResponse.json();
                 throw {
-                    status: queryLimitResponse.status,
-                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                    status: queryLimitResponse.status
                 };
             }
             setState((prev) => ({ ...prev, progress: 10 }));
@@ -94,8 +94,8 @@ export default function generateSetlistHook() {
             if (!setlistResponse.ok) {
                 const errorResponse = await setlistResponse.json();
                 throw {
-                    status: setlistResponse.status,
-                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                    status: setlistResponse.status
                 };
             }
             const setlistData = await setlistResponse.json();
@@ -112,19 +112,19 @@ export default function generateSetlistHook() {
             }, 600);
 
             const openAIResponse = await fetch("/api/openai/predict-setlist", {
-                method: "POST",
+                body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist }),
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist })
+                method: "POST"
             });
 
             if (!openAIResponse.ok) {
                 const errorResponse = await openAIResponse.json();
                 throw {
-                    status: openAIResponse.status,
-                    error: i18n(errorResponse.error) || i18n("common:unexpectedError")
+                    error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                    status: openAIResponse.status
                 };
             }
 
@@ -134,14 +134,14 @@ export default function generateSetlistHook() {
             await new Promise((t) => setTimeout(t, 500));
             setState((prev) => ({
                 ...prev,
+                pageState: PageState.Setlist,
                 predictedSetlists: Object.values(openAIData.predictedSetlists).map(
                     (predictedSetlist: Record<string, any>) => ({
                         ...predictedSetlist,
                         setlistArtist: setlistData.spotifyArtist
                     })
                 ),
-                searchComplete: true,
-                pageState: PageState.Setlist
+                searchComplete: true
             }));
         } catch (error) {
             setState((prev) => ({
@@ -151,8 +151,8 @@ export default function generateSetlistHook() {
         } finally {
             setState((prev) => ({
                 ...prev,
-                showLoading: false,
-                progress: 0
+                progress: 0,
+                showLoading: false
             }));
         }
     };
@@ -167,10 +167,10 @@ export default function generateSetlistHook() {
 
     const handleCombineSetlists = async () => {
         const seenSongs = new Set<string>();
-        const mergedSongs: { name: string; artist: string; tape: boolean }[] = [];
+        const mergedSongs: { artist: string; name: string; tape: boolean }[] = [];
         const setlistArtist = state.predictedSetlists[0].setlistArtist;
         const setlistsArray = state.predictedSetlists as Array<{
-            predictedSongs: { name: string; artist: string; tape: boolean }[];
+            predictedSongs: { artist: string; name: string; tape: boolean }[];
             setlistArtist: any;
         }>;
         const maxLength = Math.max(...state.predictedSetlists.map((s) => s.predictedSongs.length));
@@ -192,11 +192,11 @@ export default function generateSetlistHook() {
     };
 
     return {
-        mounted,
-        state,
-        setState,
-        handleSearch,
+        handleCombineSetlists,
         handleExport,
-        handleCombineSetlists
+        handleSearch,
+        mounted,
+        setState,
+        state
     };
 }

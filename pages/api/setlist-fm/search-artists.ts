@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { setTimeout } from "timers/promises";
 import { NextApiRequest, NextApiResponse } from "next";
+import { setTimeout } from "timers/promises";
 
 /**
  * API handler to search for an artist by name.
@@ -27,11 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 sort: "relevance"
             }).toString()}`,
             {
-                method: "GET",
                 headers: {
                     Accept: "application/json",
                     "x-api-key": process.env.SETLIST_FM_API_KEY!
-                }
+                },
+                method: "GET"
             }
         );
 

@@ -12,21 +12,21 @@ import { useTranslation } from "react-i18next";
  * Hook for data handling on the user-playlist page.
  */
 export default function setlistSongsExportHook(
-    setlist: Record<string, any>,
     artistData: Record<string, any>,
     onSongsFetched: (songs: Record<string, any>[]) => void,
+    setlist: Record<string, any>,
     predictedSetlist?: boolean
 ) {
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        spotifySongs: null as Record<string, any>[] | null,
-        loading: false,
-        error: null as string | null,
-        excludedSongs: new Set() as Set<string>,
-        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
+        error: null as null | string,
         excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
+        excludedSongs: new Set() as Set<string>,
         excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
-        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true"
+        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true",
+        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
+        loading: false,
+        spotifySongs: null as null | Record<string, any>[]
     });
 
     useEffect(() => {
@@ -56,8 +56,8 @@ export default function setlistSongsExportHook(
         (async () => {
             setState((prev) => ({
                 ...prev,
-                loading: true,
-                error: null
+                error: null,
+                loading: true
             }));
             try {
                 const response = await fetch(
@@ -66,16 +66,16 @@ export default function setlistSongsExportHook(
                         isPredicted: predictedSetlist ? "true" : "false"
                     }).toString()}`,
                     {
-                        method: "POST",
+                        body: JSON.stringify({ setlist }),
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ setlist })
+                        method: "POST"
                     }
                 );
                 const responseJson = await response.json();
                 if (!response.ok) {
                     throw {
-                        status: response.status,
-                        error: i18n(responseJson.error) || i18n("common:unexpectedError")
+                        error: i18n(responseJson.error) || i18n("common:unexpectedError"),
+                        status: response.status
                     };
                 }
                 setState((prev) => ({
@@ -84,11 +84,11 @@ export default function setlistSongsExportHook(
                 }));
 
                 // Songs to exclude automatically based on settings
-                const excludedSongs: { songId: string; idx: number }[] = [];
+                const excludedSongs: { idx: number; songId: string; }[] = [];
                 if (state.excludeCovers) {
                     responseJson.forEach((song: any, idx: number) => {
                         if (song.artists?.[0]?.name !== artistData.spotifyArtist.name) {
-                            excludedSongs.push({ songId: song.id, idx: idx });
+                            excludedSongs.push({ idx: idx, songId: song.id });
                         }
                     });
                 }
@@ -96,7 +96,7 @@ export default function setlistSongsExportHook(
                     const duplicateSongs = new Set();
                     responseJson.forEach((song: any, idx: number) => {
                         if (duplicateSongs.has(song.id)) {
-                            excludedSongs.push({ songId: song.id, idx: idx });
+                            excludedSongs.push({ idx: idx, songId: song.id });
                         } else {
                             duplicateSongs.add(song.id);
                         }
@@ -108,7 +108,7 @@ export default function setlistSongsExportHook(
                         .forEach((song, idx) => {
                             if (song.tape) {
                                 if (responseJson[idx]) {
-                                    excludedSongs.push({ songId: responseJson[idx].id, idx: idx });
+                                    excludedSongs.push({ idx: idx, songId: responseJson[idx].id });
                                 }
                             }
                         });
@@ -116,7 +116,7 @@ export default function setlistSongsExportHook(
 
                 // Exclude each song only once
                 const processedSongs = new Set<string>();
-                excludedSongs.forEach(({ songId, idx }) => {
+                excludedSongs.forEach(({ idx, songId }) => {
                     const uniqueKey = `${songId}-${idx}`;
                     if (!processedSongs.has(uniqueKey)) {
                         toggleExcludeSong(songId, idx);

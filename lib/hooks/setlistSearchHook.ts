@@ -19,18 +19,18 @@ export default function setlistSearchHook() {
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
-        searchTriggered: false,
-        searchComplete: false,
-        lastQuery: null as string | null,
         allSetlistsData: [] as Record<string, any>,
-        setlistChosen: false,
-        chosenSetlistData: null as Record<string, any> | null,
-        exportDialogOpen: false,
-        showAuthDialog: false,
         animLoading: true,
-        showLoading: false,
-        error: null as string | null,
-        pageState: PageState.Idle
+        chosenSetlistData: null as null | Record<string, any>,
+        error: null as null | string,
+        exportDialogOpen: false,
+        lastQuery: null as null | string,
+        pageState: PageState.Idle,
+        searchComplete: false,
+        searchTriggered: false,
+        setlistChosen: false,
+        showAuthDialog: false,
+        showLoading: false
     });
 
     useEffect(() => {
@@ -53,16 +53,16 @@ export default function setlistSearchHook() {
             } else {
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
-                    pageState: PageState.LosSetlist
+                    pageState: PageState.LosSetlist,
+                    setlistChosen: true
                 }));
             }
         } else {
             setState((prev) => ({
                 ...prev,
-                searchTriggered: false,
                 animLoading: true,
-                pageState: PageState.Idle
+                pageState: PageState.Idle,
+                searchTriggered: false
             }));
         }
 
@@ -77,22 +77,22 @@ export default function setlistSearchHook() {
         if (!response.ok) {
             const errorResponse = await response.json();
             throw {
-                status: response.status,
-                error: i18n(errorResponse.error) || i18n("common:unexpectedError")
+                error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                status: response.status
             };
         }
         return await response.json();
     };
 
-    const handleSearch = async (query: string | null, setlist: string | null) => {
+    const handleSearch = async (query: null | string, setlist: null | string) => {
         setState((prev) => ({
             ...prev,
-            searchTriggered: true,
-            searchComplete: false,
-            setlistChosen: false,
             chosenSetlistData: null,
-            showLoading: false,
-            error: null
+            error: null,
+            searchComplete: false,
+            searchTriggered: true,
+            setlistChosen: false,
+            showLoading: false
         }));
 
         if (state.animLoading) {
@@ -108,10 +108,10 @@ export default function setlistSearchHook() {
                 );
                 setState((prev) => ({
                     ...prev,
-                    searchComplete: true,
                     allSetlistsData: data,
-                    showLoading: false,
-                    pageState: PageState.ListOfSetlists
+                    pageState: PageState.ListOfSetlists,
+                    searchComplete: true,
+                    showLoading: false
                 }));
             } else if (!query && setlist) {
                 const setlistData = await fetchData(
@@ -123,11 +123,11 @@ export default function setlistSearchHook() {
                 const fullArtistdetails = { setlistfmArtist: setlistData.artist, spotifyArtist: artistData };
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
                     allSetlistsData: fullArtistdetails,
                     chosenSetlistData: setlistData,
-                    showLoading: false,
-                    pageState: PageState.Setlist
+                    pageState: PageState.Setlist,
+                    setlistChosen: true,
+                    showLoading: false
                 }));
             } else if (query && setlist) {
                 const queryData = await fetchData(
@@ -135,25 +135,25 @@ export default function setlistSearchHook() {
                 );
                 setState((prev) => ({
                     ...prev,
-                    showLoading: false,
+                    allSetlistsData: queryData,
                     searchComplete: true,
-                    allSetlistsData: queryData
+                    showLoading: false
                 }));
                 const setlistData = await fetchData(
                     `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
                 );
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
                     chosenSetlistData: setlistData,
-                    pageState: PageState.LosSetlist
+                    pageState: PageState.LosSetlist,
+                    setlistChosen: true
                 }));
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                showLoading: false,
-                error: error.error
+                error: error.error,
+                showLoading: false
             }));
         }
     };
@@ -198,17 +198,17 @@ export default function setlistSearchHook() {
         );
         setState((prev) => ({
             ...prev,
-            setlistChosen: false,
             chosenSetlistData: null,
-            pageState: PageState.ListOfSetlists
+            pageState: PageState.ListOfSetlists,
+            setlistChosen: false
         }));
     };
 
     const handleExport = async () => {
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
-                method: "GET",
-                credentials: "include"
+                credentials: "include",
+                method: "GET"
             });
 
             if (response.status === 200) {
@@ -222,12 +222,12 @@ export default function setlistSearchHook() {
     };
 
     return {
-        mounted,
-        state,
-        setState,
+        handleBackToList,
+        handleExport,
         handleSearchRouterPush,
         handleSetlistChosenRouterPush,
-        handleBackToList,
-        handleExport
+        mounted,
+        setState,
+        state
     };
 }

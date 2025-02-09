@@ -67,15 +67,15 @@ export default function PrivacyPolicy() {
                     <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:contactUs")}</h2>
                     <p className="text-gray-700 dark:text-gray-300">
                         <Trans
-                            i18nKey="privacyPolicy:contactUsContent"
                             components={{
                                 aboutLink: (
                                     <Link
-                                        href="/about"
                                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                                        href="/about"
                                     />
                                 )
                             }}
+                            i18nKey="privacyPolicy:contactUsContent"
                         />
                     </p>
                 </section>

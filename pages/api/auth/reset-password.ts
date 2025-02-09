@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
-    const { email, otp, newPassword } = req.body;
+    const { email, newPassword, otp } = req.body;
 
     // Validate input fields
     if (!email || !otp || !newPassword) {

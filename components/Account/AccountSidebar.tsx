@@ -21,10 +21,10 @@ interface AccountSidebarProps {
 }
 
 interface DecodedToken {
-    userId: string;
-    username: string;
     email: string;
     exp: number;
+    userId: string;
+    username: string;
 }
 
 /**
@@ -35,11 +35,11 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
     const router = useRouter();
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        email: null as string | null,
+        email: null as null | string,
         isVisible: false,
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
         showConfirmation: false,
-        username: null as string | null
+        username: null as null | string
     });
 
     useEffect(() => {
@@ -79,10 +79,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
             }
 
             const response = await fetch("/api/auth/delete-account", {
-                method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`
-                }
+                },
+                method: "DELETE"
             });
 
             if (response.ok) {
@@ -97,8 +97,8 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 handleLogout(); // Log out after account deletion
             } else {
                 throw {
-                    status: response.status,
-                    error: i18n("account:deleteFailed")
+                    error: i18n("account:deleteFailed"),
+                    status: response.status
                 };
             }
         } catch (error) {
@@ -117,11 +117,11 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
         <div id="account-settings-container" className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
+                aria-hidden={state.isVisible ? "false" : "true"}
                 id="account-settings-background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     state.isVisible ? "opacity-70" : "opacity-0"
                 }`}
-                aria-hidden={state.isVisible ? "false" : "true"}
                 onClick={() => {
                     setState((prev) => ({ ...prev, isVisible: false }));
                     setTimeout(onClose, 300);

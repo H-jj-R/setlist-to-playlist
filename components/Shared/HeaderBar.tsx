@@ -21,17 +21,17 @@ const HeaderBar: React.FC = () => {
     const { isAuthenticated, login, logout } = useAuth();
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        showSettings: false,
+        showAccountSidebar: false,
         showLoginDialog: false,
-        showAccountSidebar: false
+        showSettings: false
     });
 
     return (
         <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
             <div id="header-container" className="flex items-center justify-between px-4 py-2">
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
-                    <Link href="/" id="site-logo-link" className="flex items-center hover:text-gray-300">
-                        <img id="site-logo" src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
+                    <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
+                        <img id="site-logo" className="h-10 w-auto" alt="Site Logo" src="/images/logo.png" />
                         <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist
                         </span>
@@ -50,7 +50,7 @@ const HeaderBar: React.FC = () => {
                                     }));
                                 }}
                             >
-                                <FontAwesomeIcon icon={faUserCircle} className="text-xl text-gray-200" />
+                                <FontAwesomeIcon className="text-xl text-gray-200" icon={faUserCircle} />
                             </button>
                         </div>
                     ) : (
@@ -77,7 +77,7 @@ const HeaderBar: React.FC = () => {
                             }));
                         }}
                     >
-                        <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-xl text-gray-200" />
+                        <FontAwesomeIcon id="settings-icon" className="text-xl text-gray-200" icon={faCog} />
                     </button>
                 </div>
             </div>
@@ -93,14 +93,14 @@ const HeaderBar: React.FC = () => {
             )}
             {state.showAccountSidebar && (
                 <AccountSidebar
-                    onClose={() => {
+                    handleLogout={() => {
+                        logout();
                         setState((prev) => ({
                             ...prev,
                             showAccountSidebar: false
                         }));
                     }}
-                    handleLogout={() => {
-                        logout();
+                    onClose={() => {
                         setState((prev) => ({
                             ...prev,
                             showAccountSidebar: false

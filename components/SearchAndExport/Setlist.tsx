@@ -23,7 +23,7 @@ interface SetlistProps {
 const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }) => {
     const { t: i18n } = useTranslation();
 
-    const SongListItem = ({ song, isFirst, isLast }: { song: any; isFirst: boolean; isLast: boolean }) => (
+    const SongListItem = ({ isFirst, isLast, song }: { isFirst: boolean; isLast: boolean; song: any; }) => (
         <li
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
@@ -33,8 +33,8 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }) => {
                     {/* Tape indicator icon */}
                     {song.tape && (
                         <FontAwesomeIcon
-                            icon={faRecordVinyl}
                             className="opacity-80"
+                            icon={faRecordVinyl}
                             title={i18n("setlistSearch:playedFromTape")}
                         />
                     )}
@@ -109,10 +109,10 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }) => {
                         set.song.map((song: any, songIdx: number) => {
                             return (
                                 <SongListItem
-                                    key={`${songIdx}-${song.name || "unknown"}`}
-                                    song={song}
                                     isFirst={setIdx === 0 && songIdx === 0}
                                     isLast={setIdx === setArray.length - 1 && songIdx === set.song.length - 1}
+                                    key={`${songIdx}-${song.name || "unknown"}`}
+                                    song={song}
                                 />
                             );
                         })

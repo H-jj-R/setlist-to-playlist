@@ -23,7 +23,7 @@ interface LoginDialogProps {
  */
 const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) => {
     const { t: i18n } = useTranslation();
-    const { state, setState, handleClose, handleSubmit } = loginDialogHook(onClose, onLoginSuccess);
+    const { handleClose, handleSubmit, setState, state } = loginDialogHook(onClose, onLoginSuccess);
 
     return (
         state.isDialogVisible && (
@@ -50,16 +50,16 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                     >
                         {/* Close Button */}
                         <button
-                            onClick={handleClose}
                             className="absolute left-4 top-6 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                             aria-label={i18n("common:close")}
+                            onClick={handleClose}
                         >
-                            <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
+                            <FontAwesomeIcon className="h-6 w-6" icon={faTimes} />
                         </button>
 
                         {/* Login Form */}
                         <div id="login-form-container">
-                            <LoginForm handleSubmit={handleSubmit} state={state} setState={setState} />
+                            <LoginForm handleSubmit={handleSubmit} setState={setState} state={state} />
                         </div>
                     </div>
                 </div>
@@ -68,13 +68,13 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                 {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}
-                        type={state.messageDialog.type}
                         onClose={() => {
                             setState((prev) => ({
                                 ...prev,
                                 messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
                             }));
                         }}
+                        type={state.messageDialog.type}
                     />
                 )}
             </>

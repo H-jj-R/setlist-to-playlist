@@ -28,15 +28,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Make a GET request to Spotify's search API
         const response = await fetch(
             `https://api.spotify.com/v1/search?${new URLSearchParams({
+                limit: "5",
                 q: `${track} artist:${artist}`,
-                type: "track",
-                limit: "5"
+                type: "track"
             }).toString()}`,
             {
-                method: "GET",
                 headers: {
                     Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`
-                }
+                },
+                method: "GET"
             }
         );
 

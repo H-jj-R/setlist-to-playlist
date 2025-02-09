@@ -11,7 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next";
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { name, description, tracks } = req.body;
+    const { description, name, tracks } = req.body;
     try {
         const baseUrl = getBaseUrl(req);
 
@@ -34,16 +34,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // 2. Create playlist
         const createPlaylistResponse = await fetch(`${baseUrl}/api/spotify/create-playlist`, {
-            method: "POST",
+            body: JSON.stringify({
+                description: description,
+                name: name,
+                userId: userData.id
+            }),
             headers: {
                 "Content-Type": "application/json",
                 cookie: req.headers.cookie || "" // Forward client cookies for access token
             },
-            body: JSON.stringify({
-                userId: userData.id,
-                name: name,
-                description: description
-            })
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -58,15 +58,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // 3. Add songs to playlist
         const addItemsResponse = await fetch(`${baseUrl}/api/spotify/add-items-to-playlist`, {
-            method: "POST",
+            body: JSON.stringify({
+                playlistId: playlistData.data.id,
+                tracks: tracks
+            }),
             headers: {
                 "Content-Type": "application/json",
                 cookie: req.headers.cookie || "" // Forward client cookies for access token
             },
-            body: JSON.stringify({
-                playlistId: playlistData.data.id,
-                tracks: tracks
-            })
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)

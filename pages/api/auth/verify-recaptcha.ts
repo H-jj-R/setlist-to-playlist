@@ -12,25 +12,25 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Check if the request method is POST
     if (req.method !== "POST") {
-        return res.status(405).json({ success: false, error: "common:methodNotAllowed" });
+        return res.status(405).json({ error: "common:methodNotAllowed", success: false });
     }
 
     const { token } = req.body;
 
     // Check if the reCAPTCHA token is provided in the request body
     if (!token) {
-        return res.status(400).json({ success: false, error: "account:missingRecaptchaToken" });
+        return res.status(400).json({ error: "account:missingRecaptchaToken", success: false });
     }
 
     try {
         // Send a request to Google's reCAPTCHA verification endpoint
         const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
-                secret: process.env.RECAPTCHA_SECRET_KEY!,
-                response: token
-            }).toString()
+                response: token,
+                secret: process.env.RECAPTCHA_SECRET_KEY!
+            }).toString(),
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            method: "POST"
         });
 
         const data = await response.json();
@@ -41,12 +41,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
             // If verification failed, return the error codes from Google's response
             return res.status(400).json({
-                success: false,
-                error: data["error-codes"]?.join(", ") || "account:recaptchaNotVerified"
+                error: data["error-codes"]?.join(", ") || "account:recaptchaNotVerified",
+                success: false
             });
         }
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ success: false, error: "common:internalServerError" });
+        return res.status(500).json({ error: "common:internalServerError", success: false });
     }
 }

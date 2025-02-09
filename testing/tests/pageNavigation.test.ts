@@ -1,4 +1,5 @@
 import * as puppeteer from "puppeteer";
+
 import { launch } from "../utils";
 
 let browser: puppeteer.Browser;

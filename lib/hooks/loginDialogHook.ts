@@ -15,15 +15,15 @@ import { useTranslation } from "react-i18next";
 export default function loginDialogHook(onClose: () => void, onLoginSuccess: () => void) {
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        isVisible: false,
+        dialogState: LoginDialogState.Login,
         isDialogVisible: true,
-        passwordVisible: false,
-        passwordError: null as string | null,
+        isVisible: false,
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
-        recaptchaToken: null as string | null,
-        otpInput: null as string | null,
-        storedEmail: null as string | null,
-        dialogState: LoginDialogState.Login
+        otpInput: null as null | string,
+        passwordError: null as null | string,
+        passwordVisible: false,
+        recaptchaToken: null as null | string,
+        storedEmail: null as null | string
     });
 
     const PASSWORD_REGEX: RegExp =
@@ -104,11 +104,11 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     const handleLogin = async (email: string, password: string) => {
         try {
             const response = await fetch("/api/auth/login", {
-                method: "POST",
+                body: JSON.stringify({ email, password }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email, password })
+                method: "POST"
             });
 
             if (response.ok) {
@@ -119,8 +119,8 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:loginFailed", { message: i18n(data.error) })
+                    error: i18n("account:loginFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -138,28 +138,28 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     const handleSignUp = async (username: string, email: string, password: string) => {
         try {
             const response = await fetch("/api/auth/signup", {
-                method: "POST",
+                body: JSON.stringify({ email, password, username }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password })
+                method: "POST"
             });
 
             if (response.ok) {
                 setState((prev) => ({
                     ...prev,
+                    dialogState: LoginDialogState.Login,
                     messageDialog: {
                         isOpen: true,
                         message: i18n("account:signUpSuccess"),
                         type: MessageDialogState.Success
-                    },
-                    dialogState: LoginDialogState.Login
+                    }
                 }));
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:signUpFailed", { message: i18n(data.error) })
+                    error: i18n("account:signUpFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -178,12 +178,12 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         if (!PASSWORD_REGEX.test(password)) {
             setState((prev) => ({
                 ...prev,
-                passwordError: i18n("account:passwordError"),
                 messageDialog: {
                     isOpen: false,
                     message: "",
                     type: MessageDialogState.Success
-                }
+                },
+                passwordError: i18n("account:passwordError")
             }));
             return false;
         }
@@ -209,11 +209,11 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         }
         // Verify reCAPTCHA token
         const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
-            method: "POST",
+            body: JSON.stringify({ token: state.recaptchaToken }),
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ token: state.recaptchaToken })
+            method: "POST"
         });
         const { success } = await recaptchaResponse.json();
         if (!success) {
@@ -232,9 +232,9 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
 
     const handleForgotPassword = async (email: string) => {
         const response = await fetch("/api/auth/forgot-password", {
-            method: "POST",
+            body: JSON.stringify({ email }),
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
+            method: "POST"
         });
         if (!response.ok) {
             const data = await response.json();
@@ -249,13 +249,13 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         } else {
             setState((prev) => ({
                 ...prev,
+                dialogState: LoginDialogState.ResetPassword,
                 messageDialog: {
                     isOpen: false,
                     message: "",
                     type: MessageDialogState.Success
                 },
-                storedEmail: email,
-                dialogState: LoginDialogState.ResetPassword
+                storedEmail: email
             }));
         }
     };
@@ -267,29 +267,29 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
 
         try {
             const response = await fetch("/api/auth/reset-password", {
-                method: "POST",
+                body: JSON.stringify({ email: state.storedEmail, newPassword, otp: state.otpInput }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email: state.storedEmail, otp: state.otpInput, newPassword })
+                method: "POST"
             });
 
             if (response.ok) {
                 setState((prev) => ({
                     ...prev,
+                    dialogState: LoginDialogState.Login,
                     messageDialog: {
                         isOpen: true,
                         message: i18n("account:resetPasswordSuccess"),
                         type: MessageDialogState.Success
                     },
-                    storedEmail: null,
-                    dialogState: LoginDialogState.Login
+                    storedEmail: null
                 }));
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:resetPasswordFailed", { message: i18n(data.error) })
+                    error: i18n("account:resetPasswordFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -305,9 +305,9 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     };
 
     return {
-        state,
-        setState,
         handleClose,
-        handleSubmit
+        handleSubmit,
+        setState,
+        state
     };
 }

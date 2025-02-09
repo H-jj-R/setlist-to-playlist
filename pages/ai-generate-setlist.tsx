@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
  * Main page for viewing setlists.
  */
 export default function AIGenerateSetlist() {
-    const { mounted, state, setState, handleSearch, handleExport, handleCombineSetlists } = generateSetlistHook();
+    const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = generateSetlistHook();
     const { isAuthenticated } = useAuth();
     const { t: i18n } = useTranslation();
 
@@ -47,7 +47,7 @@ export default function AIGenerateSetlist() {
                                 state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                             }`}
                         >
-                            <SearchBar onSearch={handleSearch} aria-label={i18n("generateSetlist:searchForArtist")} />
+                            <SearchBar aria-label={i18n("generateSetlist:searchForArtist")} onSearch={handleSearch} />
                         </div>
 
                         {/* Loading indicator */}
@@ -92,11 +92,11 @@ export default function AIGenerateSetlist() {
                                 </div>
                                 <div id="setlist-container" className="mt-2 flex gap-4">
                                     {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
-                                        <div key={index} id="setlist-display" className="w-full animate-fadeIn">
+                                        <div id="setlist-display" className="w-full animate-fadeIn" key={index}>
                                             <AISetlist
-                                                setlist={[setlist]}
-                                                predictionNum={index + 1}
                                                 onExport={handleExport}
+                                                predictionNum={index + 1}
+                                                setlist={[setlist]}
                                             />
                                         </div>
                                     ))}
@@ -120,13 +120,11 @@ export default function AIGenerateSetlist() {
                     {/* Export Dialog */}
                     {state.pageState === PageState.Setlist && (
                         <ExportDialog
-                            setlist={state.chosenSetlist}
                             artistData={{
-                                spotifyArtist: state.allSetlistsData.spotifyArtist,
-                                setlistfmArtist: state.allSetlistsData.setlistfmArtist
+                                setlistfmArtist: state.allSetlistsData.setlistfmArtist,
+                                spotifyArtist: state.allSetlistsData.spotifyArtist
                             }}
                             isOpen={state.exportDialogOpen}
-                            predictedSetlist={true}
                             onClose={() => {
                                 setState((prev) => ({
                                     ...prev,
@@ -134,6 +132,8 @@ export default function AIGenerateSetlist() {
                                     exportDialogOpen: false
                                 }));
                             }}
+                            predictedSetlist={true}
+                            setlist={state.chosenSetlist}
                         />
                     )}
                 </>

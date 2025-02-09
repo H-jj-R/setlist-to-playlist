@@ -27,9 +27,9 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     setlist
 }) => {
     const { t: i18n } = useTranslation();
-    const { state, toggleExcludeSong } = setlistSongsExportHook(setlist, artistData, onSongsFetched, predictedSetlist);
+    const { state, toggleExcludeSong } = setlistSongsExportHook(artistData, onSongsFetched, setlist, predictedSetlist);
 
-    const SongListItem = ({ spotifySong, idx }: { spotifySong: any; idx: number }) => (
+    const SongListItem = ({ idx, spotifySong }: { idx: number; spotifySong: any; }) => (
         <li
             id={`song-item-${spotifySong?.id}`}
             className={`cursor-pointer py-2 ${
@@ -41,9 +41,9 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                 {spotifySong?.album?.images[0]?.url && (
                     <img
                         id={`song-cover-${spotifySong?.id}`}
-                        src={spotifySong.album.images[0].url}
-                        alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
                         className="h-12 w-12 rounded shadow"
+                        alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
+                        src={spotifySong.album.images[0].url}
                     />
                 )}
                 <div>
@@ -73,13 +73,13 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         {state.spotifySongs?.map((spotifySong, idx) =>
                             spotifySong?.name ? (
                                 <SongListItem
+                                    idx={idx}
                                     key={`${idx}-${spotifySong.name || "unknown"}`}
                                     spotifySong={spotifySong}
-                                    idx={idx}
                                 />
                             ) : (
                                 !state.hideSongsNotFound && (
-                                    <li key={`${idx}-${spotifySong?.name || "unknown"}`} className="py-2 text-red-500">
+                                    <li className="py-2 text-red-500" key={`${idx}-${spotifySong?.name || "unknown"}`}>
                                         <ErrorMessage
                                             message={`${i18n("exportSetlist:songNotFound")}: ${
                                                 predictedSetlist

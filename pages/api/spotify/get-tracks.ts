@@ -33,11 +33,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const trackIdsParam = Array.isArray(trackIds) ? trackIds.join(",") : trackIds;
 
         const response = await fetch(`https://api.spotify.com/v1/tracks?ids=${trackIdsParam}`, {
-            method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json"
-            }
+            },
+            method: "GET"
         });
 
         if (!response.ok) {

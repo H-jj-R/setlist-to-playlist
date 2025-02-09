@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const userId = decoded.userId;
         const { playlistId } = req.query;
 
-        const { playlistName, playlistDescription } = req.body;
+        const { playlistDescription, playlistName } = req.body;
 
         if (!playlistId || !playlistName) {
             return res.status(400).json({ error: "userPlaylists:missingParameters" });

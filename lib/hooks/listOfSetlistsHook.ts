@@ -14,12 +14,12 @@ import { useTranslation } from "react-i18next";
 export default function listOfSetlistsHook(setlistData: Record<string, any>) {
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        loadedSetlists: (setlistData.setlists.setlist || []) as Record<string, any>[] | [],
-        setlists: (setlistData.setlists.setlist || []) as Record<string, any>[] | [],
         currentPage: ((setlistData.setlists.page as number) || 1) as number,
-        isLoading: false,
         hiddenSetlistsCount: 0,
-        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true"
+        hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
+        isLoading: false,
+        loadedSetlists: (setlistData.setlists.setlist || []) as [] | Record<string, any>[],
+        setlists: (setlistData.setlists.setlist || []) as [] | Record<string, any>[]
     });
 
     // Update setlists
@@ -29,8 +29,8 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
             : state.loadedSetlists;
         setState((prev) => ({
             ...prev,
-            setlists: filteredSetlists,
-            hiddenSetlistsCount: state.loadedSetlists.length - filteredSetlists.length
+            hiddenSetlistsCount: state.loadedSetlists.length - filteredSetlists.length,
+            setlists: filteredSetlists
         }));
     }, [state.hideEmptySetlists, state.loadedSetlists]);
 
@@ -75,8 +75,8 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
             const responseJson = await response.json();
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
@@ -84,8 +84,8 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
             const newSetlists = newData.setlist || [];
             setState((prev) => ({
                 ...prev,
-                loadedSetlists: [...prev.loadedSetlists, ...newSetlists] as Record<string, any>[],
-                currentPage: prev.currentPage + 1
+                currentPage: prev.currentPage + 1,
+                loadedSetlists: [...prev.loadedSetlists, ...newSetlists] as Record<string, any>[]
             }));
         } catch (error) {
             console.error(error);
@@ -97,5 +97,5 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         }
     };
 
-    return { state, hasMorePages, loadMoreSetlists };
+    return { hasMorePages, loadMoreSetlists, state };
 }

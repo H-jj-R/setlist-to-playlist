@@ -24,7 +24,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
     // Safely access the first element of the setlist array
     const setlistData = Array.isArray(setlist) && setlist.length > 0 ? setlist[0] : {};
 
-    const SongListItem = ({ song, isLast }: { song: any; isLast: boolean }) => (
+    const SongListItem = ({ isLast, song }: { isLast: boolean; song: any; }) => (
         <li
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
@@ -34,8 +34,8 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
                     {/* Tape indicator icon */}
                     {song.tape && (
                         <FontAwesomeIcon
-                            icon={faRecordVinyl}
                             className="opacity-80"
+                            icon={faRecordVinyl}
                             title={i18n("setlistSearch:playedFromTape")}
                         />
                     )}
@@ -83,9 +83,9 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
                     {setlistData.predictedSongs.map((song: any, songIdx: number) => {
                         return (
                             <SongListItem
+                                isLast={songIdx === setlistData.predictedSongs.length - 1}
                                 key={`${songIdx}-${song.name || "unknown"}`}
                                 song={song}
-                                isLast={songIdx === setlistData.predictedSongs.length - 1}
                             />
                         );
                     })}

@@ -28,8 +28,8 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
         >
             <FontAwesomeIcon
                 id="error-icon"
-                icon={faTriangleExclamation}
                 className={`text-red-500 ${small ? "h-6 w-6" : "h-10 w-10"}`}
+                icon={faTriangleExclamation}
             />
             <span
                 id="error-message"

@@ -26,9 +26,9 @@ interface UserPlaylistProps {
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
     const { t: i18n } = useTranslation();
-    const { state, setState, toggleExpand, handleSave, handleRecover, handleDelete } = userPlaylistHook(
-        playlist,
-        onDelete
+    const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = userPlaylistHook(
+        onDelete,
+        playlist
     );
 
     return (
@@ -46,44 +46,44 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                             <div className="flex items-center space-x-4">
                                 {/* Edit Button */}
                                 <button
+                                    className="p-1 text-gray-600 hover:text-gray-900"
                                     onClick={() => {
                                         setState((prev) => ({
                                             ...prev,
                                             editing: true
                                         }));
                                     }}
-                                    className="p-1 text-gray-600 hover:text-gray-900"
                                 >
-                                    <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
+                                    <FontAwesomeIcon className="text-white" icon={faEdit} size="lg" />
                                 </button>
 
                                 {/* Recovery & Delete Buttons */}
                                 <div className="flex flex-col items-center gap-2">
                                     <button
-                                        onClick={handleRecover}
                                         className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
+                                        onClick={handleRecover}
                                     >
                                         {i18n("userPlaylists:recover")}
                                     </button>
                                     <button
+                                        className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                         onClick={() => {
                                             setState((prev) => ({
                                                 ...prev,
                                                 showConfirmation: true
                                             }));
                                         }}
-                                        className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                     >
                                         {i18n("common:delete")}
                                     </button>
                                 </div>
 
                                 {/* Expand/Collapse Button */}
-                                <button onClick={toggleExpand} className="p-1">
+                                <button className="p-1" onClick={toggleExpand}>
                                     {state.expanded ? (
-                                        <FontAwesomeIcon icon={faChevronUp} size="lg" className="text-white" />
+                                        <FontAwesomeIcon className="text-white" icon={faChevronUp} size="lg" />
                                     ) : (
-                                        <FontAwesomeIcon icon={faChevronDown} size="lg" className="text-white" />
+                                        <FontAwesomeIcon className="text-white" icon={faChevronDown} size="lg" />
                                     )}
                                 </button>
                             </div>
@@ -92,7 +92,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                         <div className="w-10/12">
                             <input
                                 className="mb-2 w-full rounded-md border p-2"
-                                value={state.name}
+                                autoComplete="off"
                                 maxLength={100}
                                 onChange={(e) => {
                                     setState((prev) => ({
@@ -102,11 +102,11 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 }}
                                 placeholder={i18n("exportSetlist:enterPlaylistName")}
                                 required
-                                autoComplete="off"
+                                value={state.name}
                             />
                             <textarea
                                 className="h-32 w-full rounded-md border p-2"
-                                value={state.description}
+                                autoComplete="off"
                                 maxLength={300}
                                 onChange={(e) => {
                                     setState((prev) => ({
@@ -115,25 +115,25 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                     }));
                                 }}
                                 placeholder={i18n("exportSetlist:enterPlaylistDescription")}
-                                autoComplete="off"
+                                value={state.description}
                             />
                             <div className="mt-2 flex justify-center space-x-2 p-2">
                                 <button
-                                    onClick={handleSave}
                                     className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
+                                    onClick={handleSave}
                                 >
                                     {i18n("common:save")}
                                 </button>
                                 <button
+                                    className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                     onClick={() => {
                                         setState((prev) => ({
                                             ...prev,
+                                            description: state.initialDescription,
                                             editing: false,
-                                            name: state.initialName,
-                                            description: state.initialDescription
+                                            name: state.initialName
                                         }));
                                     }}
-                                    className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
@@ -153,11 +153,11 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                         ) : (
                             <ul className="space-y-2">
                                 {state.tracks?.map((track, idx) => (
-                                    <li key={`${idx}-${track.id}`} className="mt-4 flex items-center space-x-4">
+                                    <li className="mt-4 flex items-center space-x-4" key={`${idx}-${track.id}`}>
                                         <img
-                                            src={track.album.images[0]?.url}
-                                            alt={track.name}
                                             className="h-12 w-12 rounded"
+                                            alt={track.name}
+                                            src={track.album.images[0]?.url}
                                         />
                                         <div>
                                             <p className="font-medium">{track.name}</p>
@@ -186,13 +186,13 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
             {/* Confirmation Modal */}
             {state.showConfirmation && (
                 <ConfirmationModal
-                    onConfirm={handleDelete}
                     onCancel={() => {
                         setState((prev) => ({
                             ...prev,
                             showConfirmation: false
                         }));
                     }}
+                    onConfirm={handleDelete}
                 />
             )}
 
@@ -200,7 +200,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
             {state.messageDialog.isOpen && (
                 <MessageDialog
                     message={state.messageDialog.message}
-                    type={state.messageDialog.type}
                     onClose={() => {
                         state.messageDialog.onClose === null
                             ? setState((prev) => ({
@@ -208,12 +207,13 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                   messageDialog: {
                                       isOpen: false,
                                       message: "",
-                                      type: MessageDialogState.Success,
-                                      onClose: null
+                                      onClose: null,
+                                      type: MessageDialogState.Success
                                   }
                               }))
                             : state.messageDialog.onClose();
                     }}
+                    type={state.messageDialog.type}
                 />
             )}
         </>

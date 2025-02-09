@@ -1,5 +1,6 @@
 import * as puppeteer from "puppeteer";
-import { launch, delay } from "../utils";
+
+import { delay, launch } from "../utils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;

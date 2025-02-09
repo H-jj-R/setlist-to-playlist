@@ -15,21 +15,21 @@ import { useTranslation } from "react-i18next";
  * Hook for data handling on the ExportDialog component.
  */
 export default function exportDialogHook(
-    setlist: Record<string, any>,
     artistData: Record<string, any>,
     isOpen: boolean,
+    onClose: () => void,
     predictedSetlist: boolean,
-    onClose: () => void
+    setlist: Record<string, any>
 ) {
     const { isAuthenticated } = useAuth();
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        playlistName: "" as string,
-        playlistDescription: "" as string,
         image: null as File | null,
-        imagePreview: null as string | ArrayBuffer | null,
-        spotifySongs: null as Record<string, any> | null,
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+        imagePreview: null as ArrayBuffer | null | string,
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
+        playlistDescription: "" as string,
+        playlistName: "" as string,
+        spotifySongs: null as null | Record<string, any>
     });
 
     const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
@@ -132,13 +132,13 @@ export default function exportDialogHook(
         }
     }, []);
 
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop: handleImageChange,
+    const { getInputProps, getRootProps } = useDropzone({
         accept: {
             "image/jpeg": [".jpg", ".jpeg"],
             "image/png": [".png"]
         },
-        maxFiles: 1
+        maxFiles: 1,
+        onDrop: handleImageChange
     });
 
     const handleExport = async () => {
@@ -158,15 +158,15 @@ export default function exportDialogHook(
 
             if (!state.playlistName.trim()) {
                 throw {
-                    status: 400,
-                    error: i18n("exportSetlist:noNameProvided")
+                    error: i18n("exportSetlist:noNameProvided"),
+                    status: 400
                 };
             }
 
             if (state.spotifySongs.length === 0) {
                 throw {
-                    status: 400,
-                    error: i18n("exportSetlist:noSongsProvided")
+                    error: i18n("exportSetlist:noSongsProvided"),
+                    status: 400
                 };
             }
 
@@ -175,32 +175,32 @@ export default function exportDialogHook(
                 base64Image = await processImage(state.image);
                 if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
                     throw {
-                        status: 400,
-                        error: i18n("exportSetlist:errorProcessingImage")
+                        error: i18n("exportSetlist:errorProcessingImage"),
+                        status: 400
                     };
                 }
             }
 
             const response = await fetch(`/api/controllers/create-spotify-playlist`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                },
                 body: JSON.stringify({
-                    name: state.playlistName,
                     description: state.playlistDescription,
                     image: base64Image,
-                    tracks: JSON.stringify(state.spotifySongs),
-                    isLoggedIn: isAuthenticated
-                })
+                    isLoggedIn: isAuthenticated,
+                    name: state.playlistName,
+                    tracks: JSON.stringify(state.spotifySongs)
+                }),
+                headers: {
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                method: "POST"
             });
             const responseJson = await response.json();
 
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
+                    error: i18n(responseJson.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
@@ -230,26 +230,26 @@ export default function exportDialogHook(
     const resetState = () => {
         setState((prev) => ({
             ...prev,
-            playlistName: "",
-            playlistDescription: "",
             image: null,
             imagePreview: null,
-            spotifySongs: null,
             messageDialog: {
                 isOpen: false,
                 message: "",
                 type: MessageDialogState.Success
-            }
+            },
+            playlistDescription: "",
+            playlistName: "",
+            spotifySongs: null
         }));
     };
 
     return {
-        state,
-        setState,
-        getRootProps,
         getInputProps,
+        getRootProps,
         handleExport,
+        onClose,
         resetState,
-        onClose
+        setState,
+        state
     };
 }
