@@ -4,17 +4,15 @@
  * See LICENSE for details.
  */
 
+import MessageDialogState from "@constants/messageDialogState";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import { MessageDialogState } from "@constants/messageDialogState";
 
 /**
  * Hook for data handling on the user-playlist page.
  */
 export default function userPlaylistHook(playlist: any, onDelete: (playlistId: number) => void) {
     const { t: i18n } = useTranslation();
-    const router = useRouter();
     const [state, setState] = useState({
         expanded: false,
         editing: false,

@@ -4,15 +4,14 @@
  * See LICENSE for details.
  */
 
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
-    const { pathname, searchParams } = request.nextUrl;
+export async function middleware(req: NextRequest) {
+    const { pathname, searchParams } = req.nextUrl;
 
     // Helper function to build a redirect URL with optional query parameters
     const createRedirectUrl = (targetPath: string, redirectPath: string, query?: string) => {
-        const redirectUrl = new URL(targetPath, request.url);
+        const redirectUrl = new URL(targetPath, req.url);
         redirectUrl.searchParams.set("redirect", redirectPath); // Original route to redirect back to
         if (query) {
             redirectUrl.searchParams.set("query", query); // Include query string if available
@@ -27,8 +26,7 @@ export async function middleware(request: NextRequest) {
         pathname.startsWith("/api/spotify/search-artist") ||
         pathname.startsWith("/api/spotify/get-tracks")
     ) {
-        const hasSpotifyAccessToken = request.cookies.get("spotify_access_token");
-        if (!hasSpotifyAccessToken) {
+        if (!req.cookies.get("spotify_access_token")) {
             const redirectUrl = createRedirectUrl(
                 "/api/spotify/generate-access-token",
                 pathname,
@@ -37,11 +35,10 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(redirectUrl);
         }
     } else if (pathname.startsWith("/api/controllers/check-for-authentication")) {
-        const hasRefreshToken = request.cookies.get("spotify_user_refresh_token");
-        const hasAccessToken = request.cookies.get("spotify_user_access_token");
+        const hasRefreshToken = req.cookies.get("spotify_user_refresh_token");
+        const hasAccessToken = req.cookies.get("spotify_user_access_token");
         if (hasRefreshToken && !hasAccessToken) {
-            const redirectUrl = createRedirectUrl("/api/spotify/regenerate-user-access-token", pathname);
-            return NextResponse.redirect(redirectUrl);
+            return NextResponse.redirect(createRedirectUrl("/api/spotify/regenerate-user-access-token", pathname));
         }
     }
 

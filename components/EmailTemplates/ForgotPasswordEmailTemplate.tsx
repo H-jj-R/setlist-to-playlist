@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import { Html, Head, Body, Container, Heading, Text } from "@react-email/components";
+import { Body, Container, Head, Heading, Html, Text } from "@react-email/components";
 
 interface ForgotPasswordEmailTemplateProps {
     otp: string;

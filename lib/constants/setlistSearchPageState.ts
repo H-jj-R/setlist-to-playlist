@@ -7,9 +7,11 @@
 /**
  * Enum for handling state of setlist-search page.
  */
-export enum PageState {
+enum PageState {
     Idle,
     ListOfSetlists,
     LosSetlist,
     Setlist
 }
+
+export default PageState;

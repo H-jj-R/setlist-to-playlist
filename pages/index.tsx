@@ -4,11 +4,11 @@
  * See LICENSE for details.
  */
 
-import { useEffect, useState } from "react";
 import GenerateSetlistSection from "@components/LandingPage/LandingPageGenerateSetlistSection";
 import HeroSection from "@components/LandingPage/LandingPageHeroSection";
 import InfoSection from "@components/LandingPage/LandingPageInfoSection";
 import Layout from "@components/Shared/Layout";
+import { useEffect, useState } from "react";
 
 /**
  * The landing page of the site.
@@ -23,7 +23,7 @@ export default function Home() {
     if (!mounted) return null;
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex min-h-screen flex-col">
             <Layout>
                 <div className="flex-grow">
                     <HeroSection />

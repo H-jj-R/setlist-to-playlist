@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
+import PageState from "@constants/generateSetlistPageState";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { PageState } from "@constants/generateSetlistPageState";
 
 /**
  * Hook for data handling on the setlist-search page.

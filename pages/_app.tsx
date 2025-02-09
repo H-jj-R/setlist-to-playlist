@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import type { AppProps } from "next/app";
-import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@context/AuthContext";
+import { ThemeProvider } from "next-themes";
+import type { AppProps } from "next/app";
 import "@/styles/globals.css";
 import "@constants/i18n";
 

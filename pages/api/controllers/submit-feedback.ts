@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
+import SupportEmailTemplate from "@components/EmailTemplates/SupportEmailTemplate";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
-import SupportEmailTemplate from "@components/EmailTemplates/SupportEmailTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

@@ -4,25 +4,25 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { useTranslation } from "react-i18next";
-import Layout from "@components/Shared/Layout";
-import SearchBar from "@components/SearchAndExport/SearchBar";
-import AISetlist from "@components/SearchAndExport/AISetlist";
 import ExportDialog from "@components/Dialogs/ExportDialog";
-import ErrorMessage from "@components/Shared/ErrorMessage";
 import SpotifyAuthDialog from "@components/Dialogs/SpotifyAuthDialog";
-import { PageState } from "@constants/generateSetlistPageState";
+import AISetlist from "@components/SearchAndExport/AISetlist";
+import SearchBar from "@components/SearchAndExport/SearchBar";
+import ErrorMessage from "@components/Shared/ErrorMessage";
+import Layout from "@components/Shared/Layout";
+import PageState from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
 import generateSetlistHook from "@hooks/generateSetlistHook";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
  */
 export default function AIGenerateSetlist() {
-    const { t: i18n } = useTranslation();
-    const { isAuthenticated } = useAuth();
     const { mounted, state, setState, handleSearch, handleExport, handleCombineSetlists } = generateSetlistHook();
+    const { isAuthenticated } = useAuth();
+    const { t: i18n } = useTranslation();
 
     if (!mounted) return null;
 
@@ -31,19 +31,19 @@ export default function AIGenerateSetlist() {
             {!isAuthenticated ? (
                 // Dialog displayed when the user is not authenticated
                 <div className="flex items-center justify-center">
-                    <div className="relative top-2/3 p-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg shadow-lg text-center text-white">
-                        <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
-                        <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
+                    <div className="relative top-2/3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg">
+                        <h2 className="mb-4 text-2xl font-bold">{i18n("common:authenticationRequired")}</h2>
+                        <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
                     </div>
                 </div>
             ) : (
                 // Main content when the user is authenticated
                 <>
                     {/* Search bar */}
-                    <div id="search-bar-container" className="p-5 overflow-hidden">
+                    <div id="search-bar-container" className="overflow-hidden p-5">
                         <div
                             id="search-bar"
-                            className={`fixed left-1/2 transform -translate-x-1/2 transition-all duration-[750ms] ease-in-out ${
+                            className={`fixed left-1/2 -translate-x-1/2 transform transition-all duration-[750ms] ease-in-out ${
                                 state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                             }`}
                         >
@@ -52,13 +52,13 @@ export default function AIGenerateSetlist() {
 
                         {/* Loading indicator */}
                         {state.showLoading && !state.animLoading && (
-                            <div id="progress-indicator" className="pt-8 mt-16 flex flex-col items-center">
+                            <div id="progress-indicator" className="mt-16 flex flex-col items-center pt-8">
                                 <p className="mb-2 text-lg font-medium text-gray-700">
                                     {state.progress < 100
                                         ? `Generating setlist... (${state.progress}%)`
                                         : "Finalising..."}
                                 </p>
-                                <div className="w-64 h-2 bg-gray-300 rounded-full overflow-hidden">
+                                <div className="h-2 w-64 overflow-hidden rounded-full bg-gray-300">
                                     <div
                                         className="h-full bg-blue-600 transition-all duration-300"
                                         style={{ width: `${state.progress}%` }}
@@ -71,7 +71,7 @@ export default function AIGenerateSetlist() {
                             <>
                                 {/* Error indicator */}
                                 {state.error && (
-                                    <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
+                                    <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
                                         <ErrorMessage message={state.error} />
                                     </div>
                                 )}
@@ -80,17 +80,17 @@ export default function AIGenerateSetlist() {
 
                         {state.pageState === PageState.Setlist && (
                             <>
-                                <div className="pt-5 overflow-hidden">
-                                    <div className="flex justify-center mt-6">
+                                <div className="overflow-hidden pt-5">
+                                    <div className="mt-6 flex justify-center">
                                         <button
-                                            className="px-6 py-3 text-white font-semibold rounded-lg shadow-mdtransition duration-300 bg-gradient-to-bl from-green-400 to-green-600 hover:from-green-500 hover:to-green-700"
+                                            className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
                                             onClick={handleCombineSetlists}
                                         >
                                             {i18n("generateSetlist:combineExportAll")}
                                         </button>
                                     </div>
                                 </div>
-                                <div id="setlist-container" className="flex gap-4 mt-2">
+                                <div id="setlist-container" className="mt-2 flex gap-4">
                                     {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
                                         <div key={index} id="setlist-display" className="w-full animate-fadeIn">
                                             <AISetlist

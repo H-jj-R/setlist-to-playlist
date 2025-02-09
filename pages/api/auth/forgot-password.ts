@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { Resend } from "resend";
 import ForgotPasswordEmailTemplate from "@components/EmailTemplates/ForgotPasswordEmailTemplate";
 import db from "@constants/db";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Resend } from "resend";
 
 /**
  * API handler to send email to a user who has forgotten their password.

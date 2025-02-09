@@ -4,33 +4,25 @@
  * See LICENSE for details.
  */
 
+import MessageDialogState from "@constants/messageDialogState";
+import { useAuth } from "@context/AuthContext";
+import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { MessageDialogState } from "@constants/messageDialogState";
-import { useAuth } from "@context/AuthContext";
-
-interface ExportDialogHookProps {
-    setlist: Record<string, any>;
-    artistData: Record<string, any>;
-    isOpen: boolean;
-    predictedSetlist?: boolean;
-    onClose: () => void;
-}
 
 /**
  * Hook for data handling on the ExportDialog component.
  */
-export default function exportDialogHook({
-    setlist,
-    artistData,
-    isOpen,
-    predictedSetlist,
-    onClose
-}: ExportDialogHookProps) {
-    const { t: i18n } = useTranslation();
+export default function exportDialogHook(
+    setlist: Record<string, any>,
+    artistData: Record<string, any>,
+    isOpen: boolean,
+    predictedSetlist: boolean,
+    onClose: () => void
+) {
     const { isAuthenticated } = useAuth();
+    const { t: i18n } = useTranslation();
     const [state, setState] = useState({
         playlistName: "" as string,
         playlistDescription: "" as string,

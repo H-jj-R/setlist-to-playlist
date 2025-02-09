@@ -4,21 +4,21 @@
  * See LICENSE for details.
  */
 
+import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
 
 interface AISetlistProps {
-    setlist: Record<string, any>; // The setlist data to be displayed
-    predictionNum: number; // The number of the prediction
     onExport: (setlist: Record<string, any>) => void; // Function to trigger Spotify export
+    predictionNum: number; // The number of the prediction
+    setlist: Record<string, any>; // The setlist data to be displayed
 }
 
 /**
  * Displays a setlist from it's predicted AI-generated details.
  */
-const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport }) => {
+const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }) => {
     const { t: i18n } = useTranslation();
 
     // Safely access the first element of the setlist array
@@ -29,7 +29,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
         >
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
                     {song.tape && (
@@ -42,7 +42,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
                     {/* Song name */}
                     <span className={"font-medium"}>{song.name}</span>
                 </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 text-right max-w-[60%]">
+                <div className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400">
                     {/* Additional song details */}
                     {song.cover &&
                         `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}`}
@@ -54,15 +54,15 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
     return (
         <div
             id="setlist-container"
-            className="px-5 border-4 border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-12rem)] overflow-y-auto"
+            className="h-[calc(100vh-12rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200"
         >
             {/* Container for buttons */}
-            <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 w-full">
-                <div id="setlist-buttons" className="flex justify-between items-center mb-4 pt-4 pb-2">
+            <div className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
+                <div id="setlist-buttons" className="mb-4 flex items-center justify-between pb-2 pt-4">
                     {/* Export to Spotify Button */}
                     <button
                         id="export-spotify-button"
-                        className="ml-auto mr-auto px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
+                        className="ml-auto mr-auto w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
                         onClick={() => onExport(setlistData)}
                     >
                         {i18n("common:exportToSpotify")}
@@ -91,7 +91,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ setlist, predictionNum, onExport 
                     })}
                 </ul>
             ) : (
-                <p id="no-songs-message" className="italic text-center">
+                <p id="no-songs-message" className="text-center italic">
                     {i18n("setlistSearch:noSongsFound")}
                 </p>
             )}

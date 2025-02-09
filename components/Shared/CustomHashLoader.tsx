@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import React, { CSSProperties } from "react";
 import { useTranslation } from "next-i18next";
+import React, { CSSProperties } from "react";
 import HashLoader from "react-spinners/HashLoader";
 
 interface CustomHashLoaderProps {

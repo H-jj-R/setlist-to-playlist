@@ -4,18 +4,18 @@
  * See LICENSE for details.
  */
 
-import { useEffect, useState } from "react";
 import Layout from "@components/Shared/Layout";
 import { useTheme } from "next-themes";
-import { useTranslation, Trans } from "react-i18next";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 /**
  * Privacy Policy page.
  */
 export default function PrivacyPolicy() {
-    const { t: i18n } = useTranslation();
     const { resolvedTheme } = useTheme();
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -27,16 +27,16 @@ export default function PrivacyPolicy() {
 
     return (
         <Layout>
-            <div className="max-w-2xl mx-auto p-6">
-                <h1 className="text-3xl font-bold mb-4">{i18n("privacyPolicy:privacyPolicy")}</h1>
+            <div className="mx-auto max-w-2xl p-6">
+                <h1 className="mb-4 text-3xl font-bold">{i18n("privacyPolicy:privacyPolicy")}</h1>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">{i18n("privacyPolicy:introduction")}</h2>
+                    <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:introduction")}</h2>
                     <p className="text-gray-700 dark:text-gray-300">{i18n("privacyPolicy:introductionContent")}</p>
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">{i18n("privacyPolicy:dataWeCollect")}</h2>
+                    <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:dataWeCollect")}</h2>
                     <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300">
                         <li>
                             <strong>{i18n("privacyPolicy:accountInformation")}</strong>{" "}
@@ -54,17 +54,17 @@ export default function PrivacyPolicy() {
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">{i18n("privacyPolicy:howWeUseData")}</h2>
+                    <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:howWeUseData")}</h2>
                     <p className="text-gray-700 dark:text-gray-300">{i18n("privacyPolicy:howWeUseDataContent")}</p>
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">{i18n("privacyPolicy:yourRights")}</h2>
+                    <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:yourRights")}</h2>
                     <p className="text-gray-700 dark:text-gray-300">{i18n("privacyPolicy:yourRightsContent")}</p>
                 </section>
 
                 <section className="mb-6">
-                    <h2 className="text-xl font-semibold mb-2">{i18n("privacyPolicy:contactUs")}</h2>
+                    <h2 className="mb-2 text-xl font-semibold">{i18n("privacyPolicy:contactUs")}</h2>
                     <p className="text-gray-700 dark:text-gray-300">
                         <Trans
                             i18nKey="privacyPolicy:contactUsContent"
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
                                 aboutLink: (
                                     <Link
                                         href="/about"
-                                        className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+                                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                     />
                                 )
                             }}

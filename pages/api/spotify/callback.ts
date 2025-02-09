@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import getBaseUrl from "@utils/getBaseUrl";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
-import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API route to handle Spotify OAuth callback.

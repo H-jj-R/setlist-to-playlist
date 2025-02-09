@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
+import SettingsKeys from "@constants/settingsKeys";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { SettingsKeys } from "@constants/settingsKeys";
 
 /**
  * Hook for data handling on the user-playlist page.

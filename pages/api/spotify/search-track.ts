@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler for searching an artist on Spotify using the Spotify API.

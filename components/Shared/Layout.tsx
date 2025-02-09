@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import React, { ReactNode } from "react";
-import Head from "next/head";
 import HeaderBar from "@components/Shared/HeaderBar";
+import Head from "next/head";
+import React, { ReactNode } from "react";
 
 interface LayoutProps {
     children: ReactNode; // All child components for the page
@@ -17,12 +17,12 @@ interface LayoutProps {
  */
 const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
     return (
-        <div id="main-container" className="h-screen flex flex-col">
+        <div id="main-container" className="flex h-screen flex-col">
             <Head>
                 <title>Setlist to Playlist</title>
             </Head>
             <HeaderBar />
-            <main id="main-content" className="flex-grow overflow-auto flex flex-col">
+            <main id="main-content" className="flex flex-grow flex-col overflow-auto">
                 {children}
             </main>
         </div>

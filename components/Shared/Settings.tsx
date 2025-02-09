@@ -4,13 +4,13 @@
  * See LICENSE for details.
  */
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SettingsKeys from "@constants/settingsKeys";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { SettingsKeys } from "@constants/settingsKeys";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface SettingsProps {
     onClose: () => void; // Close handler
@@ -20,9 +20,9 @@ interface SettingsProps {
  * The settings overlay component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }) => {
+    const { theme, setTheme, resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
-    const { theme, setTheme, resolvedTheme } = useTheme();
     const [settings, setSettings] = useState(() => ({
         hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
         hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
@@ -43,6 +43,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
         setIsVisible(true);
     }, []);
 
+    useEffect(() => {
+        if (isVisible) {
+            document.getElementById("settings-panel")?.focus();
+        }
+    }, [isVisible]);
+
     return (
         <div className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
@@ -60,11 +66,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
             {/* Settings panel */}
             <div
                 id="settings-panel"
-                className={`transform transition-transform duration-300 ease-in-out w-2/5 max-w-md h-full shadow-lg p-4 ${
+                className={`h-full w-2/5 max-w-md transform p-4 shadow-lg transition-transform duration-300 ease-in-out ${
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
-                <div id="settings-header" className="flex justify-between items-center mb-6 mr-5">
+                <div id="settings-header" className="mb-6 mr-5 flex items-center justify-between">
                     <h2 id="settings-title" className="text-xl font-bold">
                         {i18n("settings:settingsTitle")}
                     </h2>
@@ -92,7 +98,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                                 setTheme(event.target.value);
                             }}
-                            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 cursor-pointer ${
+                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
                                 resolvedTheme === "dark"
                                     ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
                                     : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
@@ -118,7 +124,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
-                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                         />
                         <span>{i18n("settings:hideEmptySetlists")}</span>
                     </label>
@@ -131,7 +137,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
-                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                         />
                         <span>{i18n("settings:hideSongsNotFound")}</span>
                     </label>
@@ -140,7 +146,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
-                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                         />
                         <span>{i18n("settings:excludeCovers")}</span>
                     </label>
@@ -149,7 +155,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
-                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                         />
                         <span>{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
@@ -158,22 +164,22 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                             type="checkbox"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
-                            className="cursor-pointer flex-shrink-0 w-7 h-7"
+                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
                         />
                         <span>{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
                 {/* About + Support Link */}
-                <div className="text-lg absolute bottom-16 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
-                    <Link href="/about" className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer">
+                <div className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
+                    <Link href="/about" className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline">
                         {i18n("about:aboutSupport")}
                     </Link>
                 </div>
                 {/* Privacy Policy Link */}
-                <div className="text-lg absolute bottom-6 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center">
+                <div className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
                     <Link
                         href="/privacy-policy"
-                        className="text-blue-500 hover:text-blue-700 hover:underline cursor-pointer"
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                     >
                         {i18n("privacyPolicy:privacyPolicy")}
                     </Link>

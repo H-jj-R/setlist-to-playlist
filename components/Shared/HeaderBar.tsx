@@ -4,22 +4,22 @@
  * See LICENSE for details.
  */
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Settings from "@components/Shared/Settings";
-import LoginDialog from "@components/Dialogs/LoginDialog";
 import AccountSidebar from "@components/Account/AccountSidebar";
+import LoginDialog from "@components/Dialogs/LoginDialog";
+import Settings from "@components/Shared/Settings";
 import { useAuth } from "@context/AuthContext";
+import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * The header bar at the top of the page.
  */
 const HeaderBar: React.FC = () => {
-    const { t: i18n } = useTranslation();
     const { isAuthenticated, login, logout } = useAuth();
+    const { t: i18n } = useTranslation();
     const [state, setState] = useState({
         showSettings: false,
         showLoginDialog: false,
@@ -29,10 +29,10 @@ const HeaderBar: React.FC = () => {
     return (
         <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
             <div id="header-container" className="flex items-center justify-between px-4 py-2">
-                <div id="logo-container" className="text-lg font-bold space-x-2">
-                    <Link href="/" id="site-logo-link" className="hover:text-gray-300 flex items-center">
+                <div id="logo-container" className="space-x-2 text-lg font-bold">
+                    <Link href="/" id="site-logo-link" className="flex items-center hover:text-gray-300">
                         <img id="site-logo" src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
-                        <span id="site-title" className="text-lg font-bold ml-2">
+                        <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist
                         </span>
                     </Link>
@@ -42,7 +42,7 @@ const HeaderBar: React.FC = () => {
                         <div className="relative">
                             <button
                                 id="account-button"
-                                className="p-2 rounded text"
+                                className="text rounded p-2"
                                 onClick={() => {
                                     setState((prev) => ({
                                         ...prev,
@@ -50,13 +50,13 @@ const HeaderBar: React.FC = () => {
                                     }));
                                 }}
                             >
-                                <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl" />
+                                <FontAwesomeIcon icon={faUserCircle} className="text-xl text-gray-200" />
                             </button>
                         </div>
                     ) : (
                         <button
                             id="login-button"
-                            className="bg-gradient-to-br from-green-500 to-green-600 text-white py-2 px-4 rounded-full hover:from-green-600 hover:to-green-700"
+                            className="rounded-full bg-gradient-to-br from-green-500 to-green-600 px-4 py-2 text-white hover:from-green-600 hover:to-green-700"
                             onClick={() => {
                                 setState((prev) => ({
                                     ...prev,
@@ -69,7 +69,7 @@ const HeaderBar: React.FC = () => {
                     )}
                     <button
                         id="settings-button"
-                        className="p-2 rounded text"
+                        className="text rounded p-2"
                         onClick={() => {
                             setState((prev) => ({
                                 ...prev,
@@ -77,7 +77,7 @@ const HeaderBar: React.FC = () => {
                             }));
                         }}
                     >
-                        <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-gray-200 text-xl" />
+                        <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-xl text-gray-200" />
                     </button>
                 </div>
             </div>

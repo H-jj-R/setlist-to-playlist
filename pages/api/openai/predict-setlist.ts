@@ -6,8 +6,8 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
-import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 const ISACTIVE = true;
 

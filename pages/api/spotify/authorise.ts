@@ -21,12 +21,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             redirect_uri: process.env.SPOTIFY_API_REDIRECT_URI!,
             state: redirect.toString(), // Pass the redirect state to identify where to redirect after authoriation
             scope: [
-                "user-read-private", // Grants access to the user's information (username required for playlist creation)
-                "ugc-image-upload", // Allows uploading user-generated images to Spotify
-                "playlist-read-private", // Allows reading private playlists
+                "playlist-modify-private", // Allows modifying the user's private playlists (e.g. adding/removing tracks)
+                "playlist-modify-public", // Allows modifying the user's public playlists (e.g. adding/removing tracks)
                 "playlist-read-collaborative", // Allows reading collaborative playlists
-                "playlist-modify-private", // Allows modifying the user's private playlists (e.g., adding/removing tracks)
-                "playlist-modify-public" // Allows modifying the user's public playlists (e.g., adding/removing tracks)
+                "playlist-read-private", // Allows reading private playlists
+                "ugc-image-upload", // Allows uploading user-generated images to Spotify
+                "user-follow-read", // Read access to a user's followers and followed artists
+                "user-read-private" // Grants access to the user's information (username required for playlist creation)
             ].join(" ")
         }).toString()}`
     );

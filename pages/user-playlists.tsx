@@ -4,22 +4,22 @@
  * See LICENSE for details.
  */
 
-import React, { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { useTranslation } from "react-i18next";
+import UserPlaylist from "@components/Account/UserPlaylist";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
-import UserPlaylist from "@components/Account/UserPlaylist";
 import { useAuth } from "@context/AuthContext";
+import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing user playlists.
  */
 export default function UserPlaylists() {
-    const { t: i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { resolvedTheme } = useTheme();
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [playlists, setPlaylists] = useState<any[]>([]);
@@ -63,10 +63,6 @@ export default function UserPlaylists() {
         }
     };
 
-    const handlePlaylistDelete = (playlistId: number) => {
-        setPlaylists((prevPlaylists) => prevPlaylists.filter((playlist) => playlist.playlistId !== playlistId));
-    };
-
     if (!mounted) return null;
 
     return (
@@ -74,27 +70,27 @@ export default function UserPlaylists() {
             <div className="h-screen overflow-y-scroll">
                 {!isAuthenticated ? (
                     // Dialog displayed when the user is not authenticated
-                    <div className="flex items-center justify-center mt-8">
-                        <div className="relative top-2/3 p-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg shadow-lg text-center text-white">
-                            <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
-                            <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
+                    <div className="mt-8 flex items-center justify-center">
+                        <div className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg">
+                            <h2 className="mb-4 text-2xl font-bold">{i18n("common:authenticationRequired")}</h2>
+                            <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
                         </div>
                     </div>
                 ) : error ? (
-                    <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
+                    <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
                         <ErrorMessage message={error} />
                     </div>
                 ) : loading ? (
-                    <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
+                    <div id="loading-indicator" className="mt-16 flex items-center justify-center pt-8">
                         <CustomHashLoader showLoading={loading} size={120} />
                     </div>
                 ) : (
                     <div className="p-4">
-                        <h1 className="flex justify-center text-2xl font-bold mb-4">
+                        <h1 className="mb-4 flex justify-center text-2xl font-bold">
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
                         {playlists.length === 0 ? (
-                            <h2 className="flex justify-center text-xl font-bold pt-5">
+                            <h2 className="flex justify-center pt-5 text-xl font-bold">
                                 {i18n("userPlaylists:noPlaylistsCreated")}
                             </h2>
                         ) : (
@@ -102,9 +98,18 @@ export default function UserPlaylists() {
                                 {playlists.map((playlist, idx) => (
                                     <div
                                         key={`${idx}-${playlist.playlistId}`}
-                                        className="flex justify-center items-center"
+                                        className="flex items-center justify-center"
                                     >
-                                        <UserPlaylist playlist={playlist} onDelete={handlePlaylistDelete} />
+                                        <UserPlaylist
+                                            playlist={playlist}
+                                            onDelete={(playlistId: number): void => {
+                                                setPlaylists((prevPlaylists) =>
+                                                    prevPlaylists.filter(
+                                                        (playlist) => playlist.playlistId !== playlistId
+                                                    )
+                                                );
+                                            }}
+                                        />
                                     </div>
                                 ))}
                             </ul>

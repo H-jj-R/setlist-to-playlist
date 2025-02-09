@@ -4,27 +4,27 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faChevronDown, faEdit } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
-import CustomHashLoader from "@components/Shared/CustomHashLoader";
-import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import SpotifyAuthDialog from "@components/Dialogs/SpotifyAuthDialog";
-import { MessageDialogState } from "@constants/messageDialogState";
+import CustomHashLoader from "@components/Shared/CustomHashLoader";
+import ErrorMessage from "@components/Shared/ErrorMessage";
+import MessageDialogState from "@constants/messageDialogState";
+import { faChevronDown, faChevronUp, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import userPlaylistHook from "@hooks/userPlaylistHook";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface UserPlaylistProps {
-    playlist: any;
     onDelete: (playlistId: number) => void;
+    playlist: any;
 }
 
 /**
  * Component to display and manage a user playlist.
  */
-const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
+const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
     const { t: i18n } = useTranslation();
     const { state, setState, toggleExpand, handleSave, handleRecover, handleDelete } = userPlaylistHook(
         playlist,
@@ -33,11 +33,11 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
 
     return (
         <>
-            <li id="user-playlist-item" className="p-4 border rounded-lg shadow-md bg-white dark:bg-gray-800 w-2/3">
-                <div id="user-playlist-container" className="flex justify-between items-center">
+            <li id="user-playlist-item" className="w-2/3 rounded-lg border bg-white p-4 shadow-md dark:bg-gray-800">
+                <div id="user-playlist-container" className="flex items-center justify-between">
                     {!state.editing ? (
                         <>
-                            <div className="w-10/12 flex items-center">
+                            <div className="flex w-10/12 items-center">
                                 <div className="w-full break-words">
                                     <h2 className="text-xl font-bold">{state.name}</h2>
                                     <p className="text-gray-400">{state.description}</p>
@@ -52,7 +52,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                             editing: true
                                         }));
                                     }}
-                                    className="text-gray-600 hover:text-gray-900 p-1"
+                                    className="p-1 text-gray-600 hover:text-gray-900"
                                 >
                                     <FontAwesomeIcon icon={faEdit} size="lg" className="text-white" />
                                 </button>
@@ -61,7 +61,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                 <div className="flex flex-col items-center gap-2">
                                     <button
                                         onClick={handleRecover}
-                                        className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+                                        className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
                                     >
                                         {i18n("userPlaylists:recover")}
                                     </button>
@@ -72,7 +72,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                                 showConfirmation: true
                                             }));
                                         }}
-                                        className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                                        className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                     >
                                         {i18n("common:delete")}
                                     </button>
@@ -91,7 +91,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                     ) : (
                         <div className="w-10/12">
                             <input
-                                className="w-full p-2 border rounded-md mb-2"
+                                className="mb-2 w-full rounded-md border p-2"
                                 value={state.name}
                                 maxLength={100}
                                 onChange={(e) => {
@@ -105,7 +105,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                 autoComplete="off"
                             />
                             <textarea
-                                className="w-full p-2 border rounded-md h-32"
+                                className="h-32 w-full rounded-md border p-2"
                                 value={state.description}
                                 maxLength={300}
                                 onChange={(e) => {
@@ -117,10 +117,10 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                 placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                 autoComplete="off"
                             />
-                            <div className="flex justify-center mt-2 space-x-2 p-2">
+                            <div className="mt-2 flex justify-center space-x-2 p-2">
                                 <button
                                     onClick={handleSave}
-                                    className="w-32 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+                                    className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
                                 >
                                     {i18n("common:save")}
                                 </button>
@@ -133,7 +133,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                                             description: state.initialDescription
                                         }));
                                     }}
-                                    className="w-32 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+                                    className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
@@ -153,11 +153,11 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ playlist, onDelete }) => {
                         ) : (
                             <ul className="space-y-2">
                                 {state.tracks?.map((track, idx) => (
-                                    <li key={`${idx}-${track.id}`} className="flex items-center space-x-4 mt-4">
+                                    <li key={`${idx}-${track.id}`} className="mt-4 flex items-center space-x-4">
                                         <img
                                             src={track.album.images[0]?.url}
                                             alt={track.name}
-                                            className="w-12 h-12 rounded"
+                                            className="h-12 w-12 rounded"
                                         />
                                         <div>
                                             <p className="font-medium">{track.name}</p>

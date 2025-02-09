@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
+import LoginDialogState from "@constants/loginDialogState";
+import MessageDialogState from "@constants/messageDialogState";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LoginDialogState } from "@constants/loginDialogState";
-import { MessageDialogState } from "@constants/messageDialogState";
 
 /**
  * Hook for data handling on the login dialog.

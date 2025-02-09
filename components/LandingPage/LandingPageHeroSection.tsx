@@ -17,13 +17,13 @@ const HeroSection: React.FC = () => {
     return (
         <div
             id="landing-page-hero"
-            className="flex-grow min-h-[33.333333%] bg-gradient-to-r from-pink-600 to-orange-500 text-white flex flex-col lg:flex-row items-center justify-between py-6 px-10"
+            className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-pink-600 to-orange-500 px-10 py-6 text-white lg:flex-row"
         >
-            <div id="landing-page-text" className="mb-6 lg:mb-0 text-center lg:text-left lg:w-1/2">
-                <h1 id="landing-page-title" className="text-4xl font-extrabold mb-4">
+            <div id="landing-page-text" className="mb-6 text-center lg:mb-0 lg:w-1/2 lg:text-left">
+                <h1 id="landing-page-title" className="mb-4 text-4xl font-extrabold">
                     {i18n("landingPage:landingPageTitle")}
                 </h1>
-                <p id="landing-page-description" className="text-lg mb-8">
+                <p id="landing-page-description" className="mb-8 text-lg">
                     {i18n("landingPage:landingPageDescription")}
                 </p>
             </div>
@@ -31,7 +31,7 @@ const HeroSection: React.FC = () => {
                 <button
                     id="go-to-setlist-search-button"
                     onClick={() => router.push("/setlist-search")}
-                    className="px-12 py-5 bg-white text-pink-600 font-semibold rounded-full shadow-lg hover:bg-gray-100 focus:outline-none transition mb-10 text-lg"
+                    className="mb-10 rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:bg-gray-100 focus:outline-none"
                 >
                     {i18n("landingPage:goToSetlistSearch")}
                 </button>

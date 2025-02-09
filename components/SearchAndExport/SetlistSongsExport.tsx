@@ -4,27 +4,27 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { useTranslation } from "react-i18next";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import setlistSongsExportHook from "@hooks/setlistSongsExportHook";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface SetlistSongsExportProps {
-    setlist: Record<string, any>; // The setlist data
     artistData: Record<string, any>; // Artist information
-    predictedSetlist?: boolean; // Whether the setlist is predicted
     onSongsFetched: (songs: Record<string, any>[]) => void; // Callback to pass songs to ExportDialog
+    predictedSetlist?: boolean; // Whether the setlist is predicted
+    setlist: Record<string, any>; // The setlist data
 }
 
 /**
  * Displays setlist songs as from Spotify as they will be exported.
  */
 const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
-    setlist,
     artistData,
+    onSongsFetched,
     predictedSetlist,
-    onSongsFetched
+    setlist
 }) => {
     const { t: i18n } = useTranslation();
     const { state, toggleExcludeSong } = setlistSongsExportHook(setlist, artistData, onSongsFetched, predictedSetlist);
@@ -32,7 +32,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     const SongListItem = ({ spotifySong, idx }: { spotifySong: any; idx: number }) => (
         <li
             id={`song-item-${spotifySong?.id}`}
-            className={`py-2 cursor-pointer ${
+            className={`cursor-pointer py-2 ${
                 state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
             }`}
             onClick={() => toggleExcludeSong(spotifySong.id, idx)}
@@ -43,7 +43,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         id={`song-cover-${spotifySong?.id}`}
                         src={spotifySong.album.images[0].url}
                         alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
-                        className="w-12 h-12 rounded shadow"
+                        className="h-12 w-12 rounded shadow"
                     />
                 )}
                 <div>
@@ -59,16 +59,16 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     );
 
     return (
-        <div className="flex flex-col bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shadow-md w-full h-full overflow-y-auto">
+        <div className="flex h-full w-full flex-col overflow-y-auto rounded-lg bg-gray-100 p-3 shadow-md dark:bg-gray-700">
             {state.loading ? (
-                <div className="flex items-center justify-center h-full">
+                <div className="flex h-full items-center justify-center">
                     <CustomHashLoader showLoading={true} size={100} />
                 </div>
             ) : state.error ? (
                 <ErrorMessage message={state.error} />
             ) : (
                 <>
-                    <h4 className="text-lg font-semibold mb-2">{i18n("exportSetlist:songs")}</h4>
+                    <h4 className="mb-2 text-lg font-semibold">{i18n("exportSetlist:songs")}</h4>
                     <ul className="space-y-1">
                         {state.spotifySongs?.map((spotifySong, idx) =>
                             spotifySong?.name ? (

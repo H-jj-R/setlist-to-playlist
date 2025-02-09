@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import { setTimeout } from "timers/promises";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to search for an artist by name.

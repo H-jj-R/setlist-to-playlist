@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import decryptToken from "@utils/decryptToken";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
-import decryptToken from "@utils/decryptToken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Refreshes the Spotify access token using the provided refresh token.

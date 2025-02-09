@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import React, { useState, ChangeEvent, KeyboardEvent, ClipboardEvent } from "react";
+import React, { ChangeEvent, ClipboardEvent, KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface OTPInputProps {
@@ -68,23 +68,25 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
 
     return (
         <fieldset id="otp-fieldset">
-            <legend className="sr-only">{i18n("account:enterOTPCode")}</legend>
+            <legend id="otp-legend" className="sr-only">
+                {i18n("account:enterOTPCode")}
+            </legend>
             <div id="otp-inputs-container" className="flex justify-center space-x-2">
                 {otp.map((digit, idx) => (
                     <input
-                        key={idx}
                         id={`otp-input-${idx}`}
-                        type="tel"
-                        value={digit}
+                        className="h-12 w-12 rounded-md border border-gray-500 text-center text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label={i18n("account:digitOfOTP", { digit: idx + 1 })}
+                        aria-required="true"
+                        autoComplete="one-time-code"
+                        key={idx}
+                        maxLength={1}
                         onChange={(e) => handleChange(e, idx)}
                         onKeyDown={(e) => handleKeyDown(e, idx)}
                         onPaste={(e) => handlePaste(e, idx)}
-                        maxLength={1}
                         required
-                        className="w-12 h-12 text-center text-xl border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autoComplete="one-time-code"
-                        aria-label={i18n("account:digitOfOTP", { digit: idx + 1 })}
-                        aria-required="true"
+                        type="tel"
+                        value={digit}
                     />
                 ))}
             </div>

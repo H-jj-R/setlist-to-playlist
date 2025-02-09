@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcrypt";
 import db from "@constants/db";
+import bcrypt from "bcrypt";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to reset a user's password.

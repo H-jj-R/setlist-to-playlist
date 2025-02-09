@@ -4,19 +4,19 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import PageState from "@constants/setlistSearchPageState";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { PageState } from "@constants/setlistSearchPageState";
 
 /**
  * Hook for data handling on the setlist-search page.
  */
 export default function setlistSearchHook() {
-    const { t: i18n } = useTranslation();
     const { resolvedTheme } = useTheme();
     const router = useRouter();
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
         searchTriggered: false,

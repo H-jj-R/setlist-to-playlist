@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import db from "@constants/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import db from "@constants/db";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to log in a user.

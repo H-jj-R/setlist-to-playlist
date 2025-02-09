@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 
 interface ErrorMessageProps {
     message: string;
@@ -14,7 +14,7 @@ interface ErrorMessageProps {
 }
 
 /**
- * 
+ *
  */
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
     if (!message) return null;
@@ -24,7 +24,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
             id="error-container"
             className={`flex ${small ? "items-center gap-4" : "flex-col items-center gap-2"} ${
                 small ? "p-4" : "p-6"
-            } bg-red-100 border border-red-300 text-red-700 rounded-lg shadow-md`}
+            } rounded-lg border border-red-300 bg-red-100 text-red-700 shadow-md`}
         >
             <FontAwesomeIcon
                 id="error-icon"

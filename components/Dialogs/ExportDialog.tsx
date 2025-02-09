@@ -4,33 +4,33 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { useTranslation } from "react-i18next";
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
-import { MessageDialogState } from "@constants/messageDialogState";
+import MessageDialogState from "@constants/messageDialogState";
 import exportDialogHook from "@hooks/exportDialogHook";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface ExportDialogProps {
-    setlist: Record<string, any>; // The setlist data to be exported
-    artistData: Record<string, any>;
+    artistData: Record<string, any>; // The data of the artist being exported
     isOpen: boolean; // Controls the visibility of the dialog
-    predictedSetlist?: boolean; // Indicates if the setlist is AI-generated
     onClose: () => void; // Close function
+    predictedSetlist?: boolean; // Indicates if the setlist is AI-generated
+    setlist: Record<string, any>; // The setlist data to be exported
 }
 
 /**
  * Dialog allowing user to export chosen setlist to playlist with custom specification.
  */
-const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen, predictedSetlist, onClose }) => {
+const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose, predictedSetlist, setlist }) => {
     const { t: i18n } = useTranslation();
-    const { state, setState, getRootProps, getInputProps, handleExport, resetState } = exportDialogHook({
+    const { state, setState, getRootProps, getInputProps, handleExport, resetState } = exportDialogHook(
         setlist,
         artistData,
         isOpen,
         predictedSetlist,
         onClose
-    });
+    );
 
     return (
         isOpen && (
@@ -38,8 +38,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                 {/* Background Overlay */}
                 <div
                     id="background-overlay"
-                    className={`z-20 fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-500 ${
-                        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                    className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-500 ${
+                        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
                     }`}
                     onClick={() => {
                         onClose();
@@ -50,17 +50,17 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                 {/* Dialog Box */}
                 <div
                     id="dialog-box"
-                    className={`z-30 fixed inset-0 flex justify-center items-center transition-all duration-500 ease-in-out ${
-                        isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"
+                    className={`fixed inset-0 z-30 flex items-center justify-center transition-all duration-500 ease-in-out ${
+                        isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                     }`}
                 >
                     <div
                         id="export-dialog"
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-full flex flex-col md:flex-row gap-6 h-[52vh] overflow-y-auto"
+                        className="flex h-[52vh] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2"
                     >
                         {/* Main Export Dialog */}
                         <div id="export-dialog-main" className="flex-1 p-4">
-                            <h3 id="export-dialog-title" className="text-xl font-semibold mb-4">
+                            <h3 id="export-dialog-title" className="mb-4 text-xl font-semibold">
                                 {i18n("common:exportToSpotify")}
                             </h3>
 
@@ -76,7 +76,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                     id="playlist-name-input"
                                     type="text"
                                     maxLength={100}
-                                    className="mt-1 p-2 w-full border rounded-lg"
+                                    className="mt-1 w-full rounded-lg border p-2"
                                     value={state.playlistName}
                                     onChange={(e) => {
                                         setState((prev) => ({
@@ -100,7 +100,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                 </label>
                                 <textarea
                                     id="playlist-description-input"
-                                    className="mt-1 p-2 w-full min-h-24 border rounded-lg overflow-auto resize-none"
+                                    className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border p-2"
                                     maxLength={300}
                                     value={state.playlistDescription}
                                     onChange={(e) => {
@@ -116,17 +116,17 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
 
                             <div
                                 id="playlist-cover-container"
-                                className="flex flex-col md:flex-row items-start gap-4 mb-4"
+                                className="mb-4 flex flex-col items-start gap-4 md:flex-row"
                             >
                                 {/* Playlist Cover Dropzone */}
-                                <div id="playlist-cover" className="flex-1 max-h-40 overflow-hidden">
+                                <div id="playlist-cover" className="max-h-40 flex-1 overflow-hidden">
                                     {state.imagePreview ? (
                                         <div className="flex items-center">
                                             <img
                                                 id="image-preview"
                                                 src={state.imagePreview as string}
                                                 alt="Playlist Cover"
-                                                className="w-24 h-24 object-cover rounded-lg mr-2"
+                                                className="mr-2 h-24 w-24 rounded-lg object-cover"
                                             />
                                             <button
                                                 id="remove-image-button"
@@ -164,10 +164,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                             </div>
 
                             {/* Buttons */}
-                            <div id="export-dialog-buttons" className="mt-4 pt-2 flex justify-end gap-4">
+                            <div id="export-dialog-buttons" className="mt-4 flex justify-end gap-4 pt-2">
                                 <button
                                     id="cancel-button"
-                                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                    className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                                     onClick={() => {
                                         onClose();
                                         resetState();
@@ -177,7 +177,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                                 </button>
                                 <button
                                     id="export-button"
-                                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                    className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
                                     onClick={handleExport}
                                 >
                                     {i18n("common:export")}
@@ -188,7 +188,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ setlist, artistData, isOpen
                         {/* Setlist Songs Component */}
                         <div
                             id="setlist-songs-wrapper"
-                            className="flex-1 flex flex-col justify-center items-center h-full"
+                            className="flex h-full flex-1 flex-col items-center justify-center"
                         >
                             <SetlistSongsExport
                                 setlist={setlist}

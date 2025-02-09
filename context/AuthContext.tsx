@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextProps {
     isAuthenticated: boolean;
@@ -35,11 +35,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(false);
     };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{ isAuthenticated, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

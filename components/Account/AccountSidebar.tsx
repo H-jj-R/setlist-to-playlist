@@ -4,20 +4,20 @@
  * See LICENSE for details.
  */
 
-import React, { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
-import { jwtDecode } from "jwt-decode";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faUserCircle, faRightFromBracket, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
 import MessageDialog from "@components/Dialogs/MessageDialog";
-import { MessageDialogState } from "@constants/messageDialogState";
+import MessageDialogState from "@constants/messageDialogState";
+import { faChevronRight, faRightFromBracket, faTrash, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { jwtDecode } from "jwt-decode";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface AccountSidebarProps {
-    onClose: () => void; // Close handler
     handleLogout: () => void; // Logout handler
+    onClose: () => void; // Close handler
 }
 
 interface DecodedToken {
@@ -30,16 +30,16 @@ interface DecodedToken {
 /**
  * The account sidebar overlay component.
  */
-const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }) => {
+const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }) => {
+    const { resolvedTheme } = useTheme();
     const router = useRouter();
     const { t: i18n } = useTranslation();
-    const { resolvedTheme } = useTheme();
     const [state, setState] = useState({
-        isVisible: false,
-        username: null as string | null,
         email: null as string | null,
+        isVisible: false,
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
         showConfirmation: false,
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+        username: null as string | null
     });
 
     useEffect(() => {
@@ -56,8 +56,8 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 const decoded = jwtDecode<DecodedToken>(token);
                 setState((prev) => ({
                     ...prev,
-                    username: decoded.username,
-                    email: decoded.email
+                    email: decoded.email,
+                    username: decoded.username
                 }));
             } catch (error) {
                 console.error(error);
@@ -96,21 +96,17 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 }));
                 handleLogout(); // Log out after account deletion
             } else {
-                setState((prev) => ({
-                    ...prev,
-                    messageDialog: {
-                        isOpen: true,
-                        message: i18n("account:deleteFailed"),
-                        type: MessageDialogState.Error
-                    }
-                }));
+                throw {
+                    status: response.status,
+                    error: i18n("account:deleteFailed")
+                };
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n("common:unexpectedError"),
+                    message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
@@ -125,27 +121,29 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     state.isVisible ? "opacity-70" : "opacity-0"
                 }`}
+                aria-hidden={state.isVisible ? "false" : "true"}
                 onClick={() => {
                     setState((prev) => ({ ...prev, isVisible: false }));
                     setTimeout(onClose, 300);
                 }}
-                aria-hidden={state.isVisible ? "false" : "true"}
             />
             {/* Settings panel */}
             <div
                 id="account-settings-panel"
-                tabIndex={-1}
-                className={`relative transform transition-transform duration-300 ease-in-out w-1/3 max-w-md h-full shadow-lg p-4 ${
+                className={`relative h-full w-1/3 max-w-md transform p-4 shadow-lg transition-transform duration-300 ease-in-out ${
                     state.isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
                 aria-live="assertive"
+                tabIndex={-1}
             >
-                <div id="account-settings-header" className="flex justify-between items-center mb-6 mr-5">
+                <div id="account-settings-header" className="mb-6 mr-5 flex items-center justify-between">
                     <h2 id="account-settings-header-title" className="text-xl font-bold">
                         {i18n("account:account")}
                     </h2>
                     <button
                         id="account-settings-close-btn"
+                        className="text-xl"
+                        aria-label={i18n("account:closeAccountSettings")}
                         onClick={() => {
                             setState((prev) => ({
                                 ...prev,
@@ -153,27 +151,25 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                             }));
                             setTimeout(onClose, 300);
                         }}
-                        className="text-xl"
-                        aria-label={i18n("account:closeAccountSettings")}
                     >
                         <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
                 </div>
-                <div id="account-settings-details-container" className="p-4 border-4 rounded-lg m-4">
+                <div id="account-settings-details-container" className="m-4 rounded-lg border-4 p-4">
                     {/* Username & Email */}
-                    <div id="account-settings-username-email-container" className="text-center mb-2">
+                    <div id="account-settings-username-email-container" className="mb-2 text-center">
                         <h3 id="account-settings-username-email-header" className="text-lg font-semibold">
                             {state.username && state.email ? (
                                 <>
                                     <div id="account-settings-username">
                                         <FontAwesomeIcon
                                             id="fa-user-circle-icon"
+                                            className="mr-2 text-xl text-gray-200"
                                             icon={faUserCircle}
-                                            className="text-gray-200 text-xl mr-2"
                                         />
                                         {state.username}
                                     </div>
-                                    <div id="account-settings-email" className="text-sm pt-2">
+                                    <div id="account-settings-email" className="pt-2 text-sm">
                                         {state.email}
                                     </div>
                                 </>
@@ -186,17 +182,17 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                     <div id="account-settings-logout-container" className="mt-4 flex justify-center">
                         <button
                             id="account-settings-logout-btn"
+                            className="w-3/4 rounded bg-gradient-to-r from-red-500 to-orange-500 px-4 py-2 text-white transition-colors duration-300 hover:from-red-600 hover:to-orange-600"
+                            aria-label={i18n("account:logout")}
                             onClick={() => {
                                 setState((prev) => ({ ...prev, isVisible: false }));
                                 setTimeout(handleLogout, 300);
                             }}
-                            className="w-3/4 bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 px-4 rounded hover:from-red-600 hover:to-orange-600 transition-colors duration-300"
-                            aria-label={i18n("account:logout")}
                         >
                             <FontAwesomeIcon
                                 id="fa-right-from-bracket-icon"
+                                className="text-l mr-2 text-gray-200"
                                 icon={faRightFromBracket}
-                                className="text-gray-200 text-l mr-2"
                             />
                             {i18n("account:logout")}
                         </button>
@@ -206,6 +202,8 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 <div id="account-settings-playlists-container" className="mt-4 flex justify-center">
                     <button
                         id="account-settings-go-to-created-playlists-button"
+                        className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:bg-violet-600 focus:outline-none"
+                        aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={() => {
                             setState((prev) => ({
                                 ...prev,
@@ -214,8 +212,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                             setTimeout(onClose, 300);
                             router.push("/user-playlists");
                         }}
-                        className="px-2 py-5 w-3/4 bg-violet-500 text-white font-semibold rounded-md shadow-lg hover:bg-violet-600 focus:outline-none transition mt-4"
-                        aria-label={i18n("userPlaylists:createdPlaylists")}
                     >
                         {i18n("userPlaylists:createdPlaylists")}
                     </button>
@@ -223,34 +219,34 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
                 {/* Delete Account */}
                 <div
                     id="account-settings-delete-account-container"
-                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-3/4 flex justify-center"
+                    className="absolute bottom-4 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center"
                 >
                     <button
                         id="account-settings-delete-account-btn"
+                        className="w-full rounded bg-gradient-to-r from-red-700 to-red-500 px-4 py-2 text-white transition-colors duration-300 hover:from-red-800 hover:to-red-600"
+                        aria-label={i18n("account:deleteAccount")}
                         onClick={() => {
                             setState((prev) => ({
                                 ...prev,
                                 showConfirmation: true
                             }));
                         }}
-                        className="w-full bg-gradient-to-r from-red-700 to-red-500 text-white py-2 px-4 rounded hover:from-red-800 hover:to-red-600 transition-colors duration-300"
-                        aria-label={i18n("account:deleteAccount")}
                     >
-                        <FontAwesomeIcon id="fa-trash-icon" icon={faTrash} className="text-gray-200 text-l mr-2" />
+                        <FontAwesomeIcon id="fa-trash-icon" className="text-l mr-2 text-gray-200" icon={faTrash} />
                         {i18n("account:deleteAccount")}
                     </button>
                 </div>
                 {/* Confirmation Modal */}
                 {state.showConfirmation && (
                     <ConfirmationModal
-                        onConfirm={handleDeleteAccount}
+                        aria-live="assertive"
                         onCancel={() => {
                             setState((prev) => ({
                                 ...prev,
                                 showConfirmation: false
                             }));
                         }}
-                        aria-live="assertive"
+                        onConfirm={handleDeleteAccount}
                     />
                 )}
             </div>
@@ -258,15 +254,15 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ onClose, handleLogout }
             {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog
+                    aria-live="assertive"
                     message={state.messageDialog.message}
-                    type={state.messageDialog.type}
                     onClose={() => {
                         setState((prev) => ({
                             ...prev,
                             messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
                         }));
                     }}
-                    aria-live="assertive"
+                    type={state.messageDialog.type}
                 />
             )}
         </div>

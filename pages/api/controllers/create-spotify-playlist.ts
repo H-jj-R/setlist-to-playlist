@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.

@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to verify a reCAPTCHA token.

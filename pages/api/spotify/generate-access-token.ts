@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to generate and store a Spotify API access token.

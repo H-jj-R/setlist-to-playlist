@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
 import db from "@constants/db";
+import jwt from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to update playlist details (name and description).

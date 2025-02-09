@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import { Html, Head, Body, Container, Heading, Text, Section } from "@react-email/components";
+import { Body, Container, Head, Heading, Html, Section, Text } from "@react-email/components";
 
 interface SupportEmailTemplateProps {
     email: string;
