@@ -27,9 +27,9 @@ const HeroSection: React.FC = (): JSX.Element => {
                     {i18n("landingPage:landingPageDescription")}
                 </p>
             </div>
-            <div id="setlist-search-button-container" className="lg:ml-auto lg:mr-auto">
+            <div id="setlist-search-btn-container" className="lg:ml-auto lg:mr-auto">
                 <button
-                    id="go-to-setlist-search-button"
+                    id="go-to-setlist-search-btn"
                     className="mb-10 rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:bg-gray-100 focus:outline-none"
                     onClick={() => router.push("/setlist-search")}
                 >

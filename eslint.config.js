@@ -102,8 +102,8 @@ module.exports = [
                 "error",
                 {
                     customGroups: {
-                        className: "className",
-                        id: "id"
+                        className: "^className$",
+                        id: "^id$"
                     },
                     groups: ["id", "className", "unknown"],
                     ignoreCase: true,

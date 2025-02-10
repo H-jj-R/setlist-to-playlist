@@ -51,7 +51,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                     )}
                 </ul>
                 {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
-                    <p className="mt-4 text-gray-500">
+                    <p id="" className="mt-4 text-gray-500">
                         {i18n(
                             state.hiddenSetlistsCount === 1
                                 ? "setlistSearch:hiddenSetlistsMessage"
@@ -62,7 +62,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                 )}
                 {hasMorePages && (
                     <button
-                        id="load-more-button"
+                        id="load-more-btn"
                         className="mt-4 rounded bg-blue-500 px-6 py-2 text-white hover:bg-blue-600"
                         disabled={state.isLoading}
                         onClick={loadMoreSetlists}

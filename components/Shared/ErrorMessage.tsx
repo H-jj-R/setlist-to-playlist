@@ -26,7 +26,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }): JSX.Elem
             } rounded-lg border border-red-300 bg-red-100 text-red-700 shadow-md`}
         >
             <FontAwesomeIcon
-                id="error-icon"
+                id="fa-triangle-exclamation-icon"
                 className={`text-red-500 ${small ? "h-6 w-6" : "h-10 w-10"}`}
                 icon={faTriangleExclamation}
             />

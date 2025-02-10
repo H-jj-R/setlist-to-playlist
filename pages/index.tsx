@@ -23,9 +23,9 @@ export default function Home(): JSX.Element {
     if (!mounted) return null;
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div id="" className="flex min-h-screen flex-col">
             <Layout>
-                <div className="flex-grow">
+                <div id="" className="flex-grow">
                     <HeroSection />
                     <GenerateSetlistSection />
                     <InfoSection />

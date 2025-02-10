@@ -30,18 +30,22 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.E
                 }
             >
                 <button
+                    id=""
                     className="absolute left-2 top-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     aria-label={i18n("common:close")}
                     onClick={onClose}
                 >
-                    <FontAwesomeIcon className="h-6 w-6" icon={faTimes} />
+                    <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
                 </button>
-                <div className="p-4">
-                    <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
+                <div id="" className="p-4">
+                    <h2 id="" className="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
                         {i18n("exportSetlist:spotifyAuthRequired")}
                     </h2>
-                    <p className="mb-6 text-gray-700 dark:text-gray-300">{i18n("exportSetlist:spotifyAuthMessage")}</p>
+                    <p id="" className="mb-6 text-gray-700 dark:text-gray-300">
+                        {i18n("exportSetlist:spotifyAuthMessage")}
+                    </p>
                     <button
+                        id=""
                         className="rounded-lg bg-green-500 px-4 py-2 text-white transition hover:bg-green-600"
                         onClick={(): void => {
                             router.push(
