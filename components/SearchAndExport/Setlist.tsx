@@ -27,18 +27,19 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.El
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
         >
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+            <div id="" className="flex items-center justify-between">
+                <div id="" className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
                     {song.tape && (
                         <FontAwesomeIcon
+                            id="fa-record-vinyl-icon"
                             className="opacity-80"
                             icon={faRecordVinyl}
                             title={i18n("setlistSearch:playedFromTape")}
                         />
                     )}
                     {/* Song name */}
-                    <span className={`font-medium ${song.tape ? "italic opacity-80" : ""}`}>
+                    <span id="" className={`font-medium ${song.tape ? "italic opacity-80" : ""}`}>
                         {song.name ||
                             (song.tape && !song.name
                                 ? isFirst
@@ -47,7 +48,7 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.El
                                 : `(${i18n("setlistSearch:unknown")})`)}
                     </span>
                 </div>
-                <div className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400">
+                <div id="" className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400">
                     {/* Additional song details */}
                     {song.cover &&
                         `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}${
@@ -66,11 +67,11 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.El
             className="h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200"
         >
             {/* Container for buttons */}
-            <div className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
-                <div id="setlist-buttons" className="mb-6 flex items-center justify-between pb-2 pt-4">
+            <div id="setlist-btns-container" className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
+                <div id="setlist-btns" className="mb-6 flex items-center justify-between pb-2 pt-4">
                     {/* Back Button */}
                     <button
-                        id="back-button"
+                        id="back-btn"
                         className="w-full rounded bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 focus:ring focus:ring-red-300 sm:w-auto"
                         onClick={onClose}
                     >
@@ -79,7 +80,7 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.El
 
                     {/* Export to Spotify Button */}
                     <button
-                        id="export-spotify-button"
+                        id="export-spotify-btn"
                         className="w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
                         onClick={onExport}
                     >

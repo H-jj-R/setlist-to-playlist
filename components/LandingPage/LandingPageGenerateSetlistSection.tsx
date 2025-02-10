@@ -19,9 +19,9 @@ const GenerateSetlistSection: React.FC = (): JSX.Element => {
             id="generate-setlist-hero"
             className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-sky-500 to-purple-700 px-10 py-6 text-white lg:flex-row"
         >
-            <div id="generate-setlist-button-container" className="order-last lg:order-first lg:ml-auto lg:mr-auto">
+            <div id="generate-setlist-btn-container" className="order-last lg:order-first lg:ml-auto lg:mr-auto">
                 <button
-                    id="go-to-ai-generate-setlist-button"
+                    id="go-to-ai-generate-setlist-btn"
                     className="mb-10 rounded-full bg-white px-12 py-5 text-lg font-semibold text-purple-600 shadow-lg transition hover:bg-gray-100 focus:outline-none lg:mb-0"
                     onClick={() => router.push("/ai-generate-setlist")}
                 >

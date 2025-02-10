@@ -37,19 +37,19 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onCl
                       ? "cursor-not-allowed opacity-50"
                       : "cursor-pointer hover:shadow-md"
             }`}
-            onClick={() => !isDisabled && onClick(setlist)}
+            onClick={(): void => (!isDisabled ? onClick(setlist) : undefined)}
         >
-            <div id={`setlist-date-${setlist.id}`} className={`text-lg font-semibold ${isDisabled ? "text-sm" : ""}`}>
+            <div id="setlist-date" className={`text-lg font-semibold ${isDisabled ? "text-sm" : ""}`}>
                 {formatDate(setlist.eventDate)}
             </div>
-            <div id={`setlist-venue-${setlist.id}`} className={`text-lg ${isDisabled ? "text-sm" : ""}`}>
+            <div id="setlist-venue" className={`text-lg ${isDisabled ? "text-sm" : ""}`}>
                 {i18n("setlistSearch:artistAtVenue", {
                     artistName: setlist.artist.name,
                     location: formatLocation(setlist)
                 })}
             </div>
             {!isDisabled && (
-                <div id={`setlist-song-count-${setlist.id}`} className="text-base italic">
+                <div id="setlist-song-count" className="text-base italic">
                     {i18n(songCount === 1 ? "setlistSearch:songCount" : "setlistSearch:songCountPlural", { songCount })}
                 </div>
             )}

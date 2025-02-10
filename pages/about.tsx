@@ -76,21 +76,32 @@ export default function About(): JSX.Element {
 
     return (
         <Layout>
-            <div className="mx-auto max-w-4xl p-6">
-                <h1 className="mb-4 flex justify-center text-3xl font-bold">{i18n("about:aboutThisSite")}</h1>
-                <section className="mb-6">
-                    <h2 className="text-xl font-semibold">{i18n("about:whatIsThisApp")}</h2>
-                    <p className="mt-2 text-gray-700 dark:text-gray-300">{i18n("about:whatIsThisAppDescription")}</p>
+            <div id="" className="mx-auto max-w-4xl p-6">
+                <h1 id="" className="mb-4 flex justify-center text-3xl font-bold">
+                    {i18n("about:aboutThisSite")}
+                </h1>
+                <section id="" className="mb-6">
+                    <h2 id="" className="text-xl font-semibold">
+                        {i18n("about:whatIsThisApp")}
+                    </h2>
+                    <p id="" className="mt-2 text-gray-700 dark:text-gray-300">
+                        {i18n("about:whatIsThisAppDescription")}
+                    </p>
                 </section>
-                <section className="mb-6">
-                    <h2 className="text-xl font-semibold">{i18n("about:supportAndFeedback")}</h2>
-                    <p className="mt-2 text-gray-700 dark:text-gray-300">{i18n("about:fillOutFormBelow")}</p>
+                <section id="" className="mb-6">
+                    <h2 id="" className="text-xl font-semibold">
+                        {i18n("about:supportAndFeedback")}
+                    </h2>
+                    <p id="" className="mt-2 text-gray-700 dark:text-gray-300">
+                        {i18n("about:fillOutFormBelow")}
+                    </p>
                     {state.submitted ? (
-                        <div className="mt-4 flex items-center gap-2">
-                            <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                        <div id="" className="mt-4 flex items-center gap-2">
+                            <p id="" className="text-lg font-bold text-green-600 dark:text-green-400">
                                 {i18n("about:messageSent")}
                             </p>
                             <button
+                                id=""
                                 className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                                 onClick={(): void => {
                                     setState((prev) => ({
@@ -104,10 +115,13 @@ export default function About(): JSX.Element {
                             </button>
                         </div>
                     ) : (
-                        <form className="mt-4" onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 dark:text-gray-300">{i18n("common:email")}</label>
+                        <form id="" className="mt-4" onSubmit={handleSubmit}>
+                            <div id="" className="mb-4">
+                                <label id="" className="block text-gray-700 dark:text-gray-300">
+                                    {i18n("common:email")}
+                                </label>
                                 <input
+                                    id=""
                                     className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
                                     autoComplete="email"
                                     maxLength={320}
@@ -123,11 +137,12 @@ export default function About(): JSX.Element {
                                     value={state.formData.email}
                                 />
                             </div>
-                            <div className="relative mb-4">
-                                <label className="block text-gray-700 dark:text-gray-300">
+                            <div id="" className="relative mb-4">
+                                <label id="" className="block text-gray-700 dark:text-gray-300">
                                     {i18n("about:message")}
                                 </label>
                                 <textarea
+                                    id=""
                                     className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
                                     maxLength={MAX_MESSAGE_LENGTH}
                                     name="message"
@@ -146,12 +161,16 @@ export default function About(): JSX.Element {
                                     rows={4}
                                     value={state.formData.message}
                                 />
-                                <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
+                                <div
+                                    id=""
+                                    className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400"
+                                >
                                     {state.formData.message.length}/{MAX_MESSAGE_LENGTH}
                                 </div>
                             </div>
-                            <div className="flex">
+                            <div id="" className="flex">
                                 <button
+                                    id=""
                                     className="rounded-md bg-blue-600 px-8 py-3 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                                     type="submit"
                                 >
@@ -161,17 +180,25 @@ export default function About(): JSX.Element {
                         </form>
                     )}
                 </section>
-                <section className="mb-6">
-                    <h2 className="text-xl font-semibold">{i18n("about:credits")}</h2>
-                    <p className="mt-2 text-gray-700 dark:text-gray-300">{i18n("about:developedWith")}</p>
-                    <section className="mb-6">
-                        <p className="mt-2 text-gray-700 dark:text-gray-300">{i18n("about:usesAPIs")}</p>
-                        <ul className="mt-2 list-inside list-disc text-gray-700 dark:text-gray-300">
-                            <li>
+                <section id="" className="mb-6">
+                    <h2 id="" className="text-xl font-semibold">
+                        {i18n("about:credits")}
+                    </h2>
+                    <p id="" className="mt-2 text-gray-700 dark:text-gray-300">
+                        {i18n("about:developedWith")}
+                    </p>
+                    <section id="" className="mb-6">
+                        <p id="" className="mt-2 text-gray-700 dark:text-gray-300">
+                            {i18n("about:usesAPIs")}
+                        </p>
+                        <ul id="" className="mt-2 list-inside list-disc text-gray-700 dark:text-gray-300">
+                            <li id="">
                                 <Trans
+                                    id=""
                                     components={{
                                         spotifyLink: (
                                             <Link
+                                                id=""
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                                 href="https://spotify.com/"
                                             />
@@ -180,11 +207,13 @@ export default function About(): JSX.Element {
                                     i18nKey="about:spotifyAPIDisclaimer"
                                 />
                             </li>
-                            <li>
+                            <li id="">
                                 <Trans
+                                    id=""
                                     components={{
                                         setlistFmLink: (
                                             <Link
+                                                id=""
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                                 href="https://www.setlist.fm/"
                                             />
@@ -193,7 +222,7 @@ export default function About(): JSX.Element {
                                     i18nKey="about:setlistFmAPIDisclaimer"
                                 />
                             </li>
-                            <li>{i18n("about:apiUsageDisclaimer")}</li>
+                            <li id="">{i18n("about:apiUsageDisclaimer")}</li>
                         </ul>
                     </section>
                 </section>

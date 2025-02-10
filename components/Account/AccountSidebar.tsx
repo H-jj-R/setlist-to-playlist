@@ -110,11 +110,11 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
         <div id="account-settings-container" className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
-                aria-hidden={state.isVisible ? "false" : "true"}
                 id="account-settings-background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     state.isVisible ? "opacity-70" : "opacity-0"
                 }`}
+                aria-hidden={state.isVisible ? "false" : "true"}
                 onClick={(): void => {
                     setState((prev) => ({ ...prev, isVisible: false }));
                     setTimeout(onClose, 300);
@@ -191,7 +191,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 {/* Link to Created Playlists */}
                 <div id="account-settings-playlists-container" className="mt-4 flex justify-center">
                     <button
-                        id="account-settings-go-to-created-playlists-button"
+                        id="account-settings-go-to-created-playlists-btn"
                         className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:bg-violet-600 focus:outline-none"
                         aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={(): void => {

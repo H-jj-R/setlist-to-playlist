@@ -23,7 +23,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
             <div
                 id="background-overlay"
                 className="absolute inset-0 bg-black bg-opacity-50"
-                onClick={type === MessageDialogState.Loading && onClose}
+                onClick={type === MessageDialogState.Loading ? onClose : undefined}
             />
             <div
                 id="dialog-box"
@@ -66,7 +66,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
                 </span>
                 {type !== MessageDialogState.Loading && (
                     <button
-                        id="close-button"
+                        id="close-btn"
                         className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                         onClick={onClose}
                     >

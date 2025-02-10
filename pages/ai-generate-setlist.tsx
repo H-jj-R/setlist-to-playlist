@@ -29,10 +29,17 @@ export default function AIGenerateSetlist(): JSX.Element {
         <Layout>
             {!isAuthenticated ? (
                 // Dialog displayed when the user is not authenticated
-                <div className="flex items-center justify-center">
-                    <div className="relative top-2/3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg">
-                        <h2 className="mb-4 text-2xl font-bold">{i18n("common:authenticationRequired")}</h2>
-                        <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
+                <div id="" className="flex items-center justify-center">
+                    <div
+                        id=""
+                        className="relative top-2/3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg"
+                    >
+                        <h2 id="" className="mb-4 text-2xl font-bold">
+                            {i18n("common:authenticationRequired")}
+                        </h2>
+                        <p id="" className="mb-6 text-lg">
+                            {i18n("common:needToLogIn")}
+                        </p>
                     </div>
                 </div>
             ) : (
@@ -56,13 +63,14 @@ export default function AIGenerateSetlist(): JSX.Element {
                         {/* Loading indicator */}
                         {state.showLoading && !state.animLoading && (
                             <div id="progress-indicator" className="mt-16 flex flex-col items-center pt-8">
-                                <p className="mb-2 text-lg font-medium text-gray-700">
+                                <p id="" className="mb-2 text-lg font-medium text-gray-700">
                                     {state.progress < 100
                                         ? `Generating setlist... (${state.progress}%)`
                                         : "Finalising..."}
                                 </p>
-                                <div className="h-2 w-64 overflow-hidden rounded-full bg-gray-300">
+                                <div id="" className="h-2 w-64 overflow-hidden rounded-full bg-gray-300">
                                     <div
+                                        id=""
                                         className="h-full bg-blue-600 transition-all duration-300"
                                         style={{ width: `${state.progress}%` }}
                                     />
@@ -83,9 +91,10 @@ export default function AIGenerateSetlist(): JSX.Element {
 
                         {state.pageState === PageState.Setlist && (
                             <>
-                                <div className="overflow-hidden pt-5">
-                                    <div className="mt-6 flex justify-center">
+                                <div id="" className="overflow-hidden pt-5">
+                                    <div id="" className="mt-6 flex justify-center">
                                         <button
+                                            id=""
                                             className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
                                             onClick={handleCombineSetlists}
                                         >

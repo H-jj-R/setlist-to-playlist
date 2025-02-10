@@ -72,6 +72,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             {/* Playlist Name */}
                             <div id="playlist-name" className="mb-4">
                                 <label
+                                    id=""
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     htmlFor="playlist-name-input"
                                 >
@@ -95,6 +96,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             {/* Playlist Description */}
                             <div id="playlist-description" className="mb-4">
                                 <label
+                                    id=""
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     htmlFor="playlist-description-input"
                                 >
@@ -120,7 +122,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             >
                                 <div id="playlist-cover" className="max-h-40 flex-1 overflow-hidden">
                                     {state.imagePreview ? (
-                                        <div className="flex items-center">
+                                        <div id="" className="flex items-center">
                                             <img
                                                 id="image-preview"
                                                 className="mr-2 h-24 w-24 rounded-lg object-cover"
@@ -128,7 +130,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                                 src={state.imagePreview as string}
                                             />
                                             <button
-                                                id="remove-image-button"
+                                                id="remove-image-btn"
                                                 className="text-red-500 hover:text-red-700 focus:outline-none"
                                                 onClick={(): void => {
                                                     setState((prev) => ({ ...prev, image: null, imagePreview: null }));
@@ -140,13 +142,13 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                         </div>
                                     ) : (
                                         <div
-                                            id="dropzone"
+                                            id="dropzone-container"
                                             {...getRootProps({
                                                 className:
                                                     "border-dashed border-2 border-gray-300 p-4 text-center cursor-pointer h-full flex flex-col justify-center overflow-hidden"
                                             })}
                                         >
-                                            <input {...getInputProps()} />
+                                            <input id="dropzone" {...getInputProps()} />
                                             <p id="dropzone-message" className="overflow-hidden text-sm">
                                                 {i18n("exportSetlist:dropzoneMessage")}
                                             </p>
@@ -159,9 +161,9 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             </div>
 
                             {/* Buttons */}
-                            <div id="export-dialog-buttons" className="mt-4 flex justify-end gap-4 pt-2">
+                            <div id="export-dialog-btns" className="mt-4 flex justify-end gap-4 pt-2">
                                 <button
-                                    id="cancel-button"
+                                    id="cancel-btn"
                                     className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                                     onClick={(): void => {
                                         onClose();
@@ -171,7 +173,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                     {i18n("common:cancel")}
                                 </button>
                                 <button
-                                    id="export-button"
+                                    id="export-btn"
                                     className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
                                     onClick={handleExport}
                                 >

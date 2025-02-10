@@ -39,20 +39,24 @@ const HeaderBar: React.FC = (): JSX.Element => {
                 </div>
                 <div id="actions-container" className="flex items-center space-x-4">
                     {isAuthenticated ? (
-                        <div id="account-button-container" className="relative">
+                        <div id="account-btn-container" className="relative">
                             <button
-                                id="account-button"
+                                id="account-btn"
                                 className="text rounded p-2"
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, showAccountSidebar: true }));
                                 }}
                             >
-                                <FontAwesomeIcon className="text-xl text-gray-200" icon={faUserCircle} />
+                                <FontAwesomeIcon
+                                    id="fa-user-circle-icon"
+                                    className="text-xl text-gray-200"
+                                    icon={faUserCircle}
+                                />
                             </button>
                         </div>
                     ) : (
                         <button
-                            id="login-button"
+                            id="login-btn"
                             className="rounded-full bg-gradient-to-br from-green-500 to-green-600 px-4 py-2 text-white hover:from-green-600 hover:to-green-700"
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, showLoginDialog: true }));
@@ -62,13 +66,13 @@ const HeaderBar: React.FC = (): JSX.Element => {
                         </button>
                     )}
                     <button
-                        id="settings-button"
+                        id="settings-btn"
                         className="text rounded p-2"
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showSettings: true }));
                         }}
                     >
-                        <FontAwesomeIcon id="settings-icon" className="text-xl text-gray-200" icon={faCog} />
+                        <FontAwesomeIcon id="fa-cog-icon" className="text-xl text-gray-200" icon={faCog} />
                     </button>
                 </div>
             </div>

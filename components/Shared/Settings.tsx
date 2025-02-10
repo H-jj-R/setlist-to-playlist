@@ -54,14 +54,14 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     }, [isVisible]);
 
     return (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div id="" className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
                 id="background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     isVisible ? "opacity-70" : "opacity-0"
                 }`}
-                onClick={() => {
+                onClick={(): void => {
                     // Trigger the slide-out and undimming animation before unmounting
                     setIsVisible(false);
                     setTimeout(onClose, 300); // Match the animation duration
@@ -81,13 +81,13 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <button
                         id="close-settings-btn"
                         className="text-xl"
-                        onClick={() => {
+                        onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
                             setTimeout(onClose, 300); // Match the animation duration
                         }}
                     >
-                        <FontAwesomeIcon icon={faChevronRight} size="lg" />
+                        <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
                 </div>
                 {/* Theme Setting */}
@@ -95,7 +95,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <h3 id="theme-title" className="text-lg font-medium">
                         {i18n("settings:themeTitle")}
                     </h3>
-                    <label className="flex items-center space-x-2 p-2">
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
                             className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
@@ -121,67 +121,87 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     </label>
                 </div>
                 {/* Setlists Settings */}
-                <div className="mb-4">
-                    <h3 className="text-lg font-medium">{i18n("settings:setlistsTitle")}</h3>
-                    <label className="flex items-center space-x-2 p-2">
+                <div id="" className="mb-4">
+                    <h3 id="" className="text-lg font-medium">
+                        {i18n("settings:setlistsTitle")}
+                    </h3>
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <input
+                            id=""
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:hideEmptySetlists")}</span>
+                        <span id="">{i18n("settings:hideEmptySetlists")}</span>
                     </label>
                 </div>
                 {/* Export Settings */}
-                <div className="mb-4">
-                    <h3 className="text-lg font-medium">{i18n("common:export")}</h3>
-                    <label className="flex items-center space-x-2 p-2">
+                <div id="" className="mb-4">
+                    <h3 id="" className="text-lg font-medium">
+                        {i18n("common:export")}
+                    </h3>
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <input
+                            id=""
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:hideSongsNotFound")}</span>
+                        <span id="">{i18n("settings:hideSongsNotFound")}</span>
                     </label>
-                    <label className="flex items-center space-x-2 p-2">
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <input
+                            id=""
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludeCovers")}</span>
+                        <span id="">{i18n("settings:excludeCovers")}</span>
                     </label>
-                    <label className="flex items-center space-x-2 p-2">
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <input
+                            id=""
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludeDuplicateSongs")}</span>
+                        <span id="">{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
-                    <label className="flex items-center space-x-2 p-2">
+                    <label id="" className="flex items-center space-x-2 p-2">
                         <input
+                            id=""
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludePlayedOnTape")}</span>
+                        <span id="">{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
                 {/* About + Support Link */}
-                <div className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
-                    <Link className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline" href="/about">
+                <div
+                    id=""
+                    className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
+                >
+                    <Link
+                        id=""
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                        href="/about"
+                    >
                         {i18n("about:aboutSupport")}
                     </Link>
                 </div>
                 {/* Privacy Policy Link */}
-                <div className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg">
+                <div
+                    id=""
+                    className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
+                >
                     <Link
+                        id=""
                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                         href="/privacy-policy"
                     >

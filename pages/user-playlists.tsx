@@ -69,37 +69,45 @@ export default function UserPlaylists(): JSX.Element {
 
     return (
         <Layout>
-            <div className="h-screen overflow-y-scroll">
+            <div id="" className="h-screen overflow-y-scroll">
                 {!isAuthenticated ? (
                     // Dialog displayed when the user is not authenticated
-                    <div className="mt-8 flex items-center justify-center">
-                        <div className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg">
-                            <h2 className="mb-4 text-2xl font-bold">{i18n("common:authenticationRequired")}</h2>
-                            <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
+                    <div id="" className="mt-8 flex items-center justify-center">
+                        <div
+                            id=""
+                            className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg"
+                        >
+                            <h2 id="" className="mb-4 text-2xl font-bold">
+                                {i18n("common:authenticationRequired")}
+                            </h2>
+                            <p id="" className="mb-6 text-lg">
+                                {i18n("common:needToLogIn")}
+                            </p>
                         </div>
                     </div>
                 ) : state.error ? (
-                    <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
+                    <div id="error-message-container" className="mx-auto mt-5 max-w-4xl pt-8">
                         <ErrorMessage message={state.error} />
                     </div>
                 ) : state.loading ? (
-                    <div id="loading-indicator" className="mt-16 flex items-center justify-center pt-8">
+                    <div id="loading-indicator-container" className="mt-16 flex items-center justify-center pt-8">
                         <CustomHashLoader showLoading={state.loading} size={120} />
                     </div>
                 ) : (
-                    <div className="p-4">
-                        <h1 className="mb-4 flex justify-center text-2xl font-bold">
+                    <div id="" className="p-4">
+                        <h1 id="" className="mb-4 flex justify-center text-2xl font-bold">
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
                         {state.playlists.length === 0 ? (
-                            <h2 className="flex justify-center pt-5 text-xl font-bold">
+                            <h2 id="" className="flex justify-center pt-5 text-xl font-bold">
                                 {i18n("userPlaylists:noPlaylistsCreated")}
                             </h2>
                         ) : (
-                            <ul className="space-y-4">
+                            <ul id="" className="space-y-4">
                                 {state.playlists.map(
                                     (playlist: Record<string, any>, idx: number): JSX.Element => (
                                         <div
+                                            id=""
                                             className="flex items-center justify-center"
                                             key={`${idx}-${playlist.playlistId}`}
                                         >

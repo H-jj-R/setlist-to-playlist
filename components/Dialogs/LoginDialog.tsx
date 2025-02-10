@@ -22,7 +22,7 @@ interface LoginDialogProps {
  */
 const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {
     const { t: i18n } = useTranslation();
-    const { handleClose, handleSubmit, setState, state } = loginDialogHook(onClose, onLoginSuccess);
+    const { handleClose, handleSubmit, recaptchaRef, setState, state } = loginDialogHook(onClose, onLoginSuccess);
 
     return (
         state.isDialogVisible && (
@@ -49,16 +49,22 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                     >
                         {/* Close Button */}
                         <button
+                            id=""
                             className="absolute left-4 top-6 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                             aria-label={i18n("common:close")}
                             onClick={handleClose}
                         >
-                            <FontAwesomeIcon className="h-6 w-6" icon={faTimes} />
+                            <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
                         </button>
 
                         {/* Login Form */}
                         <div id="login-form-container">
-                            <LoginForm handleSubmit={handleSubmit} setState={setState} state={state} />
+                            <LoginForm
+                                handleSubmit={handleSubmit}
+                                recaptchaRef={recaptchaRef}
+                                setState={setState}
+                                state={state}
+                            />
                         </div>
                     </div>
                 </div>

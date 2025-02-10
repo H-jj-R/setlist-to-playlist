@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 
 interface LoginFormProps {
     handleSubmit: (e: React.FormEvent) => Promise<void>;
+    recaptchaRef: React.MutableRefObject<ReCAPTCHA>;
     setState: any;
     state: any;
 }
@@ -20,7 +21,7 @@ interface LoginFormProps {
 /**
  *
  */
-const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }): JSX.Element => {
+const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setState, state }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     const RECAPTCHA_SITE_KEY: string = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
@@ -136,7 +137,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }):
                                 icon={faLock}
                             />
                             <button
-                                id="toggle-new-password-visibility"
+                                id="toggle-new-password-visibility-btn"
                                 className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
@@ -163,6 +164,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }):
                             onExpired={(): void => {
                                 setState((prev) => ({ ...prev, recaptchaToken: null }));
                             }}
+                            ref={recaptchaRef}
                             sitekey={RECAPTCHA_SITE_KEY}
                         />
                     </div>

@@ -6,7 +6,8 @@
 
 import LoginDialogState from "@constants/loginDialogState";
 import MessageDialogState from "@constants/messageDialogState";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -14,6 +15,7 @@ import { useTranslation } from "react-i18next";
  */
 export default function loginDialogHook(onClose: () => void, onLoginSuccess: () => void) {
     const { t: i18n } = useTranslation();
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
     const [state, setState] = useState({
         dialogState: LoginDialogState.Login,
         isDialogVisible: true,
@@ -88,7 +90,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 }
             }
         },
-        [state.dialogState]
+        [state]
     );
 
     const handleLogin = async (email: string, password: string): Promise<void> => {
@@ -114,13 +116,17 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 };
             }
         } catch (error) {
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset();
+            }
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
                     message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
-                }
+                },
+                recaptchaToken: null
             }));
         }
     };
@@ -153,19 +159,26 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                 };
             }
         } catch (error) {
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset();
+            }
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
                     message: error.error || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
-                }
+                },
+                recaptchaToken: null
             }));
         }
     };
 
     const validatePassword = async (password: string): Promise<boolean> => {
         if (!PASSWORD_REGEX.test(password)) {
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset();
+            }
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -173,7 +186,8 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     message: "",
                     type: MessageDialogState.Success
                 },
-                passwordError: i18n("account:passwordError")
+                passwordError: i18n("account:passwordError"),
+                recaptchaToken: null
             }));
             return false;
         }
@@ -182,6 +196,9 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     };
 
     const verifyRecaptcha = async (): Promise<boolean> => {
+        if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+        }
         // Ensure the reCAPTCHA token exists
         if (!state.recaptchaToken) {
             setState((prev) => ({
@@ -190,7 +207,8 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
                     isOpen: true,
                     message: i18n("account:recaptchaNotVerified"),
                     type: MessageDialogState.Error
-                }
+                },
+                recaptchaToken: null
             }));
             return false;
         }
@@ -294,6 +312,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     return {
         handleClose,
         handleSubmit,
+        recaptchaRef,
         setState,
         state
     };

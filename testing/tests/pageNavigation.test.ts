@@ -11,7 +11,7 @@ describe("Page Navigation -", () => {
     }, 20000);
 
     it("Landing Page to Setlist Search", async () => {
-        const setlistSearchBut = await page.waitForSelector("#go-to-setlist-search-button");
+        const setlistSearchBut = await page.waitForSelector("#go-to-setlist-search-btn");
         await Promise.all([setlistSearchBut.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/setlist-search");
     }, 10000);
@@ -23,7 +23,7 @@ describe("Page Navigation -", () => {
     }, 10000);
 
     it("Landing Page to AI Generate Setlist", async () => {
-        const generateSetlistBut = await page.waitForSelector("#go-to-ai-generate-setlist-button");
+        const generateSetlistBut = await page.waitForSelector("#go-to-ai-generate-setlist-btn");
         await Promise.all([generateSetlistBut.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/ai-generate-setlist");
     }, 10000);
