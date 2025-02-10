@@ -7,8 +7,10 @@
 /**
  * Enum for handling state of message dialog.
  */
-export enum MessageDialogState {
-    Success,
+enum MessageDialogState {
     Error,
-    Loading
+    Loading,
+    Success
 }
+
+export default MessageDialogState;

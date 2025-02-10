@@ -4,52 +4,44 @@
  * See LICENSE for details.
  */
 
+import MessageDialogState from "@constants/messageDialogState";
+import { useAuth } from "@context/AuthContext";
+import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
-import { format } from "date-fns";
-import { MessageDialogState } from "@constants/messageDialogState";
-import { useAuth } from "@context/AuthContext";
-
-interface ExportDialogHookProps {
-    setlist: Record<string, any>;
-    artistData: Record<string, any>;
-    isOpen: boolean;
-    predictedSetlist?: boolean;
-    onClose: () => void;
-}
 
 /**
  * Hook for data handling on the ExportDialog component.
  */
-export default function exportDialogHook({
-    setlist,
-    artistData,
-    isOpen,
-    predictedSetlist,
-    onClose
-}: ExportDialogHookProps) {
-    const { t: i18n } = useTranslation();
+export default function exportDialogHook(
+    artistData: Record<string, any>,
+    isOpen: boolean,
+    onClose: () => void,
+    predictedSetlist: boolean,
+    setlist: Record<string, any>
+) {
     const { isAuthenticated } = useAuth();
+    const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        playlistName: "" as string,
-        playlistDescription: "" as string,
         image: null as File | null,
-        imagePreview: null as string | ArrayBuffer | null,
-        spotifySongs: null as Record<string, any> | null,
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+        imagePreview: null as ArrayBuffer | null | string,
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
+        playlistDescription: "" as string,
+        playlistName: "" as string,
+        spotifySongs: null as null | Record<string, any>
     });
 
-    const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
+    const MAX_IMAGE_FILE_SIZE: number = 262144; // 256 * 1024 = 256 KB
 
-    useEffect(() => {
+    useEffect((): void => {
         if (isOpen) {
             setState((prev) => ({
                 ...prev,
                 playlistName: predictedSetlist
                     ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
                     : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${format(
-                          ((dateString: string) => {
+                          ((dateString: string): Date => {
                               const [day, month, year] = dateString.split("-");
                               return new Date(`${year}-${month}-${day}`);
                           })(setlist.eventDate),
@@ -60,13 +52,13 @@ export default function exportDialogHook({
     }, [isOpen, artistData, setlist]);
 
     const processImage = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (event) => {
+            reader.onload = (event: ProgressEvent<FileReader>): void => {
                 const img = new Image();
                 img.src = event.target?.result as string;
-                img.onload = () => {
+                img.onload = (): void => {
                     const minSize = Math.min(img.width, img.height);
                     const canvas = document.createElement("canvas");
                     canvas.width = minSize;
@@ -114,12 +106,12 @@ export default function exportDialogHook({
         });
     };
 
-    const handleImageChange = useCallback((acceptedFiles: File[]) => {
+    const handleImageChange = useCallback((acceptedFiles: File[]): void => {
         const file = acceptedFiles[0];
         if (file) {
             if (file.type === "image/jpeg" || file.type === "image/png") {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = (): void => {
                     setState((prev) => ({
                         ...prev,
                         image: file,
@@ -140,16 +132,16 @@ export default function exportDialogHook({
         }
     }, []);
 
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop: handleImageChange,
+    const { getInputProps, getRootProps } = useDropzone({
         accept: {
             "image/jpeg": [".jpg", ".jpeg"],
             "image/png": [".png"]
         },
-        maxFiles: 1
+        maxFiles: 1,
+        onDrop: handleImageChange
     });
 
-    const handleExport = async () => {
+    const handleExport = useCallback(async (): Promise<void> => {
         try {
             // Reset errors
             setState((prev) => ({ ...prev, error: null }));
@@ -166,15 +158,15 @@ export default function exportDialogHook({
 
             if (!state.playlistName.trim()) {
                 throw {
-                    status: 400,
-                    error: i18n("exportSetlist:noNameProvided")
+                    error: i18n("exportSetlist:noNameProvided"),
+                    status: 400
                 };
             }
 
             if (state.spotifySongs.length === 0) {
                 throw {
-                    status: 400,
-                    error: i18n("exportSetlist:noSongsProvided")
+                    error: i18n("exportSetlist:noSongsProvided"),
+                    status: 400
                 };
             }
 
@@ -183,32 +175,32 @@ export default function exportDialogHook({
                 base64Image = await processImage(state.image);
                 if (!base64Image || base64Image.length > MAX_IMAGE_FILE_SIZE) {
                     throw {
-                        status: 400,
-                        error: i18n("exportSetlist:errorProcessingImage")
+                        error: i18n("exportSetlist:errorProcessingImage"),
+                        status: 400
                     };
                 }
             }
 
             const response = await fetch(`/api/controllers/create-spotify-playlist`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                },
                 body: JSON.stringify({
-                    name: state.playlistName,
                     description: state.playlistDescription,
                     image: base64Image,
-                    tracks: JSON.stringify(state.spotifySongs),
-                    isLoggedIn: isAuthenticated
-                })
+                    isLoggedIn: isAuthenticated,
+                    name: state.playlistName,
+                    tracks: JSON.stringify(state.spotifySongs)
+                }),
+                headers: {
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                method: "POST"
             });
             const responseJson = await response.json();
 
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(responseJson.error) || i18n("common:unexpectedError")
+                    error: i18n(responseJson.error),
+                    status: response.status
                 };
             }
 
@@ -228,36 +220,36 @@ export default function exportDialogHook({
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n(error.error),
+                    message: i18n(error.error) || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
         }
-    };
+    }, [state, isAuthenticated]);
 
-    const resetState = () => {
+    const resetState = useCallback((): void => {
         setState((prev) => ({
             ...prev,
-            playlistName: "",
-            playlistDescription: "",
             image: null,
             imagePreview: null,
-            spotifySongs: null,
             messageDialog: {
                 isOpen: false,
                 message: "",
                 type: MessageDialogState.Success
-            }
+            },
+            playlistDescription: "",
+            playlistName: "",
+            spotifySongs: null
         }));
-    };
+    }, []);
 
     return {
-        state,
-        setState,
-        getRootProps,
         getInputProps,
+        getRootProps,
         handleExport,
+        onClose,
         resetState,
-        onClose
+        setState,
+        state
     };
 }

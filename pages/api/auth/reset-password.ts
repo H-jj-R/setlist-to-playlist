@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcrypt";
 import db from "@constants/db";
+import bcrypt from "bcrypt";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to reset a user's password.
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: "common:methodNotAllowed" });
     }
 
-    const { email, otp, newPassword } = req.body;
+    const { email, newPassword, otp } = req.body;
 
     // Validate input fields
     if (!email || !otp || !newPassword) {

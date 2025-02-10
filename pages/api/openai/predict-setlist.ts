@@ -6,8 +6,8 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
-import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 const ISACTIVE = true;
 
@@ -17,8 +17,8 @@ const PredictedSetlistSchema = z.object({
         setlist1: z.object({
             predictedSongs: z.array(
                 z.object({
-                    name: z.string(),
                     artist: z.string(),
+                    name: z.string(),
                     tape: z.boolean()
                 })
             )
@@ -26,8 +26,8 @@ const PredictedSetlistSchema = z.object({
         setlist2: z.object({
             predictedSongs: z.array(
                 z.object({
-                    name: z.string(),
                     artist: z.string(),
+                    name: z.string(),
                     tape: z.boolean()
                 })
             )
@@ -35,8 +35,8 @@ const PredictedSetlistSchema = z.object({
         setlist3: z.object({
             predictedSongs: z.array(
                 z.object({
-                    name: z.string(),
                     artist: z.string(),
+                    name: z.string(),
                     tape: z.boolean()
                 })
             )
@@ -85,10 +85,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Send the request to GPT-4o-mini with a structured response format
         const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
         const completion = await openai.beta.chat.completions.parse({
-            model: "gpt-4o-mini",
             messages: [
                 {
-                    role: "system",
                     content: `You are a setlist predictor. Based on the past setlists provided, predict exactly three possible future setlists for the artist. 
                     **Rules for the Predictions:**
                     - You **must** return exactly **three** predicted setlists.
@@ -101,13 +99,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     - Do **not** repeat identical setlists.
                     - If a song is a cover, include the original artist's name in the 'artist' field and **not** in the song name.
                     - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**. Do **not** include this in the song name.
-                    **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`
+                    **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`,
+                    role: "system"
                 },
                 {
-                    role: "user",
-                    content: `Here are the past setlists:\n${input}`
+                    content: `Here are the past setlists:\n${input}`,
+                    role: "user"
                 }
             ],
+            model: "gpt-4o-mini",
             response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
             temperature: 0.6,
             top_p: 1

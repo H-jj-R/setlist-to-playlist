@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import db from "@constants/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import db from "@constants/db";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to log in a user.
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Generate a JWT (JSON Web Token)
         const token = jwt.sign(
-            { userId: user.user_id, username: user.username, email: user.email },
+            { email: user.email, userId: user.user_id, username: user.username },
             process.env.JWT_SECRET!,
             { expiresIn: "1000h" }
         );

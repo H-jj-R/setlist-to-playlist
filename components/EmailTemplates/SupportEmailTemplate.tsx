@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import { Html, Head, Body, Container, Heading, Text, Section } from "@react-email/components";
+import { Body, Container, Head, Heading, Html, Section, Text } from "@react-email/components";
 
 interface SupportEmailTemplateProps {
     email: string;
@@ -14,51 +14,51 @@ interface SupportEmailTemplateProps {
 /**
  *
  */
-const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }) => {
+const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }): JSX.Element => {
     return (
         <Html>
             <Head />
             <Body
-                style={{ fontFamily: "Arial, sans-serif", backgroundColor: "#f3f4f6", padding: "20px" }}
                 role="document"
+                style={{ backgroundColor: "#f3f4f6", fontFamily: "Arial, sans-serif", padding: "20px" }}
             >
                 <Container
                     style={{
-                        maxWidth: "600px",
-                        margin: "0 auto",
                         backgroundColor: "#ffffff",
-                        padding: "20px",
+                        border: "1px solid #ddd",
                         borderRadius: "8px",
-                        border: "1px solid #ddd"
+                        margin: "0 auto",
+                        maxWidth: "600px",
+                        padding: "20px"
                     }}
                 >
                     <Heading
                         as="h2"
                         style={{
+                            borderBottom: "2px solid #2563eb",
+                            color: "#333",
                             fontSize: "20px",
                             fontWeight: "600",
-                            color: "#333",
-                            borderBottom: "2px solid #2563eb",
                             paddingBottom: "8px"
                         }}
                     >
                         Support/Feedback
                     </Heading>
 
-                    <Text style={{ fontSize: "16px", color: "#555", marginTop: "16px" }}>
+                    <Text style={{ color: "#555", fontSize: "16px", marginTop: "16px" }}>
                         <strong>From:</strong> {email}
                     </Text>
 
                     <Section
                         style={{
                             backgroundColor: "#ffffff",
-                            padding: "16px",
                             borderRadius: "6px",
                             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                            marginTop: "12px"
+                            marginTop: "12px",
+                            padding: "16px"
                         }}
                     >
-                        <Text style={{ fontSize: "16px", color: "#333", whiteSpace: "pre-wrap" }}>
+                        <Text style={{ color: "#333", fontSize: "16px", whiteSpace: "pre-wrap" }}>
                             <strong>Message:</strong> {message}
                         </Text>
                     </Section>

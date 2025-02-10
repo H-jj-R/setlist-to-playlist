@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import React, { CSSProperties } from "react";
 import { useTranslation } from "next-i18next";
+import { CSSProperties } from "react";
 import HashLoader from "react-spinners/HashLoader";
 
 interface CustomHashLoaderProps {
@@ -16,17 +16,17 @@ interface CustomHashLoaderProps {
 /**
  * Custom hash loader.
  */
-const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }) => {
+const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     return (
         <HashLoader
+            cssOverride={{} as CSSProperties}
             id="hash-loader"
+            aria-label={i18n("common:loading")}
             color="#3DDAFA"
             loading={showLoading}
-            cssOverride={{} as CSSProperties}
             size={size}
-            aria-label={i18n("common:loading")}
         />
     );
 };

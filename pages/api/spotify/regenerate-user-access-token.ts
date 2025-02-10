@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import decryptToken from "@utils/decryptToken";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
-import decryptToken from "@utils/decryptToken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Refreshes the Spotify access token using the provided refresh token.
@@ -25,14 +25,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const response = await fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
                 client_id: process.env.SPOTIFY_API_C_ID!,
                 client_secret: process.env.SPOTIFY_API_C_SECRET!,
                 grant_type: "refresh_token",
                 refresh_token: decryptToken(encryptedRefreshToken)
-            })
+            }),
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            method: "POST"
         });
 
         if (!response.ok) {
@@ -51,9 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 CryptoJS.AES.encrypt(data.access_token, process.env.ENCRYPTION_KEY!).toString(),
                 {
                     httpOnly: true,
-                    secure: true,
                     maxAge: data.expires_in,
-                    path: "/"
+                    path: "/",
+                    secure: true
                 }
             )
         );

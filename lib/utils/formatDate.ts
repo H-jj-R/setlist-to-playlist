@@ -6,7 +6,7 @@
 
 /**
  * Formats a date string (in "YYYY-MM-DD" format) into a human-readable UK date format.
- * 
+ *
  * @param {string} dateString - The date string to format, expected in "YYYY-MM-DD" format.
  * @returns {string} - The formatted date in "DD MMM YYYY" format (e.g. "01 Jan 1970").
  */

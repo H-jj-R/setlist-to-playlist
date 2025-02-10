@@ -7,10 +7,12 @@
 /**
  * Enum for handling settings key strings.
  */
-export enum SettingsKeys {
-    HideEmptySetlists = "hideEmptySetlists",
-    HideSongsNotFound = "hideSongsNotFound",
+enum SettingsKeys {
     ExcludeCovers = "excludeCovers",
     ExcludeDuplicateSongs = "excludeDuplicateSongs",
-    ExcludePlayedOnTape = "excludePlayedOnTape"
+    ExcludePlayedOnTape = "excludePlayedOnTape",
+    HideEmptySetlists = "hideEmptySetlists",
+    HideSongsNotFound = "hideSongsNotFound"
 }
+
+export default SettingsKeys;

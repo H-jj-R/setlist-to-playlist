@@ -1,5 +1,5 @@
-const next = require("next");
 const { setup: setupPuppeteer } = require("jest-environment-puppeteer");
+const next = require("next");
 
 const app = next({ dev: false });
 let server;

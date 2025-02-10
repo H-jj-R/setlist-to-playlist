@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { jwtDecode } from "jwt-decode";
 import db from "@constants/db";
+import { jwtDecode } from "jwt-decode";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const DAILY_QUERY_LIMIT = 5;
 
@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             userQueryLimit = newRows[0];
         }
 
-        const { queries_today, last_query_date } = userQueryLimit;
+        const { last_query_date, queries_today } = userQueryLimit;
 
         // Reset queries_today if the last query date is before today
         const today = new Date().toISOString().split("T")[0];

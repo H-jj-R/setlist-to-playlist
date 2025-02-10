@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
+import LoginDialogState from "@constants/loginDialogState";
+import MessageDialogState from "@constants/messageDialogState";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LoginDialogState } from "@constants/loginDialogState";
-import { MessageDialogState } from "@constants/messageDialogState";
 
 /**
  * Hook for data handling on the login dialog.
@@ -15,100 +15,90 @@ import { MessageDialogState } from "@constants/messageDialogState";
 export default function loginDialogHook(onClose: () => void, onLoginSuccess: () => void) {
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        isVisible: false,
+        dialogState: LoginDialogState.Login,
         isDialogVisible: true,
-        passwordVisible: false,
-        passwordError: null as string | null,
+        isVisible: false,
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
-        recaptchaToken: null as string | null,
-        otpInput: null as string | null,
-        storedEmail: null as string | null,
-        dialogState: LoginDialogState.Login
+        otpInput: null as null | string,
+        passwordError: null as null | string,
+        passwordVisible: false,
+        recaptchaToken: null as null | string,
+        storedEmail: null as null | string
     });
 
     const PASSWORD_REGEX: RegExp =
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,32}$/;
 
-    useEffect(() => {
+    useEffect((): void => {
         // Trigger the dimming animation after mounting
-        setState((prev) => ({
-            ...prev,
-            isVisible: true
-        }));
+        setState((prev) => ({ ...prev, isVisible: true }));
     }, []);
 
-    useEffect(() => {
+    useEffect((): (() => void) => {
         if (!state.isVisible) {
             const timer = setTimeout(onClose, 200);
-            return () => clearTimeout(timer);
+            return (): void => clearTimeout(timer);
         }
     }, [state.isVisible, onClose]);
 
-    const handleClose = () => {
-        setTimeout(
-            () =>
-                setState((prev) => ({
-                    ...prev,
-                    isDialogVisible: false
-                })),
-            300
-        );
-        setState((prev) => ({
-            ...prev,
-            isVisible: false
-        }));
-    };
+    const handleClose = useCallback((): void => {
+        setTimeout((): void => setState((prev) => ({ ...prev, isDialogVisible: false })), 300);
+        setState((prev) => ({ ...prev, isVisible: false }));
+    }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setState((prev) => ({
-            ...prev,
-            messageDialog: {
-                isOpen: true,
-                message: "",
-                type: MessageDialogState.Loading
-            }
-        }));
-        const formData = new FormData(e.target as HTMLFormElement);
-
-        if (state.dialogState === LoginDialogState.ForgotPassword) {
-            const email = formData.get("email") as string;
-            handleForgotPassword(email);
-        } else if (state.dialogState === LoginDialogState.ResetPassword) {
-            handleResetPassword(formData.get("password") as string);
-        } else {
-            const password = formData.get("password") as string;
-            if (state.dialogState === LoginDialogState.SignUp) {
-                if (!(await validatePassword(password))) {
-                    return;
+    const handleSubmit = useCallback(
+        async (e: React.FormEvent): Promise<void> => {
+            e.preventDefault();
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: "",
+                    type: MessageDialogState.Loading
                 }
-            }
+            }));
+            const formData = new FormData(e.target as HTMLFormElement);
 
-            if (state.dialogState === LoginDialogState.SignUp) {
-                // Verify ReCAPTCHA
-                if (!(await verifyRecaptcha())) {
-                    return;
-                }
-            }
-
-            const email = formData.get("email") as string;
-            if (state.dialogState === LoginDialogState.SignUp) {
-                const username = formData.get("username") as string;
-                await handleSignUp(username, email, password);
+            if (state.dialogState === LoginDialogState.ForgotPassword) {
+                const email = formData.get("email") as string;
+                handleForgotPassword(email);
+            } else if (state.dialogState === LoginDialogState.ResetPassword) {
+                handleResetPassword(formData.get("password") as string);
             } else {
-                await handleLogin(email, password);
-            }
-        }
-    };
+                const password = formData.get("password") as string;
+                if (state.dialogState === LoginDialogState.SignUp) {
+                    if (!(await validatePassword(password))) {
+                        return;
+                    }
+                }
 
-    const handleLogin = async (email: string, password: string) => {
+                if (state.dialogState === LoginDialogState.SignUp) {
+                    // Verify ReCAPTCHA
+                    if (!(await verifyRecaptcha())) {
+                        return;
+                    }
+                }
+
+                const email = formData.get("email") as string;
+                if (state.dialogState === LoginDialogState.SignUp) {
+                    const username = formData.get("username") as string;
+                    await handleSignUp(username, email, password);
+                } else {
+                    await handleLogin(email, password);
+                }
+            }
+        },
+        [state.dialogState]
+    );
+
+    const handleLogin = async (email: string, password: string): Promise<void> => {
         try {
             const response = await fetch("/api/auth/login", {
-                method: "POST",
+                body: JSON.stringify({ email, password }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email, password })
+                method: "POST"
             });
 
             if (response.ok) {
@@ -119,8 +109,8 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:loginFailed", { message: i18n(data.error) })
+                    error: i18n("account:loginFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -135,31 +125,31 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         }
     };
 
-    const handleSignUp = async (username: string, email: string, password: string) => {
+    const handleSignUp = async (username: string, email: string, password: string): Promise<void> => {
         try {
             const response = await fetch("/api/auth/signup", {
-                method: "POST",
+                body: JSON.stringify({ email, password, username }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password })
+                method: "POST"
             });
 
             if (response.ok) {
                 setState((prev) => ({
                     ...prev,
+                    dialogState: LoginDialogState.Login,
                     messageDialog: {
                         isOpen: true,
                         message: i18n("account:signUpSuccess"),
                         type: MessageDialogState.Success
-                    },
-                    dialogState: LoginDialogState.Login
+                    }
                 }));
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:signUpFailed", { message: i18n(data.error) })
+                    error: i18n("account:signUpFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -174,27 +164,24 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         }
     };
 
-    const validatePassword = async (password: string) => {
+    const validatePassword = async (password: string): Promise<boolean> => {
         if (!PASSWORD_REGEX.test(password)) {
             setState((prev) => ({
                 ...prev,
-                passwordError: i18n("account:passwordError"),
                 messageDialog: {
                     isOpen: false,
                     message: "",
                     type: MessageDialogState.Success
-                }
+                },
+                passwordError: i18n("account:passwordError")
             }));
             return false;
         }
-        setState((prev) => ({
-            ...prev,
-            passwordError: null
-        }));
+        setState((prev) => ({ ...prev, passwordError: null }));
         return true;
     };
 
-    const verifyRecaptcha = async () => {
+    const verifyRecaptcha = async (): Promise<boolean> => {
         // Ensure the reCAPTCHA token exists
         if (!state.recaptchaToken) {
             setState((prev) => ({
@@ -209,11 +196,11 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         }
         // Verify reCAPTCHA token
         const recaptchaResponse = await fetch("/api/auth/verify-recaptcha", {
-            method: "POST",
+            body: JSON.stringify({ token: state.recaptchaToken }),
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ token: state.recaptchaToken })
+            method: "POST"
         });
         const { success } = await recaptchaResponse.json();
         if (!success) {
@@ -230,11 +217,11 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         return true;
     };
 
-    const handleForgotPassword = async (email: string) => {
+    const handleForgotPassword = async (email: string): Promise<void> => {
         const response = await fetch("/api/auth/forgot-password", {
-            method: "POST",
+            body: JSON.stringify({ email }),
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
+            method: "POST"
         });
         if (!response.ok) {
             const data = await response.json();
@@ -249,47 +236,47 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
         } else {
             setState((prev) => ({
                 ...prev,
+                dialogState: LoginDialogState.ResetPassword,
                 messageDialog: {
                     isOpen: false,
                     message: "",
                     type: MessageDialogState.Success
                 },
-                storedEmail: email,
-                dialogState: LoginDialogState.ResetPassword
+                storedEmail: email
             }));
         }
     };
 
-    const handleResetPassword = async (newPassword: string) => {
+    const handleResetPassword = async (newPassword: string): Promise<void> => {
         if (!(await validatePassword(newPassword))) {
             return;
         }
 
         try {
             const response = await fetch("/api/auth/reset-password", {
-                method: "POST",
+                body: JSON.stringify({ email: state.storedEmail, newPassword, otp: state.otpInput }),
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email: state.storedEmail, otp: state.otpInput, newPassword })
+                method: "POST"
             });
 
             if (response.ok) {
                 setState((prev) => ({
                     ...prev,
+                    dialogState: LoginDialogState.Login,
                     messageDialog: {
                         isOpen: true,
                         message: i18n("account:resetPasswordSuccess"),
                         type: MessageDialogState.Success
                     },
-                    storedEmail: null,
-                    dialogState: LoginDialogState.Login
+                    storedEmail: null
                 }));
             } else {
                 const data = await response.json();
                 throw {
-                    status: data.status,
-                    error: i18n("account:resetPasswordFailed", { message: i18n(data.error) })
+                    error: i18n("account:resetPasswordFailed", { message: i18n(data.error) }),
+                    status: data.status
                 };
             }
         } catch (error) {
@@ -305,9 +292,9 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     };
 
     return {
-        state,
-        setState,
         handleClose,
-        handleSubmit
+        handleSubmit,
+        setState,
+        state
     };
 }

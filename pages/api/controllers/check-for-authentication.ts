@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to ensure the user has an access token.

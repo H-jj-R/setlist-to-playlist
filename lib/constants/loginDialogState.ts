@@ -7,9 +7,11 @@
 /**
  * Enum for handling state of login dialog.
  */
-export enum LoginDialogState {
-    Login,
-    SignUp,
+enum LoginDialogState {
     ForgotPassword,
-    ResetPassword
+    Login,
+    ResetPassword,
+    SignUp
 }
+
+export default LoginDialogState;

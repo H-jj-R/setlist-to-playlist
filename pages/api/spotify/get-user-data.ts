@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to get an authenticated user's data.
@@ -24,10 +24,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
-            method: "GET",
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`
-            }
+            },
+            method: "GET"
         });
 
         if (!response.ok) {

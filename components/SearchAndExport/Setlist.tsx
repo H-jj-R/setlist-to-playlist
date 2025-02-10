@@ -4,37 +4,36 @@
  * See LICENSE for details.
  */
 
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import formatDate from "@utils/formatDate";
 import formatLocation from "@utils/formatLocation";
+import { useTranslation } from "react-i18next";
 
 interface SetlistProps {
-    setlist: Record<string, any>; // The setlist data to be displayed
     onClose: () => void; // Function to handle the close action (navigate back to the list)
     onExport: () => void; // Function to trigger Spotify export
+    setlist: Record<string, any>; // The setlist data to be displayed
 }
 
 /**
  * Displays a setlist from it's setlist.fm details.
  */
-const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
+const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
-    const SongListItem = ({ song, isFirst, isLast }: { song: any; isFirst: boolean; isLast: boolean }) => (
+    const SongListItem = ({ isFirst, isLast, song }: { isFirst: boolean; isLast: boolean; song: any }): JSX.Element => (
         <li
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
         >
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
                     {song.tape && (
                         <FontAwesomeIcon
-                            icon={faRecordVinyl}
                             className="opacity-80"
+                            icon={faRecordVinyl}
                             title={i18n("setlistSearch:playedFromTape")}
                         />
                     )}
@@ -48,7 +47,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                                 : `(${i18n("setlistSearch:unknown")})`)}
                     </span>
                 </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 text-right max-w-[60%]">
+                <div className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400">
                     {/* Additional song details */}
                     {song.cover &&
                         `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}${
@@ -64,15 +63,15 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
     return (
         <div
             id="setlist-container"
-            className="px-5 border-4 border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg shadow-lg h-[calc(100vh-9rem)] overflow-y-auto"
+            className="h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200"
         >
             {/* Container for buttons */}
-            <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 w-full">
-                <div id="setlist-buttons" className="flex justify-between items-center mb-6 pt-4 pb-2">
+            <div className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
+                <div id="setlist-buttons" className="mb-6 flex items-center justify-between pb-2 pt-4">
                     {/* Back Button */}
                     <button
                         id="back-button"
-                        className="px-4 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:ring focus:ring-red-300 w-full sm:w-auto"
+                        className="w-full rounded bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 focus:ring focus:ring-red-300 sm:w-auto"
                         onClick={onClose}
                     >
                         {i18n("setlistSearch:backToList")}
@@ -81,7 +80,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                     {/* Export to Spotify Button */}
                     <button
                         id="export-spotify-button"
-                        className="px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 focus:ring focus:ring-green-300 w-full sm:w-auto"
+                        className="w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
                         onClick={onExport}
                     >
                         {i18n("common:exportToSpotify")}
@@ -94,7 +93,7 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
                 <h2 id="setlist-artist" className="text-3xl font-bold">
                     {setlist.artist.name}
                 </h2>
-                <p id="setlist-location" className="text-lg mt-1">
+                <p id="setlist-location" className="mt-1 text-lg">
                     {formatLocation(setlist)}
                 </p>
                 <p id="setlist-date" className="text-sm text-gray-500 dark:text-gray-400">
@@ -106,20 +105,20 @@ const Setlist: React.FC<SetlistProps> = ({ setlist, onClose, onExport }) => {
             {setlist.sets && setlist.sets.set.length > 0 ? (
                 <ul id="songs-list" className="space-y-1 pb-6">
                     {setlist.sets.set.flatMap((set: any, setIdx: number, setArray: any[]) =>
-                        set.song.map((song: any, songIdx: number) => {
+                        set.song.map((song: any, songIdx: number): JSX.Element => {
                             return (
                                 <SongListItem
-                                    key={`${songIdx}-${song.name || "unknown"}`}
-                                    song={song}
                                     isFirst={setIdx === 0 && songIdx === 0}
                                     isLast={setIdx === setArray.length - 1 && songIdx === set.song.length - 1}
+                                    key={`${songIdx}-${song.name || "unknown"}`}
+                                    song={song}
                                 />
                             );
                         })
                     )}
                 </ul>
             ) : (
-                <p id="no-songs-message" className="italic text-center">
+                <p id="no-songs-message" className="text-center italic">
                     {i18n("setlistSearch:noSongsFound")}
                 </p>
             )}

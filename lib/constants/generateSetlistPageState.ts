@@ -7,7 +7,9 @@
 /**
  * Enum for handling state of ai-generate-setlist page.
  */
-export enum PageState {
+enum PageState {
     Idle,
     Setlist
 }
+
+export default PageState;

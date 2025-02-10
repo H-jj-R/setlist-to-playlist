@@ -4,41 +4,41 @@
  * See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import PageState from "@constants/setlistSearchPageState";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { PageState } from "@constants/setlistSearchPageState";
 
 /**
  * Hook for data handling on the setlist-search page.
  */
 export default function setlistSearchHook() {
-    const { t: i18n } = useTranslation();
     const { resolvedTheme } = useTheme();
     const router = useRouter();
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
     const [state, setState] = useState({
-        searchTriggered: false,
-        searchComplete: false,
-        lastQuery: null as string | null,
         allSetlistsData: [] as Record<string, any>,
-        setlistChosen: false,
-        chosenSetlistData: null as Record<string, any> | null,
-        exportDialogOpen: false,
-        showAuthDialog: false,
         animLoading: true,
-        showLoading: false,
-        error: null as string | null,
-        pageState: PageState.Idle
+        chosenSetlistData: null as null | Record<string, any>,
+        error: null as null | string,
+        exportDialogOpen: false,
+        lastQuery: null as null | string,
+        pageState: PageState.Idle,
+        searchComplete: false,
+        searchTriggered: false,
+        setlistChosen: false,
+        showAuthDialog: false,
+        showLoading: false
     });
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    useEffect(() => {
+    useEffect((): void => {
         const { q, setlist } = router.query;
 
         if (q && !setlist) {
@@ -53,16 +53,16 @@ export default function setlistSearchHook() {
             } else {
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
-                    pageState: PageState.LosSetlist
+                    pageState: PageState.LosSetlist,
+                    setlistChosen: true
                 }));
             }
         } else {
             setState((prev) => ({
                 ...prev,
-                searchTriggered: false,
                 animLoading: true,
-                pageState: PageState.Idle
+                pageState: PageState.Idle,
+                searchTriggered: false
             }));
         }
 
@@ -72,31 +72,31 @@ export default function setlistSearchHook() {
         }));
     }, [router.query.q, router.query.setlist]);
 
-    const fetchData = async (url: string) => {
+    const fetchData = async (url: string): Promise<Record<string, any>> => {
         const response = await fetch(url);
         if (!response.ok) {
             const errorResponse = await response.json();
             throw {
-                status: response.status,
-                error: i18n(errorResponse.error) || i18n("common:unexpectedError")
+                error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                status: response.status
             };
         }
-        return await response.json();
+        return (await response.json()) as Record<string, any>;
     };
 
-    const handleSearch = async (query: string | null, setlist: string | null) => {
+    const handleSearch = async (query: null | string, setlist: null | string): Promise<void> => {
         setState((prev) => ({
             ...prev,
-            searchTriggered: true,
-            searchComplete: false,
-            setlistChosen: false,
             chosenSetlistData: null,
-            showLoading: false,
-            error: null
+            error: null,
+            searchComplete: false,
+            searchTriggered: true,
+            setlistChosen: false,
+            showLoading: false
         }));
 
         if (state.animLoading) {
-            setTimeout(() => setState((prev) => ({ ...prev, animLoading: false })), 750);
+            setTimeout((): void => setState((prev) => ({ ...prev, animLoading: false })), 750);
         }
 
         setState((prev) => ({ ...prev, showLoading: true }));
@@ -108,10 +108,10 @@ export default function setlistSearchHook() {
                 );
                 setState((prev) => ({
                     ...prev,
-                    searchComplete: true,
                     allSetlistsData: data,
-                    showLoading: false,
-                    pageState: PageState.ListOfSetlists
+                    pageState: PageState.ListOfSetlists,
+                    searchComplete: true,
+                    showLoading: false
                 }));
             } else if (!query && setlist) {
                 const setlistData = await fetchData(
@@ -123,11 +123,11 @@ export default function setlistSearchHook() {
                 const fullArtistdetails = { setlistfmArtist: setlistData.artist, spotifyArtist: artistData };
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
                     allSetlistsData: fullArtistdetails,
                     chosenSetlistData: setlistData,
-                    showLoading: false,
-                    pageState: PageState.Setlist
+                    pageState: PageState.Setlist,
+                    setlistChosen: true,
+                    showLoading: false
                 }));
             } else if (query && setlist) {
                 const queryData = await fetchData(
@@ -135,59 +135,65 @@ export default function setlistSearchHook() {
                 );
                 setState((prev) => ({
                     ...prev,
-                    showLoading: false,
+                    allSetlistsData: queryData,
                     searchComplete: true,
-                    allSetlistsData: queryData
+                    showLoading: false
                 }));
                 const setlistData = await fetchData(
                     `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
                 );
                 setState((prev) => ({
                     ...prev,
-                    setlistChosen: true,
                     chosenSetlistData: setlistData,
-                    pageState: PageState.LosSetlist
+                    pageState: PageState.LosSetlist,
+                    setlistChosen: true
                 }));
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                showLoading: false,
-                error: error.error
+                error: error.error,
+                showLoading: false
             }));
         }
     };
 
-    const handleSearchRouterPush = async (query: string) => {
-        if (!query) return;
+    const handleSearchRouterPush = useCallback(
+        async (query: string): Promise<void> => {
+            if (!query) return;
 
-        const queryParams = query.startsWith("https://www.setlist.fm/setlist/")
-            ? { setlist: query.split("-").pop()?.replace(".html", "") }
-            : { q: query };
+            const queryParams = query.startsWith("https://www.setlist.fm/setlist/")
+                ? { setlist: query.split("-").pop()?.replace(".html", "") }
+                : { q: query };
 
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: queryParams
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
+            await router.push(
+                {
+                    pathname: "/setlist-search",
+                    query: queryParams
+                },
+                undefined,
+                { shallow: true }
+            );
+        },
+        [router]
+    );
 
-    const handleSetlistChosenRouterPush = async (setlist: any) => {
-        setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: { q: router.query.q, setlist: setlist.id }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
+    const handleSetlistChosenRouterPush = useCallback(
+        async (setlist: Record<string, any>): Promise<void> => {
+            setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
+            await router.push(
+                {
+                    pathname: "/setlist-search",
+                    query: { q: router.query.q, setlist: setlist.id }
+                },
+                undefined,
+                { shallow: true }
+            );
+        },
+        [router]
+    );
 
-    const handleBackToList = async () => {
+    const handleBackToList = useCallback(async (): Promise<void> => {
         await router.push(
             {
                 pathname: "/setlist-search",
@@ -198,17 +204,17 @@ export default function setlistSearchHook() {
         );
         setState((prev) => ({
             ...prev,
-            setlistChosen: false,
             chosenSetlistData: null,
-            pageState: PageState.ListOfSetlists
+            pageState: PageState.ListOfSetlists,
+            setlistChosen: false
         }));
-    };
+    }, [router]);
 
-    const handleExport = async () => {
+    const handleExport = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
-                method: "GET",
-                credentials: "include"
+                credentials: "include",
+                method: "GET"
             });
 
             if (response.status === 200) {
@@ -219,15 +225,15 @@ export default function setlistSearchHook() {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, []);
 
     return {
-        mounted,
-        state,
-        setState,
+        handleBackToList,
+        handleExport,
         handleSearchRouterPush,
         handleSetlistChosenRouterPush,
-        handleBackToList,
-        handleExport
+        mounted,
+        setState,
+        state
     };
 }

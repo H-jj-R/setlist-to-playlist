@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to fetch Spotify artist details and associated setlists.
@@ -73,9 +73,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Return a combined response containing full artist details and their setlists
         res.status(200).json({
-            spotifyArtist,
             setlistfmArtist,
-            setlists: await setlistsResponse.json()
+            setlists: await setlistsResponse.json(),
+            spotifyArtist
         });
     } catch (error) {
         res.status(500).json({

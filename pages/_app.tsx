@@ -5,8 +5,9 @@
  */
 
 import type { AppProps } from "next/app";
-import { ThemeProvider } from "next-themes";
+
 import { AuthProvider } from "@context/AuthContext";
+import { ThemeProvider } from "next-themes";
 import "@/styles/globals.css";
 import "@constants/i18n";
 
@@ -18,7 +19,7 @@ import "@constants/i18n";
  *  - Component: The page being rendered
  *  - pageProps: Props passed to that page
  */
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
             <AuthProvider>

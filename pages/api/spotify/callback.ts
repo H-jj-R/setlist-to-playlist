@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
+import getBaseUrl from "@utils/getBaseUrl";
 import cookie from "cookie";
 import CryptoJS from "crypto-js";
-import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API route to handle Spotify OAuth callback.
@@ -31,15 +31,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Make a POST request to Spotify's token endpoint to exchange the authorisation code for tokens
         const response = await fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
                 client_id: process.env.SPOTIFY_API_C_ID!,
                 client_secret: process.env.SPOTIFY_API_C_SECRET!,
-                grant_type: "authorization_code",
                 code: code as string,
+                grant_type: "authorization_code",
                 redirect_uri: process.env.SPOTIFY_API_REDIRECT_URI!
-            }).toString()
+            }).toString(),
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -59,9 +59,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 CryptoJS.AES.encrypt(data.access_token, process.env.ENCRYPTION_KEY!).toString(),
                 {
                     httpOnly: true,
-                    secure: true,
                     maxAge: data.expires_in,
-                    path: "/"
+                    path: "/",
+                    secure: true
                 }
             ),
             // Refresh token cookie
@@ -70,9 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 CryptoJS.AES.encrypt(data.refresh_token, process.env.ENCRYPTION_KEY!).toString(),
                 {
                     httpOnly: true,
-                    secure: true,
                     maxAge: 2147483646,
-                    path: "/"
+                    path: "/",
+                    secure: true
                 }
             )
         ]);

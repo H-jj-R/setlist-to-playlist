@@ -4,64 +4,58 @@
  * See LICENSE for details.
  */
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import Settings from "@components/Shared/Settings";
-import LoginDialog from "@components/Dialogs/LoginDialog";
 import AccountSidebar from "@components/Account/AccountSidebar";
+import LoginDialog from "@components/Dialogs/LoginDialog";
+import Settings from "@components/Shared/Settings";
 import { useAuth } from "@context/AuthContext";
+import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * The header bar at the top of the page.
  */
-const HeaderBar: React.FC = () => {
-    const { t: i18n } = useTranslation();
+const HeaderBar: React.FC = (): JSX.Element => {
     const { isAuthenticated, login, logout } = useAuth();
+    const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        showSettings: false,
+        showAccountSidebar: false,
         showLoginDialog: false,
-        showAccountSidebar: false
+        showSettings: false
     });
 
     return (
         <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
             <div id="header-container" className="flex items-center justify-between px-4 py-2">
-                <div id="logo-container" className="text-lg font-bold space-x-2">
-                    <Link href="/" id="site-logo-link" className="hover:text-gray-300 flex items-center">
-                        <img id="site-logo" src="/images/logo.png" alt="Site Logo" className="h-10 w-auto" />
-                        <span id="site-title" className="text-lg font-bold ml-2">
+                <div id="logo-container" className="space-x-2 text-lg font-bold">
+                    <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
+                        <img id="site-logo" className="h-10 w-auto" alt="Site Logo" src="/images/logo.png" />
+                        <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist
                         </span>
                     </Link>
                 </div>
                 <div id="actions-container" className="flex items-center space-x-4">
                     {isAuthenticated ? (
-                        <div className="relative">
+                        <div id="account-button-container" className="relative">
                             <button
                                 id="account-button"
-                                className="p-2 rounded text"
-                                onClick={() => {
-                                    setState((prev) => ({
-                                        ...prev,
-                                        showAccountSidebar: true
-                                    }));
+                                className="text rounded p-2"
+                                onClick={(): void => {
+                                    setState((prev) => ({ ...prev, showAccountSidebar: true }));
                                 }}
                             >
-                                <FontAwesomeIcon icon={faUserCircle} className="text-gray-200 text-xl" />
+                                <FontAwesomeIcon className="text-xl text-gray-200" icon={faUserCircle} />
                             </button>
                         </div>
                     ) : (
                         <button
                             id="login-button"
-                            className="bg-gradient-to-br from-green-500 to-green-600 text-white py-2 px-4 rounded-full hover:from-green-600 hover:to-green-700"
-                            onClick={() => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    showLoginDialog: true
-                                }));
+                            className="rounded-full bg-gradient-to-br from-green-500 to-green-600 px-4 py-2 text-white hover:from-green-600 hover:to-green-700"
+                            onClick={(): void => {
+                                setState((prev) => ({ ...prev, showLoginDialog: true }));
                             }}
                         >
                             {i18n("account:loginSignUp")}
@@ -69,52 +63,37 @@ const HeaderBar: React.FC = () => {
                     )}
                     <button
                         id="settings-button"
-                        className="p-2 rounded text"
-                        onClick={() => {
-                            setState((prev) => ({
-                                ...prev,
-                                showSettings: true
-                            }));
+                        className="text rounded p-2"
+                        onClick={(): void => {
+                            setState((prev) => ({ ...prev, showSettings: true }));
                         }}
                     >
-                        <FontAwesomeIcon icon={faCog} id="settings-icon" className="text-gray-200 text-xl" />
+                        <FontAwesomeIcon id="settings-icon" className="text-xl text-gray-200" icon={faCog} />
                     </button>
                 </div>
             </div>
             {state.showSettings && (
                 <Settings
-                    onClose={() => {
-                        setState((prev) => ({
-                            ...prev,
-                            showSettings: false
-                        }));
+                    onClose={(): void => {
+                        setState((prev) => ({ ...prev, showSettings: false }));
                     }}
                 />
             )}
             {state.showAccountSidebar && (
                 <AccountSidebar
-                    onClose={() => {
-                        setState((prev) => ({
-                            ...prev,
-                            showAccountSidebar: false
-                        }));
-                    }}
-                    handleLogout={() => {
+                    handleLogout={(): void => {
                         logout();
-                        setState((prev) => ({
-                            ...prev,
-                            showAccountSidebar: false
-                        }));
+                        setState((prev) => ({ ...prev, showAccountSidebar: false }));
+                    }}
+                    onClose={(): void => {
+                        setState((prev) => ({ ...prev, showAccountSidebar: false }));
                     }}
                 />
             )}
             {state.showLoginDialog && (
                 <LoginDialog
-                    onClose={() => {
-                        setState((prev) => ({
-                            ...prev,
-                            showLoginDialog: false
-                        }));
+                    onClose={(): void => {
+                        setState((prev) => ({ ...prev, showLoginDialog: false }));
                     }}
                     onLoginSuccess={login}
                 />

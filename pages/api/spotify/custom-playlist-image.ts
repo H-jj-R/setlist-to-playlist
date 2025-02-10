@@ -4,15 +4,15 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to add a custom image to a playlist.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { playlistId, image } = req.body;
+    const { image, playlistId } = req.body;
 
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
@@ -26,12 +26,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
-            method: "PUT",
+            body: image.replace(/^data:image\/\w+;base64,/, ""),
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`,
                 "Content-Type": "image/jpeg"
             },
-            body: image.replace(/^data:image\/\w+;base64,/, "")
+            method: "PUT"
         });
 
         if (!response.ok) {

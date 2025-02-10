@@ -4,15 +4,15 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to create a playlist for a Spotify user.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { userId, name, description } = req.body;
+    const { description, name, userId } = req.body;
 
     const cookies = cookie.parse(req.headers.cookie || "");
     const encryptedAccessToken = cookies.spotify_user_access_token;
@@ -26,15 +26,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-            method: "POST",
+            body: JSON.stringify({
+                description: description,
+                name: name
+            }),
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                name: name,
-                description: description
-            })
+            method: "POST"
         });
 
         if (!response.ok) {
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const data = await response.json();
-        res.status(200).json({ success: true, data: data });
+        res.status(200).json({ data: data, success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({

@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
 import db from "@constants/db";
+import jwt from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to save Spotify playlist details into the database.
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
 
-        const { spotifyPlaylistID, name, description, tracks } = playlistDetails;
+        const { description, name, spotifyPlaylistID, tracks } = playlistDetails;
 
         // Insert playlist into the Playlists table
         const [playlistResult] = await db.execute(
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Insert tracks into the Tracks table
         for (const track of tracks) {
-            const { songID, position } = track;
+            const { position, songID } = track;
             await db.execute("INSERT INTO PlaylistSongs (playlist_id, song_id, position) VALUES (?, ?, ?)", [
                 playlistId,
                 songID,

@@ -4,60 +4,40 @@
  * See LICENSE for details.
  */
 
-import { useState } from "react";
-import { useRouter } from "next/router";
+import MessageDialogState from "@constants/messageDialogState";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MessageDialogState } from "@constants/messageDialogState";
 
 /**
  * Hook for data handling on the user-playlist page.
  */
-export default function userPlaylistHook(playlist: any, onDelete: (playlistId: number) => void) {
+export default function userPlaylistHook(onDelete: (playlistId: number) => void, playlist: any) {
     const { t: i18n } = useTranslation();
-    const router = useRouter();
     const [state, setState] = useState({
-        expanded: false,
-        editing: false,
-        name: playlist.name as string,
         description: (playlist.description || "") as string,
-        initialName: playlist.name as string,
+        editing: false,
+        expanded: false,
         initialDescription: (playlist.description || "") as string,
-        tracks: null as Record<string, any> | null,
-        songsLoading: false,
-        songError: null as string | null,
-        showConfirmation: false,
-        showAuthDialog: false,
+        initialName: playlist.name as string,
         messageDialog: {
             isOpen: false,
             message: "",
-            type: MessageDialogState.Success,
-            onClose: null as (() => void) | null
-        }
+            onClose: null as (() => void) | null,
+            type: MessageDialogState.Success
+        },
+        name: playlist.name as string,
+        showAuthDialog: false,
+        showConfirmation: false,
+        songError: null as null | string,
+        songsLoading: false,
+        tracks: null as null | Record<string, any>
     });
 
-    const toggleExpand = async () => {
-        setState((prev) => ({
-            ...prev,
-            expanded: !state.expanded
-        }));
-        if (!state.tracks && !state.songsLoading) {
-            const trackDetails = await fetchTrackDetails();
-            setState((prev) => ({
-                ...prev,
-                tracks: trackDetails
-            }));
-        }
-    };
-
-    const fetchTrackDetails = async () => {
-        setState((prev) => ({
-            ...prev,
-            songsLoading: true,
-            songError: null
-        }));
+    const fetchTrackDetails = async (): Promise<Record<string, any>> => {
+        setState((prev) => ({ ...prev, songError: null, songsLoading: true }));
 
         try {
-            const trackIds = playlist.tracks.map((track: any) => track.songID).join(",");
+            const trackIds = playlist.tracks.map((track: Record<string, any>) => track.songID).join(",");
             const response = await fetch(
                 `/api/spotify/get-tracks?${new URLSearchParams({
                     query: trackIds
@@ -66,36 +46,38 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
             const data = await response.json();
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("common:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
-            return data.tracks;
+            return data.tracks as Record<string, any>;
         } catch (error) {
-            setState((prev) => ({
-                ...prev,
-                songError: error.error
-            }));
+            setState((prev) => ({ ...prev, songError: error.error }));
         } finally {
-            setState((prev) => ({
-                ...prev,
-                songsLoading: false
-            }));
+            setState((prev) => ({ ...prev, songsLoading: false }));
         }
     };
 
-    const handleSave = async () => {
+    const toggleExpand = useCallback(async (): Promise<void> => {
+        setState((prev) => ({ ...prev, expanded: !state.expanded }));
+        if (!state.tracks && !state.songsLoading) {
+            const trackDetails = await fetchTrackDetails();
+            setState((prev) => ({ ...prev, tracks: trackDetails }));
+        }
+    }, [state.expanded, state.tracks, state.songsLoading]);
+
+    const handleSave = useCallback(async (): Promise<void> => {
         setState((prev) => ({
             ...prev,
-            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
+            messageDialog: { isOpen: true, message: "", onClose: null, type: MessageDialogState.Loading }
         }));
 
         try {
             if (!state.name.trim()) {
                 throw {
-                    status: 400,
-                    error: i18n("exportSetlist:noNameProvided")
+                    error: i18n("exportSetlist:noNameProvided"),
+                    status: 400
                 };
             }
 
@@ -109,72 +91,72 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                     playlistId: playlist.playlistId
                 }).toString()}`,
                 {
-                    method: "POST",
+                    body: JSON.stringify({ playlistDescription: state.description, playlistName: state.name }),
                     headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ playlistName: state.name, playlistDescription: state.description })
+                    method: "POST"
                 }
             );
             const data = await response.json();
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("common:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
             setState((prev) => ({
                 ...prev,
-                initialName: state.name,
-                initialDescription: state.description,
                 editing: false,
+                initialDescription: state.description,
+                initialName: state.name,
                 messageDialog: {
                     isOpen: true,
                     message: i18n("userPlaylists:detailsUpdated"),
-                    type: MessageDialogState.Success,
-                    onClose: null
+                    onClose: null,
+                    type: MessageDialogState.Success
                 }
             }));
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
+                messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [state.name, state.description, state.messageDialog]);
 
-    const handleRecover = async () => {
+    const handleRecover = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
-                method: "GET",
-                credentials: "include"
+                credentials: "include",
+                method: "GET"
             });
             if (response.status === 401) {
                 setState((prev) => ({ ...prev, showAuthDialog: true }));
             } else if (response.status === 200) {
                 setState((prev) => ({
                     ...prev,
-                    messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
+                    messageDialog: { isOpen: true, message: "", onClose: null, type: MessageDialogState.Loading }
                 }));
                 const response = await fetch(`/api/controllers/create-spotify-playlist`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                    },
                     body: JSON.stringify({
-                        name: state.name,
                         description: state.description,
+                        name: state.name,
                         tracks: JSON.stringify(state.tracks ? state.tracks : await fetchTrackDetails())
-                    })
+                    }),
+                    headers: {
+                        Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST"
                 });
                 const responseJson = await response.json();
                 if (!response.ok) {
                     throw {
-                        status: response.status,
-                        error: i18n(responseJson.error) || i18n("common:unexpectedError")
+                        error: i18n(responseJson.error) || i18n("common:unexpectedError"),
+                        status: response.status
                     };
                 }
                 setState((prev) => ({
@@ -182,23 +164,23 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                     messageDialog: {
                         isOpen: true,
                         message: i18n("userPlaylists:playlistRecovered"),
-                        type: MessageDialogState.Success,
-                        onClose: null
+                        onClose: null,
+                        type: MessageDialogState.Success
                     }
                 }));
             }
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
+                messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [state.name, state.description, state.messageDialog, state.tracks]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async (): Promise<void> => {
         setState((prev) => ({
             ...prev,
-            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading, onClose: null }
+            messageDialog: { isOpen: true, message: "", onClose: null, type: MessageDialogState.Loading }
         }));
 
         try {
@@ -212,55 +194,55 @@ export default function userPlaylistHook(playlist: any, onDelete: (playlistId: n
                     playlistId: playlist.playlistId
                 }).toString()}`,
                 {
-                    method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`
-                    }
+                    },
+                    method: "POST"
                 }
             );
             const data = await response.json();
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("common:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
             setState((prev) => ({
                 ...prev,
-                showConfirmation: false,
                 messageDialog: {
                     isOpen: true,
                     message: i18n("userPlaylists:playlistDeleted"),
-                    type: MessageDialogState.Success,
-                    onClose: () => {
+                    onClose: (): void => {
                         setState((prev) => ({
                             ...prev,
                             messageDialog: {
                                 isOpen: false,
                                 message: "",
-                                type: MessageDialogState.Success,
-                                onClose: null
+                                onClose: null,
+                                type: MessageDialogState.Success
                             }
                         }));
                         onDelete(playlist.playlistId);
-                    }
-                }
+                    },
+                    type: MessageDialogState.Success
+                },
+                showConfirmation: false
             }));
         } catch (error) {
             setState((prev) => ({
                 ...prev,
-                messageDialog: { isOpen: true, message: error.error, type: MessageDialogState.Error, onClose: null }
+                messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [playlist.playlistId, state.messageDialog, onDelete]);
 
     return {
-        state,
-        setState,
-        toggleExpand,
-        handleSave,
+        handleDelete,
         handleRecover,
-        handleDelete
+        handleSave,
+        setState,
+        state,
+        toggleExpand
     };
 }

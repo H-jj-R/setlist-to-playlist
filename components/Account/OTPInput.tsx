@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import React, { useState, ChangeEvent, KeyboardEvent, ClipboardEvent } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface OTPInputProps {
@@ -14,77 +14,88 @@ interface OTPInputProps {
 /**
  *
  */
-const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
+const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, idx: number): void => {
-        const value = e.target.value;
-        if (/[^0-9]/.test(value)) {
-            return;
-        }
+    const handleChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>, idx: number): void => {
+            const value = e.target.value;
+            if (/[^0-9]/.test(value)) {
+                return;
+            }
 
-        const newOtp = [...otp];
-        newOtp[idx] = value;
-        setOtp(newOtp);
-        setOtpInput(newOtp.join(""));
+            const newOtp = [...otp];
+            newOtp[idx] = value;
+            setOtp(newOtp);
+            setOtpInput(newOtp.join(""));
 
-        // Move focus to next input if current one is filled
-        if (value && idx < otp.length - 1) {
-            document.getElementById(`otp-input-${idx + 1}`)?.focus();
-        }
-    };
+            // Move focus to next input if current one is filled
+            if (value && idx < otp.length - 1) {
+                document.getElementById(`otp-input-${idx + 1}`)?.focus();
+            }
+        },
+        [otp, setOtpInput]
+    );
 
-    const handlePaste = (e: ClipboardEvent<HTMLInputElement>, idx: number): void => {
-        e.preventDefault();
-        if (idx !== 0) {
-            return;
-        }
-        const pastedData = e.clipboardData.getData("text").trim();
-        if (!/^\d{6}$/.test(pastedData)) {
-            return;
-        }
-
-        const newOtp = pastedData.split("");
-        setOtp(newOtp);
-        setOtpInput(newOtp.join(""));
-
-        // Move focus to the last filled input
-        document.getElementById(`otp-input-${newOtp.length - 1}`)?.focus();
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, idx: number): void => {
-        // Move focus to previous input if current is empty
-        if (e.key === "Backspace" && !otp[idx] && idx > 0) {
-            document.getElementById(`otp-input-${idx - 1}`)?.focus();
-        } else if (e.key === "ArrowLeft" && idx > 0) {
+    const handlePaste = useCallback(
+        (e: React.ClipboardEvent<HTMLInputElement>, idx: number): void => {
             e.preventDefault();
-            document.getElementById(`otp-input-${idx - 1}`)?.focus();
-        } else if (e.key === "ArrowRight" && idx < otp.length - 1) {
-            e.preventDefault();
-            document.getElementById(`otp-input-${idx + 1}`)?.focus();
-        }
-    };
+            if (idx !== 0) {
+                return;
+            }
+            const pastedData = e.clipboardData.getData("text").trim();
+            if (!/^\d{6}$/.test(pastedData)) {
+                return;
+            }
+
+            const newOtp = pastedData.split("");
+            setOtp(newOtp);
+            setOtpInput(newOtp.join(""));
+
+            // Move focus to the last filled input
+            document.getElementById(`otp-input-${newOtp.length - 1}`)?.focus();
+        },
+        [setOtpInput]
+    );
+
+    const handleKeyDown = useCallback(
+        (e: React.KeyboardEvent<HTMLInputElement>, idx: number): void => {
+            // Move focus to previous input if current is empty
+            if (e.key === "Backspace" && !otp[idx] && idx > 0) {
+                document.getElementById(`otp-input-${idx - 1}`)?.focus();
+            } else if (e.key === "ArrowLeft" && idx > 0) {
+                e.preventDefault();
+                document.getElementById(`otp-input-${idx - 1}`)?.focus();
+            } else if (e.key === "ArrowRight" && idx < otp.length - 1) {
+                e.preventDefault();
+                document.getElementById(`otp-input-${idx + 1}`)?.focus();
+            }
+        },
+        [otp]
+    );
 
     return (
         <fieldset id="otp-fieldset">
-            <legend className="sr-only">{i18n("account:enterOTPCode")}</legend>
+            <legend id="otp-legend" className="sr-only">
+                {i18n("account:enterOTPCode")}
+            </legend>
             <div id="otp-inputs-container" className="flex justify-center space-x-2">
                 {otp.map((digit, idx) => (
                     <input
-                        key={idx}
                         id={`otp-input-${idx}`}
-                        type="tel"
-                        value={digit}
-                        onChange={(e) => handleChange(e, idx)}
-                        onKeyDown={(e) => handleKeyDown(e, idx)}
-                        onPaste={(e) => handlePaste(e, idx)}
-                        maxLength={1}
-                        required
-                        className="w-12 h-12 text-center text-xl border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autoComplete="one-time-code"
+                        className="h-12 w-12 rounded-md border border-gray-500 text-center text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         aria-label={i18n("account:digitOfOTP", { digit: idx + 1 })}
                         aria-required="true"
+                        autoComplete="one-time-code"
+                        key={idx}
+                        maxLength={1}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => handleChange(e, idx)}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => handleKeyDown(e, idx)}
+                        onPaste={(e: React.ClipboardEvent<HTMLInputElement>): void => handlePaste(e, idx)}
+                        required
+                        type="tel"
+                        value={digit}
                     />
                 ))}
             </div>

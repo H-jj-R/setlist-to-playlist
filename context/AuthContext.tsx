@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface AuthContextProps {
     isAuthenticated: boolean;
@@ -18,7 +18,7 @@ interface AuthProviderProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }): JSX.Element => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -26,20 +26,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(!!token);
     }, []);
 
-    const login = () => {
+    const login = useCallback(() => {
         setIsAuthenticated(true);
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage?.removeItem("authToken");
         setIsAuthenticated(false);
-    };
+    }, []);
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{ isAuthenticated, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

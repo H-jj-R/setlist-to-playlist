@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler for searching an artist on Spotify using the Spotify API.
@@ -28,15 +28,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Make a GET request to Spotify's search API
         const response = await fetch(
             `https://api.spotify.com/v1/search?${new URLSearchParams({
+                limit: "1",
                 q: query as string,
-                type: "artist",
-                limit: "1"
+                type: "artist"
             }).toString()}`,
             {
-                method: "GET",
                 headers: {
                     Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`
-                }
+                },
+                method: "GET"
             }
         );
 

@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import cookie from "cookie";
 import decryptToken from "@utils/decryptToken";
+import cookie from "cookie";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to add tracks to a Spotify playlist.
@@ -27,12 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const trackUris: string[] = parsedTracks.filter((track) => track && track.uri).map((track) => track.uri);
 
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-            method: "POST",
+            body: JSON.stringify({ uris: trackUris }),
             headers: {
                 Authorization: `Bearer ${decryptToken(encryptedAccessToken)}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ uris: trackUris })
+            method: "POST"
         });
 
         if (!response.ok) {

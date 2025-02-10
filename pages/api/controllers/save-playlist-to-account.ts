@@ -4,8 +4,8 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to fetch Spotify playlist details and save them to a database.
@@ -38,25 +38,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Filter details for the database from the playlistDetails object
         const filteredPlaylistDetails = {
-            spotifyPlaylistID: playlistDetails.id,
-            name: playlistDetails.name,
             description: playlistDetails.description,
+            name: playlistDetails.name,
+            spotifyPlaylistID: playlistDetails.id,
             tracks: playlistDetails.tracks.items.map((item: any, index: number) => ({
-                songID: item.track.id,
-                position: index
+                position: index,
+                songID: item.track.id
             }))
         };
 
         // 2. Send playlist details to the database API
         const savePlaylistResponse = await fetch(`${baseUrl}/api/database/save-playlist`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
             body: JSON.stringify({
                 playlistDetails: filteredPlaylistDetails
-            })
+            }),
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            method: "POST"
         });
 
         if (!savePlaylistResponse.ok) {

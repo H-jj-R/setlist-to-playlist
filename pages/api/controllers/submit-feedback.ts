@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
+import SupportEmailTemplate from "@components/EmailTemplates/SupportEmailTemplate";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
-import SupportEmailTemplate from "@components/EmailTemplates/SupportEmailTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -18,13 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { email, message } = req.body;
 
         const { error } = await resend.emails.send({
+            from: "Support <support@setlist-to-playlist.com>",
             headers: {
                 "X-Entity-Ref-ID": `${Date.now()}`
             },
-            from: "Support <support@setlist-to-playlist.com>",
-            to: ["support@setlist-to-playlist.com"],
+            react: SupportEmailTemplate({ email, message }),
             subject: "Support/Feedback",
-            react: SupportEmailTemplate({ email, message })
+            to: ["support@setlist-to-playlist.com"]
         });
 
         if (error) {

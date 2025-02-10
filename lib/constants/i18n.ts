@@ -4,10 +4,6 @@
  * See LICENSE for details.
  */
 
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-
 import translationAr from "@locales/ar/translation.json";
 import translationDe from "@locales/de/translation.json";
 import translationEn from "@locales/en/translation.json";
@@ -16,23 +12,19 @@ import translationFi from "@locales/fi/translation.json";
 import translationFr from "@locales/fr/translation.json";
 import translationHi from "@locales/hi/translation.json";
 import translationZhCn from "@locales/zh-cn/translation.json";
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
 
 if (!i18n.isInitialized) {
     i18n.use(LanguageDetector)
         .use(initReactI18next)
         .init({
-            resources: {
-                ar: translationAr,
-                de: translationDe,
-                en: translationEn,
-                es: translationEs,
-                fi: translationFi,
-                fr: translationFr,
-                hi: translationHi,
-                "zh-cn": translationZhCn
+            debug: false,
+            detection: {
+                order: ["querystring", "navigator", "htmlTag"]
             },
             fallbackLng: "en",
-            debug: false,
             interpolation: {
                 escapeValue: false
             },
@@ -48,8 +40,15 @@ if (!i18n.isInitialized) {
                 "settings",
                 "userPlaylists"
             ],
-            detection: {
-                order: ["querystring", "navigator", "htmlTag"]
+            resources: {
+                ar: translationAr,
+                de: translationDe,
+                en: translationEn,
+                es: translationEs,
+                fi: translationFi,
+                fr: translationFr,
+                hi: translationHi,
+                "zh-cn": translationZhCn
             }
         });
 }

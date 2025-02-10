@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
 import db from "@constants/db";
+import jwt from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to update playlist details (name and description).
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const userId = decoded.userId;
         const { playlistId } = req.query;
 
-        const { playlistName, playlistDescription } = req.body;
+        const { playlistDescription, playlistName } = req.body;
 
         if (!playlistId || !playlistName) {
             return res.status(400).json({ error: "userPlaylists:missingParameters" });

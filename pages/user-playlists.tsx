@@ -4,67 +4,65 @@
  * See LICENSE for details.
  */
 
-import React, { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { useTranslation } from "react-i18next";
+import UserPlaylist from "@components/Account/UserPlaylist";
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
-import UserPlaylist from "@components/Account/UserPlaylist";
 import { useAuth } from "@context/AuthContext";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing user playlists.
  */
-export default function UserPlaylists() {
-    const { t: i18n } = useTranslation();
+export default function UserPlaylists(): JSX.Element {
     const { isAuthenticated } = useAuth();
     const { resolvedTheme } = useTheme();
+    const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [playlists, setPlaylists] = useState<any[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [state, setState] = useState({
+        error: null as null | string,
+        loading: false,
+        playlists: [] as Record<string, any>[]
+    });
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    useEffect(() => {
+    useEffect((): void => {
         if (isAuthenticated) {
             fetchPlaylists();
         }
     }, [isAuthenticated]);
 
-    const fetchPlaylists = async () => {
-        setLoading(true);
+    const fetchPlaylists = async (): Promise<void> => {
+        setState((prev) => ({ ...prev, loading: true }));
         try {
             const response = await fetch("/api/database/get-user-playlists", {
-                method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`
-                }
+                    Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                    "Content-Type": "application/json"
+                },
+                method: "POST"
             });
             const data = await response.json();
 
             if (!response.ok) {
                 throw {
-                    status: response.status,
-                    error: i18n(data.error) || i18n("common:unexpectedError")
+                    error: i18n(data.error) || i18n("common:unexpectedError"),
+                    status: response.status
                 };
             }
 
-            setPlaylists(data.playlists);
+            setState((prev) => ({ ...prev, playlists: data.playlists }));
         } catch (error) {
-            setError(error.error);
+            setState((prev) => ({ ...prev, error: error.error }));
         } finally {
-            setLoading(false);
+            setState((prev) => ({ ...prev, loading: false }));
         }
-    };
-
-    const handlePlaylistDelete = (playlistId: number) => {
-        setPlaylists((prevPlaylists) => prevPlaylists.filter((playlist) => playlist.playlistId !== playlistId));
     };
 
     if (!mounted) return null;
@@ -74,39 +72,52 @@ export default function UserPlaylists() {
             <div className="h-screen overflow-y-scroll">
                 {!isAuthenticated ? (
                     // Dialog displayed when the user is not authenticated
-                    <div className="flex items-center justify-center mt-8">
-                        <div className="relative top-2/3 p-8 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg shadow-lg text-center text-white">
-                            <h2 className="text-2xl font-bold mb-4">{i18n("common:authenticationRequired")}</h2>
-                            <p className="text-lg mb-6">{i18n("common:needToLogIn")}</p>
+                    <div className="mt-8 flex items-center justify-center">
+                        <div className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg">
+                            <h2 className="mb-4 text-2xl font-bold">{i18n("common:authenticationRequired")}</h2>
+                            <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
                         </div>
                     </div>
-                ) : error ? (
-                    <div id="error-message" className="pt-8 mt-5 max-w-4xl mx-auto">
-                        <ErrorMessage message={error} />
+                ) : state.error ? (
+                    <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
+                        <ErrorMessage message={state.error} />
                     </div>
-                ) : loading ? (
-                    <div id="loading-indicator" className="pt-8 mt-16 flex justify-center items-center">
-                        <CustomHashLoader showLoading={loading} size={120} />
+                ) : state.loading ? (
+                    <div id="loading-indicator" className="mt-16 flex items-center justify-center pt-8">
+                        <CustomHashLoader showLoading={state.loading} size={120} />
                     </div>
                 ) : (
                     <div className="p-4">
-                        <h1 className="flex justify-center text-2xl font-bold mb-4">
+                        <h1 className="mb-4 flex justify-center text-2xl font-bold">
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
-                        {playlists.length === 0 ? (
-                            <h2 className="flex justify-center text-xl font-bold pt-5">
+                        {state.playlists.length === 0 ? (
+                            <h2 className="flex justify-center pt-5 text-xl font-bold">
                                 {i18n("userPlaylists:noPlaylistsCreated")}
                             </h2>
                         ) : (
                             <ul className="space-y-4">
-                                {playlists.map((playlist, idx) => (
-                                    <div
-                                        key={`${idx}-${playlist.playlistId}`}
-                                        className="flex justify-center items-center"
-                                    >
-                                        <UserPlaylist playlist={playlist} onDelete={handlePlaylistDelete} />
-                                    </div>
-                                ))}
+                                {state.playlists.map(
+                                    (playlist: Record<string, any>, idx: number): JSX.Element => (
+                                        <div
+                                            className="flex items-center justify-center"
+                                            key={`${idx}-${playlist.playlistId}`}
+                                        >
+                                            <UserPlaylist
+                                                onDelete={(playlistId: number): void => {
+                                                    setState((prev) => ({
+                                                        ...prev,
+                                                        playlists: prev.playlists.filter(
+                                                            (playlist: Record<string, any>): boolean =>
+                                                                playlist.playlistId !== playlistId
+                                                        )
+                                                    }));
+                                                }}
+                                                playlist={playlist}
+                                            />
+                                        </div>
+                                    )
+                                )}
                             </ul>
                         )}
                     </div>

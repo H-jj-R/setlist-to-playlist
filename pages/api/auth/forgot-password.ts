@@ -4,10 +4,10 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { Resend } from "resend";
 import ForgotPasswordEmailTemplate from "@components/EmailTemplates/ForgotPasswordEmailTemplate";
 import db from "@constants/db";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Resend } from "resend";
 
 /**
  * API handler to send email to a user who has forgotten their password.
@@ -43,13 +43,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Send Email
         const resend = new Resend(process.env.RESEND_API_KEY!);
         const { error } = await resend.emails.send({
+            from: "Setlist to Playlist <account.management@setlist-to-playlist.com>",
             headers: {
                 "X-Entity-Ref-ID": `ref-${Date.now()}`
             },
-            from: "Setlist to Playlist <account.management@setlist-to-playlist.com>",
-            to: [email],
+            react: ForgotPasswordEmailTemplate({ otp }),
             subject: "Forgot Password - Setlist to Playlist",
-            react: ForgotPasswordEmailTemplate({ otp })
+            to: [email]
         });
 
         if (error) {

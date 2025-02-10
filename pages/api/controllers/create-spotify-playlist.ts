@@ -4,14 +4,14 @@
  * See LICENSE for details.
  */
 
-import { NextApiRequest, NextApiResponse } from "next";
 import getBaseUrl from "@utils/getBaseUrl";
+import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { name, description, image, tracks, isLoggedIn } = req.body;
+    const { description, image, isLoggedIn, name, tracks } = req.body;
     try {
         let issue;
         const baseUrl = getBaseUrl(req);
@@ -35,16 +35,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // 2. Create playlist
         const createPlaylistResponse = await fetch(`${baseUrl}/api/spotify/create-playlist`, {
-            method: "POST",
+            body: JSON.stringify({
+                description: description,
+                name: name,
+                userId: userData.id
+            }),
             headers: {
                 "Content-Type": "application/json",
                 cookie: req.headers.cookie || "" // Forward client cookies for access token
             },
-            body: JSON.stringify({
-                userId: userData.id,
-                name: name,
-                description: description
-            })
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -59,15 +59,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // 3. Add songs to playlist
         const addItemsResponse = await fetch(`${baseUrl}/api/spotify/add-items-to-playlist`, {
-            method: "POST",
+            body: JSON.stringify({
+                playlistId: playlistData.data.id,
+                tracks: tracks
+            }),
             headers: {
                 "Content-Type": "application/json",
                 cookie: req.headers.cookie || "" // Forward client cookies for access token
             },
-            body: JSON.stringify({
-                playlistId: playlistData.data.id,
-                tracks: tracks
-            })
+            method: "POST"
         });
 
         // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -81,15 +81,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // 4. Add cover image (if provided)
         if (image) {
             const addCoverImageResponse = await fetch(`${baseUrl}/api/spotify/custom-playlist-image`, {
-                method: "POST",
+                body: JSON.stringify({
+                    image: image,
+                    playlistId: playlistData.data.id
+                }),
                 headers: {
                     "Content-Type": "application/json",
                     cookie: req.headers.cookie || "" // Forward client cookies for access token
                 },
-                body: JSON.stringify({
-                    playlistId: playlistData.data.id,
-                    image: image
-                })
+                method: "POST"
             });
 
             // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
@@ -105,11 +105,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const savePlaylistResponse = await fetch(
                 `${baseUrl}/api/controllers/save-playlist-to-account?playlistId=${playlistData.data.id}`,
                 {
-                    method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`,
                         cookie: req.headers.cookie || "" // Forward client cookies for access token
-                    }
+                    },
+                    method: "POST"
                 }
             );
 
@@ -120,7 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        res.status(200).json({ success: true, issue: issue });
+        res.status(200).json({ issue: issue, success: true });
     } catch (error) {
         res.status(500).json({
             error: "common:internalServerError"
