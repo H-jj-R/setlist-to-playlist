@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "فشل في تحميل المزيد من قوائم الأغاني",
         "noSongsFound": "لم يتم العثور على أغاني!",
         "playedFromTape": "تم تشغيلها من الشريط",
-        "searchForSetlist": "البحث عن فنان/فرقة أو رابط setlist.fm...",
+        "searchForSetlist": "البحث عن فنان/فرقة أو رابط setlist.fm",
         "setlistDate": "التاريخ: {{date}}",
         "setlistFmNoSetlistsError": "لم يتم العثور على قوائم أغاني!",
         "setlistFmSearchArtistError": "خطأ في العثور على الفنان في setlist.fm!",

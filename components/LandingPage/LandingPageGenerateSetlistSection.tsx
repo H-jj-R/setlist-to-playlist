@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 /**
  * Generate Setlist section for landing page.
  */
-const GenerateSetlistSection: React.FC = () => {
+const GenerateSetlistSection: React.FC = (): JSX.Element => {
     const router = useRouter();
     const { t: i18n } = useTranslation();
 

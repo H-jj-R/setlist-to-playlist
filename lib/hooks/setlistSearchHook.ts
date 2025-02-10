@@ -7,7 +7,7 @@
 import PageState from "@constants/setlistSearchPageState";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -33,12 +33,12 @@ export default function setlistSearchHook() {
         showLoading: false
     });
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    useEffect(() => {
+    useEffect((): void => {
         const { q, setlist } = router.query;
 
         if (q && !setlist) {
@@ -72,7 +72,7 @@ export default function setlistSearchHook() {
         }));
     }, [router.query.q, router.query.setlist]);
 
-    const fetchData = async (url: string) => {
+    const fetchData = async (url: string): Promise<Record<string, any>> => {
         const response = await fetch(url);
         if (!response.ok) {
             const errorResponse = await response.json();
@@ -81,10 +81,10 @@ export default function setlistSearchHook() {
                 status: response.status
             };
         }
-        return await response.json();
+        return (await response.json()) as Record<string, any>;
     };
 
-    const handleSearch = async (query: null | string, setlist: null | string) => {
+    const handleSearch = async (query: null | string, setlist: null | string): Promise<void> => {
         setState((prev) => ({
             ...prev,
             chosenSetlistData: null,
@@ -96,7 +96,7 @@ export default function setlistSearchHook() {
         }));
 
         if (state.animLoading) {
-            setTimeout(() => setState((prev) => ({ ...prev, animLoading: false })), 750);
+            setTimeout((): void => setState((prev) => ({ ...prev, animLoading: false })), 750);
         }
 
         setState((prev) => ({ ...prev, showLoading: true }));
@@ -158,36 +158,42 @@ export default function setlistSearchHook() {
         }
     };
 
-    const handleSearchRouterPush = async (query: string) => {
-        if (!query) return;
+    const handleSearchRouterPush = useCallback(
+        async (query: string): Promise<void> => {
+            if (!query) return;
 
-        const queryParams = query.startsWith("https://www.setlist.fm/setlist/")
-            ? { setlist: query.split("-").pop()?.replace(".html", "") }
-            : { q: query };
+            const queryParams = query.startsWith("https://www.setlist.fm/setlist/")
+                ? { setlist: query.split("-").pop()?.replace(".html", "") }
+                : { q: query };
 
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: queryParams
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
+            await router.push(
+                {
+                    pathname: "/setlist-search",
+                    query: queryParams
+                },
+                undefined,
+                { shallow: true }
+            );
+        },
+        [router]
+    );
 
-    const handleSetlistChosenRouterPush = async (setlist: any) => {
-        setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
-        await router.push(
-            {
-                pathname: "/setlist-search",
-                query: { q: router.query.q, setlist: setlist.id }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
+    const handleSetlistChosenRouterPush = useCallback(
+        async (setlist: Record<string, any>): Promise<void> => {
+            setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
+            await router.push(
+                {
+                    pathname: "/setlist-search",
+                    query: { q: router.query.q, setlist: setlist.id }
+                },
+                undefined,
+                { shallow: true }
+            );
+        },
+        [router]
+    );
 
-    const handleBackToList = async () => {
+    const handleBackToList = useCallback(async (): Promise<void> => {
         await router.push(
             {
                 pathname: "/setlist-search",
@@ -202,9 +208,9 @@ export default function setlistSearchHook() {
             pageState: PageState.ListOfSetlists,
             setlistChosen: false
         }));
-    };
+    }, [router]);
 
-    const handleExport = async () => {
+    const handleExport = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
                 credentials: "include",
@@ -219,7 +225,7 @@ export default function setlistSearchHook() {
         } catch (error) {
             console.error(error);
         }
-    };
+    }, []);
 
     return {
         handleBackToList,

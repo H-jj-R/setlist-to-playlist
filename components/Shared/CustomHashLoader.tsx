@@ -5,7 +5,7 @@
  */
 
 import { useTranslation } from "next-i18next";
-import React, { CSSProperties } from "react";
+import { CSSProperties } from "react";
 import HashLoader from "react-spinners/HashLoader";
 
 interface CustomHashLoaderProps {
@@ -16,7 +16,7 @@ interface CustomHashLoaderProps {
 /**
  * Custom hash loader.
  */
-const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }) => {
+const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     return (

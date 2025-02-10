@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "Failed to load more setlists",
         "noSongsFound": "No songs found!",
         "playedFromTape": "Played from tape",
-        "searchForSetlist": "Search for an artist/band or setlist.fm link...",
+        "searchForSetlist": "Search for an artist/band or setlist.fm link",
         "setlistDate": "Date: {{date}}",
         "setlistFmNoSetlistsError": "No setlists found!",
         "setlistFmSearchArtistError": "Error finding artist on setlist.fm!",

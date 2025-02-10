@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "सेटलिस्ट लोड करने में विफल",
         "noSongsFound": "कोई गाने नहीं मिले!",
         "playedFromTape": "टेप से खेला गया",
-        "searchForSetlist": "कलाकार/बैंड या सेटलिस्ट.fm लिंक के लिए खोजें...",
+        "searchForSetlist": "कलाकार/बैंड या सेटलिस्ट.fm लिंक के लिए खोजें",
         "setlistDate": "तारीख: {{date}}",
         "setlistFmNoSetlistsError": "कोई सेटलिस्ट नहीं मिली!",
         "setlistFmSearchArtistError": "setlist.fm पर कलाकार खोजने में त्रुटि!",

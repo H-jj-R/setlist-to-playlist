@@ -5,7 +5,7 @@
  */
 
 import SettingsKeys from "@constants/settingsKeys";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -23,7 +23,7 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
     });
 
     // Update setlists
-    useEffect(() => {
+    useEffect((): void => {
         const filteredSetlists = state.hideEmptySetlists
             ? filterEmptySetlists(state.loadedSetlists)
             : state.loadedSetlists;
@@ -34,8 +34,8 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         }));
     }, [state.hideEmptySetlists, state.loadedSetlists]);
 
-    useEffect(() => {
-        const handleStorageChange = () => {
+    useEffect((): (() => void) => {
+        const handleStorageChange = (): void => {
             setState((prev) => ({
                 ...prev,
                 hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true"
@@ -48,8 +48,8 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         };
     }, []);
 
-    const filterEmptySetlists = (data: Record<string, any>[]) => {
-        return data.filter((setlist: Record<string, any>) => {
+    const filterEmptySetlists = (data: Record<string, any>[]): Record<string, any>[] => {
+        return data.filter((setlist: Record<string, any>): boolean => {
             const songCount = setlist.sets.set.reduce(
                 (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
                 0
@@ -58,13 +58,12 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         });
     };
 
-    const hasMorePages = state.currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    const hasMorePages: boolean = useMemo((): boolean => {
+        return state.currentPage < Math.ceil(setlistData.setlists.total / setlistData.setlists.itemsPerPage);
+    }, [state.currentPage, setlistData.setlists.total, setlistData.setlists.itemsPerPage]);
 
-    const loadMoreSetlists = async () => {
-        setState((prev) => ({
-            ...prev,
-            isLoading: true
-        }));
+    const loadMoreSetlists = useCallback(async (): Promise<void> => {
+        setState((prev) => ({ ...prev, isLoading: true }));
         try {
             const response = await fetch(
                 `/api/setlist-fm/search-setlists?${new URLSearchParams({
@@ -90,12 +89,9 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         } catch (error) {
             console.error(error);
         } finally {
-            setState((prev) => ({
-                ...prev,
-                isLoading: false
-            }));
+            setState((prev) => ({ ...prev, isLoading: false }));
         }
-    };
+    }, [state.currentPage, setlistData.setlistfmArtist.mbid]);
 
     return { hasMorePages, loadMoreSetlists, state };
 }

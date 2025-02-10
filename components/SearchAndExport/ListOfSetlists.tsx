@@ -6,7 +6,6 @@
 
 import SetlistChoiceBlock from "@components/SearchAndExport/SetlistChoiceBlock";
 import listOfSetlistsHook from "@hooks/listOfSetlistsHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface ListOfSetlistsProps {
@@ -18,7 +17,7 @@ interface ListOfSetlistsProps {
  * This component displays a list of setlists for a given Spotify artist.
  * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
  */
-const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }) => {
+const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const { hasMorePages, loadMoreSetlists, state } = listOfSetlistsHook({ ...setlistData });
 
@@ -40,20 +39,25 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                     </h2>
                 </div>
                 <ul id="setlist-list" className="w-full space-y-3 px-4">
-                    {state.setlists.map((setlist: Record<string, any>) => (
-                        <SetlistChoiceBlock
-                            hideEmpty={state.hideEmptySetlists}
-                            key={setlist.id}
-                            onClick={onSetlistChosen}
-                            setlist={setlist}
-                        />
-                    ))}
+                    {state.setlists.map(
+                        (setlist: Record<string, any>): JSX.Element => (
+                            <SetlistChoiceBlock
+                                hideEmpty={state.hideEmptySetlists}
+                                key={setlist.id}
+                                onClick={onSetlistChosen}
+                                setlist={setlist}
+                            />
+                        )
+                    )}
                 </ul>
                 {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
                     <p className="mt-4 text-gray-500">
-                        {state.hiddenSetlistsCount === 1
-                            ? i18n("setlistSearch:hiddenSetlistsMessage", { count: state.hiddenSetlistsCount })
-                            : i18n("setlistSearch:hiddenSetlistsMessagePlural", { count: state.hiddenSetlistsCount })}
+                        {i18n(
+                            state.hiddenSetlistsCount === 1
+                                ? "setlistSearch:hiddenSetlistsMessage"
+                                : "setlistSearch:hiddenSetlistsMessagePlural",
+                            { count: state.hiddenSetlistsCount }
+                        )}
                     </p>
                 )}
                 {hasMorePages && (

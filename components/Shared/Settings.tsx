@@ -9,7 +9,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface SettingsProps {
@@ -19,7 +19,7 @@ interface SettingsProps {
 /**
  * The settings overlay component.
  */
-const Settings: React.FC<SettingsProps> = ({ onClose }) => {
+const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     const { resolvedTheme, setTheme, theme } = useTheme();
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
@@ -31,12 +31,16 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
         hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true"
     }));
 
-    const handleSettingChange = (key: keyof typeof settings) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        const isChecked = event.target.checked;
-        setSettings((prev) => ({ ...prev, [key]: isChecked }));
-        localStorage?.setItem(key, isChecked.toString());
-        window.dispatchEvent(new StorageEvent(key));
-    };
+    const handleSettingChange = useCallback(
+        (key: keyof typeof settings) =>
+            (event: React.ChangeEvent<HTMLInputElement>): void => {
+                const isChecked = event.target.checked;
+                setSettings((prev) => ({ ...prev, [key]: isChecked }));
+                localStorage?.setItem(key, isChecked.toString());
+                window.dispatchEvent(new StorageEvent(key));
+            },
+        []
+    );
 
     useEffect(() => {
         // Trigger the slide-in and dimming animation after mounting

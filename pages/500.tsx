@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
  * Renders a custom 500 error page.
  * It displays a friendly error message for server-side issues.
  */
-export default function Custom500() {
+export default function Custom500(): JSX.Element {
     const { t: i18n } = useTranslation();
     return (
         <Layout>

@@ -7,7 +7,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface SpotifyAuthDialogProps {
@@ -17,17 +16,9 @@ interface SpotifyAuthDialogProps {
 /**
  *
  */
-const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
+const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.Element => {
     const router = useRouter();
     const { t: i18n } = useTranslation();
-
-    const handleAuthorise = () => {
-        router.push(
-            `/api/spotify/authorise?${new URLSearchParams({
-                redirect: window.location.pathname + window.location.search
-            }).toString()}`
-        );
-    };
 
     return (
         <div id="dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">
@@ -52,7 +43,13 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
                     <p className="mb-6 text-gray-700 dark:text-gray-300">{i18n("exportSetlist:spotifyAuthMessage")}</p>
                     <button
                         className="rounded-lg bg-green-500 px-4 py-2 text-white transition hover:bg-green-600"
-                        onClick={handleAuthorise}
+                        onClick={(): void => {
+                            router.push(
+                                `/api/spotify/authorise?${new URLSearchParams({
+                                    redirect: window.location.pathname + window.location.search
+                                }).toString()}`
+                            );
+                        }}
                     >
                         {i18n("exportSetlist:authoriseWithSpotify")}
                     </button>

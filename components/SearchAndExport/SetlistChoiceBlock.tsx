@@ -6,7 +6,6 @@
 
 import formatDate from "@utils/formatDate";
 import formatLocation from "@utils/formatLocation";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface SetlistChoiceBlockProps {
@@ -18,15 +17,15 @@ interface SetlistChoiceBlockProps {
 /**
  * Displays information about a setlist, including event date, artist, location, and song count.
  */
-const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }) => {
+const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     // Calculate the total number of songs in the setlist
-    const songCount = setlist.sets.set.reduce(
+    const songCount: number = setlist.sets.set.reduce(
         (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
         0
     );
-    const isDisabled = songCount === 0;
+    const isDisabled: boolean = songCount === 0;
 
     return (
         <li
@@ -51,9 +50,7 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onCl
             </div>
             {!isDisabled && (
                 <div id={`setlist-song-count-${setlist.id}`} className="text-base italic">
-                    {songCount === 1
-                        ? i18n("setlistSearch:songCount", { songCount })
-                        : i18n("setlistSearch:songCountPlural", { songCount })}
+                    {i18n(songCount === 1 ? "setlistSearch:songCount" : "setlistSearch:songCountPlural", { songCount })}
                 </div>
             )}
         </li>

@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "加载更多setlist失败",
         "noSongsFound": "未找到歌曲！",
         "playedFromTape": "播放自带录音带",
-        "searchForSetlist": "搜索艺术家/乐队或setlist.fm链接...",
+        "searchForSetlist": "搜索艺术家/乐队或setlist.fm链接",
         "setlistDate": "日期：{{date}}",
         "setlistFmNoSetlistsError": "未找到setlist!",
         "setlistFmSearchArtistError": "查找艺术家时出错！",

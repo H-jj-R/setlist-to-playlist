@@ -5,7 +5,7 @@
  */
 
 import SettingsKeys from "@constants/settingsKeys";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -29,36 +29,29 @@ export default function setlistSongsExportHook(
         spotifySongs: null as null | Record<string, any>[]
     });
 
-    useEffect(() => {
-        const settingsKeys = [
+    useEffect((): (() => void) => {
+        const settingsKeys: SettingsKeys[] = [
             SettingsKeys.HideSongsNotFound,
             SettingsKeys.ExcludeCovers,
             SettingsKeys.ExcludeDuplicateSongs,
             SettingsKeys.ExcludePlayedOnTape
         ];
-        const handleSettingChange = (key: string) => {
-            setState((prev) => ({
-                ...prev,
-                [key]: localStorage?.getItem(key) === "true"
-            }));
+        const handleSettingChange = (key: string): void => {
+            setState((prev) => ({ ...prev, [key]: localStorage?.getItem(key) === "true" }));
         };
-        settingsKeys.forEach((key) => {
+        settingsKeys.forEach((key): void => {
             window.addEventListener(key, () => handleSettingChange(key));
         });
-        return () => {
-            settingsKeys.forEach((key) => {
+        return (): void => {
+            settingsKeys.forEach((key): void => {
                 window.removeEventListener(key, () => handleSettingChange(key));
             });
         };
     }, []);
 
-    useEffect(() => {
-        (async () => {
-            setState((prev) => ({
-                ...prev,
-                error: null,
-                loading: true
-            }));
+    useEffect((): void => {
+        (async (): Promise<void> => {
+            setState((prev) => ({ ...prev, error: null, loading: true }));
             try {
                 const response = await fetch(
                     `/api/controllers/get-spotify-songs?${new URLSearchParams({
@@ -78,15 +71,12 @@ export default function setlistSongsExportHook(
                         status: response.status
                     };
                 }
-                setState((prev) => ({
-                    ...prev,
-                    spotifySongs: responseJson
-                }));
+                setState((prev) => ({ ...prev, spotifySongs: responseJson }));
 
                 // Songs to exclude automatically based on settings
-                const excludedSongs: { idx: number; songId: string; }[] = [];
+                const excludedSongs: { idx: number; songId: string }[] = [];
                 if (state.excludeCovers) {
-                    responseJson.forEach((song: any, idx: number) => {
+                    responseJson.forEach((song: Record<string, any>, idx: number): void => {
                         if (song.artists?.[0]?.name !== artistData.spotifyArtist.name) {
                             excludedSongs.push({ idx: idx, songId: song.id });
                         }
@@ -94,7 +84,7 @@ export default function setlistSongsExportHook(
                 }
                 if (state.excludeDuplicateSongs) {
                     const duplicateSongs = new Set();
-                    responseJson.forEach((song: any, idx: number) => {
+                    responseJson.forEach((song: Record<string, any>, idx: number): void => {
                         if (duplicateSongs.has(song.id)) {
                             excludedSongs.push({ idx: idx, songId: song.id });
                         } else {
@@ -104,8 +94,10 @@ export default function setlistSongsExportHook(
                 }
                 if (state.excludePlayedOnTape) {
                     setlist.sets.set
-                        .flatMap((set) => set.song.filter((song) => song.name))
-                        .forEach((song, idx) => {
+                        .flatMap((set: Record<string, any>) =>
+                            set.song.filter((song: Record<string, any>) => song.name)
+                        )
+                        .forEach((song: Record<string, any>, idx: number) => {
                             if (song.tape) {
                                 if (responseJson[idx]) {
                                     excludedSongs.push({ idx: idx, songId: responseJson[idx].id });
@@ -116,7 +108,7 @@ export default function setlistSongsExportHook(
 
                 // Exclude each song only once
                 const processedSongs = new Set<string>();
-                excludedSongs.forEach(({ idx, songId }) => {
+                excludedSongs.forEach(({ idx, songId }): void => {
                     const uniqueKey = `${songId}-${idx}`;
                     if (!processedSongs.has(uniqueKey)) {
                         toggleExcludeSong(songId, idx);
@@ -124,29 +116,27 @@ export default function setlistSongsExportHook(
                     }
                 });
             } catch (error) {
-                setState((prev) => ({
-                    ...prev,
-                    error: error.error
-                }));
+                setState((prev) => ({ ...prev, error: error.error }));
             } finally {
-                setState((prev) => ({
-                    ...prev,
-                    loading: false
-                }));
+                setState((prev) => ({ ...prev, loading: false }));
             }
         })();
     }, [setlist, artistData.spotifyArtist.name]);
 
-    useEffect(() => {
+    useEffect((): void => {
         if (state.spotifySongs) {
-            onSongsFetched(state.spotifySongs.filter((song, idx) => !state.excludedSongs.has(`${song.id}-${idx}`)));
+            onSongsFetched(
+                state.spotifySongs.filter(
+                    (song: Record<string, any>, idx: number) => !state.excludedSongs.has(`${song.id}-${idx}`)
+                )
+            );
         }
     }, [state.spotifySongs, state.excludedSongs]);
 
-    const toggleExcludeSong = (songId: string, songIndex: number) => {
+    const toggleExcludeSong = useCallback((songId: string, songIndex: number): void => {
         setState((prev) => ({
             ...prev,
-            excludedSongs: (() => {
+            excludedSongs: ((): Set<string> => {
                 const newExcludedSongs = new Set(prev.excludedSongs);
                 const songKey = `${songId}-${songIndex}`;
 
@@ -159,7 +149,7 @@ export default function setlistSongsExportHook(
                 return newExcludedSongs;
             })()
         }));
-    };
+    }, []);
 
     return { state, toggleExcludeSong };
 }

@@ -15,34 +15,31 @@ import { Trans, useTranslation } from "react-i18next";
 /**
  * About page, containing details about the site, and a support/feedback form.
  */
-export default function About() {
+export default function About(): JSX.Element {
     const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
-    const [formData, setFormData] = useState({ email: "", message: "", name: "" });
-    const [submitted, setSubmitted] = useState(false);
-    const [messageDialog, setMessageDialog] = useState({
-        isOpen: false,
-        message: "",
-        type: MessageDialogState.Success
+    const [state, setState] = useState({
+        formData: { email: "", message: "" },
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
+        submitted: false
     });
 
-    const MAX_MESSAGE_LENGTH = 1000;
+    const MAX_MESSAGE_LENGTH: number = 1000;
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
     if (!mounted) return null;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
-        setMessageDialog({
-            isOpen: true,
-            message: "",
-            type: MessageDialogState.Loading
-        });
+        setState((prev) => ({
+            ...prev,
+            messageDialog: { isOpen: true, message: "", type: MessageDialogState.Loading }
+        }));
         try {
             const formData = new FormData(e.target as HTMLFormElement);
             const email = formData.get("email") as string;
@@ -59,19 +56,21 @@ export default function About() {
                     status: response.status
                 };
             } else {
-                setMessageDialog({
-                    isOpen: false,
-                    message: "",
-                    type: MessageDialogState.Success
-                });
-                setSubmitted(true);
+                setState((prev) => ({
+                    ...prev,
+                    messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
+                    submitted: true
+                }));
             }
         } catch (error) {
-            setMessageDialog({
-                isOpen: true,
-                message: error.error,
-                type: MessageDialogState.Error
-            });
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: true,
+                    message: error.error || i18n("common:unknownError"),
+                    type: MessageDialogState.Error
+                }
+            }));
         }
     };
 
@@ -86,16 +85,19 @@ export default function About() {
                 <section className="mb-6">
                     <h2 className="text-xl font-semibold">{i18n("about:supportAndFeedback")}</h2>
                     <p className="mt-2 text-gray-700 dark:text-gray-300">{i18n("about:fillOutFormBelow")}</p>
-                    {submitted ? (
+                    {state.submitted ? (
                         <div className="mt-4 flex items-center gap-2">
                             <p className="text-lg font-bold text-green-600 dark:text-green-400">
                                 {i18n("about:messageSent")}
                             </p>
                             <button
                                 className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                                onClick={() => {
-                                    setSubmitted(false);
-                                    setFormData({ email: "", message: "", name: "" });
+                                onClick={(): void => {
+                                    setState((prev) => ({
+                                        ...prev,
+                                        formData: { email: "", message: "" },
+                                        submitted: false
+                                    }));
                                 }}
                             >
                                 {i18n("about:submitAnother")}
@@ -110,12 +112,15 @@ export default function About() {
                                     autoComplete="email"
                                     maxLength={320}
                                     name="email"
-                                    onChange={(e) => {
-                                        setFormData({ ...formData, [e.target.name]: e.target.value });
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                        setState((prev) => ({
+                                            ...prev,
+                                            formData: { ...state.formData, [e.target.name]: e.target.value }
+                                        }));
                                     }}
                                     required
                                     type="email"
-                                    value={formData.email}
+                                    value={state.formData.email}
                                 />
                             </div>
                             <div className="relative mb-4">
@@ -126,20 +131,23 @@ export default function About() {
                                     className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
                                     maxLength={MAX_MESSAGE_LENGTH}
                                     name="message"
-                                    onChange={(e) => {
-                                        setFormData({ ...formData, [e.target.name]: e.target.value });
+                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                                        setState((prev) => ({
+                                            ...prev,
+                                            formData: { ...state.formData, [e.target.name]: e.target.value }
+                                        }));
                                     }}
-                                    onInput={(e) => {
+                                    onInput={(e: React.FormEvent<HTMLTextAreaElement>): void => {
                                         const target = e.target as HTMLTextAreaElement;
                                         target.style.height = "auto";
                                         target.style.height = `${target.scrollHeight}px`;
                                     }}
                                     required
                                     rows={4}
-                                    value={formData.message}
+                                    value={state.formData.message}
                                 />
                                 <div className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400">
-                                    {formData.message.length}/{MAX_MESSAGE_LENGTH}
+                                    {state.formData.message.length}/{MAX_MESSAGE_LENGTH}
                                 </div>
                             </div>
                             <div className="flex">
@@ -191,11 +199,16 @@ export default function About() {
                 </section>
             </div>
             {/* Message Dialog */}
-            {messageDialog.isOpen && (
+            {state.messageDialog.isOpen && (
                 <MessageDialog
-                    message={messageDialog.message}
-                    onClose={() => setMessageDialog({ isOpen: false, message: "", type: MessageDialogState.Success })}
-                    type={messageDialog.type}
+                    message={state.messageDialog.message}
+                    onClose={(): void =>
+                        setState((prev) => ({
+                            ...prev,
+                            messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }
+                        }))
+                    }
+                    type={state.messageDialog.type}
                 />
             )}
         </Layout>

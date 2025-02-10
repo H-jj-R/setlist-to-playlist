@@ -10,7 +10,6 @@ import MessageDialogState from "@constants/messageDialogState";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import loginDialogHook from "@hooks/loginDialogHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface LoginDialogProps {
@@ -21,7 +20,7 @@ interface LoginDialogProps {
 /**
  *
  */
-const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) => {
+const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const { handleClose, handleSubmit, setState, state } = loginDialogHook(onClose, onLoginSuccess);
 
@@ -68,7 +67,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                 {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}
-                        onClose={() => {
+                        onClose={(): void => {
                             setState((prev) => ({
                                 ...prev,
                                 messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }

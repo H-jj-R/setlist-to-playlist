@@ -5,7 +5,6 @@
  */
 
 import { useTheme } from "next-themes";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface ConfirmationModalProps {
@@ -16,7 +15,7 @@ interface ConfirmationModalProps {
 /**
  *
  */
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }): JSX.Element => {
     const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
 

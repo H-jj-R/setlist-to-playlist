@@ -10,34 +10,36 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
 import { useAuth } from "@context/AuthContext";
 import { useTheme } from "next-themes";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing user playlists.
  */
-export default function UserPlaylists() {
+export default function UserPlaylists(): JSX.Element {
     const { isAuthenticated } = useAuth();
     const { resolvedTheme } = useTheme();
     const { t: i18n } = useTranslation();
     const [mounted, setMounted] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [playlists, setPlaylists] = useState<any[]>([]);
-    const [error, setError] = useState<null | string>(null);
+    const [state, setState] = useState({
+        error: null as null | string,
+        loading: false,
+        playlists: [] as Record<string, any>[]
+    });
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    useEffect(() => {
+    useEffect((): void => {
         if (isAuthenticated) {
             fetchPlaylists();
         }
     }, [isAuthenticated]);
 
-    const fetchPlaylists = async () => {
-        setLoading(true);
+    const fetchPlaylists = async (): Promise<void> => {
+        setState((prev) => ({ ...prev, loading: true }));
         try {
             const response = await fetch("/api/database/get-user-playlists", {
                 headers: {
@@ -55,11 +57,11 @@ export default function UserPlaylists() {
                 };
             }
 
-            setPlaylists(data.playlists);
+            setState((prev) => ({ ...prev, playlists: data.playlists }));
         } catch (error) {
-            setError(error.error);
+            setState((prev) => ({ ...prev, error: error.error }));
         } finally {
-            setLoading(false);
+            setState((prev) => ({ ...prev, loading: false }));
         }
     };
 
@@ -76,42 +78,46 @@ export default function UserPlaylists() {
                             <p className="mb-6 text-lg">{i18n("common:needToLogIn")}</p>
                         </div>
                     </div>
-                ) : error ? (
+                ) : state.error ? (
                     <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
-                        <ErrorMessage message={error} />
+                        <ErrorMessage message={state.error} />
                     </div>
-                ) : loading ? (
+                ) : state.loading ? (
                     <div id="loading-indicator" className="mt-16 flex items-center justify-center pt-8">
-                        <CustomHashLoader showLoading={loading} size={120} />
+                        <CustomHashLoader showLoading={state.loading} size={120} />
                     </div>
                 ) : (
                     <div className="p-4">
                         <h1 className="mb-4 flex justify-center text-2xl font-bold">
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
-                        {playlists.length === 0 ? (
+                        {state.playlists.length === 0 ? (
                             <h2 className="flex justify-center pt-5 text-xl font-bold">
                                 {i18n("userPlaylists:noPlaylistsCreated")}
                             </h2>
                         ) : (
                             <ul className="space-y-4">
-                                {playlists.map((playlist, idx) => (
-                                    <div
-                                        className="flex items-center justify-center"
-                                        key={`${idx}-${playlist.playlistId}`}
-                                    >
-                                        <UserPlaylist
-                                            onDelete={(playlistId: number): void => {
-                                                setPlaylists((prevPlaylists) =>
-                                                    prevPlaylists.filter(
-                                                        (playlist) => playlist.playlistId !== playlistId
-                                                    )
-                                                );
-                                            }}
-                                            playlist={playlist}
-                                        />
-                                    </div>
-                                ))}
+                                {state.playlists.map(
+                                    (playlist: Record<string, any>, idx: number): JSX.Element => (
+                                        <div
+                                            className="flex items-center justify-center"
+                                            key={`${idx}-${playlist.playlistId}`}
+                                        >
+                                            <UserPlaylist
+                                                onDelete={(playlistId: number): void => {
+                                                    setState((prev) => ({
+                                                        ...prev,
+                                                        playlists: prev.playlists.filter(
+                                                            (playlist: Record<string, any>): boolean =>
+                                                                playlist.playlistId !== playlistId
+                                                        )
+                                                    }));
+                                                }}
+                                                playlist={playlist}
+                                            />
+                                        </div>
+                                    )
+                                )}
                             </ul>
                         )}
                     </div>

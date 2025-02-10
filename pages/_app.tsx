@@ -19,7 +19,7 @@ import "@constants/i18n";
  *  - Component: The page being rendered
  *  - pageProps: Props passed to that page
  */
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
             <AuthProvider>

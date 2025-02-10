@@ -13,10 +13,10 @@ import { useEffect, useState } from "react";
 /**
  * The landing page of the site.
  */
-export default function Home() {
+export default function Home(): JSX.Element {
     const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
+    useEffect((): void => {
         setMounted(true);
     }, []);
 

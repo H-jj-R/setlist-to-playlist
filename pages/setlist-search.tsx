@@ -14,13 +14,12 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
 import PageState from "@constants/setlistSearchPageState";
 import setlistSearchHook from "@hooks/setlistSearchHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
  */
-export default function SetlistSearch() {
+export default function SetlistSearch(): JSX.Element {
     const {
         handleBackToList,
         handleExport,
@@ -103,7 +102,7 @@ export default function SetlistSearch() {
             {/* Spotify Authorisation Dialog */}
             {state.showAuthDialog && (
                 <SpotifyAuthDialog
-                    onClose={() => {
+                    onClose={(): void => {
                         setState((prev) => ({
                             ...prev,
                             showAuthDialog: false
@@ -121,7 +120,7 @@ export default function SetlistSearch() {
                         spotifyArtist: state.allSetlistsData.spotifyArtist
                     }}
                     isOpen={state.exportDialogOpen}
-                    onClose={() => {
+                    onClose={(): void => {
                         setState((prev) => ({ ...prev, exportDialogOpen: false }));
                     }}
                     setlist={state.chosenSetlistData}

@@ -8,7 +8,6 @@ import OTPInput from "@components/Account/OTPInput";
 import LoginDialogState from "@constants/loginDialogState";
 import { faEnvelope, faLock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 
@@ -21,15 +20,15 @@ interface LoginFormProps {
 /**
  *
  */
-const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
-    const RECAPTCHA_SITE_KEY = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
+    const RECAPTCHA_SITE_KEY: string = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
 
     return (
         <>
             <h2 id="login-form-title" className="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100">
-                {(() => {
+                {((): string => {
                     switch (state.dialogState) {
                         case LoginDialogState.ForgotPassword:
                             return i18n("account:forgotPasswordTitle");
@@ -102,7 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                         <button
                             id="toggle-password-visibility-btn"
                             className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => {
+                            onClick={(): void => {
                                 setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                             }}
                             type="button"
@@ -117,7 +116,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                             {i18n("account:resetPasswordMessage")}
                         </p>
                         <OTPInput
-                            setOtpInput={(otp) => {
+                            setOtpInput={(otp: string): void => {
                                 setState((prev) => ({ ...prev, otpInput: otp }));
                             }}
                         />
@@ -139,11 +138,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                             <button
                                 id="toggle-new-password-visibility"
                                 className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 hover:text-gray-500"
-                                onClick={() => {
-                                    setState((prev) => ({
-                                        ...prev,
-                                        passwordVisible: !state.passwordVisible
-                                    }));
+                                onClick={(): void => {
+                                    setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                                 }}
                                 type="button"
                             >
@@ -161,17 +157,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                     <div id="recaptcha-container" className="flex justify-center">
                         <ReCAPTCHA
                             id="recaptcha"
-                            onChange={(token) => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    recaptchaToken: token
-                                }));
+                            onChange={(token: string): void => {
+                                setState((prev) => ({ ...prev, recaptchaToken: token }));
                             }}
-                            onExpired={() => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    recaptchaToken: null
-                                }));
+                            onExpired={(): void => {
+                                setState((prev) => ({ ...prev, recaptchaToken: null }));
                             }}
                             sitekey={RECAPTCHA_SITE_KEY}
                         />
@@ -182,11 +172,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                         <p
                             id="forgot-password-link"
                             className="text-md inline-block cursor-pointer text-center text-blue-500 hover:underline"
-                            onClick={() => {
-                                setState((prev) => ({
-                                    ...prev,
-                                    dialogState: LoginDialogState.ForgotPassword
-                                }));
+                            onClick={(): void => {
+                                setState((prev) => ({ ...prev, dialogState: LoginDialogState.ForgotPassword }));
                             }}
                         >
                             {i18n("account:forgotPassword")}
@@ -211,11 +198,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                     <p
                         id="back-to-login-link"
                         className="text-md mt-2 inline-block cursor-pointer pt-2 text-center text-blue-500 hover:underline"
-                        onClick={() => {
-                            setState((prev) => ({
-                                ...prev,
-                                dialogState: LoginDialogState.Login
-                            }));
+                        onClick={(): void => {
+                            setState((prev) => ({ ...prev, dialogState: LoginDialogState.Login }));
                         }}
                     >
                         {i18n("account:backToLogin")}
@@ -225,10 +209,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, setState, state }) 
                     <p
                         id="switch-login-signup-link"
                         className="text-md mt-2 inline-block cursor-pointer pt-2 text-center text-blue-500 hover:underline"
-                        onClick={() => {
-                            state.dialogState === LoginDialogState.Login
-                                ? setState((prev) => ({ ...prev, dialogState: LoginDialogState.SignUp }))
-                                : setState((prev) => ({ ...prev, dialogState: LoginDialogState.Login }));
+                        onClick={(): void => {
+                            setState((prev) => ({
+                                ...prev,
+                                dialogState:
+                                    state.dialogState === LoginDialogState.Login
+                                        ? LoginDialogState.SignUp
+                                        : LoginDialogState.Login
+                            }));
                         }}
                     >
                         {state.dialogState === LoginDialogState.SignUp

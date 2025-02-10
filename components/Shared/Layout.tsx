@@ -6,7 +6,7 @@
 
 import HeaderBar from "@components/Shared/HeaderBar";
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface LayoutProps {
     children: ReactNode; // All child components for the page
@@ -15,7 +15,7 @@ interface LayoutProps {
 /**
  * Layout for all pages - for common components.
  */
-const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
     return (
         <div id="main-container" className="flex h-screen flex-col">
             <Head>

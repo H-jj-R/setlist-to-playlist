@@ -8,7 +8,6 @@ import MessageDialog from "@components/Dialogs/MessageDialog";
 import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
 import MessageDialogState from "@constants/messageDialogState";
 import exportDialogHook from "@hooks/exportDialogHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface ExportDialogProps {
@@ -22,7 +21,13 @@ interface ExportDialogProps {
 /**
  * Dialog allowing user to export chosen setlist to playlist with custom specification.
  */
-const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose, predictedSetlist, setlist }) => {
+const ExportDialog: React.FC<ExportDialogProps> = ({
+    artistData,
+    isOpen,
+    onClose,
+    predictedSetlist,
+    setlist
+}): JSX.Element => {
     const { t: i18n } = useTranslation();
     const { getInputProps, getRootProps, handleExport, resetState, setState, state } = exportDialogHook(
         artistData,
@@ -41,7 +46,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                     className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-500 ${
                         isOpen ? "opacity-100" : "pointer-events-none opacity-0"
                     }`}
-                    onClick={() => {
+                    onClick={(): void => {
                         onClose();
                         resetState();
                     }}
@@ -77,11 +82,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                     className="mt-1 w-full rounded-lg border p-2"
                                     autoComplete="off"
                                     maxLength={100}
-                                    onChange={(e) => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            playlistName: e.target.value
-                                        }));
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                        setState((prev) => ({ ...prev, playlistName: e.target.value }));
                                     }}
                                     placeholder={i18n("exportSetlist:enterPlaylistName")}
                                     required
@@ -103,22 +105,19 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                     className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border p-2"
                                     autoComplete="off"
                                     maxLength={300}
-                                    onChange={(e) => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            playlistDescription: e.target.value
-                                        }));
+                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                                        setState((prev) => ({ ...prev, playlistDescription: e.target.value }));
                                     }}
                                     placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                     value={state.playlistDescription}
                                 />
                             </div>
 
+                            {/* Playlist Cover Dropzone */}
                             <div
                                 id="playlist-cover-container"
                                 className="mb-4 flex flex-col items-start gap-4 md:flex-row"
                             >
-                                {/* Playlist Cover Dropzone */}
                                 <div id="playlist-cover" className="max-h-40 flex-1 overflow-hidden">
                                     {state.imagePreview ? (
                                         <div className="flex items-center">
@@ -131,12 +130,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                             <button
                                                 id="remove-image-button"
                                                 className="text-red-500 hover:text-red-700 focus:outline-none"
-                                                onClick={() => {
-                                                    setState((prev) => ({
-                                                        ...prev,
-                                                        image: null,
-                                                        imagePreview: null
-                                                    }));
+                                                onClick={(): void => {
+                                                    setState((prev) => ({ ...prev, image: null, imagePreview: null }));
                                                 }}
                                                 type="button"
                                             >
@@ -168,7 +163,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                 <button
                                     id="cancel-button"
                                     className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                                    onClick={() => {
+                                    onClick={(): void => {
                                         onClose();
                                         resetState();
                                     }}
@@ -192,11 +187,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                         >
                             <SetlistSongsExport
                                 artistData={artistData}
-                                onSongsFetched={(songs) =>
-                                    setState((prev) => ({
-                                        ...prev,
-                                        spotifySongs: songs
-                                    }))
+                                onSongsFetched={(songs: Record<string, any>[]): void =>
+                                    setState((prev) => ({ ...prev, spotifySongs: songs }))
                                 }
                                 predictedSetlist={predictedSetlist}
                                 setlist={setlist}
@@ -209,7 +201,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                 {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}
-                        onClose={() => {
+                        onClose={(): void => {
                             setState((prev) => ({
                                 ...prev,
                                 messageDialog: {

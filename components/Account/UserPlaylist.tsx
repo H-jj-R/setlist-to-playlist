@@ -13,7 +13,6 @@ import MessageDialogState from "@constants/messageDialogState";
 import { faChevronDown, faChevronUp, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import userPlaylistHook from "@hooks/userPlaylistHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface UserPlaylistProps {
@@ -24,7 +23,7 @@ interface UserPlaylistProps {
 /**
  * Component to display and manage a user playlist.
  */
-const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
+const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = userPlaylistHook(
         onDelete,
@@ -47,11 +46,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 {/* Edit Button */}
                                 <button
                                     className="p-1 text-gray-600 hover:text-gray-900"
-                                    onClick={() => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            editing: true
-                                        }));
+                                    onClick={(): void => {
+                                        setState((prev) => ({ ...prev, editing: true }));
                                     }}
                                 >
                                     <FontAwesomeIcon className="text-white" icon={faEdit} size="lg" />
@@ -67,11 +63,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                     </button>
                                     <button
                                         className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
-                                        onClick={() => {
-                                            setState((prev) => ({
-                                                ...prev,
-                                                showConfirmation: true
-                                            }));
+                                        onClick={(): void => {
+                                            setState((prev) => ({ ...prev, showConfirmation: true }));
                                         }}
                                     >
                                         {i18n("common:delete")}
@@ -94,11 +87,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 className="mb-2 w-full rounded-md border p-2"
                                 autoComplete="off"
                                 maxLength={100}
-                                onChange={(e) => {
-                                    setState((prev) => ({
-                                        ...prev,
-                                        name: e.target.value
-                                    }));
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                    setState((prev) => ({ ...prev, name: e.target.value }));
                                 }}
                                 placeholder={i18n("exportSetlist:enterPlaylistName")}
                                 required
@@ -108,11 +98,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 className="h-32 w-full rounded-md border p-2"
                                 autoComplete="off"
                                 maxLength={300}
-                                onChange={(e) => {
-                                    setState((prev) => ({
-                                        ...prev,
-                                        description: e.target.value
-                                    }));
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                                    setState((prev) => ({ ...prev, description: e.target.value }));
                                 }}
                                 placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                 value={state.description}
@@ -126,7 +113,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 </button>
                                 <button
                                     className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
-                                    onClick={() => {
+                                    onClick={(): void => {
                                         setState((prev) => ({
                                             ...prev,
                                             description: state.initialDescription,
@@ -152,19 +139,21 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                             <ErrorMessage message={state.songError} />
                         ) : (
                             <ul className="space-y-2">
-                                {state.tracks?.map((track, idx) => (
-                                    <li className="mt-4 flex items-center space-x-4" key={`${idx}-${track.id}`}>
-                                        <img
-                                            className="h-12 w-12 rounded"
-                                            alt={track.name}
-                                            src={track.album.images[0]?.url}
-                                        />
-                                        <div>
-                                            <p className="font-medium">{track.name}</p>
-                                            <p className="text-sm text-gray-500">{track.artists[0]?.name}</p>
-                                        </div>
-                                    </li>
-                                ))}
+                                {state.tracks?.map(
+                                    (track: Record<string, any>, idx: number): React.JSX.Element => (
+                                        <li className="mt-4 flex items-center space-x-4" key={`${idx}-${track.id}`}>
+                                            <img
+                                                className="h-12 w-12 rounded"
+                                                alt={track.name}
+                                                src={track.album.images[0]?.url}
+                                            />
+                                            <div>
+                                                <p className="font-medium">{track.name}</p>
+                                                <p className="text-sm text-gray-500">{track.artists[0]?.name}</p>
+                                            </div>
+                                        </li>
+                                    )
+                                )}
                             </ul>
                         )}
                     </div>
@@ -174,11 +163,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
             {/* Spotify Authorisation dialog */}
             {state.showAuthDialog && (
                 <SpotifyAuthDialog
-                    onClose={() => {
-                        setState((prev) => ({
-                            ...prev,
-                            showAuthDialog: false
-                        }));
+                    onClose={(): void => {
+                        setState((prev) => ({ ...prev, showAuthDialog: false }));
                     }}
                 />
             )}
@@ -186,11 +172,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
             {/* Confirmation Modal */}
             {state.showConfirmation && (
                 <ConfirmationModal
-                    onCancel={() => {
-                        setState((prev) => ({
-                            ...prev,
-                            showConfirmation: false
-                        }));
+                    onCancel={(): void => {
+                        setState((prev) => ({ ...prev, showConfirmation: false }));
                     }}
                     onConfirm={handleDelete}
                 />
@@ -200,7 +183,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
             {state.messageDialog.isOpen && (
                 <MessageDialog
                     message={state.messageDialog.message}
-                    onClose={() => {
+                    onClose={(): void => {
                         state.messageDialog.onClose === null
                             ? setState((prev) => ({
                                   ...prev,

@@ -6,7 +6,6 @@
 
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
 
 interface ErrorMessageProps {
     message: string;
@@ -16,7 +15,7 @@ interface ErrorMessageProps {
 /**
  *
  */
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }): JSX.Element => {
     if (!message) return null;
 
     return (

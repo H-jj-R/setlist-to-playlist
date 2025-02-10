@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "Setlistien lataaminen epäonnistui",
         "noSongsFound": "Ei löytynyt kappaleita!",
         "playedFromTape": "Soitettu nauhalta",
-        "searchForSetlist": "Etsi artistia/yhtyettä tai setlist.fm-linkkiä...",
+        "searchForSetlist": "Etsi artistia/yhtyettä tai setlist.fm-linkkiä",
         "setlistDate": "Päivämäärä: {{date}}",
         "setlistFmNoSetlistsError": "Ei löytynyt setlistejä!",
         "setlistFmSearchArtistError": "Virhe etsittäessä artistia setlist.fm:ltä!",

@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "No se pudo cargar más listas de canciones",
         "noSongsFound": "¡No se encontraron canciones!",
         "playedFromTape": "Reproducido desde cinta",
-        "searchForSetlist": "Buscar un artista/banda o enlace de setlist.fm...",
+        "searchForSetlist": "Buscar un artista/banda o enlace de setlist.fm",
         "setlistDate": "Fecha: {{date}}",
         "setlistFmNoSetlistsError": "¡No se encontraron listas de canciones!",
         "setlistFmSearchArtistError": "¡Error al buscar artista en setlist.fm!",

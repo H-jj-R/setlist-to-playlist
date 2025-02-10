@@ -13,13 +13,12 @@ import Layout from "@components/Shared/Layout";
 import PageState from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
 import generateSetlistHook from "@hooks/generateSetlistHook";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
  */
-export default function AIGenerateSetlist() {
+export default function AIGenerateSetlist(): JSX.Element {
     const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = generateSetlistHook();
     const { isAuthenticated } = useAuth();
     const { t: i18n } = useTranslation();
@@ -47,7 +46,11 @@ export default function AIGenerateSetlist() {
                                 state.searchTriggered ? "top-12 translate-y-0" : "top-[40%] -translate-y-1/2"
                             }`}
                         >
-                            <SearchBar aria-label={i18n("generateSetlist:searchForArtist")} onSearch={handleSearch} />
+                            <SearchBar
+                                aria-label={i18n("generateSetlist:searchForArtist")}
+                                isPredicted={true}
+                                onSearch={handleSearch}
+                            />
                         </div>
 
                         {/* Loading indicator */}
@@ -91,15 +94,17 @@ export default function AIGenerateSetlist() {
                                     </div>
                                 </div>
                                 <div id="setlist-container" className="mt-2 flex gap-4">
-                                    {state.predictedSetlists.slice(0, 3).map((setlist, index) => (
-                                        <div id="setlist-display" className="w-full animate-fadeIn" key={index}>
-                                            <AISetlist
-                                                onExport={handleExport}
-                                                predictionNum={index + 1}
-                                                setlist={[setlist]}
-                                            />
-                                        </div>
-                                    ))}
+                                    {state.predictedSetlists.slice(0, 3).map(
+                                        (setlist: Record<string, any>, index: number): JSX.Element => (
+                                            <div id="setlist-display" className="w-full animate-fadeIn" key={index}>
+                                                <AISetlist
+                                                    onExport={handleExport}
+                                                    predictionNum={index + 1}
+                                                    setlist={[setlist]}
+                                                />
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                             </>
                         )}
@@ -108,7 +113,7 @@ export default function AIGenerateSetlist() {
                     {/* Spotify Authorisation Dialog */}
                     {state.showAuthDialog && (
                         <SpotifyAuthDialog
-                            onClose={() => {
+                            onClose={(): void => {
                                 setState((prev) => ({
                                     ...prev,
                                     showAuthDialog: false
@@ -125,7 +130,7 @@ export default function AIGenerateSetlist() {
                                 spotifyArtist: state.allSetlistsData.spotifyArtist
                             }}
                             isOpen={state.exportDialogOpen}
-                            onClose={() => {
+                            onClose={(): void => {
                                 setState((prev) => ({
                                     ...prev,
                                     chosenSetlist: null,

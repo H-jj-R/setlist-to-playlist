@@ -7,7 +7,6 @@
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialogState from "@constants/messageDialogState";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface MessageDialogProps {
@@ -16,7 +15,7 @@ interface MessageDialogProps {
     type: MessageDialogState;
 }
 
-const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }) => {
+const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     return (
@@ -24,7 +23,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
             <div
                 id="background-overlay"
                 className="absolute inset-0 bg-black bg-opacity-50"
-                onClick={type === MessageDialogState.Loading ? undefined : onClose}
+                onClick={type === MessageDialogState.Loading && onClose}
             />
             <div
                 id="dialog-box"

@@ -4,10 +4,11 @@
  * See LICENSE for details.
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface SearchBarProps {
+    isPredicted?: boolean;
     locked?: boolean; // Determines if the search bar should be locked
     onSearch: (query: string) => void; // Callback function for the search action
 }
@@ -16,7 +17,7 @@ interface SearchBarProps {
  * Primary search bar component.
  * This component allows users to search for artists/bands or setlist.fm links.
  */
-const SearchBar: React.FC<SearchBarProps> = ({ locked, onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const [query, setQuery] = useState("");
 
@@ -30,13 +31,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ locked, onSearch }) => {
                     }`}
                     autoComplete="off"
                     disabled={locked}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setQuery(e.target.value)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
                         if (e.key === "Enter" && !locked) {
                             onSearch(query);
                         }
                     }}
-                    placeholder={i18n("setlistSearch:searchForSetlist")}
+                    placeholder={`${
+                        !isPredicted ? i18n("setlistSearch:searchForSetlist") : i18n("generateSetlist:searchForArtist")
+                    }...`}
                     type="text"
                     value={query}
                 />
@@ -48,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ locked, onSearch }) => {
                             : ""
                     }`}
                     disabled={locked}
-                    onClick={() => onSearch(query)}
+                    onClick={(): void => onSearch(query)}
                 >
                     {i18n("common:search")}
                 </button>

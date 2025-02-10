@@ -13,7 +13,7 @@ interface ForgotPasswordEmailTemplateProps {
 /**
  *
  */
-const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ otp }) => {
+const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ otp }): JSX.Element => {
     return (
         <Html>
             <Head />

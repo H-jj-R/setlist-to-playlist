@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 /**
  * Info section under hero section on landing page.
  */
-const InfoSection: React.FC = () => {
+const InfoSection: React.FC = (): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     return (

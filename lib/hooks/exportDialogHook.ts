@@ -32,16 +32,16 @@ export default function exportDialogHook(
         spotifySongs: null as null | Record<string, any>
     });
 
-    const MAX_IMAGE_FILE_SIZE = 256 * 1024; // 256 KB
+    const MAX_IMAGE_FILE_SIZE: number = 262144; // 256 * 1024 = 256 KB
 
-    useEffect(() => {
+    useEffect((): void => {
         if (isOpen) {
             setState((prev) => ({
                 ...prev,
                 playlistName: predictedSetlist
                     ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
                     : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${format(
-                          ((dateString: string) => {
+                          ((dateString: string): Date => {
                               const [day, month, year] = dateString.split("-");
                               return new Date(`${year}-${month}-${day}`);
                           })(setlist.eventDate),
@@ -52,13 +52,13 @@ export default function exportDialogHook(
     }, [isOpen, artistData, setlist]);
 
     const processImage = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject): void => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (event) => {
+            reader.onload = (event: ProgressEvent<FileReader>): void => {
                 const img = new Image();
                 img.src = event.target?.result as string;
-                img.onload = () => {
+                img.onload = (): void => {
                     const minSize = Math.min(img.width, img.height);
                     const canvas = document.createElement("canvas");
                     canvas.width = minSize;
@@ -106,12 +106,12 @@ export default function exportDialogHook(
         });
     };
 
-    const handleImageChange = useCallback((acceptedFiles: File[]) => {
+    const handleImageChange = useCallback((acceptedFiles: File[]): void => {
         const file = acceptedFiles[0];
         if (file) {
             if (file.type === "image/jpeg" || file.type === "image/png") {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = (): void => {
                     setState((prev) => ({
                         ...prev,
                         image: file,
@@ -141,7 +141,7 @@ export default function exportDialogHook(
         onDrop: handleImageChange
     });
 
-    const handleExport = async () => {
+    const handleExport = useCallback(async (): Promise<void> => {
         try {
             // Reset errors
             setState((prev) => ({ ...prev, error: null }));
@@ -199,7 +199,7 @@ export default function exportDialogHook(
 
             if (!response.ok) {
                 throw {
-                    error: i18n(responseJson.error) || i18n("common:unexpectedError"),
+                    error: i18n(responseJson.error),
                     status: response.status
                 };
             }
@@ -220,14 +220,14 @@ export default function exportDialogHook(
                 ...prev,
                 messageDialog: {
                     isOpen: true,
-                    message: i18n(error.error),
+                    message: i18n(error.error) || i18n("common:unexpectedError"),
                     type: MessageDialogState.Error
                 }
             }));
         }
-    };
+    }, [state, isAuthenticated]);
 
-    const resetState = () => {
+    const resetState = useCallback((): void => {
         setState((prev) => ({
             ...prev,
             image: null,
@@ -241,7 +241,7 @@ export default function exportDialogHook(
             playlistName: "",
             spotifySongs: null
         }));
-    };
+    }, []);
 
     return {
         getInputProps,

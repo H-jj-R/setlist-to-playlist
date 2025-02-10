@@ -5,7 +5,7 @@
  */
 
 import MessageDialogState from "@constants/messageDialogState";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -33,29 +33,11 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
         tracks: null as null | Record<string, any>
     });
 
-    const toggleExpand = async () => {
-        setState((prev) => ({
-            ...prev,
-            expanded: !state.expanded
-        }));
-        if (!state.tracks && !state.songsLoading) {
-            const trackDetails = await fetchTrackDetails();
-            setState((prev) => ({
-                ...prev,
-                tracks: trackDetails
-            }));
-        }
-    };
-
-    const fetchTrackDetails = async () => {
-        setState((prev) => ({
-            ...prev,
-            songError: null,
-            songsLoading: true
-        }));
+    const fetchTrackDetails = async (): Promise<Record<string, any>> => {
+        setState((prev) => ({ ...prev, songError: null, songsLoading: true }));
 
         try {
-            const trackIds = playlist.tracks.map((track: any) => track.songID).join(",");
+            const trackIds = playlist.tracks.map((track: Record<string, any>) => track.songID).join(",");
             const response = await fetch(
                 `/api/spotify/get-tracks?${new URLSearchParams({
                     query: trackIds
@@ -69,21 +51,23 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
                 };
             }
 
-            return data.tracks;
+            return data.tracks as Record<string, any>;
         } catch (error) {
-            setState((prev) => ({
-                ...prev,
-                songError: error.error
-            }));
+            setState((prev) => ({ ...prev, songError: error.error }));
         } finally {
-            setState((prev) => ({
-                ...prev,
-                songsLoading: false
-            }));
+            setState((prev) => ({ ...prev, songsLoading: false }));
         }
     };
 
-    const handleSave = async () => {
+    const toggleExpand = useCallback(async (): Promise<void> => {
+        setState((prev) => ({ ...prev, expanded: !state.expanded }));
+        if (!state.tracks && !state.songsLoading) {
+            const trackDetails = await fetchTrackDetails();
+            setState((prev) => ({ ...prev, tracks: trackDetails }));
+        }
+    }, [state.expanded, state.tracks, state.songsLoading]);
+
+    const handleSave = useCallback(async (): Promise<void> => {
         setState((prev) => ({
             ...prev,
             messageDialog: { isOpen: true, message: "", onClose: null, type: MessageDialogState.Loading }
@@ -141,9 +125,9 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
                 messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [state.name, state.description, state.messageDialog]);
 
-    const handleRecover = async () => {
+    const handleRecover = useCallback(async (): Promise<void> => {
         try {
             const response = await fetch("/api/controllers/check-for-authentication", {
                 credentials: "include",
@@ -191,9 +175,9 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
                 messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [state.name, state.description, state.messageDialog, state.tracks]);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async (): Promise<void> => {
         setState((prev) => ({
             ...prev,
             messageDialog: { isOpen: true, message: "", onClose: null, type: MessageDialogState.Loading }
@@ -229,7 +213,7 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
                 messageDialog: {
                     isOpen: true,
                     message: i18n("userPlaylists:playlistDeleted"),
-                    onClose: () => {
+                    onClose: (): void => {
                         setState((prev) => ({
                             ...prev,
                             messageDialog: {
@@ -251,7 +235,7 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
                 messageDialog: { isOpen: true, message: error.error, onClose: null, type: MessageDialogState.Error }
             }));
         }
-    };
+    }, [playlist.playlistId, state.messageDialog, onDelete]);
 
     return {
         handleDelete,

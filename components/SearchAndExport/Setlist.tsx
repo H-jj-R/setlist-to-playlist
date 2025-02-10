@@ -8,7 +8,6 @@ import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import formatDate from "@utils/formatDate";
 import formatLocation from "@utils/formatLocation";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface SetlistProps {
@@ -20,10 +19,10 @@ interface SetlistProps {
 /**
  * Displays a setlist from it's setlist.fm details.
  */
-const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }) => {
+const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
-    const SongListItem = ({ isFirst, isLast, song }: { isFirst: boolean; isLast: boolean; song: any; }) => (
+    const SongListItem = ({ isFirst, isLast, song }: { isFirst: boolean; isLast: boolean; song: any }): JSX.Element => (
         <li
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
@@ -106,7 +105,7 @@ const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }) => {
             {setlist.sets && setlist.sets.set.length > 0 ? (
                 <ul id="songs-list" className="space-y-1 pb-6">
                     {setlist.sets.set.flatMap((set: any, setIdx: number, setArray: any[]) =>
-                        set.song.map((song: any, songIdx: number) => {
+                        set.song.map((song: any, songIdx: number): JSX.Element => {
                             return (
                                 <SongListItem
                                     isFirst={setIdx === 0 && songIdx === 0}

@@ -6,7 +6,6 @@
 
 import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 interface AISetlistProps {
@@ -18,13 +17,13 @@ interface AISetlistProps {
 /**
  * Displays a setlist from it's predicted AI-generated details.
  */
-const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }) => {
+const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }): JSX.Element => {
     const { t: i18n } = useTranslation();
 
     // Safely access the first element of the setlist array
     const setlistData = Array.isArray(setlist) && setlist.length > 0 ? setlist[0] : {};
 
-    const SongListItem = ({ isLast, song }: { isLast: boolean; song: any; }) => (
+    const SongListItem = ({ isLast, song }: { isLast: boolean; song: any }): JSX.Element => (
         <li
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
@@ -80,7 +79,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
             {/* Songs List */}
             {setlistData.predictedSongs && setlistData.predictedSongs.length > 0 ? (
                 <ul id="songs-list" className="space-y-1 pb-6">
-                    {setlistData.predictedSongs.map((song: any, songIdx: number) => {
+                    {setlistData.predictedSongs.map((song: any, songIdx: number): JSX.Element => {
                         return (
                             <SongListItem
                                 isLast={songIdx === setlistData.predictedSongs.length - 1}

@@ -178,7 +178,7 @@
         "loadSetlistsFailed": "Échec du chargement des setlists",
         "noSongsFound": "Aucune chanson trouvée !",
         "playedFromTape": "Joué à partir de la bande",
-        "searchForSetlist": "Rechercher un artiste/groupe ou un lien setlist.fm...",
+        "searchForSetlist": "Rechercher un artiste/groupe ou un lien setlist.fm",
         "setlistDate": "Date : {{date}}",
         "setlistFmNoSetlistsError": "Aucune setlist trouvée !",
         "setlistFmSearchArtistError": "Erreur lors de la recherche de l'artiste sur setlist.fm !",
