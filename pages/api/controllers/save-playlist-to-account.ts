@@ -41,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             description: playlistDetails.description,
             name: playlistDetails.name,
             spotifyPlaylistID: playlistDetails.id,
-            tracks: playlistDetails.tracks.items.map((item: any, index: number) => ({
-                position: index,
+            tracks: playlistDetails.tracks.items.map((item: any, idx: number) => ({
+                position: idx,
                 songID: item.track.id
             }))
         };

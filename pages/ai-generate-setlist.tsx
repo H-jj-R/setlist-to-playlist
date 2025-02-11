@@ -29,15 +29,15 @@ export default function AIGenerateSetlist(): JSX.Element {
         <Layout>
             {!isAuthenticated ? (
                 // Dialog displayed when the user is not authenticated
-                <div id="" className="flex items-center justify-center">
+                <div id="unauthenticated-dialog" className="flex items-center justify-center">
                     <div
-                        id=""
+                        id="auth-required-message"
                         className="relative top-2/3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg"
                     >
-                        <h2 id="" className="mb-4 text-2xl font-bold">
+                        <h2 id="auth-required-title" className="mb-4 text-2xl font-bold">
                             {i18n("common:authenticationRequired")}
                         </h2>
-                        <p id="" className="mb-6 text-lg">
+                        <p id="auth-required-description" className="mb-6 text-lg">
                             {i18n("common:needToLogIn")}
                         </p>
                     </div>
@@ -63,14 +63,17 @@ export default function AIGenerateSetlist(): JSX.Element {
                         {/* Loading indicator */}
                         {state.showLoading && !state.animLoading && (
                             <div id="progress-indicator" className="mt-16 flex flex-col items-center pt-8">
-                                <p id="" className="mb-2 text-lg font-medium text-gray-700">
+                                <p id="progress-text" className="mb-2 text-lg font-medium text-gray-700">
                                     {state.progress < 100
                                         ? `Generating setlist... (${state.progress}%)`
                                         : "Finalising..."}
                                 </p>
-                                <div id="" className="h-2 w-64 overflow-hidden rounded-full bg-gray-300">
+                                <div
+                                    id="progress-bar-container"
+                                    className="h-2 w-64 overflow-hidden rounded-full bg-gray-300"
+                                >
                                     <div
-                                        id=""
+                                        id="progress-bar"
                                         className="h-full bg-blue-600 transition-all duration-300"
                                         style={{ width: `${state.progress}%` }}
                                     />
@@ -91,10 +94,10 @@ export default function AIGenerateSetlist(): JSX.Element {
 
                         {state.pageState === PageState.Setlist && (
                             <>
-                                <div id="" className="overflow-hidden pt-5">
-                                    <div id="" className="mt-6 flex justify-center">
+                                <div id="setlist-actions-container" className="overflow-hidden pt-5">
+                                    <div id="combine-export-btn-container" className="mt-6 flex justify-center">
                                         <button
-                                            id=""
+                                            id="combine-export-btn"
                                             className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
                                             onClick={handleCombineSetlists}
                                         >
@@ -104,11 +107,15 @@ export default function AIGenerateSetlist(): JSX.Element {
                                 </div>
                                 <div id="setlist-container" className="mt-2 flex gap-4">
                                     {state.predictedSetlists.slice(0, 3).map(
-                                        (setlist: Record<string, any>, index: number): JSX.Element => (
-                                            <div id="setlist-display" className="w-full animate-fadeIn" key={index}>
+                                        (setlist: Record<string, any>, idx: number): JSX.Element => (
+                                            <div
+                                                id={`setlist-display-${idx}`}
+                                                className="w-full animate-fadeIn"
+                                                key={idx}
+                                            >
                                                 <AISetlist
                                                     onExport={handleExport}
-                                                    predictionNum={index + 1}
+                                                    predictionNum={idx + 1}
                                                     setlist={[setlist]}
                                                 />
                                             </div>

@@ -29,7 +29,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
             <div id="setlist-header" className="flex w-full flex-col items-center p-4">
                 <div id="artist-info" className="mb-5 flex items-center px-4">
                     <img
-                        id="artist-image"
+                        id="artist-img"
                         className="mr-4 h-16 w-16 rounded-full"
                         alt={setlistData.spotifyArtist.name}
                         src={setlistData.spotifyArtist.images[0].url}
@@ -51,7 +51,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                     )}
                 </ul>
                 {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
-                    <p id="" className="mt-4 text-gray-500">
+                    <p id="hidden-setlists-count" className="mt-4 text-gray-500">
                         {i18n(
                             state.hiddenSetlistsCount === 1
                                 ? "setlistSearch:hiddenSetlistsMessage"

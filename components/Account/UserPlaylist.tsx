@@ -36,20 +36,20 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                 <div id="user-playlist-container" className="flex items-center justify-between">
                     {!state.editing ? (
                         <>
-                            <div id="" className="flex w-10/12 items-center">
-                                <div id="" className="w-full break-words">
-                                    <h2 id="" className="text-xl font-bold">
+                            <div id="user-playlist-details-container" className="flex w-10/12 items-center">
+                                <div id="user-playlist-details" className="w-full break-words">
+                                    <h2 id="user-playlist-name" className="text-xl font-bold">
                                         {state.name}
                                     </h2>
-                                    <p id="" className="text-gray-400">
+                                    <p id="user-playlist-description" className="text-gray-400">
                                         {state.description}
                                     </p>
                                 </div>
                             </div>
-                            <div id="" className="flex items-center space-x-4">
+                            <div id="edit-btn-container" className="flex items-center space-x-4">
                                 {/* Edit Button */}
                                 <button
-                                    id=""
+                                    id="edit-btn"
                                     className="p-1 text-gray-600 hover:text-gray-900"
                                     onClick={(): void => {
                                         setState((prev) => ({ ...prev, editing: true }));
@@ -59,16 +59,16 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 </button>
 
                                 {/* Recovery & Delete Buttons */}
-                                <div id="" className="flex flex-col items-center gap-2">
+                                <div id="recovery-delete-btns-container" className="flex flex-col items-center gap-2">
                                     <button
-                                        id=""
+                                        id="recovery-btn"
                                         className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
                                         onClick={handleRecover}
                                     >
                                         {i18n("userPlaylists:recover")}
                                     </button>
                                     <button
-                                        id=""
+                                        id="delete-btn"
                                         className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                         onClick={(): void => {
                                             setState((prev) => ({ ...prev, showConfirmation: true }));
@@ -79,7 +79,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 </div>
 
                                 {/* Expand/Collapse Button */}
-                                <button id="" className="p-1" onClick={toggleExpand}>
+                                <button id="expand-collapse-btns-container" className="p-1" onClick={toggleExpand}>
                                     {state.expanded ? (
                                         <FontAwesomeIcon
                                             id="fa-chevron-up-icon"
@@ -99,9 +99,9 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             </div>
                         </>
                     ) : (
-                        <div id="" className="w-10/12">
+                        <div id="user-playlist-edit-container" className="w-10/12">
                             <input
-                                id=""
+                                id="playlist-name-input"
                                 className="mb-2 w-full rounded-md border p-2"
                                 autoComplete="off"
                                 maxLength={100}
@@ -113,7 +113,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 value={state.name}
                             />
                             <textarea
-                                id=""
+                                id="playlist-description-input"
                                 className="h-32 w-full rounded-md border p-2"
                                 autoComplete="off"
                                 maxLength={300}
@@ -123,16 +123,16 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 placeholder={i18n("exportSetlist:enterPlaylistDescription")}
                                 value={state.description}
                             />
-                            <div id="" className="mt-2 flex justify-center space-x-2 p-2">
+                            <div id="save-cancel-btns-container" className="mt-2 flex justify-center space-x-2 p-2">
                                 <button
-                                    id=""
+                                    id="save-btn"
                                     className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
                                     onClick={handleSave}
                                 >
                                     {i18n("common:save")}
                                 </button>
                                 <button
-                                    id=""
+                                    id="cancel-btn"
                                     className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
                                     onClick={(): void => {
                                         setState((prev) => ({
@@ -151,33 +151,36 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                 </div>
 
                 {state.expanded && (
-                    <div id="" className="mt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div
+                        id="user-playlist-contents-container"
+                        className="mt-4 border-t border-gray-200 dark:border-gray-700"
+                    >
                         {state.songsLoading ? (
-                            <div id="" className="flex justify-center p-6">
+                            <div id="loader-container" className="flex justify-center p-6">
                                 <CustomHashLoader showLoading={true} size={80} />
                             </div>
                         ) : state.songError ? (
                             <ErrorMessage message={state.songError} />
                         ) : (
-                            <ul id="" className="space-y-2">
+                            <ul id="user-playlist-tracks" className="space-y-2">
                                 {state.tracks?.map(
-                                    (track: Record<string, any>, idx: number): React.JSX.Element => (
+                                    (track: Record<string, any>, idx: number): JSX.Element => (
                                         <li
-                                            id=""
+                                            id={`track-${idx}-${track.id}`}
                                             className="mt-4 flex items-center space-x-4"
                                             key={`${idx}-${track.id}`}
                                         >
                                             <img
-                                                id=""
+                                                id="track-img"
                                                 className="h-12 w-12 rounded"
                                                 alt={track.name}
                                                 src={track.album.images[0]?.url}
                                             />
                                             <div>
-                                                <p id="" className="font-medium">
+                                                <p id="track-name" className="font-medium">
                                                     {track.name}
                                                 </p>
-                                                <p id="" className="text-sm text-gray-500">
+                                                <p id="track-artist" className="text-sm text-gray-500">
                                                     {track.artists[0]?.name}
                                                 </p>
                                             </div>

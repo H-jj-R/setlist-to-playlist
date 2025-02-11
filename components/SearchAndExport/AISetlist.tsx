@@ -28,8 +28,8 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
             id={`song-item-${song.name || "unknown"}`}
             className={`py-2 ${!isLast ? "border-b border-gray-200 dark:border-gray-700" : ""}`}
         >
-            <div id="" className="flex items-center justify-between">
-                <div id="" className="flex items-center space-x-2">
+            <div id="song-details-container" className="flex items-center justify-between">
+                <div id="song-name-container" className="flex items-center space-x-2">
                     {/* Tape indicator icon */}
                     {song.tape && (
                         <FontAwesomeIcon
@@ -40,12 +40,15 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
                         />
                     )}
                     {/* Song name */}
-                    <span id="" className={"font-medium"}>
+                    <span id="song-name" className={"font-medium"}>
                         {song.name}
                     </span>
                 </div>
-                <div id="" className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400">
-                    {/* Additional song details */}
+                {/* Additional song details */}
+                <div
+                    id="additional-song-details"
+                    className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400"
+                >
                     {song.cover &&
                         `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}`}
                 </div>

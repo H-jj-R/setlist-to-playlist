@@ -54,7 +54,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     }, [isVisible]);
 
     return (
-        <div id="" className="fixed inset-0 z-50 flex justify-end">
+        <div id="settings-sidebar" className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
                 id="background-overlay"
@@ -95,7 +95,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <h3 id="theme-title" className="text-lg font-medium">
                         {i18n("settings:themeTitle")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="theme-label" className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
                             className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
@@ -121,92 +121,66 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     </label>
                 </div>
                 {/* Setlists Settings */}
-                <div id="" className="mb-4">
-                    <h3 id="" className="text-lg font-medium">
+                <div id="setlists-setting" className="mb-4">
+                    <h3 id="setlists-title" className="text-lg font-medium">
                         {i18n("settings:setlistsTitle")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="hide-empty-setlists" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="hide-empty-setlists-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:hideEmptySetlists")}</span>
+                        <span>{i18n("settings:hideEmptySetlists")}</span>
                     </label>
                 </div>
                 {/* Export Settings */}
-                <div id="" className="mb-4">
-                    <h3 id="" className="text-lg font-medium">
+                <div id="export-settings" className="mb-4">
+                    <h3 id="export-title" className="text-lg font-medium">
                         {i18n("common:export")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="hide-songs-not-found" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="hide-songs-not-found-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:hideSongsNotFound")}</span>
+                        <span>{i18n("settings:hideSongsNotFound")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-covers" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-covers-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludeCovers")}</span>
+                        <span>{i18n("settings:excludeCovers")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-duplicate-songs" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-duplicate-songs-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludeDuplicateSongs")}</span>
+                        <span>{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-played-on-tape" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-played-on-tape-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludePlayedOnTape")}</span>
+                        <span>{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
-                </div>
-                {/* About + Support Link */}
-                <div
-                    id=""
-                    className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
-                >
-                    <Link
-                        id=""
-                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
-                        href="/about"
-                    >
-                        {i18n("about:aboutSupport")}
-                    </Link>
-                </div>
-                {/* Privacy Policy Link */}
-                <div
-                    id=""
-                    className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
-                >
-                    <Link
-                        id=""
-                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
-                        href="/privacy-policy"
-                    >
-                        {i18n("privacyPolicy:privacyPolicy")}
-                    </Link>
                 </div>
             </div>
         </div>

@@ -27,64 +27,64 @@ export default function PrivacyPolicy(): JSX.Element {
 
     return (
         <Layout>
-            <div id="" className="mx-auto max-w-2xl p-6">
-                <h1 id="" className="mb-4 text-3xl font-bold">
+            <div id="privacy-policy" className="mx-auto max-w-2xl p-6">
+                <h1 id="privacy-policy-title" className="mb-4 text-3xl font-bold">
                     {i18n("privacyPolicy:privacyPolicy")}
                 </h1>
-                <section id="" className="mb-6">
-                    <h2 id="" className="mb-2 text-xl font-semibold">
+                <section id="privacy-introduction" className="mb-6">
+                    <h2 id="privacy-introduction-title" className="mb-2 text-xl font-semibold">
                         {i18n("privacyPolicy:introduction")}
                     </h2>
-                    <p id="" className="text-gray-700 dark:text-gray-300">
+                    <p id="privacy-introduction-content" className="text-gray-700 dark:text-gray-300">
                         {i18n("privacyPolicy:introductionContent")}
                     </p>
                 </section>
-                <section id="" className="mb-6">
-                    <h2 id="" className="mb-2 text-xl font-semibold">
+                <section id="privacy-data-collection" className="mb-6">
+                    <h2 id="privacy-data-collection-title" className="mb-2 text-xl font-semibold">
                         {i18n("privacyPolicy:dataWeCollect")}
                     </h2>
-                    <ul id="" className="list-disc pl-5 text-gray-700 dark:text-gray-300">
-                        <li id="">
+                    <ul id="privacy-data-list" className="list-disc pl-5 text-gray-700 dark:text-gray-300">
+                        <li id="privacy-account-info">
                             <strong>{i18n("privacyPolicy:accountInformation")}</strong>{" "}
                             {i18n("privacyPolicy:accountInformationContent")}
                         </li>
-                        <li id="">
+                        <li id="privacy-spotify-data">
                             <strong>{i18n("privacyPolicy:spotifyData")}</strong>{" "}
                             {i18n("privacyPolicy:spotifyDataContent")}
                         </li>
-                        <li id="">
+                        <li id="privacy-setlist-data">
                             <strong>{i18n("privacyPolicy:setlistData")}</strong>{" "}
                             {i18n("privacyPolicy:setlistDataContent")}
                         </li>
                     </ul>
                 </section>
-                <section id="" className="mb-6">
-                    <h2 id="" className="mb-2 text-xl font-semibold">
+                <section id="privacy-data-usage" className="mb-6">
+                    <h2 id="privacy-data-usage-title" className="mb-2 text-xl font-semibold">
                         {i18n("privacyPolicy:howWeUseData")}
                     </h2>
-                    <p id="" className="text-gray-700 dark:text-gray-300">
+                    <p id="privacy-data-usage-content" className="text-gray-700 dark:text-gray-300">
                         {i18n("privacyPolicy:howWeUseDataContent")}
                     </p>
                 </section>
-                <section id="" className="mb-6">
-                    <h2 id="" className="mb-2 text-xl font-semibold">
+                <section id="privacy-rights" className="mb-6">
+                    <h2 id="privacy-rights-title" className="mb-2 text-xl font-semibold">
                         {i18n("privacyPolicy:yourRights")}
                     </h2>
-                    <p id="" className="text-gray-700 dark:text-gray-300">
+                    <p id="privacy-rights-content" className="text-gray-700 dark:text-gray-300">
                         {i18n("privacyPolicy:yourRightsContent")}
                     </p>
                 </section>
-                <section id="" className="mb-6">
-                    <h2 id="" className="mb-2 text-xl font-semibold">
+                <section id="privacy-contact" className="mb-6">
+                    <h2 id="privacy-contact-title" className="mb-2 text-xl font-semibold">
                         {i18n("privacyPolicy:contactUs")}
                     </h2>
-                    <p id="" className="text-gray-700 dark:text-gray-300">
+                    <p id="privacy-contact-content" className="text-gray-700 dark:text-gray-300">
                         <Trans
-                            id=""
+                            id="privacy-contact-trans"
                             components={{
                                 aboutLink: (
                                     <Link
-                                        id=""
+                                        id="privacy-contact-link"
                                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                         href="/about"
                                     />
