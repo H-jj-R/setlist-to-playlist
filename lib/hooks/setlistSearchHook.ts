@@ -163,7 +163,7 @@ export default function setlistSearchHook() {
                 }));
             } else if (query && setlist) {
                 const queryData = await fetchData(
-                    `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
+                    `/api/controllers/get-setlists?${new URLSearchParams({ country: state.countryFilter, query }).toString()}`
                 );
                 setState((prev) => ({
                     ...prev,
