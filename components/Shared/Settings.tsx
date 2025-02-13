@@ -36,8 +36,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     const handleSettingChange = useCallback(
         (key: keyof typeof settings) =>
             (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-                const value: boolean | string =
-                    event.target.type === "checkbox" ? event.target.checked : event.target.value;
+                let value: boolean | string;
+                if (event.target instanceof HTMLInputElement && event.target.type === "checkbox") {
+                    value = event.target.checked;
+                } else {
+                    value = (event.target as HTMLSelectElement).value;
+                }
                 setSettings((prev) => ({ ...prev, [key]: value }));
                 localStorage?.setItem(key, value.toString());
                 window.dispatchEvent(new StorageEvent(key));
