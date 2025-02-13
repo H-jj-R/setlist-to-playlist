@@ -39,9 +39,8 @@ export default function generateSetlistHook() {
 
     const handleSearch = useCallback(
         async (query: string): Promise<void> => {
-            if (query === state.previousQuery) {
-                return;
-            }
+            if (query === state.previousQuery) return;
+
             setState((prev) => ({ ...prev, previousQuery: query }));
             const response = await fetch("/api/controllers/check-for-authentication", {
                 credentials: "include",

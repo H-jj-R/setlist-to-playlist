@@ -4,6 +4,7 @@
  * See LICENSE for details.
  */
 
+import countryCodes from "@constants/countryCodes";
 import SettingsKeys from "@constants/settingsKeys";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,6 +25,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const [settings, setSettings] = useState(() => ({
+        countryFilter: (localStorage?.getItem(SettingsKeys.CountryFilter) as string) ?? "",
         excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
         excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
         excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true",
@@ -33,10 +35,15 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
 
     const handleSettingChange = useCallback(
         (key: keyof typeof settings) =>
-            (event: React.ChangeEvent<HTMLInputElement>): void => {
-                const isChecked = event.target.checked;
-                setSettings((prev) => ({ ...prev, [key]: isChecked }));
-                localStorage?.setItem(key, isChecked.toString());
+            (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+                let value: boolean | string;
+                if (event.target instanceof HTMLInputElement && event.target.type === "checkbox") {
+                    value = event.target.checked;
+                } else {
+                    value = (event.target as HTMLSelectElement).value;
+                }
+                setSettings((prev) => ({ ...prev, [key]: value }));
+                localStorage?.setItem(key, value.toString());
                 window.dispatchEvent(new StorageEvent(key));
             },
         []
@@ -54,7 +61,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     }, [isVisible]);
 
     return (
-        <div id="" className="fixed inset-0 z-50 flex justify-end">
+        <div id="settings-sidebar" className="fixed inset-0 z-50 flex justify-end">
             {/* Background overlay with opacity animation */}
             <div
                 id="background-overlay"
@@ -95,13 +102,13 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <h3 id="theme-title" className="text-lg font-medium">
                         {i18n("settings:themeTitle")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="theme-label" className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
-                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
+                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                                 resolvedTheme === "dark"
-                                    ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
-                                    : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
+                                    ? "border-gray-600 bg-gray-700 text-gray-200"
+                                    : "border-gray-400 bg-white text-gray-800"
                             }`}
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                                 setTheme(event.target.value);
@@ -121,74 +128,99 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     </label>
                 </div>
                 {/* Setlists Settings */}
-                <div id="" className="mb-4">
-                    <h3 id="" className="text-lg font-medium">
+                <div id="setlists-settings" className="mb-4">
+                    <h3 id="setlists-title" className="text-lg font-medium">
                         {i18n("settings:setlistsTitle")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="hide-empty-setlists" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="hide-empty-setlists-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:hideEmptySetlists")}</span>
+                        <span id="hide-empty-setlists-span">{i18n("settings:hideEmptySetlists")}</span>
+                    </label>
+                    <label id="filter-by-country" className="flex items-center space-x-2 p-2">
+                        <select
+                            id="country-select"
+                            className={`w-1/2 max-w-52 cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                resolvedTheme === "dark"
+                                    ? "border-gray-600 bg-gray-700 text-gray-200"
+                                    : "border-gray-400 bg-white text-gray-800"
+                            }`}
+                            onChange={handleSettingChange(SettingsKeys.CountryFilter)}
+                            value={settings.countryFilter}
+                        >
+                            <option id="no-filter-option" value="">
+                                {i18n("settings:noFilter")}
+                            </option>
+                            {Object.entries(countryCodes)
+                                .map(([code, name]) => ({ code, name }))
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map(({ code, name }) => (
+                                    <option id={`country-option-${code}`} key={code} value={code}>
+                                        {name}
+                                    </option>
+                                ))}
+                        </select>
+                        <span id="filter-by-country-span">{i18n("settings:filterByCountry")}</span>
                     </label>
                 </div>
                 {/* Export Settings */}
-                <div id="" className="mb-4">
-                    <h3 id="" className="text-lg font-medium">
+                <div id="export-settings" className="mb-4">
+                    <h3 id="export-title" className="text-lg font-medium">
                         {i18n("common:export")}
                     </h3>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="hide-songs-not-found" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="hide-songs-not-found-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:hideSongsNotFound")}</span>
+                        <span id="hide-songs-not-found-span">{i18n("settings:hideSongsNotFound")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-covers" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-covers-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludeCovers")}</span>
+                        <span id="exclude-covers-span">{i18n("settings:excludeCovers")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-duplicate-songs" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-duplicate-songs-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludeDuplicateSongs")}</span>
+                        <span id="exclude-duplicate-songs-span">{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
-                    <label id="" className="flex items-center space-x-2 p-2">
+                    <label id="exclude-played-on-tape" className="flex items-center space-x-2 p-2">
                         <input
-                            id=""
+                            id="exclude-played-on-tape-checkbox"
                             className="h-7 w-7 flex-shrink-0 cursor-pointer"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"
                         />
-                        <span id="">{i18n("settings:excludePlayedOnTape")}</span>
+                        <span id="exclude-played-on-tape-span">{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
                 {/* About + Support Link */}
                 <div
-                    id=""
+                    id="about-support-link-container"
                     className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
                 >
                     <Link
-                        id=""
+                        id="about-support-link"
                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                         href="/about"
                     >
@@ -197,11 +229,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                 </div>
                 {/* Privacy Policy Link */}
                 <div
-                    id=""
+                    id="privacy-policy-link-container"
                     className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
                 >
                     <Link
-                        id=""
+                        id="privacy-policy-link"
                         className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                         href="/privacy-policy"
                     >

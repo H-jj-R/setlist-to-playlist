@@ -14,7 +14,7 @@ import { NextApiRequest, NextApiResponse } from "next";
  * artist details and their performance setlists.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { query } = req.query;
+    const { country, query } = req.query;
     try {
         const baseUrl = getBaseUrl(req);
 
@@ -59,7 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Step 3: Fetch setlists by the artist's mbid from Setlist.fm
         const setlistsResponse = await fetch(
             `${baseUrl}/api/setlist-fm/search-setlists?${new URLSearchParams({
-                artistMbid: setlistfmArtist.mbid
+                artistMbid: setlistfmArtist.mbid,
+                country: country as string
             }).toString()}`
         );
 

@@ -23,7 +23,7 @@ const InfoSection: React.FC = (): JSX.Element => {
                 <div id="feature-cards-container" className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     <div
                         id="feature-card-1"
-                        className="rounded-lg border-2 border-gray-300 p-6 text-center shadow-lg transition hover:shadow-xl"
+                        className="rounded-lg border-2 border-gray-300 p-4 text-center shadow-lg transition hover:shadow-xl"
                     >
                         <h3 id="feature-1-title" className="mb-4 text-xl font-bold">
                             {i18n("landingPage:feature1Title")}
@@ -32,7 +32,7 @@ const InfoSection: React.FC = (): JSX.Element => {
                     </div>
                     <div
                         id="feature-card-2"
-                        className="rounded-lg border-2 border-gray-300 p-6 text-center shadow-lg transition hover:shadow-xl"
+                        className="rounded-lg border-2 border-gray-300 p-4 text-center shadow-lg transition hover:shadow-xl"
                     >
                         <h3 id="feature-2-title" className="mb-4 text-xl font-bold">
                             {i18n("landingPage:feature2Title")}
@@ -41,7 +41,7 @@ const InfoSection: React.FC = (): JSX.Element => {
                     </div>
                     <div
                         id="feature-card-3"
-                        className="rounded-lg border-2 border-gray-300 p-6 text-center shadow-lg transition hover:shadow-xl"
+                        className="rounded-lg border-2 border-gray-300 p-4 text-center shadow-lg transition hover:shadow-xl"
                     >
                         <h3 id="feature-3-title" className="mb-4 text-xl font-bold">
                             {i18n("landingPage:feature3Title")}

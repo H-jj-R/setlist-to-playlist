@@ -133,12 +133,12 @@ export default function setlistSongsExportHook(
         }
     }, [state.spotifySongs, state.excludedSongs]);
 
-    const toggleExcludeSong = useCallback((songId: string, songIndex: number): void => {
+    const toggleExcludeSong = useCallback((songId: string, songIdx: number): void => {
         setState((prev) => ({
             ...prev,
             excludedSongs: ((): Set<string> => {
                 const newExcludedSongs = new Set(prev.excludedSongs);
-                const songKey = `${songId}-${songIndex}`;
+                const songKey = `${songId}-${songIdx}`;
 
                 if (newExcludedSongs.has(songKey)) {
                     newExcludedSongs.delete(songKey);

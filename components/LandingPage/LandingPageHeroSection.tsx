@@ -19,19 +19,19 @@ const HeroSection: React.FC = (): JSX.Element => {
             id="landing-page-hero"
             className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-pink-600 to-orange-500 px-10 py-6 text-white lg:flex-row"
         >
-            <div id="landing-page-text" className="mb-6 text-center lg:mb-0 lg:w-1/2 lg:text-left">
-                <h1 id="landing-page-title" className="mb-4 text-4xl font-extrabold">
+            <div id="landing-page-text" className="text-center lg:mb-0 lg:w-1/2 lg:text-left">
+                <h1 id="landing-page-title" className="text-4xl font-extrabold">
                     {i18n("landingPage:landingPageTitle")}
                 </h1>
-                <p id="landing-page-description" className="mb-8 text-lg">
+                <p id="landing-page-description" className="text-lg">
                     {i18n("landingPage:landingPageDescription")}
                 </p>
             </div>
-            <div id="setlist-search-btn-container" className="lg:ml-auto lg:mr-auto">
+            <div id="setlist-search-btn-container" className="lg:mx-auto">
                 <button
                     id="go-to-setlist-search-btn"
-                    className="mb-10 rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:bg-gray-100 focus:outline-none"
-                    onClick={() => router.push("/setlist-search")}
+                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:bg-gray-100 focus:outline-none"
+                    onClick={(): Promise<boolean> => router.push("/setlist-search")}
                 >
                     {i18n("landingPage:goToSetlistSearch")}
                 </button>

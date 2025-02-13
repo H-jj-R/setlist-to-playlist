@@ -52,14 +52,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })
         );
 
-        // Extract the original redirect path and optional query parameter from the request
-        if (req.query.redirect) {
-            res.redirect(
-                307,
-                `${req.query.redirect as string}?${new URLSearchParams({
-                    query: req.query.query as string
-                }).toString()}`
-            );
+        // Extract the original redirect path
+        const redirectPath = req.query.redirect as string;
+        if (redirectPath) {
+            const params = new URLSearchParams(req.query as Record<string, string>);
+            params.delete("redirect"); // Remove the 'redirect' parameter to avoid duplication
+            res.redirect(307, `${redirectPath}?${params.toString()}`);
         } else {
             // If no redirect path is provided, respond with a success message
             res.status(200).json({ success: true });

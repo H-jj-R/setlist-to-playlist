@@ -8,6 +8,7 @@
  * Enum for handling settings key strings.
  */
 enum SettingsKeys {
+    CountryFilter = "countryFilter",
     ExcludeCovers = "excludeCovers",
     ExcludeDuplicateSongs = "excludeDuplicateSongs",
     ExcludePlayedOnTape = "excludePlayedOnTape",

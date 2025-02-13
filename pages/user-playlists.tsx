@@ -69,18 +69,18 @@ export default function UserPlaylists(): JSX.Element {
 
     return (
         <Layout>
-            <div id="" className="h-screen overflow-y-scroll">
+            <div id="user-playlists-container" className="h-screen overflow-y-scroll">
                 {!isAuthenticated ? (
                     // Dialog displayed when the user is not authenticated
-                    <div id="" className="mt-8 flex items-center justify-center">
+                    <div id="unauthenticated-dialog" className="mt-8 flex items-center justify-center">
                         <div
-                            id=""
+                            id="auth-required-message"
                             className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg"
                         >
-                            <h2 id="" className="mb-4 text-2xl font-bold">
+                            <h2 id="auth-required-title" className="mb-4 text-2xl font-bold">
                                 {i18n("common:authenticationRequired")}
                             </h2>
-                            <p id="" className="mb-6 text-lg">
+                            <p id="auth-required-description" className="mb-6 text-lg">
                                 {i18n("common:needToLogIn")}
                             </p>
                         </div>
@@ -94,20 +94,20 @@ export default function UserPlaylists(): JSX.Element {
                         <CustomHashLoader showLoading={state.loading} size={120} />
                     </div>
                 ) : (
-                    <div id="" className="p-4">
-                        <h1 id="" className="mb-4 flex justify-center text-2xl font-bold">
+                    <div id="playlists-container" className="p-4">
+                        <h1 id="exported-setlists-title" className="mb-4 flex justify-center text-2xl font-bold">
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
                         {state.playlists.length === 0 ? (
-                            <h2 id="" className="flex justify-center pt-5 text-xl font-bold">
+                            <h2 id="no-playlists-message" className="flex justify-center pt-5 text-xl font-bold">
                                 {i18n("userPlaylists:noPlaylistsCreated")}
                             </h2>
                         ) : (
-                            <ul id="" className="space-y-4">
+                            <ul id="playlists-list" className="space-y-4">
                                 {state.playlists.map(
                                     (playlist: Record<string, any>, idx: number): JSX.Element => (
                                         <div
-                                            id=""
+                                            id={`user-playlist-${playlist.playlistId}-container`}
                                             className="flex items-center justify-center"
                                             key={`${idx}-${playlist.playlistId}`}
                                         >

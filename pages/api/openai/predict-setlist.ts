@@ -115,8 +115,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Parse the structured response
         const predictedSetlists = completion.choices.map((choice) => choice.message.parsed)[0];
-        console.log(JSON.stringify(predictedSetlists));
-
         res.status(200).json(predictedSetlists);
     } catch (error) {
         console.error(error);

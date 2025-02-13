@@ -36,10 +36,10 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
             }`}
             onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
         >
-            <div id="" className="flex items-center space-x-4">
+            <div id="song-details-container" className="flex items-center space-x-4">
                 {spotifySong?.album?.images[0]?.url && (
                     <img
-                        id="song-cover"
+                        id="song-cover-img"
                         className="h-12 w-12 rounded shadow"
                         alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
                         src={spotifySong.album.images[0].url}
@@ -59,21 +59,21 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
 
     return (
         <div
-            id=""
+            id="exported-setlist-container"
             className="flex h-full w-full flex-col overflow-y-auto rounded-lg bg-gray-100 p-3 shadow-md dark:bg-gray-700"
         >
             {state.loading ? (
-                <div id="" className="flex h-full items-center justify-center">
+                <div id="loader-container" className="flex h-full items-center justify-center">
                     <CustomHashLoader showLoading={true} size={100} />
                 </div>
             ) : state.error ? (
                 <ErrorMessage message={state.error} />
             ) : (
                 <>
-                    <h4 id="" className="mb-2 text-lg font-semibold">
+                    <h4 id="exported-setlist-title" className="mb-2 text-lg font-semibold">
                         {i18n("exportSetlist:songs")}
                     </h4>
-                    <ul id="" className="space-y-1">
+                    <ul id="exported-setlist-tracks" className="space-y-1">
                         {state.spotifySongs?.map(
                             (spotifySong: Record<string, any>, idx: number): JSX.Element =>
                                 spotifySong?.name ? (

@@ -72,11 +72,14 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             {/* Playlist Name */}
                             <div id="playlist-name" className="mb-4">
                                 <label
-                                    id=""
+                                    id="playlist-name-label"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     htmlFor="playlist-name-input"
                                 >
-                                    {i18n("exportSetlist:playlistName")}
+                                    {i18n("exportSetlist:playlistName")}{" "}
+                                    <span id="required-asterisk" className="text-red-500">
+                                        *
+                                    </span>
                                 </label>
                                 <input
                                     id="playlist-name-input"
@@ -96,7 +99,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             {/* Playlist Description */}
                             <div id="playlist-description" className="mb-4">
                                 <label
-                                    id=""
+                                    id="playlist-description-label"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     htmlFor="playlist-description-input"
                                 >
@@ -117,20 +120,20 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
 
                             {/* Playlist Cover Dropzone */}
                             <div
-                                id="playlist-cover-container"
+                                id="playlist-cover-dropzone-container"
                                 className="mb-4 flex flex-col items-start gap-4 md:flex-row"
                             >
-                                <div id="playlist-cover" className="max-h-40 flex-1 overflow-hidden">
+                                <div id="playlist-cover-dropzone" className="max-h-40 flex-1 overflow-hidden">
                                     {state.imagePreview ? (
-                                        <div id="" className="flex items-center">
+                                        <div id="playlist-cover-container" className="flex items-center">
                                             <img
-                                                id="image-preview"
+                                                id="img-preview"
                                                 className="mr-2 h-24 w-24 rounded-lg object-cover"
                                                 alt="Playlist Cover"
                                                 src={state.imagePreview as string}
                                             />
                                             <button
-                                                id="remove-image-btn"
+                                                id="remove-img-btn"
                                                 className="text-red-500 hover:text-red-700 focus:outline-none"
                                                 onClick={(): void => {
                                                     setState((prev) => ({ ...prev, image: null, imagePreview: null }));
