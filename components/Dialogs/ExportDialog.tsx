@@ -76,7 +76,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                                     htmlFor="playlist-name-input"
                                 >
-                                    {i18n("exportSetlist:playlistName")}
+                                    {i18n("exportSetlist:playlistName")}{" "}
+                                    <span id="required-asterisk" className="text-red-500">
+                                        *
+                                    </span>
                                 </label>
                                 <input
                                     id="playlist-name-input"

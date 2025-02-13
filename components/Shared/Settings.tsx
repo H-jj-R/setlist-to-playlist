@@ -9,6 +9,7 @@ import SettingsKeys from "@constants/settingsKeys";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -208,6 +209,32 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         />
                         <span id="exclude-played-on-tape-span">{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
+                </div>
+                {/* About + Support Link */}
+                <div
+                    id="about-support-link-container"
+                    className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
+                >
+                    <Link
+                        id="about-support-link"
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                        href="/about"
+                    >
+                        {i18n("about:aboutSupport")}
+                    </Link>
+                </div>
+                {/* Privacy Policy Link */}
+                <div
+                    id="privacy-policy-link-container"
+                    className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
+                >
+                    <Link
+                        id="privacy-policy-link"
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
+                        href="/privacy-policy"
+                    >
+                        {i18n("privacyPolicy:privacyPolicy")}
+                    </Link>
                 </div>
             </div>
         </div>

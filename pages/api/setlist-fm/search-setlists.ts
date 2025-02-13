@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         p: page as string,
         sort: "recency"
     };
-    if (country !== "" && country !== "null") queryParams.countryCode = country as string;
+    if (country && country !== "null" && country !== "undefined") queryParams.countryCode = country as string;
 
     /**
      * Fetches a setlist from the Setlist.fm API, with retry logic for handling rate limits (429 errors).

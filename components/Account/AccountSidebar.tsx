@@ -15,11 +15,17 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the AccountSidebar component.
+ */
 interface AccountSidebarProps {
-    handleLogout: () => void; // Logout handler
-    onClose: () => void; // Close handler
+    handleLogout: () => void;
+    onClose: () => void;
 }
 
+/**
+ * Type declaration for decoded JWT token.
+ */
 interface DecodedToken {
     email: string;
     exp: number;
@@ -35,40 +41,48 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
     const router = useRouter();
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
-        email: null as null | string,
-        isVisible: false,
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
-        showConfirmation: false,
-        username: null as null | string
+        email: null as null | string, // User's email
+        isVisible: false, // Whether the sidebar is fully visible
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }, // Properties for message dialog
+        showConfirmation: false, // Whether to show the confirmation dialog
+        username: null as null | string // User's username
     });
 
+    /**
+     * Component pre-initialisation.
+     */
     useEffect((): void => {
         // Trigger the slide-in and dimming animation after mounting
         setState((prev) => ({ ...prev, isVisible: true }));
 
-        // Decode the JWT to get the username
+        // Decode the JWT to get the username and email and set them in state variables
         const token = localStorage?.getItem("authToken");
         if (token) {
             try {
                 const decoded = jwtDecode<DecodedToken>(token);
                 setState((prev) => ({ ...prev, email: decoded.email, username: decoded.username }));
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) {}
         }
     }, []);
 
+    /**
+     * Move focus to panel when fully visible for accessibility.
+     */
     useEffect((): void => {
         if (state.isVisible) {
             document.getElementById("account-settings-panel")?.focus();
         }
     }, [state.isVisible]);
 
+    /**
+     * Handles account deletion by sending a DELETE request to the server.
+     */
     const handleDeleteAccount = useCallback(async (): Promise<void> => {
         try {
-            const token = localStorage?.getItem("authToken");
-            if (!token) return;
+            const token = localStorage?.getItem("authToken"); // Retrieve the auth token from localStorage
+            if (!token) return; // If no token is found, exit early
 
+            // Send a DELETE request to the server to delete the user's account
             const response = await fetch("/api/auth/delete-account", {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -76,7 +90,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 method: "DELETE"
             });
 
+            // Validate that server responds with a successful status
             if (response.ok) {
+                // Show a success message
                 setState((prev) => ({
                     ...prev,
                     messageDialog: {
@@ -93,6 +109,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 };
             }
         } catch (error) {
+            // Show an error message
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -114,6 +131,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 }`}
                 aria-hidden={state.isVisible ? "false" : "true"}
                 onClick={(): void => {
+                    // Trigger the slide-out and undimming animation before unmounting
                     setState((prev) => ({ ...prev, isVisible: false }));
                     setTimeout(onClose, 300);
                 }}
@@ -136,6 +154,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         className="text-xl"
                         aria-label={i18n("account:closeAccountSettings")}
                         onClick={(): void => {
+                            // Trigger the slide-out and undimming animation before unmounting
                             setState((prev) => ({ ...prev, isVisible: false }));
                             setTimeout(onClose, 300);
                         }}
@@ -195,6 +214,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:bg-violet-600 focus:outline-none"
                         aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={(): void => {
+                            // Trigger the slide-out and undimming animation before unmounting, then redirect to user-playlists
                             setState((prev) => ({ ...prev, isVisible: false }));
                             setTimeout(onClose, 300);
                             router.push("/user-playlists");

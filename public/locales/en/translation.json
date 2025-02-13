@@ -129,7 +129,7 @@
         "openaiDisabled": "OpenAI API is currently disabled.",
         "predictSetlistFailed": "Failed to predict setlist.",
         "queryLimitReached": "Daily query limit reached. Please try again later.",
-        "searchForArtist": "Search for an artist"
+        "searchForArtist": "Search for an artist/band"
     },
     "landingPage": {
         "feature1Description": "Keep track of your created playlists and access them anytime.",

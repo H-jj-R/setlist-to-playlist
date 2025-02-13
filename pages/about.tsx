@@ -119,48 +119,48 @@ export default function About(): JSX.Element {
                             <div id="email-field" className="mb-4">
                                 <label id="email-label" className="block text-gray-700 dark:text-gray-300">
                                     {i18n("common:email")}
+                                    <input
+                                        id="email-input"
+                                        className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        autoComplete="email"
+                                        maxLength={320}
+                                        name="email"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                            setState((prev) => ({
+                                                ...prev,
+                                                formData: { ...state.formData, [e.target.name]: e.target.value }
+                                            }));
+                                        }}
+                                        required
+                                        type="email"
+                                        value={state.formData.email}
+                                    />
                                 </label>
-                                <input
-                                    id="email-input"
-                                    className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
-                                    autoComplete="email"
-                                    maxLength={320}
-                                    name="email"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            formData: { ...state.formData, [e.target.name]: e.target.value }
-                                        }));
-                                    }}
-                                    required
-                                    type="email"
-                                    value={state.formData.email}
-                                />
                             </div>
                             <div id="message-field" className="relative mb-4">
                                 <label id="message-label" className="block text-gray-700 dark:text-gray-300">
                                     {i18n("about:message")}
+                                    <textarea
+                                        id="message-input"
+                                        className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        maxLength={MAX_MESSAGE_LENGTH}
+                                        name="message"
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                                            setState((prev) => ({
+                                                ...prev,
+                                                formData: { ...state.formData, [e.target.name]: e.target.value }
+                                            }));
+                                        }}
+                                        onInput={(e: React.FormEvent<HTMLTextAreaElement>): void => {
+                                            const target = e.target as HTMLTextAreaElement;
+                                            target.style.height = "auto";
+                                            target.style.height = `${target.scrollHeight}px`;
+                                        }}
+                                        required
+                                        rows={4}
+                                        value={state.formData.message}
+                                    />
                                 </label>
-                                <textarea
-                                    id="message-input"
-                                    className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
-                                    maxLength={MAX_MESSAGE_LENGTH}
-                                    name="message"
-                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            formData: { ...state.formData, [e.target.name]: e.target.value }
-                                        }));
-                                    }}
-                                    onInput={(e: React.FormEvent<HTMLTextAreaElement>): void => {
-                                        const target = e.target as HTMLTextAreaElement;
-                                        target.style.height = "auto";
-                                        target.style.height = `${target.scrollHeight}px`;
-                                    }}
-                                    required
-                                    rows={4}
-                                    value={state.formData.message}
-                                />
                                 <div
                                     id="message-length-counter"
                                     className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400"
@@ -227,7 +227,7 @@ export default function About(): JSX.Element {
                     </section>
                 </section>
             </div>
-            
+
             {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog
