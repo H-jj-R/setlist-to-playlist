@@ -109,7 +109,7 @@ export default function generateSetlistHook() {
                     if (simulatedProgress >= 95) {
                         clearInterval(interval);
                     }
-                }, 600);
+                }, 800);
 
                 const openAIResponse = await fetch("/api/openai/predict-setlist", {
                     body: JSON.stringify({ pastSetlists: setlistData.setlists.setlist }),

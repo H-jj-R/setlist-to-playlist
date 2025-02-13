@@ -61,7 +61,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                 >
                     <div
                         id="export-dialog"
-                        className="flex h-[52vh] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2"
+                        className="flex h-[30rem] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2"
                     >
                         {/* Main Export Dialog */}
                         <div id="export-dialog-main" className="flex-1 p-4">
