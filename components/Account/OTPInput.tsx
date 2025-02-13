@@ -21,9 +21,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>, idx: number): void => {
             const value = e.target.value;
-            if (/[^0-9]/.test(value)) {
-                return;
-            }
+            if (/[^0-9]/.test(value)) return;
 
             const newOtp = [...otp];
             newOtp[idx] = value;
@@ -41,13 +39,10 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
     const handlePaste = useCallback(
         (e: React.ClipboardEvent<HTMLInputElement>, idx: number): void => {
             e.preventDefault();
-            if (idx !== 0) {
-                return;
-            }
+            if (idx !== 0) return;
+
             const pastedData = e.clipboardData.getData("text").trim();
-            if (!/^\d{6}$/.test(pastedData)) {
-                return;
-            }
+            if (!/^\d{6}$/.test(pastedData)) return;
 
             const newOtp = pastedData.split("");
             setOtp(newOtp);

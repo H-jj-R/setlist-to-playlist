@@ -4,11 +4,11 @@
  * See LICENSE for details.
  */
 
+import countryCodes from "@constants/countryCodes";
 import SettingsKeys from "@constants/settingsKeys";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,6 +24,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
     const { t: i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const [settings, setSettings] = useState(() => ({
+        countryFilter: (localStorage?.getItem(SettingsKeys.CountryFilter) as string) ?? "",
         excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
         excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
         excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true",
@@ -33,10 +34,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
 
     const handleSettingChange = useCallback(
         (key: keyof typeof settings) =>
-            (event: React.ChangeEvent<HTMLInputElement>): void => {
-                const isChecked = event.target.checked;
-                setSettings((prev) => ({ ...prev, [key]: isChecked }));
-                localStorage?.setItem(key, isChecked.toString());
+            (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+                const value: boolean | string =
+                    event.target.type === "checkbox" ? event.target.checked : event.target.value;
+                setSettings((prev) => ({ ...prev, [key]: value }));
+                localStorage?.setItem(key, value.toString());
                 window.dispatchEvent(new StorageEvent(key));
             },
         []
@@ -98,10 +100,10 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="theme-label" className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
-                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 ${
+                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                                 resolvedTheme === "dark"
-                                    ? "border-gray-600 bg-gray-700 text-gray-200 focus:ring-blue-500"
-                                    : "border-gray-400 bg-white text-gray-800 focus:ring-blue-500"
+                                    ? "border-gray-600 bg-gray-700 text-gray-200"
+                                    : "border-gray-400 bg-white text-gray-800"
                             }`}
                             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                                 setTheme(event.target.value);
@@ -121,7 +123,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     </label>
                 </div>
                 {/* Setlists Settings */}
-                <div id="setlists-setting" className="mb-4">
+                <div id="setlists-settings" className="mb-4">
                     <h3 id="setlists-title" className="text-lg font-medium">
                         {i18n("settings:setlistsTitle")}
                     </h3>
@@ -133,7 +135,32 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:hideEmptySetlists")}</span>
+                        <span id="hide-empty-setlists-span">{i18n("settings:hideEmptySetlists")}</span>
+                    </label>
+                    <label id="filter-by-country" className="flex items-center space-x-2 p-2">
+                        <select
+                            id="country-select"
+                            className={`w-1/2 max-w-52 cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                                resolvedTheme === "dark"
+                                    ? "border-gray-600 bg-gray-700 text-gray-200"
+                                    : "border-gray-400 bg-white text-gray-800"
+                            }`}
+                            onChange={handleSettingChange(SettingsKeys.CountryFilter)}
+                            value={settings.countryFilter}
+                        >
+                            <option id="no-filter-option" value="">
+                                {i18n("settings:noFilter")}
+                            </option>
+                            {Object.entries(countryCodes)
+                                .map(([code, name]) => ({ code, name }))
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map(({ code, name }) => (
+                                    <option id={`country-option-${code}`} key={code} value={code}>
+                                        {name}
+                                    </option>
+                                ))}
+                        </select>
+                        <span id="filter-by-country-span">{i18n("settings:filterByCountry")}</span>
                     </label>
                 </div>
                 {/* Export Settings */}
@@ -149,7 +176,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:hideSongsNotFound")}</span>
+                        <span id="hide-songs-not-found-span">{i18n("settings:hideSongsNotFound")}</span>
                     </label>
                     <label id="exclude-covers" className="flex items-center space-x-2 p-2">
                         <input
@@ -159,7 +186,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludeCovers")}</span>
+                        <span id="exclude-covers-span">{i18n("settings:excludeCovers")}</span>
                     </label>
                     <label id="exclude-duplicate-songs" className="flex items-center space-x-2 p-2">
                         <input
@@ -169,7 +196,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludeDuplicateSongs")}</span>
+                        <span id="exclude-duplicate-songs-span">{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
                     <label id="exclude-played-on-tape" className="flex items-center space-x-2 p-2">
                         <input
@@ -179,7 +206,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"
                         />
-                        <span>{i18n("settings:excludePlayedOnTape")}</span>
+                        <span id="exclude-played-on-tape-span">{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
             </div>

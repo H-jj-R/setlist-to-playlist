@@ -82,9 +82,7 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
             }
 
             const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
+            if (!token) return;
 
             const response = await fetch(
                 `/api/database/update-playlist-details?${new URLSearchParams({
@@ -185,9 +183,7 @@ export default function userPlaylistHook(onDelete: (playlistId: number) => void,
 
         try {
             const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
+            if (!token) return;
 
             const response = await fetch(
                 `/api/database/delete-user-playlist?${new URLSearchParams({

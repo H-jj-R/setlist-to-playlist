@@ -67,9 +67,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
     const handleDeleteAccount = useCallback(async (): Promise<void> => {
         try {
             const token = localStorage?.getItem("authToken");
-            if (!token) {
-                return;
-            }
+            if (!token) return;
 
             const response = await fetch("/api/auth/delete-account", {
                 headers: {
@@ -164,7 +162,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                                     </div>
                                 </>
                             ) : (
-                                <span aria-busy="true">`${i18n("common:loading")}...`</span>
+                                <span id="loading-text" aria-busy="true">
+                                    `${i18n("common:loading")}...`
+                                </span>
                             )}
                         </h3>
                     </div>

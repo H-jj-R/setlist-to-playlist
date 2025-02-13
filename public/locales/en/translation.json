@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} empty setlist is hidden",
         "hiddenSetlistsMessagePlural": "{{count}} empty setlists are hidden",
         "image": "image",
+        "inCountry": "in {{country}}",
         "interlude": "Interlude",
         "intro": "Intro",
         "loadMore": "Load More",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} songs",
         "spotifySearchArtistError": "Error finding artist on Spotify!",
         "unknown": "Unknown",
+        "unknownCountry": "Unknown Country",
         "with": "with {{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "Exclude Covers",
         "excludeDuplicateSongs": "Exclude Duplicate Songs",
         "excludePlayedOnTape": "Exclude Songs Played on Tape",
+        "filterByCountry": "Filter by Country",
         "hideEmptySetlists": "Hide Empty Setlists",
         "hideSongsNotFound": "Hide Songs Not Found",
         "lightTheme": "Light",
+        "noFilter": "No Filter",
         "setlistsTitle": "Setlists",
         "settingsTitle": "Settings",
         "systemTheme": "System",

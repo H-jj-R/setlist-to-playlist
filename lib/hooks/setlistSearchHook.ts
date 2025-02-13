@@ -5,6 +5,7 @@
  */
 
 import PageState from "@constants/setlistSearchPageState";
+import SettingsKeys from "@constants/settingsKeys";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -22,6 +23,7 @@ export default function setlistSearchHook() {
         allSetlistsData: [] as Record<string, any>,
         animLoading: true,
         chosenSetlistData: null as null | Record<string, any>,
+        countryFilter: "" as string,
         error: null as null | string,
         exportDialogOpen: false,
         lastQuery: null as null | string,
@@ -36,7 +38,37 @@ export default function setlistSearchHook() {
     useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
+        setState((prev) => ({
+            ...prev,
+            countryFilter: localStorage?.getItem(SettingsKeys.CountryFilter)
+        }));
     }, [resolvedTheme]);
+
+    useEffect((): (() => void) => {
+        const handleStorageChange = (): void => {
+            setState((prev) => ({
+                ...prev,
+                countryFilter: localStorage?.getItem(SettingsKeys.CountryFilter)
+            }));
+        };
+
+        window.addEventListener(SettingsKeys.CountryFilter, handleStorageChange);
+        return (): void => {
+            window.removeEventListener(SettingsKeys.CountryFilter, handleStorageChange);
+        };
+    }, []);
+
+    useEffect((): void => {
+        const { q } = router.query;
+        if (q) {
+            if (state.pageState !== PageState.LosSetlist || q !== state.lastQuery) {
+                handleSearch(q as string, null);
+            } else if (state.pageState === PageState.LosSetlist) {
+                handleBackToList();
+                handleSearch(q as string, null);
+            }
+        }
+    }, [state.countryFilter]);
 
     useEffect((): void => {
         const { q, setlist } = router.query;
@@ -104,7 +136,7 @@ export default function setlistSearchHook() {
         try {
             if (query && !setlist) {
                 const data = await fetchData(
-                    `/api/controllers/get-setlists?${new URLSearchParams({ query }).toString()}`
+                    `/api/controllers/get-setlists?${new URLSearchParams({ country: state.countryFilter, query }).toString()}`
                 );
                 setState((prev) => ({
                     ...prev,

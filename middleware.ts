@@ -10,12 +10,12 @@ export async function middleware(req: NextRequest) {
     const { pathname, searchParams } = req.nextUrl;
 
     // Helper function to build a redirect URL with optional query parameters
-    const createRedirectUrl = (targetPath: string, redirectPath: string, query?: string) => {
+    const createRedirectUrl = (targetPath: string, redirectPath: string): URL => {
         const redirectUrl = new URL(targetPath, req.url);
         redirectUrl.searchParams.set("redirect", redirectPath); // Original route to redirect back to
-        if (query) {
-            redirectUrl.searchParams.set("query", query); // Include query string if available
-        }
+        searchParams.forEach((value, key) => {
+            redirectUrl.searchParams.set(key, value);
+        });
         return redirectUrl;
     };
 
@@ -27,11 +27,7 @@ export async function middleware(req: NextRequest) {
         pathname.startsWith("/api/spotify/get-tracks")
     ) {
         if (!req.cookies.get("spotify_access_token")) {
-            const redirectUrl = createRedirectUrl(
-                "/api/spotify/generate-access-token",
-                pathname,
-                searchParams.get("query")
-            );
+            const redirectUrl = createRedirectUrl("/api/spotify/generate-access-token", pathname);
             return NextResponse.redirect(redirectUrl);
         }
     } else if (pathname.startsWith("/api/controllers/check-for-authentication")) {
@@ -48,5 +44,11 @@ export async function middleware(req: NextRequest) {
 
 // Specifies which paths the middleware should run on
 export const config = {
-    matcher: ["/api/:path*"] // Matches all API routes
+    matcher: [
+        "/api/controllers/get-setlists/:path*",
+        "/api/controllers/get-spotify-songs/:path*",
+        "/api/spotify/search-artist/:path*",
+        "/api/spotify/get-tracks/:path*",
+        "/api/controllers/check-for-authentication/:path*"
+    ]
 };

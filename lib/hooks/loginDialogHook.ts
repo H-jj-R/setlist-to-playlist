@@ -69,16 +69,12 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
             } else {
                 const password = formData.get("password") as string;
                 if (state.dialogState === LoginDialogState.SignUp) {
-                    if (!(await validatePassword(password))) {
-                        return;
-                    }
+                    if (!(await validatePassword(password))) return;
                 }
 
                 if (state.dialogState === LoginDialogState.SignUp) {
                     // Verify ReCAPTCHA
-                    if (!(await verifyRecaptcha())) {
-                        return;
-                    }
+                    if (!(await verifyRecaptcha())) return;
                 }
 
                 const email = formData.get("email") as string;
@@ -266,9 +262,7 @@ export default function loginDialogHook(onClose: () => void, onLoginSuccess: () 
     };
 
     const handleResetPassword = async (newPassword: string): Promise<void> => {
-        if (!(await validatePassword(newPassword))) {
-            return;
-        }
+        if (!(await validatePassword(newPassword))) return;
 
         try {
             const response = await fetch("/api/auth/reset-password", {

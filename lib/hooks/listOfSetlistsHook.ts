@@ -15,6 +15,7 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
     const { t: i18n } = useTranslation();
     const [state, setState] = useState({
         currentPage: ((setlistData.setlists.page as number) || 1) as number,
+        error: null as null | string,
         hiddenSetlistsCount: 0,
         hideEmptySetlists: localStorage?.getItem(SettingsKeys.HideEmptySetlists) === "true",
         isLoading: false,
@@ -43,7 +44,7 @@ export default function listOfSetlistsHook(setlistData: Record<string, any>) {
         };
 
         window.addEventListener(SettingsKeys.HideEmptySetlists, handleStorageChange);
-        return () => {
+        return (): void => {
             window.removeEventListener(SettingsKeys.HideEmptySetlists, handleStorageChange);
         };
     }, []);
