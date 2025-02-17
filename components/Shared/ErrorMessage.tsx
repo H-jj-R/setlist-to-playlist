@@ -7,17 +7,26 @@
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+/**
+ * Props for the `ErrorMessage` component.
+ *
+ * @property {string} message - The error message to display.
+ * @property {boolean} [small] - If true, displays a smaller version of the error message.
+ */
 interface ErrorMessageProps {
     message: string;
     small?: boolean;
 }
 
 /**
+ * **ErrorMessage Component**
  *
+ * Displays an error message with a warning icon.
+ *
+ * @param ErrorMessageProps - The component props.
+ * @returns {JSX.Element} The rendered `ErrorMessage` component.
  */
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }): JSX.Element => {
-    if (!message) return null;
-
     return (
         <div
             id="error-container"

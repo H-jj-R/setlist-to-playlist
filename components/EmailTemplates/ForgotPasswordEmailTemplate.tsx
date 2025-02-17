@@ -6,14 +6,25 @@
 
 import { Body, Container, Head, Heading, Html, Text } from "@react-email/components";
 
+/**
+ * Props for the `ForgotPasswordEmailTemplate` component.
+ *
+ * @property {string} otp - The one-time password (OTP) for resetting the user's password.
+ */
 interface ForgotPasswordEmailTemplateProps {
     otp: string;
 }
 
 /**
+ * **Forgot Password Email Template**
  *
+ * Generates a HTML email template for users who have requested a password reset.
+ * It displays a one-time password (OTP) that users can use to verify their identity.
+ *
+ * @param ForgotPasswordEmailTemplateProps - Component props.
+ * @returns {JSX.Element} The rendered email template.
  */
-const ForgotPasswordEmailTemplate: React.FC<ForgotPasswordEmailTemplateProps> = ({ otp }): JSX.Element => {
+const ForgotPasswordEmailTemplate: React.FC<Readonly<ForgotPasswordEmailTemplateProps>> = ({ otp }): JSX.Element => {
     return (
         <Html>
             <Head />

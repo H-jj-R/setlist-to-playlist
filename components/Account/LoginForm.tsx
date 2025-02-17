@@ -11,19 +11,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `LoginForm` component.
+ *
+ * @property {Function} handleSubmit - Function to handle form submission.
+ * @property {React.MutableRefObject<ReCAPTCHA>} recaptchaRef - Reference to the reCAPTCHA instance.
+ * @property {Function} setState - Function to update component state.
+ * @property {any} state - Current state of the login form.
+ */
 interface LoginFormProps {
     handleSubmit: (e: React.FormEvent) => Promise<void>;
     recaptchaRef: React.MutableRefObject<ReCAPTCHA>;
-    setState: any;
+    setState: Function;
     state: any;
 }
 
 /**
+ * **LoginForm Component**
  *
+ * Gives the user full login & signup options.
+ *
+ * @param LoginFormProps - Component props.
+ * @returns {JSX.Element} The rendered `LoginForm` component.
  */
 const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setState, state }): JSX.Element => {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
 
+    // Site key used to validate reCAPTCHA input
     const RECAPTCHA_SITE_KEY: string = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
 
     return (

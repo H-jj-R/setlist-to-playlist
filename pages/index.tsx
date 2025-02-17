@@ -4,9 +4,9 @@
  * See LICENSE for details.
  */
 
-import GenerateSetlistSection from "@components/LandingPage/LandingPageGenerateSetlistSection";
-import HeroSection from "@components/LandingPage/LandingPageHeroSection";
-import InfoSection from "@components/LandingPage/LandingPageInfoSection";
+import AccountInfoSection from "@components/LandingPage/AccountInfoSection";
+import GenerateSetlistSection from "@components/LandingPage/GenerateSetlistSection";
+import SetlistSearchSection from "@components/LandingPage/SetlistSearchSection";
 import Layout from "@components/Shared/Layout";
 import { useEffect, useState } from "react";
 
@@ -26,9 +26,9 @@ export default function Home(): JSX.Element {
         <div id="index-container" className="flex min-h-screen flex-col">
             <Layout>
                 <div id="index-contents-container" className="flex-grow">
-                    <HeroSection />
+                    <SetlistSearchSection />
                     <GenerateSetlistSection />
-                    <InfoSection />
+                    <AccountInfoSection />
                 </div>
             </Layout>
         </div>

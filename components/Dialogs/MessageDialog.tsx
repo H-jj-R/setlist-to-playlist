@@ -9,14 +9,29 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialogState from "@constants/messageDialogState";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `MessageDialog` component.
+ *
+ * @property {string} message - The message to be displayed in the dialog.
+ * @property {Function} onClose - Function to handle closing the dialog.
+ * @property {MessageDialogState} type - The type of message (e.g. success, error, loading).
+ */
 interface MessageDialogProps {
     message: string;
     onClose: () => void;
     type: MessageDialogState;
 }
 
+/**
+ * **MessageDialog Component**
+ *
+ * Displays a message dialog based on the provided type.
+ *
+ * @param MessageDialogProps - Component props.
+ * @returns {JSX.Element} The rendered `MessageDialog` component.
+ */
 const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }): JSX.Element => {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div id="dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">

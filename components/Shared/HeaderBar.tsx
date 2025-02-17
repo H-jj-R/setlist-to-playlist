@@ -15,15 +15,19 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * The header bar at the top of the page.
+ * **HeaderBar Component**
+ *
+ * The main header bar displayed at the top of the page.
+ *
+ * @returns {JSX.Element} The rendered `HeaderBar` component.
  */
-const HeaderBar: React.FC = (): JSX.Element => {
-    const { isAuthenticated, login, logout } = useAuth();
-    const { t: i18n } = useTranslation();
+const HeaderBar: React.FC<{}> = (): JSX.Element => {
+    const { isAuthenticated, login, logout } = useAuth(); // Authentication context
+    const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
-        showAccountSidebar: false,
-        showLoginDialog: false,
-        showSettings: false
+        showAccountSidebar: false, // Controls visibility of the account sidebar
+        showLoginDialog: false, // Controls visibility of the login dialog
+        showSettings: false // Controls visibility of the settings modal
     });
 
     return (

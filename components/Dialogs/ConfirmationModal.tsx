@@ -7,17 +7,28 @@
 import { useTheme } from "next-themes";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `ConfirmationModal` component.
+ *
+ * @property {Function} onCancel - Function to handle cancellation.
+ * @property {Function} onConfirm - Function to handle confirmation.
+ */
 interface ConfirmationModalProps {
     onCancel: () => void;
     onConfirm: () => void;
 }
 
 /**
+ * **ConfirmationModal Component**
  *
+ * Displays a modal to get confirmation from the user before proceeding with an action.
+ *
+ * @param ConfirmationModalProps - Component props.
+ * @returns {JSX.Element} The rendered `ConfirmationModal` component.
  */
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }): JSX.Element => {
-    const { resolvedTheme } = useTheme();
-    const { t: i18n } = useTranslation();
+    const { resolvedTheme } = useTheme(); // Theme setting hook
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div

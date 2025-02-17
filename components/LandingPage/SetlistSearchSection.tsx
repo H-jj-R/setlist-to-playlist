@@ -8,22 +8,26 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
 /**
- * Hero section for landing page.
+ * **SetlistSearchSection Component**
+ *
+ * Displays the option to go the setlist-search page.
+ *
+ * @returns {JSX.Element} The rendered `SetlistSearchSection` component.
  */
-const HeroSection: React.FC = (): JSX.Element => {
-    const router = useRouter();
-    const { t: i18n } = useTranslation();
+const SetlistSearchSection: React.FC<{}> = (): JSX.Element => {
+    const router = useRouter(); // Router hook
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div
-            id="landing-page-hero"
+            id="setlist-search-section"
             className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-pink-600 to-orange-500 px-10 py-6 text-white lg:flex-row"
         >
-            <div id="landing-page-text" className="text-center lg:mb-0 lg:w-1/2 lg:text-left">
-                <h1 id="landing-page-title" className="text-4xl font-extrabold">
+            <div id="setlist-search-text" className="text-center lg:mb-0 lg:w-1/2 lg:text-left">
+                <h1 id="setlist-search-title" className="text-4xl font-extrabold">
                     {i18n("landingPage:landingPageTitle")}
                 </h1>
-                <p id="landing-page-description" className="text-lg">
+                <p id="setlist-search-description" className="text-lg">
                     {i18n("landingPage:landingPageDescription")}
                 </p>
             </div>
@@ -40,4 +44,4 @@ const HeroSection: React.FC = (): JSX.Element => {
     );
 };
 
-export default HeroSection;
+export default SetlistSearchSection;

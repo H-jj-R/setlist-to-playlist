@@ -7,19 +7,30 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `SearchBar` component.
+ *
+ * @property {boolean} [isPredicted] - Optional flag indicating whether this is an AI prediction query.
+ * @property {boolean} [locked] - Determines if the search bar should be locked and disabled.
+ * @property {Function} onSearch - Callback function triggered when a search is performed.
+ */
 interface SearchBarProps {
     isPredicted?: boolean;
-    locked?: boolean; // Determines if the search bar should be locked
-    onSearch: (query: string) => void; // Callback function for the search action
+    locked?: boolean;
+    onSearch: (query: string) => void;
 }
 
 /**
- * Primary search bar component.
- * This component allows users to search for artists/bands or setlist.fm links.
+ * **SearchBar Component**
+ *
+ * Provides a search input field where users can type a query.
+ *
+ * @param SearchBarProps - The component props.
+ * @returns {JSX.Element} The rendered `SearchBar` component.
  */
 const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const [query, setQuery] = useState("");
+    const { t: i18n } = useTranslation(); // Translation hook
+    const [query, setQuery] = useState(""); // State to track the user's search input
 
     return (
         <div id="search-container" className="mt-4 flex w-full items-center justify-center px-2 sm:px-4">
