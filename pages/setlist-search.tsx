@@ -65,11 +65,11 @@ export default function SetlistSearch(): JSX.Element {
                     )}
 
                     {state.pageState !== PageState.Idle && (
-                        <div id="setlists-container" className="mt-[3rem] flex gap-4">
+                        <div id="list-of-setlists-container" className="mt-[3rem] flex gap-4">
                             {/* List of setlists */}
                             {state.searchComplete && !state.animLoading && (
                                 <div
-                                    id="setlist-list"
+                                    id="list-of-setlists"
                                     className={`${
                                         state.setlistChosen
                                             ? "mx-auto hidden w-4/5 max-w-3xl animate-fadeIn sm:block"

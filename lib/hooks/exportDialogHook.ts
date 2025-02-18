@@ -12,7 +12,17 @@ import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 
 /**
- * Hook for data handling on the ExportDialog component.
+ * **exportDialogHook**
+ *
+ * Custom hook for handling data and state management in the `ExportDialog` component.
+ *
+ * @param {Record<string, any>} artistData - The data for the selected artist.
+ * @param {boolean} isOpen - Indicates if the export dialog is open.
+ * @param {Function} onClose - Function to close the dialog.
+ * @param {boolean} predictedSetlist - Determines if the setlist is predicted or an actual event setlist.
+ * @param {Record<string, any>} setlist - The setlist data including event details.
+ *
+ * @returns Hook state and handlers.
  */
 export default function exportDialogHook(
     artistData: Record<string, any>,
@@ -21,19 +31,25 @@ export default function exportDialogHook(
     predictedSetlist: boolean,
     setlist: Record<string, any>
 ) {
-    const { isAuthenticated } = useAuth();
-    const { t: i18n } = useTranslation();
+    const { isAuthenticated } = useAuth(); // Authentication context
+    const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
-        image: null as File | null,
-        imagePreview: null as ArrayBuffer | null | string,
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
-        playlistDescription: "" as string,
-        playlistName: "" as string,
-        spotifySongs: null as null | Record<string, any>
+        image: null as File | null, // Uploaded image file for playlist
+        imagePreview: null as ArrayBuffer | null | string, // Preview of the uploaded image
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }, // Controls status messages
+        playlistDescription: "" as string, // User input playlist description
+        playlistName: "" as string, // User input playlist name
+        spotifySongs: null as null | Record<string, any> // Processed Spotify songs data for playlist
     });
 
-    const MAX_IMAGE_FILE_SIZE: number = 262144; // 256 * 1024 = 256 KB
+    /**
+     * Maximum image size (256 * 1024 = 262144 = 256 KB).
+     */
+    const MAX_IMAGE_FILE_SIZE: number = 262144;
 
+    /**
+     * Effect that instantly updates the playlist name when the dialog is opened.
+     */
     useEffect((): void => {
         if (isOpen) {
             setState((prev) => ({
@@ -51,6 +67,12 @@ export default function exportDialogHook(
         }
     }, [isOpen, artistData, setlist]);
 
+    /**
+     * Processes and resizes an image file to fit within the maximum file size limit for Spotify.
+     *
+     * @param {File} file - The image file to process.
+     * @returns {Promise<string>} A promise that resolves to the base64 representation of the resized image.
+     */
     const processImage = (file: File): Promise<string> => {
         return new Promise((resolve, reject): void => {
             const reader = new FileReader();
@@ -59,6 +81,7 @@ export default function exportDialogHook(
                 const img = new Image();
                 img.src = event.target?.result as string;
                 img.onload = (): void => {
+                    // Crop and draw the image centered on a square canvas
                     const minSize = Math.min(img.width, img.height);
                     const canvas = document.createElement("canvas");
                     canvas.width = minSize;
@@ -76,10 +99,10 @@ export default function exportDialogHook(
                             minSize,
                             minSize
                         );
-
                     let base64Image = canvas.toDataURL("image/jpeg");
                     let fileSize = base64Image.length;
 
+                    // Reduce image quality until it meets the file size constraint
                     while (fileSize > MAX_IMAGE_FILE_SIZE) {
                         const scaleFactor = Math.sqrt(MAX_IMAGE_FILE_SIZE / fileSize);
                         const newWidth = Math.floor(canvas.width * scaleFactor);
@@ -97,7 +120,6 @@ export default function exportDialogHook(
                         base64Image = canvas.toDataURL("image/jpeg");
                         fileSize = base64Image.length;
                     }
-
                     resolve(base64Image);
                 };
                 img.onerror = reject;
@@ -106,17 +128,18 @@ export default function exportDialogHook(
         });
     };
 
+    /**
+     * Handles image selection and validation.
+     *
+     * @param {File[]} acceptedFiles - Array of accepted image files.
+     */
     const handleImageChange = useCallback((acceptedFiles: File[]): void => {
         const file = acceptedFiles[0];
         if (file) {
             if (file.type === "image/jpeg" || file.type === "image/png") {
                 const reader = new FileReader();
                 reader.onload = (): void => {
-                    setState((prev) => ({
-                        ...prev,
-                        image: file,
-                        imagePreview: reader.result
-                    }));
+                    setState((prev) => ({ ...prev, image: file, imagePreview: reader.result }));
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -132,21 +155,24 @@ export default function exportDialogHook(
         }
     }, []);
 
+    /**
+     * Dropzone configuration for image file uploads
+     */
     const { getInputProps, getRootProps } = useDropzone({
-        accept: {
-            "image/jpeg": [".jpg", ".jpeg"],
-            "image/png": [".png"]
-        },
+        accept: { "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"] },
         maxFiles: 1,
         onDrop: handleImageChange
     });
 
+    /**
+     * Handles the export process by creating a Spotify playlist.
+     */
     const handleExport = useCallback(async (): Promise<void> => {
         try {
-            // Reset errors
+            // Reset any previous errors
             setState((prev) => ({ ...prev, error: null }));
 
-            // Show the loading dialog
+            // Show loading dialog while processing
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -156,6 +182,7 @@ export default function exportDialogHook(
                 }
             }));
 
+            // Validate that a playlist name is provided
             if (!state.playlistName.trim()) {
                 throw {
                     error: i18n("exportSetlist:noNameProvided"),
@@ -163,6 +190,7 @@ export default function exportDialogHook(
                 };
             }
 
+            // Validate that there are songs in the playlist
             if (state.spotifySongs.length === 0) {
                 throw {
                     error: i18n("exportSetlist:noSongsProvided"),
@@ -170,6 +198,7 @@ export default function exportDialogHook(
                 };
             }
 
+            // If an image is provided, process it for upload
             let base64Image = null;
             if (state.image) {
                 base64Image = await processImage(state.image);
@@ -181,6 +210,7 @@ export default function exportDialogHook(
                 }
             }
 
+            // Send request to backend to create the playlist
             const response = await fetch(`/api/controllers/create-spotify-playlist`, {
                 body: JSON.stringify({
                     description: state.playlistDescription,
@@ -196,7 +226,6 @@ export default function exportDialogHook(
                 method: "POST"
             });
             const responseJson = await response.json();
-
             if (!response.ok) {
                 throw {
                     error: i18n(responseJson.error),
@@ -204,7 +233,7 @@ export default function exportDialogHook(
                 };
             }
 
-            // Success
+            // Display success message if the playlist was created successfully
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -227,6 +256,9 @@ export default function exportDialogHook(
         }
     }, [state, isAuthenticated]);
 
+    /**
+     * Resets the export dialog state, clearing all inputs and messages.
+     */
     const resetState = useCallback((): void => {
         setState((prev) => ({
             ...prev,

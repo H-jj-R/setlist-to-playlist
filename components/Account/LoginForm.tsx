@@ -37,7 +37,9 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setState, state }): JSX.Element => {
     const { t: i18n } = useTranslation(); // Translation hook
 
-    // Site key used to validate reCAPTCHA input
+    /**
+     * Site key used to validate reCAPTCHA input.
+     */
     const RECAPTCHA_SITE_KEY: string = "6LeSO8MqAAAAAPZJW7-h7yrBqb_6er-gLbOEcsc-";
 
     return (
