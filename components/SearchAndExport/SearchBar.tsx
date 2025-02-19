@@ -26,6 +26,7 @@ interface SearchBarProps {
  * Provides a search input field where users can type a query.
  *
  * @param SearchBarProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `SearchBar` component.
  */
 const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }): JSX.Element => {

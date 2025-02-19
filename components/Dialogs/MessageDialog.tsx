@@ -28,6 +28,7 @@ interface MessageDialogProps {
  * Displays a message dialog based on the provided type.
  *
  * @param MessageDialogProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `MessageDialog` component.
  */
 const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }): JSX.Element => {

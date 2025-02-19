@@ -25,6 +25,7 @@ interface CustomHashLoaderProps {
  * A customised loading spinner using the `HashLoader` from `react-spinners`.
  *
  * @param CustomHashLoaderProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `CustomHashLoader` component.
  */
 const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }): JSX.Element => {

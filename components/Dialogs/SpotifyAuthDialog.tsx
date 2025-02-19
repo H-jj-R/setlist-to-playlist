@@ -24,6 +24,7 @@ interface SpotifyAuthDialogProps {
  * Provides a modal interface for users to authenticate with Spotify.
  *
  * @param SpotifyAuthDialogProps - Component props.
+ *
  * @returns {JSX.Element} The rendered component.
  */
 const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.Element => {

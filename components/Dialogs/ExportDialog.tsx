@@ -33,6 +33,7 @@ interface ExportDialogProps {
  * Allows user to export chosen setlist to Spotify playlist with custom specifications.
  *
  * @param ExportDialogProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `ExportDialog` component.
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({

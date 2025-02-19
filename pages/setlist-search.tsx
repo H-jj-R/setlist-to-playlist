@@ -18,8 +18,13 @@ import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing setlists.
+ *
+ * @returns {JSX.Element} The rendered `/setlist-search` page.
  */
 export default function SetlistSearch(): JSX.Element {
+    const { t: i18n } = useTranslation(); // Translation hook
+
+    // Hook initialiser to manage setlist search page actions and state
     const {
         handleBackToList,
         handleExport,
@@ -29,14 +34,12 @@ export default function SetlistSearch(): JSX.Element {
         setState,
         state
     } = setlistSearchHook();
-    const { t: i18n } = useTranslation();
 
-    if (!mounted) return null;
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <>
             <Layout>
-                {/* Search bar */}
                 <div id="search-container" className="overflow-hidden p-5">
                     <div
                         id="search-bar"
@@ -49,24 +52,18 @@ export default function SetlistSearch(): JSX.Element {
                             onSearch={handleSearchRouterPush}
                         />
                     </div>
-
-                    {/* Loading indicator */}
                     {state.showLoading && !state.animLoading && (
                         <div id="loading-indicator" className="mt-16 flex items-center justify-center pt-8">
                             <CustomHashLoader showLoading={state.showLoading} size={150} />
                         </div>
                     )}
-
-                    {/* Error indicator */}
                     {state.error && (
                         <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
                             <ErrorMessage message={state.error} />
                         </div>
                     )}
-
                     {state.pageState !== PageState.Idle && (
                         <div id="list-of-setlists-container" className="mt-[3rem] flex gap-4">
-                            {/* List of setlists */}
                             {state.searchComplete && !state.animLoading && (
                                 <div
                                     id="list-of-setlists"
@@ -82,8 +79,6 @@ export default function SetlistSearch(): JSX.Element {
                                     />
                                 </div>
                             )}
-
-                            {/* Setlist display */}
                             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                                 state.pageState === PageState.Setlist) && (
                                 <div id="setlist-display" className={`w-full animate-fadeIn`}>
@@ -98,8 +93,6 @@ export default function SetlistSearch(): JSX.Element {
                     )}
                 </div>
             </Layout>
-
-            {/* Spotify Authorisation Dialog */}
             {state.showAuthDialog && (
                 <SpotifyAuthDialog
                     onClose={(): void => {
@@ -110,8 +103,6 @@ export default function SetlistSearch(): JSX.Element {
                     }}
                 />
             )}
-
-            {/* Export Dialog */}
             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                 state.pageState === PageState.Setlist) && (
                 <ExportDialog

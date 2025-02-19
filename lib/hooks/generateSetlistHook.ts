@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 export default function generateSetlistHook() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
-    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted.
+    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
     const [state, setState] = useState({
         allSetlistsData: [] as Record<string, any>, // Stores all fetched setlists
         animLoading: true, // Controls when to begin loading animation visibility

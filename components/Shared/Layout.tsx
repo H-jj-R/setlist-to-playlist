@@ -23,6 +23,7 @@ interface LayoutProps {
  * Provides a consistent layout structure for all pages, including a header bar and dynamic content.
  *
  * @param LayoutProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `Layout` component.
  */
 const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {

@@ -23,6 +23,7 @@ interface SupportEmailTemplateProps {
  * Generates a HTML email template for support requests or feedback.
  *
  * @param SupportEmailTemplateProps - Component props.
+ *
  * @returns {JSX.Element} The rendered email template.
  */
 const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }): JSX.Element => {

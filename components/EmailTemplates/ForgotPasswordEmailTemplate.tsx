@@ -22,6 +22,7 @@ interface ForgotPasswordEmailTemplateProps {
  * It displays a one-time password (OTP) that users can use to verify their identity.
  *
  * @param ForgotPasswordEmailTemplateProps - Component props.
+ *
  * @returns {JSX.Element} The rendered email template.
  */
 const ForgotPasswordEmailTemplate: React.FC<Readonly<ForgotPasswordEmailTemplateProps>> = ({ otp }): JSX.Element => {

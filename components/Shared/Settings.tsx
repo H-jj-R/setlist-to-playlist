@@ -29,6 +29,7 @@ interface SettingsProps {
  * Settings are saved in `localStorage` for persistence.
  *
  * @param SettingsProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `Settings` component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {

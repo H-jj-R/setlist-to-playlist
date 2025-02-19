@@ -24,6 +24,7 @@ interface ConfirmationModalProps {
  * Displays a modal to get confirmation from the user before proceeding with an action.
  *
  * @param ConfirmationModalProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `ConfirmationModal` component.
  */
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }): JSX.Element => {

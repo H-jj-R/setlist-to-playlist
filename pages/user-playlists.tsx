@@ -15,32 +15,42 @@ import { useTranslation } from "react-i18next";
 
 /**
  * Main page for viewing user playlists.
+ *
+ * @returns {JSX.Element} The rendered `/user-playlists` page.
  */
 export default function UserPlaylists(): JSX.Element {
-    const { isAuthenticated } = useAuth();
-    const { resolvedTheme } = useTheme();
-    const { t: i18n } = useTranslation();
-    const [mounted, setMounted] = useState(false);
+    const { isAuthenticated } = useAuth(); // Authentication context
+    const { resolvedTheme } = useTheme(); // Theme setting hook
+    const { t: i18n } = useTranslation(); // Translation hook
+    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
     const [state, setState] = useState({
-        error: null as null | string,
-        loading: false,
-        playlists: [] as Record<string, any>[]
+        error: null as null | string, // Tracks any errors
+        loading: false, // Tracks if the component is loading
+        playlists: [] as Record<string, any>[] // Tracks the user's playlists
     });
 
+    /**
+     * Sets the component as mounted when first rendered.
+     */
     useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
+    /**
+     * Fetches the user's playlists when the component mounts or when authentication status changes.
+     */
     useEffect((): void => {
-        if (isAuthenticated) {
-            fetchPlaylists();
-        }
+        if (isAuthenticated) fetchPlaylists();
     }, [isAuthenticated]);
 
+    /**
+     * Fetches the user's playlists from the database.
+     */
     const fetchPlaylists = async (): Promise<void> => {
         setState((prev) => ({ ...prev, loading: true }));
         try {
+            // Get user playlists from the database
             const response = await fetch("/api/database/get-user-playlists", {
                 headers: {
                     Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
@@ -49,7 +59,6 @@ export default function UserPlaylists(): JSX.Element {
                 method: "POST"
             });
             const data = await response.json();
-
             if (!response.ok) {
                 throw {
                     error: i18n(data.error) || i18n("common:unexpectedError"),
@@ -65,13 +74,12 @@ export default function UserPlaylists(): JSX.Element {
         }
     };
 
-    if (!mounted) return null;
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <Layout>
             <div id="user-playlists-container" className="h-screen overflow-y-scroll">
                 {!isAuthenticated ? (
-                    // Dialog displayed when the user is not authenticated
                     <div id="unauthenticated-dialog" className="mt-8 flex items-center justify-center">
                         <div
                             id="auth-required-message"

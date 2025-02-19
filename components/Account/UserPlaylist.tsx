@@ -32,6 +32,7 @@ interface UserPlaylistProps {
  * Displays a user-created playlist's full details and contents.
  *
  * @param UserPlaylistProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `UserPlaylist` component.
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.Element => {

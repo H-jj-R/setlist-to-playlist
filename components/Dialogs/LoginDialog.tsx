@@ -29,6 +29,7 @@ interface LoginDialogProps {
  * Dialog which holds the LoginForm component.
  *
  * @param LoginDialogProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `LoginDialog` component.
  */
 const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {

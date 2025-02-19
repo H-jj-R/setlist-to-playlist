@@ -28,6 +28,7 @@ interface ListOfSetlistsProps {
  * Displays a list of setlists for a given Spotify artist.
  *
  * @param ListOfSetlistsProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `ListOfSetlists` component.
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }): JSX.Element => {

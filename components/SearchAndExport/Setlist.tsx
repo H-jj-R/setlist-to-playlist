@@ -29,6 +29,7 @@ interface SetlistProps {
  * Displays a setlist and it's details from it's setlist.fm data.
  *
  * @param SetlistProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `Setlist` component.
  */
 const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.Element => {

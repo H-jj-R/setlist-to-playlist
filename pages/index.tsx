@@ -12,15 +12,20 @@ import { useEffect, useState } from "react";
 
 /**
  * The landing page of the site.
+ *
+ * @returns {JSX.Element} The rendered index page.
  */
 export default function Home(): JSX.Element {
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
 
+    /**
+     * Sets the component as mounted when first rendered.
+     */
     useEffect((): void => {
         setMounted(true);
     }, []);
 
-    if (!mounted) return null;
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <div id="index-container" className="flex min-h-screen flex-col">

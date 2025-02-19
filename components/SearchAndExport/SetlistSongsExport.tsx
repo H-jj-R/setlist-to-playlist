@@ -30,6 +30,7 @@ interface SetlistSongsExportProps {
  * This component fetches and displays songs from a setlist as they will appear in an exported Spotify playlist.
  *
  * @param SetlistSongsExportProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `SetlistSongsExport` component.
  */
 const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({

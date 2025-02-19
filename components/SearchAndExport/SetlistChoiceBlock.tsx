@@ -27,6 +27,7 @@ interface SetlistChoiceBlockProps {
  * Displays information about a setlist, including event date, artist, location, and song count.
  *
  * @param SetlistChoiceBlockProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `SetlistChoiceBlock` component.
  */
 const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }): JSX.Element => {

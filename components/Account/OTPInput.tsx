@@ -22,6 +22,7 @@ interface OTPInputProps {
  * Allows user to enter a 6-digit verification code.
  *
  * @param OTPInputProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `OTPInput` component.
  */
 const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {

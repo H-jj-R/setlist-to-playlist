@@ -47,6 +47,7 @@ type DecodedToken = {
  * Overlay showing the user options related to their account.
  *
  * @param AccountSidebarProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `AccountSidebar` component.
  */
 const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }): JSX.Element => {

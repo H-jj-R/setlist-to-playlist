@@ -16,19 +16,22 @@ import generateSetlistHook from "@hooks/generateSetlistHook";
 import { useTranslation } from "react-i18next";
 
 /**
- * Main page for viewing setlists.
+ * Main page for AI generating, then viewing predicted setlists.
+ *
+ * @returns {JSX.Element} The rendered `/ai-generate-setlist` page.
  */
 export default function AIGenerateSetlist(): JSX.Element {
-    const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = generateSetlistHook();
-    const { isAuthenticated } = useAuth();
-    const { t: i18n } = useTranslation();
+    const { isAuthenticated } = useAuth(); // Authentication context
+    const { t: i18n } = useTranslation(); // Translation hook
 
-    if (!mounted) return null;
+    // Hook initialiser to manage AI generate setlist page actions and state
+    const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = generateSetlistHook();
+
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <Layout>
             {!isAuthenticated ? (
-                // Dialog displayed when the user is not authenticated
                 <div id="unauthenticated-dialog" className="flex items-center justify-center">
                     <div
                         id="auth-required-message"
@@ -43,9 +46,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                     </div>
                 </div>
             ) : (
-                // Main content when the user is authenticated
                 <>
-                    {/* Search bar */}
                     <div id="search-bar-container" className="overflow-hidden p-5">
                         <div
                             id="search-bar"
@@ -59,8 +60,6 @@ export default function AIGenerateSetlist(): JSX.Element {
                                 onSearch={handleSearch}
                             />
                         </div>
-
-                        {/* Loading indicator */}
                         {state.showLoading && !state.animLoading && (
                             <div id="progress-indicator" className="mt-16 flex flex-col items-center pt-8">
                                 <p id="progress-text" className="mb-2 text-lg font-medium text-gray-700">
@@ -80,18 +79,11 @@ export default function AIGenerateSetlist(): JSX.Element {
                                 </div>
                             </div>
                         )}
-
-                        {state.pageState === PageState.Idle && (
-                            <>
-                                {/* Error indicator */}
-                                {state.error && (
-                                    <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
-                                        <ErrorMessage message={state.error} />
-                                    </div>
-                                )}
-                            </>
+                        {state.pageState === PageState.Idle && state.error && (
+                            <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
+                                <ErrorMessage message={state.error} />
+                            </div>
                         )}
-
                         {state.pageState === PageState.Setlist && (
                             <>
                                 <div id="setlist-actions-container" className="overflow-hidden pt-5">
@@ -125,8 +117,6 @@ export default function AIGenerateSetlist(): JSX.Element {
                             </>
                         )}
                     </div>
-
-                    {/* Spotify Authorisation Dialog */}
                     {state.showAuthDialog && (
                         <SpotifyAuthDialog
                             onClose={(): void => {
@@ -137,8 +127,6 @@ export default function AIGenerateSetlist(): JSX.Element {
                             }}
                         />
                     )}
-
-                    {/* Export Dialog */}
                     {state.pageState === PageState.Setlist && (
                         <ExportDialog
                             artistData={{

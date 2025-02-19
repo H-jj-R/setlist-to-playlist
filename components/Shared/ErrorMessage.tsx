@@ -24,6 +24,7 @@ interface ErrorMessageProps {
  * Displays an error message with a warning icon.
  *
  * @param ErrorMessageProps - The component props.
+ *
  * @returns {JSX.Element} The rendered `ErrorMessage` component.
  */
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }): JSX.Element => {

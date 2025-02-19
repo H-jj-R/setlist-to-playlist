@@ -27,6 +27,7 @@ interface AISetlistProps {
  * Displays a setlist from it's predicted AI-generated details.
  *
  * @param AISetlistProps - Component props.
+ *
  * @returns {JSX.Element} The rendered `AISetlist` component.
  */
 const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }): JSX.Element => {

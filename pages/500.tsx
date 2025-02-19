@@ -10,9 +10,12 @@ import { useTranslation } from "react-i18next";
 /**
  * Renders a custom 500 error page.
  * It displays a friendly error message for server-side issues.
+ *
+ * @returns {JSX.Element} The rendered custom 500 page.
  */
 export default function Custom500(): JSX.Element {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
+
     return (
         <Layout>
             <div id="500-page-container" className="flex h-1/3 flex-col items-center justify-center text-center">
