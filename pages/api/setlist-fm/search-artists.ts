@@ -9,6 +9,9 @@ import { setTimeout } from "timers/promises";
 
 /**
  * API handler to search for an artist by name.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { artistName, page } = req.query;
@@ -52,31 +55,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await fetchArtist();
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
-            return res.status(response.status).json({
-                error: "setlistSearch:setlistFmSearchArtistError"
-            });
+            return res.status(response.status).json({ error: "setlistSearch:setlistFmSearchArtistError" });
         }
 
         // Find an artist matching the exact name
         const artist = (await response.json()).artist?.find(
-            (artist) => artist.name.toLowerCase() === artistName.toString().toLowerCase()
+            (artist): boolean => artist.name.toLowerCase() === artistName.toString().toLowerCase()
         );
 
         // Return a 404 if no artist is found
-        if (!artist) {
-            return res.status(404).json({
-                error: "setlistSearch:setlistFmSearchArtistError"
-            });
-        }
+        if (!artist) return res.status(404).json({ error: "setlistSearch:setlistFmSearchArtistError" });
 
         res.status(200).json(artist);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

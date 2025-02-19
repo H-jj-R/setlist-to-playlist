@@ -8,7 +8,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API route to initiate the Spotify OAuth flow.
+ *
  * Redirects the user to Spotify's authorisation page.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const { redirect } = req.query;

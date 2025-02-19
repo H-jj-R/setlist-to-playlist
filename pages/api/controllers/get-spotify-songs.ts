@@ -9,17 +9,25 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to get a set of songs from Spotify.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { artist, isPredicted } = req.query;
     const { setlist } = req.body;
-    const baseUrl = getBaseUrl(req);
+    const baseUrl = getBaseUrl(req); // Get base URL for API requests
 
-    if (!setlist) {
-        return res.status(400).json({ error: "exportSetlist:noSetlistProvided" });
-    }
+    // Ensure setlist has been provided
+    if (!setlist) return res.status(400).json({ error: "exportSetlist:noSetlistProvided" });
 
-    const fetchSongDetails = async (song: any) => {
+    /**
+     * Fetch Spotify details for a song.
+     * @param {Record<string, any>} song - The song to fetch details for.
+     * @returns {Promise<null | Record<string, any>>} The Spotify details for the song.
+     */
+    const fetchSongDetails = async (song: Record<string, any>): Promise<null | Record<string, any>> => {
+        // Construct main artist search URL
         const mainArtistSearchUrl = `${baseUrl}/api/spotify/search-track?${new URLSearchParams({
             artist: artist as string,
             track: song.name
@@ -32,7 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ? song.artist
                     : null
                 : song.cover?.name || null;
-
         const coverArtistSearchUrl = coverArtist
             ? `${baseUrl}/api/spotify/search-track?${new URLSearchParams({
                   artist: coverArtist,
@@ -40,13 +47,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               }).toString()}`
             : null;
 
-        // Attempt to fetch details for the main artist first
-        const fetchTrack = async (url: string) => {
+        /**
+         * Fetch a track from the Spotify API.
+         * @param {string} url - The URL to fetch the track from.
+         * @returns {Promise<null | Record<string, any>>} The fetched track.
+         */
+        const fetchTrack = async (url: string): Promise<null | Record<string, any>> => {
             try {
                 const response = await fetch(url, {
-                    headers: {
-                        cookie: req.headers.cookie || "" // Forward client cookies for access token
-                    }
+                    headers: { cookie: req.headers.cookie || "" } // Forward client cookies for access token
                 });
                 if (!response.ok) {
                     console.error(`${response.status} - ${url}`);
@@ -58,17 +67,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return null;
             }
         };
+
+        // Attempt to fetch details for the main artist first
         let trackDetails = await fetchTrack(mainArtistSearchUrl);
 
         // If no match for the main artist, try the cover artist
-        if (!trackDetails?.name && coverArtistSearchUrl) {
-            trackDetails = await fetchTrack(coverArtistSearchUrl);
-        }
+        if (!trackDetails?.name && coverArtistSearchUrl) trackDetails = await fetchTrack(coverArtistSearchUrl);
 
-        return trackDetails || { error: `No match found for ${song.name}` };
+        return trackDetails || null;
     };
 
     try {
+        // Asynchronously fetch Spotify details for each song in the setlist
         const spotifyDetails = await Promise.all(
             (isPredicted === "true"
                 ? setlist.predictedSongs

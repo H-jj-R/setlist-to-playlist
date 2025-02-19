@@ -5,7 +5,7 @@ const perfectionist = require("eslint-plugin-perfectionist");
 module.exports = [
     {
         files: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js", "**/*.json"],
-        ignores: [".next/**", "node_modules/**", "testing/reports/**"],
+        ignores: [".next/**", "node_modules/**", "testing/reports/**", "package-lock.json", "package.json"],
         languageOptions: {
             parser: tsParser
         },

@@ -9,31 +9,27 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to export a chosen setlist to a Spotify playlist, with customisation.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { description, image, isLoggedIn, name, tracks } = req.body;
     try {
-        let issue;
-        const baseUrl = getBaseUrl(req);
+        let issue: string; // Issue message to return to client (if playlist creation is successful but there is a separate non-critical issue)
+        const baseUrl = getBaseUrl(req); // Get base URL for API requests
 
-        // 1. Get user data
+        // Step 1. Get Spotify user data
         const userDataResponse = await fetch(`${baseUrl}/api/spotify/get-user-data`, {
-            headers: {
-                cookie: req.headers.cookie || "" // Forward client cookies for access token
-            }
+            headers: { cookie: req.headers.cookie || "" } // Forward client cookies for access token
         });
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!userDataResponse.ok) {
             const errorResponse = await userDataResponse.json();
-            return res.status(userDataResponse.status).json({
-                error: errorResponse.error
-            });
+            return res.status(userDataResponse.status).json({ error: errorResponse.error });
         }
-
         const userData = await userDataResponse.json();
 
-        // 2. Create playlist
+        // Step 2. Create new, empty Spotify playlist
         const createPlaylistResponse = await fetch(`${baseUrl}/api/spotify/create-playlist`, {
             body: JSON.stringify({
                 description: description,
@@ -46,18 +42,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             method: "POST"
         });
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!createPlaylistResponse.ok) {
             const errorResponse = await createPlaylistResponse.json();
             return res.status(createPlaylistResponse.status).json({
                 error: errorResponse.error
             });
         }
-
         const playlistData = await createPlaylistResponse.json();
 
-        // 3. Add songs to playlist
+        // Step 3. Add all songs to Spotify playlist
         const addItemsResponse = await fetch(`${baseUrl}/api/spotify/add-items-to-playlist`, {
             body: JSON.stringify({
                 playlistId: playlistData.data.id,
@@ -69,16 +62,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             method: "POST"
         });
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!addItemsResponse.ok) {
             const errorResponse = await addItemsResponse.json();
-            return res.status(addItemsResponse.status).json({
-                error: errorResponse.error
-            });
+            return res.status(addItemsResponse.status).json({ error: errorResponse.error });
         }
 
-        // 4. Add cover image (if provided)
+        // Step 4. Add cover image to Spotify playlist (if provided)
         if (image) {
             const addCoverImageResponse = await fetch(`${baseUrl}/api/spotify/custom-playlist-image`, {
                 body: JSON.stringify({
@@ -91,15 +80,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 },
                 method: "POST"
             });
-
-            // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
             if (!addCoverImageResponse.ok) {
                 const errorResponse = await addCoverImageResponse.json();
-                issue += errorResponse.error;
+                issue += errorResponse.error; // Append issue to existing issues
             }
         }
 
-        // 5. Save playlist to user's account (if logged in)
+        // Step 5. Save Spotify playlist to user's account (if logged in)
         if (isLoggedIn) {
             const token = req.headers.authorization?.split(" ")[1];
             const savePlaylistResponse = await fetch(
@@ -112,18 +99,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     method: "POST"
                 }
             );
-
-            // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
             if (!savePlaylistResponse.ok) {
                 const errorResponse = await savePlaylistResponse.json();
-                issue += errorResponse.error;
+                issue += errorResponse.error; // Append issue to existing issues
             }
         }
 
         res.status(200).json({ issue: issue, success: true });
     } catch (error) {
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        console.error(error);
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

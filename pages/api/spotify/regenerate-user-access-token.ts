@@ -10,7 +10,10 @@ import CryptoJS from "crypto-js";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
- * Refreshes the Spotify access token using the provided refresh token.
+ * API handler to refresh the Spotify access token using the provided refresh token.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -18,11 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const encryptedRefreshToken = cookies.spotify_user_refresh_token;
 
         // If no refresh token is found in the cookies, respond with an error
-        if (!encryptedRefreshToken) {
-            return res.status(401).json({
-                error: "common:spotifyAccessTokenError"
-            });
-        }
+        if (!encryptedRefreshToken) return res.status(401).json({ error: "common:spotifyAccessTokenError" });
 
         const response = await fetch("https://accounts.spotify.com/api/token", {
             body: new URLSearchParams({
@@ -34,13 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             method: "POST"
         });
-
-        if (!response.ok) {
-            return res.status(response.status).json({
-                error: "common:spotifyGenerateAccessTokenError"
-            });
-        }
-
+        if (!response.ok) return res.status(response.status).json({ error: "common:spotifyGenerateAccessTokenError" });
         const data = await response.json();
 
         // Set the new access token cookie
@@ -58,10 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             )
         );
 
-        // Extract the original redirect path and optional query parameter from the request
-
         if (req.query.redirect) {
-            // If a redirect path is provided, redirect back to that path with the query parameter
+            // If a redirect path is provided, redirect back to that path
             res.redirect(307, req.query.redirect as string);
         } else {
             // If no redirect path is provided, respond with a success message
@@ -69,8 +60,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

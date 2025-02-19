@@ -13,6 +13,9 @@ import { NextApiRequest, NextApiResponse } from "next";
  *
  * This handler fetches a client credentials token from Spotify, encrypts it,
  * and stores it in a secure cookie. Optionally, it redirects back to a given path if provided.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -22,18 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 client_secret: process.env.SPOTIFY_API_C_SECRET!,
                 grant_type: "client_credentials"
             }),
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             method: "POST"
         });
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
-        if (!response.ok) {
-            return res.status(response.status).json({
-                error: "common:spotifyGenerateAccessTokenError"
-            });
-        }
+        if (!response.ok) return res.status(response.status).json({ error: "common:spotifyGenerateAccessTokenError" });
 
         // Extract the access token and expiration time from the response
         const { access_token, expires_in } = await response.json();
@@ -64,8 +59,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

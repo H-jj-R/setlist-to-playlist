@@ -9,9 +9,14 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 
+/**
+ * Flag to manually enable/disable the OpenAI API.
+ */
 const ISACTIVE = true;
 
-// Define the schema for the predicted setlists
+/**
+ *  Defines the schema for the 3 predicted setlists response from the API.
+ */
 const PredictedSetlistSchema = z.object({
     predictedSetlists: z.object({
         setlist1: z.object({
@@ -44,12 +49,15 @@ const PredictedSetlistSchema = z.object({
     })
 });
 
+/**
+ * API handler to generate a setlist prediction based on past setlists.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (!ISACTIVE) {
-        res.status(500).json({
-            error: "generateSetlist:openaiDisabled"
-        });
-    }
+    // Immediately stop the request if the OpenAI API has been  manually disabled
+    if (!ISACTIVE) res.status(500).json({ error: "generateSetlist:openaiDisabled" });
 
     try {
         // Filter and format the past setlists for input
@@ -60,10 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .map((setlist: any) => {
                 const artistName = setlist.artist.name;
                 const eventDate = setlist.eventDate;
-
                 // Flatten the song list from all sets
                 const songs = setlist.sets.set.flatMap((set: any) =>
-                    set.song.map((song: any) => {
+                    set.song.map((song: any): string => {
                         // Check if the song has a cover and append it to the name
                         return `${song.name}${song.cover ? ` (${song.cover.name} cover)` : ""}${
                             song.tape ? " (Played on tape)" : ""
@@ -71,13 +78,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     })
                 );
 
-                return {
-                    artistName,
-                    eventDate,
-                    songs
-                };
+                return { artistName, eventDate, songs };
             })
-            .map((setlist) => {
+            .map((setlist): string => {
                 return `Setlist for ${setlist.artistName} on ${setlist.eventDate}: ${setlist.songs.join(", ")}`;
             })
             .join("\n");
@@ -115,11 +118,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Parse the structured response
         const predictedSetlists = completion.choices.map((choice) => choice.message.parsed)[0];
+        
         res.status(200).json(predictedSetlists);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "generateSetlist:predictSetlistFailed"
-        });
+        res.status(500).json({ error: "generateSetlist:predictSetlistFailed" });
     }
 }

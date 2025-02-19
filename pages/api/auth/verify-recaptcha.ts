@@ -8,19 +8,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to verify a reCAPTCHA token.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // Check if the request method is POST
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "common:methodNotAllowed", success: false });
-    }
+    // Ensure the request method is POST
+    if (req.method !== "POST") return res.status(405).json({ error: "common:methodNotAllowed", success: false });
 
     const { token } = req.body;
 
-    // Check if the reCAPTCHA token is provided in the request body
-    if (!token) {
-        return res.status(400).json({ error: "account:missingRecaptchaToken", success: false });
-    }
+    // Ensure the reCAPTCHA token is provided in the request body
+    if (!token) return res.status(400).json({ error: "account:missingRecaptchaToken", success: false });
 
     try {
         // Send a request to Google's reCAPTCHA verification endpoint
@@ -32,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             method: "POST"
         });
-
         const data = await response.json();
 
         // Check if the reCAPTCHA verification was successful
