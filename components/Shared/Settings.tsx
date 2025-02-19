@@ -13,17 +13,31 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `Settings` component.
+ *
+ * @property {Function} onClose - Function to close the settings overlay.
+ */
 interface SettingsProps {
-    onClose: () => void; // Close handler
+    onClose: () => void;
 }
 
 /**
- * The settings overlay component.
+ * **Settings Component**
+ *
+ * A slide-in overlay for managing global site settings.
+ * Settings are saved in `localStorage` for persistence.
+ *
+ * @param SettingsProps - The component props.
+ *
+ * @returns {JSX.Element} The rendered `Settings` component.
  */
 const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
-    const { resolvedTheme, setTheme, theme } = useTheme();
-    const { t: i18n } = useTranslation();
-    const [isVisible, setIsVisible] = useState(false);
+    const { resolvedTheme, setTheme, theme } = useTheme(); // Theme setting hook
+    const { t: i18n } = useTranslation(); // Translation hook
+    const [isVisible, setIsVisible] = useState(false); // State to manage visibility of the settings panel
+
+    // States to store site settings, initialised from localStorage
     const [settings, setSettings] = useState(() => ({
         countryFilter: (localStorage?.getItem(SettingsKeys.CountryFilter) as string) ?? "",
         excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
@@ -33,36 +47,50 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
         hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true"
     }));
 
-    const handleSettingChange = useCallback(
-        (key: keyof typeof settings) =>
-            (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-                let value: boolean | string;
-                if (event.target instanceof HTMLInputElement && event.target.type === "checkbox") {
-                    value = event.target.checked;
-                } else {
-                    value = (event.target as HTMLSelectElement).value;
-                }
-                setSettings((prev) => ({ ...prev, [key]: value }));
-                localStorage?.setItem(key, value.toString());
-                window.dispatchEvent(new StorageEvent(key));
-            },
-        []
-    );
-
+    /**
+     * Component pre-initialisation.
+     */
     useEffect(() => {
         // Trigger the slide-in and dimming animation after mounting
         setIsVisible(true);
     }, []);
 
+    /**
+     * Effect to focus the settings panel when it becomes visible, for accessibility.
+     */
     useEffect(() => {
         if (isVisible) {
             document.getElementById("settings-panel")?.focus();
         }
     }, [isVisible]);
 
+    /**
+     * Handles changes to settings - updates state and localStorage, then dispatches a StorageEvent.
+     *
+     * @param {keyof typeof settings} key - The setting key to update.
+     */
+    const handleSettingChange = useCallback(
+        (key: keyof typeof settings) =>
+            (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+                let value: boolean | string;
+
+                // Determine value type based on input element type
+                if (event.target instanceof HTMLInputElement && event.target.type === "checkbox") {
+                    value = event.target.checked;
+                } else {
+                    value = (event.target as HTMLSelectElement).value;
+                }
+                setSettings((prev) => ({ ...prev, [key]: value }));
+
+                // Save to localStorage and trigger an event for state update
+                localStorage?.setItem(key, value.toString());
+                window.dispatchEvent(new StorageEvent(key));
+            },
+        []
+    );
+
     return (
         <div id="settings-sidebar" className="fixed inset-0 z-50 flex justify-end">
-            {/* Background overlay with opacity animation */}
             <div
                 id="background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
@@ -71,10 +99,9 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                 onClick={(): void => {
                     // Trigger the slide-out and undimming animation before unmounting
                     setIsVisible(false);
-                    setTimeout(onClose, 300); // Match the animation duration
+                    setTimeout(onClose, 300);
                 }}
             />
-            {/* Settings panel */}
             <div
                 id="settings-panel"
                 className={`h-full w-2/5 max-w-md transform p-4 shadow-lg transition-transform duration-300 ease-in-out ${
@@ -91,13 +118,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
-                            setTimeout(onClose, 300); // Match the animation duration
+                            setTimeout(onClose, 300);
                         }}
                     >
                         <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
                 </div>
-                {/* Theme Setting */}
                 <div id="theme-setting" className="mb-4">
                     <h3 id="theme-title" className="text-lg font-medium">
                         {i18n("settings:themeTitle")}
@@ -127,7 +153,6 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         </select>
                     </label>
                 </div>
-                {/* Setlists Settings */}
                 <div id="setlists-settings" className="mb-4">
                     <h3 id="setlists-title" className="text-lg font-medium">
                         {i18n("settings:setlistsTitle")}
@@ -168,7 +193,6 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         <span id="filter-by-country-span">{i18n("settings:filterByCountry")}</span>
                     </label>
                 </div>
-                {/* Export Settings */}
                 <div id="export-settings" className="mb-4">
                     <h3 id="export-title" className="text-lg font-medium">
                         {i18n("common:export")}
@@ -214,7 +238,6 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         <span id="exclude-played-on-tape-span">{i18n("settings:excludePlayedOnTape")}</span>
                     </label>
                 </div>
-                {/* About + Support Link */}
                 <div
                     id="about-support-link-container"
                     className="absolute bottom-16 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"
@@ -227,7 +250,6 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                         {i18n("about:aboutSupport")}
                     </Link>
                 </div>
-                {/* Privacy Policy Link */}
                 <div
                     id="privacy-policy-link-container"
                     className="absolute bottom-6 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center text-lg"

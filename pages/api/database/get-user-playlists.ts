@@ -10,16 +10,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to fetch user playlists with track details.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "common:methodNotAllowed" });
-    }
+    // Ensure the request method is POST
+    if (req.method !== "POST") return res.status(405).json({ error: "common:methodNotAllowed" });
 
+    // Extract the token from the Authorization header and verify it exists
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-        return res.status(401).json({ error: "common:authorisationError" });
-    }
+    if (!token) return res.status(401).json({ error: "common:authorisationError" });
 
     try {
         // Verify and decode the JWT token
@@ -43,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Fetch tracks for each playlist
         const playlistsWithTracks = await Promise.all(
-            (playlists as any[]).map(async (playlist) => {
+            (playlists as any[]).map(async (playlist): Promise<any> => {
                 const [tracks] = await db.execute(
                     `
                     SELECT 
@@ -56,10 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     [playlist.playlistId]
                 );
 
-                return {
-                    ...playlist,
-                    tracks
-                };
+                return { ...playlist, tracks };
             })
         );
 

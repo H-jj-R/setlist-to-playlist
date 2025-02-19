@@ -9,27 +9,40 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * Hook for data handling on the user-playlist page.
+ * **useSetlistSongsExportHook**
+ *
+ * Custom hook for handling data and state management in the `SetlistSongsExport` component.
+ *
+ * @param {Record<string, any>} artistData - The artist data object.
+ * @param {Function} onSongsFetched - Callback to handle fetched songs.
+ * @param {Record<string, any>} setlist - The setlist data object.
+ * @param {boolean} [predictedSetlist] - Optional flag indicating if the setlist is predicted.
+ *
+ * @returns Hook state and handlers.
  */
-export default function setlistSongsExportHook(
+export default function useSetlistSongsExportHook(
     artistData: Record<string, any>,
     onSongsFetched: (songs: Record<string, any>[]) => void,
     setlist: Record<string, any>,
     predictedSetlist?: boolean
 ) {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
-        error: null as null | string,
-        excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true",
-        excludedSongs: new Set() as Set<string>,
-        excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true",
-        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true",
-        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true",
-        loading: false,
-        spotifySongs: null as null | Record<string, any>[]
+        error: null as null | string, // Stores error messages
+        excludeCovers: localStorage?.getItem(SettingsKeys.ExcludeCovers) === "true", // Exclude cover songs setting
+        excludedSongs: new Set() as Set<string>, // Tracks excluded songs
+        excludeDuplicateSongs: localStorage?.getItem(SettingsKeys.ExcludeDuplicateSongs) === "true", // Exclude duplicate songs setting
+        excludePlayedOnTape: localStorage?.getItem(SettingsKeys.ExcludePlayedOnTape) === "true", // Exclude songs played on tape setting
+        hideSongsNotFound: localStorage?.getItem(SettingsKeys.HideSongsNotFound) === "true", // Hide songs not found setting
+        loading: false, // Tracks loading state
+        spotifySongs: null as null | Record<string, any>[] // Stores fetched Spotify songs
     });
 
+    /**
+     * Effect hook to listen for changes in local storage and update settings accordingly.
+     */
     useEffect((): (() => void) => {
+        // Settings keys to listen for
         const settingsKeys: SettingsKeys[] = [
             SettingsKeys.HideSongsNotFound,
             SettingsKeys.ExcludeCovers,
@@ -39,20 +52,28 @@ export default function setlistSongsExportHook(
         const handleSettingChange = (key: string): void => {
             setState((prev) => ({ ...prev, [key]: localStorage?.getItem(key) === "true" }));
         };
+
+        // Add event listeners for each settings key
         settingsKeys.forEach((key): void => {
             window.addEventListener(key, () => handleSettingChange(key));
         });
+
+        // Cleanup all listeners when the component unmounts
         return (): void => {
             settingsKeys.forEach((key): void => {
-                window.removeEventListener(key, () => handleSettingChange(key));
+                window.removeEventListener(key, (): void => handleSettingChange(key));
             });
         };
     }, []);
 
+    /**
+     * Effect hook to fetch Spotify songs based on the setlist and artist data.
+     */
     useEffect((): void => {
         (async (): Promise<void> => {
             setState((prev) => ({ ...prev, error: null, loading: true }));
             try {
+                // Make an API request to fetch Spotify songs
                 const response = await fetch(
                     `/api/controllers/get-spotify-songs?${new URLSearchParams({
                         artist: artistData.spotifyArtist.name,
@@ -73,8 +94,10 @@ export default function setlistSongsExportHook(
                 }
                 setState((prev) => ({ ...prev, spotifySongs: responseJson }));
 
-                // Songs to exclude automatically based on settings
+                // Initialise array to store songs that need to be excluded based on settings
                 const excludedSongs: { idx: number; songId: string }[] = [];
+
+                // Exclude cover songs
                 if (state.excludeCovers) {
                     responseJson.forEach((song: Record<string, any>, idx: number): void => {
                         if (song.artists?.[0]?.name !== artistData.spotifyArtist.name) {
@@ -82,6 +105,8 @@ export default function setlistSongsExportHook(
                         }
                     });
                 }
+
+                // Exclude duplicate songs
                 if (state.excludeDuplicateSongs) {
                     const duplicateSongs = new Set();
                     responseJson.forEach((song: Record<string, any>, idx: number): void => {
@@ -92,12 +117,14 @@ export default function setlistSongsExportHook(
                         }
                     });
                 }
+
+                // Exclude songs that were played on tape
                 if (state.excludePlayedOnTape) {
                     setlist.sets.set
                         .flatMap((set: Record<string, any>) =>
                             set.song.filter((song: Record<string, any>) => song.name)
                         )
-                        .forEach((song: Record<string, any>, idx: number) => {
+                        .forEach((song: Record<string, any>, idx: number): void => {
                             if (song.tape) {
                                 if (responseJson[idx]) {
                                     excludedSongs.push({ idx: idx, songId: responseJson[idx].id });
@@ -106,7 +133,7 @@ export default function setlistSongsExportHook(
                         });
                 }
 
-                // Exclude each song only once
+                // Ensure that each song is excluded only once
                 const processedSongs = new Set<string>();
                 excludedSongs.forEach(({ idx, songId }): void => {
                     const uniqueKey = `${songId}-${idx}`;
@@ -123,6 +150,9 @@ export default function setlistSongsExportHook(
         })();
     }, [setlist, artistData.spotifyArtist.name]);
 
+    /**
+     * Effect hook to update the fetched songs when the Spotify songs or excluded songs state changes.
+     */
     useEffect((): void => {
         if (state.spotifySongs) {
             onSongsFetched(
@@ -133,13 +163,21 @@ export default function setlistSongsExportHook(
         }
     }, [state.spotifySongs, state.excludedSongs]);
 
+    /**
+     * Toggles the exclusion of a song by its ID and index.
+     *
+     * @param {string} songId The ID of the song to toggle.
+     * @param {number} songIdx The index of the song to toggle.
+     */
     const toggleExcludeSong = useCallback((songId: string, songIdx: number): void => {
         setState((prev) => ({
             ...prev,
             excludedSongs: ((): Set<string> => {
+                // Create a new Set based on the previous excluded songs
                 const newExcludedSongs = new Set(prev.excludedSongs);
                 const songKey = `${songId}-${songIdx}`;
 
+                // Toggle the song's exclusion status
                 if (newExcludedSongs.has(songKey)) {
                     newExcludedSongs.delete(songKey);
                 } else {

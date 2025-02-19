@@ -6,10 +6,14 @@
 import { useTranslation } from "react-i18next";
 
 /**
- * Info section under hero section on landing page.
+ * **AccountInfoSection Component**
+ *
+ * Displays information on why to create an account.
+ *
+ * @returns {JSX.Element} The rendered `AccountInfoSection` component.
  */
-const InfoSection: React.FC = (): JSX.Element => {
-    const { t: i18n } = useTranslation();
+const AccountInfoSection: React.FC<{}> = (): JSX.Element => {
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div
@@ -54,4 +58,4 @@ const InfoSection: React.FC = (): JSX.Element => {
     );
 };
 
-export default InfoSection;
+export default AccountInfoSection;

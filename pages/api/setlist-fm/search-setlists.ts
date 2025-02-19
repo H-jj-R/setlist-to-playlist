@@ -9,9 +9,14 @@ import { setTimeout } from "timers/promises";
 
 /**
  * API handler to search for a setlist by artist Mbid.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { artistMbid, country, page = 1 } = req.query;
+
+    // Construct the query parameters for the Setlist.fm API
     const queryParams: Record<string, string> = {
         artistMbid: artistMbid as string,
         p: page as string,
@@ -25,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      * @param retries - The current retry attempt number.
      * @returns A Promise resolving to the API response.
      */
-    async function fetchSetlist(retries: number = 0): Promise<Response> {
+    async function fetchSetlists(retries: number = 0): Promise<Response> {
         const response = await fetch(
             `https://api.setlist.fm/rest/1.0/search/setlists?${new URLSearchParams(queryParams).toString()}`,
             {
@@ -46,31 +51,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ? parseInt(retryAfterHeader, 10) // Use Retry-After if provided
                     : 1000 * Math.pow(2, retries)
             );
-            return fetchSetlist(retries + 1); // Recursive call with incremented retry count
+            return fetchSetlists(retries + 1); // Recursive call with incremented retry count
         }
 
         return response;
     }
 
     try {
-        const response = await fetchSetlist();
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
-        if (!response.ok) {
-            return res.status(200).json({});
-        }
-
+        const response = await fetchSetlists();
+        if (!response.ok) return res.status(200).json({});
         const data = await response.json();
 
-        if (!data.setlist || data.setlist.length === 0) {
-            return res.status(200).json({});
-        }
+        // If no setlists are found, return an empty object
+        if (!data.setlist || data.setlist.length === 0) return res.status(200).json({});
 
         res.status(200).json(data);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

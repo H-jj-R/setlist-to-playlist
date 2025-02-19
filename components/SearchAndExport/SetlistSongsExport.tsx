@@ -6,18 +6,32 @@
 
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
-import setlistSongsExportHook from "@hooks/setlistSongsExportHook";
+import useSetlistSongsExportHook from "@hooks/useSetlistSongsExportHook";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `SetlistSongsExport` component.
+ *
+ * @property {Record<string, any>} artistData - The data containing artist details.
+ * @property {Function} onSongsFetched - Callback function triggered once songs are retrieved.
+ * @property {boolean} [predictedSetlist] - Indicates whether the setlist is AI-predicted.
+ * @property {Record<string, any>} setlist - The setlist data containing song details.
+ */
 interface SetlistSongsExportProps {
-    artistData: Record<string, any>; // Artist information
-    onSongsFetched: (songs: Record<string, any>[]) => void; // Callback to pass songs to ExportDialog
-    predictedSetlist?: boolean; // Whether the setlist is predicted
-    setlist: Record<string, any>; // The setlist data
+    artistData: Record<string, any>;
+    onSongsFetched: (songs: Record<string, any>[]) => void;
+    predictedSetlist?: boolean;
+    setlist: Record<string, any>;
 }
 
 /**
- * Displays setlist songs as from Spotify as they will be exported.
+ * **SetlistSongsExport Component**
+ *
+ * This component fetches and displays songs from a setlist as they will appear in an exported Spotify playlist.
+ *
+ * @param SetlistSongsExportProps - The component props.
+ *
+ * @returns {JSX.Element} The rendered `SetlistSongsExport` component.
  */
 const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     artistData,
@@ -25,36 +39,14 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     predictedSetlist,
     setlist
 }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const { state, toggleExcludeSong } = setlistSongsExportHook(artistData, onSongsFetched, setlist, predictedSetlist);
+    const { t: i18n } = useTranslation(); // Translation hook
 
-    const SongListItem = ({ idx, spotifySong }: { idx: number; spotifySong: any }): JSX.Element => (
-        <li
-            id={`song-item-${spotifySong?.id}`}
-            className={`cursor-pointer py-2 ${
-                state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
-            }`}
-            onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
-        >
-            <div id="song-details-container" className="flex items-center space-x-4">
-                {spotifySong?.album?.images[0]?.url && (
-                    <img
-                        id="song-cover-img"
-                        className="h-12 w-12 rounded shadow"
-                        alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
-                        src={spotifySong.album.images[0].url}
-                    />
-                )}
-                <div>
-                    <p id="song-name" className="font-medium">
-                        {spotifySong?.name}
-                    </p>
-                    <p id="song-artist" className="text-sm text-gray-500">
-                        {spotifySong?.artists?.[0]?.name}
-                    </p>
-                </div>
-            </div>
-        </li>
+    // Hook initialiser to manage song data and state
+    const { state, toggleExcludeSong } = useSetlistSongsExportHook(
+        artistData,
+        onSongsFetched,
+        setlist,
+        predictedSetlist
     );
 
     return (
@@ -77,11 +69,33 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         {state.spotifySongs?.map(
                             (spotifySong: Record<string, any>, idx: number): JSX.Element =>
                                 spotifySong?.name ? (
-                                    <SongListItem
-                                        idx={idx}
+                                    <li
+                                        id={`song-item-${spotifySong?.id}`}
+                                        className={`cursor-pointer py-2 ${
+                                            state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
+                                        }`}
                                         key={`${idx}-${spotifySong.name || "unknown"}`}
-                                        spotifySong={spotifySong}
-                                    />
+                                        onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
+                                    >
+                                        <div id="song-details-container" className="flex items-center space-x-4">
+                                            {spotifySong?.album?.images[0]?.url && (
+                                                <img
+                                                    id="song-cover-img"
+                                                    className="h-12 w-12 rounded shadow"
+                                                    alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
+                                                    src={spotifySong.album.images[0].url}
+                                                />
+                                            )}
+                                            <div>
+                                                <p id="song-name" className="font-medium">
+                                                    {spotifySong?.name}
+                                                </p>
+                                                <p id="song-artist" className="text-sm text-gray-500">
+                                                    {spotifySong?.artists?.[0]?.name}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
                                 ) : (
                                     !state.hideSongsNotFound && (
                                         <li

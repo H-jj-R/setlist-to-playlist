@@ -4,6 +4,16 @@
  * See LICENSE for details.
  */
 
+/**
+ * **Country Codes Mapping**
+ *
+ * This object contains the ISO 3166-1 alpha-2 country codes as keys and the corresponding country names as values.
+ * It is used to reference countries by their two-letter codes.
+ *
+ * @example
+ * countryCodes["GB"] => "United Kingdom"
+ * countryCodes["US"] => "United States"
+ */
 const countryCodes = {
     AD: "Andorra",
     AE: "United Arab Emirates",

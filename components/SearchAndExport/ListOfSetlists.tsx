@@ -8,21 +8,36 @@ import SetlistChoiceBlock from "@components/SearchAndExport/SetlistChoiceBlock";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import countryCodes from "@constants/countryCodes";
 import SettingsKeys from "@constants/settingsKeys";
-import listOfSetlistsHook from "@hooks/listOfSetlistsHook";
+import useListOfSetlistsHook from "@hooks/useListOfSetlistsHook";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `ListOfSetlists` component.
+ *
+ * @property {Function} onSetlistChosen - Callback function that is triggered when a user selects a setlist.
+ * @property {Record<string, any>} setlistData - The data containing details about the artist and their setlists.
+ */
 interface ListOfSetlistsProps {
     onSetlistChosen: (setlist: Record<string, any>) => void; // Callback function that handles when a user selects a setlist
     setlistData: Record<string, any>; // The setlist data containing Spotify artist details and associated setlists
 }
 
 /**
- * This component displays a list of setlists for a given Spotify artist.
- * It shows the artist's image, name, and a list of setlists, allowing the user to select one.
+ * **ListOfSetlists Component**
+ *
+ * Displays a list of setlists for a given Spotify artist.
+ *
+ * @param ListOfSetlistsProps - The component props.
+ *
+ * @returns {JSX.Element} The rendered `ListOfSetlists` component.
  */
 const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const { hasMorePages, loadMoreSetlists, state } = listOfSetlistsHook({ ...setlistData });
+    const { t: i18n } = useTranslation(); // Translation hook
+
+    // Hook initialiser to manage setlist state and pagination
+    const { hasMorePages, loadMoreSetlists, state } = useListOfSetlistsHook({ ...setlistData });
+
+    // Retrieve user's selected country filter from local storage
     const countryFilter = localStorage?.getItem(SettingsKeys.CountryFilter) ?? "";
 
     return (

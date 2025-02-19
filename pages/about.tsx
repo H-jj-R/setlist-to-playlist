@@ -14,26 +14,37 @@ import { Trans, useTranslation } from "react-i18next";
 
 /**
  * About page, containing details about the site, and a support/feedback form.
+ *
+ * @returns {JSX.Element} The rendered `/about` page.
  */
 export default function About(): JSX.Element {
-    const { resolvedTheme } = useTheme();
-    const { t: i18n } = useTranslation();
-    const [mounted, setMounted] = useState(false);
+    const { resolvedTheme } = useTheme(); // Theme setting hook
+    const { t: i18n } = useTranslation(); // Translation hook
+    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
     const [state, setState] = useState({
-        formData: { email: "", message: "" },
-        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success },
-        submitted: false
+        formData: { email: "", message: "" }, // Tracks the support/feedback form data
+        messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }, // Tracks the message dialog state
+        submitted: false // Tracks if the form has been submitted
     });
 
+    /**
+     * Maximum length the feedback message can be.
+     */
     const MAX_MESSAGE_LENGTH: number = 1000;
 
+    /**
+     * Sets the component as mounted when first rendered.
+     */
     useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    if (!mounted) return null;
-
+    /**
+     * Handles the form submission for the support/feedback form.
+     *
+     * @param {React.FormEvent} e - The form submission event.
+     */
     const handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         setState((prev) => ({
@@ -44,6 +55,8 @@ export default function About(): JSX.Element {
             const formData = new FormData(e.target as HTMLFormElement);
             const email = formData.get("email") as string;
             const message = formData.get("message") as string;
+
+            // Submit the feedback message to the backend
             const response = await fetch("/api/controllers/submit-feedback", {
                 body: JSON.stringify({ email, message }),
                 headers: { "Content-Type": "application/json" },
@@ -73,6 +86,8 @@ export default function About(): JSX.Element {
             }));
         }
     };
+
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <Layout>
@@ -227,8 +242,6 @@ export default function About(): JSX.Element {
                     </section>
                 </section>
             </div>
-
-            {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog
                     message={state.messageDialog.message}

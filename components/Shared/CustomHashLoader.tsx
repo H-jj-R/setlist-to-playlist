@@ -8,16 +8,28 @@ import { useTranslation } from "next-i18next";
 import { CSSProperties } from "react";
 import HashLoader from "react-spinners/HashLoader";
 
+/**
+ * Props for the `CustomHashLoader` component.
+ *
+ * @property {boolean} showLoading - Determines whether the loader should be displayed.
+ * @property {number} size - The size of the loader.
+ */
 interface CustomHashLoaderProps {
-    showLoading: boolean; // Indicates when the loader should be displayed
-    size: number; // Size of the loader
+    showLoading: boolean;
+    size: number;
 }
 
 /**
- * Custom hash loader.
+ * **CustomHashLoader Component**
+ *
+ * A customised loading spinner using the `HashLoader` from `react-spinners`.
+ *
+ * @param CustomHashLoaderProps - The component props.
+ *
+ * @returns {JSX.Element} The rendered `CustomHashLoader` component.
  */
 const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }): JSX.Element => {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <HashLoader

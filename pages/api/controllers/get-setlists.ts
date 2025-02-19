@@ -12,30 +12,26 @@ import { NextApiRequest, NextApiResponse } from "next";
  *
  * Combines data from Spotify's API and Setlist.fm's API to provide
  * artist details and their performance setlists.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { country, query } = req.query;
     try {
-        const baseUrl = getBaseUrl(req);
+        const baseUrl = getBaseUrl(req); // Get base URL for API requests
 
         // Step 1: Fetch artist details from Spotify
         const spotifyResponse = await fetch(
             `${baseUrl}/api/spotify/search-artist?${new URLSearchParams({ query: query as string }).toString()}`,
             {
-                headers: {
-                    cookie: req.headers.cookie || "" // Forward client cookies for access token
-                }
+                headers: { cookie: req.headers.cookie || "" } // Forward client cookies for access token
             }
         );
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!spotifyResponse.ok) {
             const errorResponse = await spotifyResponse.json();
-            return res.status(spotifyResponse.status).json({
-                error: errorResponse.error
-            });
+            return res.status(spotifyResponse.status).json({ error: errorResponse.error });
         }
-
         const spotifyArtist = await spotifyResponse.json();
 
         // Step 2: Fetch the artist's mbid (MusicBrainz ID) from Setlist.fm
@@ -45,15 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 page: "1"
             }).toString()}`
         );
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistfmArtistResponse.ok) {
             const errorResponse = await setlistfmArtistResponse.json();
-            return res.status(setlistfmArtistResponse.status).json({
-                error: errorResponse.error
-            });
+            return res.status(setlistfmArtistResponse.status).json({ error: errorResponse.error });
         }
-
         const setlistfmArtist = await setlistfmArtistResponse.json();
 
         // Step 3: Fetch setlists by the artist's mbid from Setlist.fm
@@ -63,13 +54,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 country: country as string
             }).toString()}`
         );
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!setlistsResponse.ok) {
             const errorResponse = await setlistsResponse.json();
-            return res.status(setlistsResponse.status).json({
-                error: errorResponse.error
-            });
+            return res.status(setlistsResponse.status).json({ error: errorResponse.error });
         }
 
         // Return a combined response containing full artist details and their setlists
@@ -79,8 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             spotifyArtist
         });
     } catch (error) {
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        console.error(error);
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

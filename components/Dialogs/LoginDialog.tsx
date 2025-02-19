@@ -9,25 +9,38 @@ import MessageDialog from "@components/Dialogs/MessageDialog";
 import MessageDialogState from "@constants/messageDialogState";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import loginDialogHook from "@hooks/loginDialogHook";
+import useLoginDialogHook from "@hooks/useLoginDialogHook";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `LoginDialog` component.
+ *
+ * @property {Function} onClose - Function to handle closing the dialog.
+ * @property {Function} onLoginSuccess - Function to handle actions after successful login.
+ */
 interface LoginDialogProps {
     onClose: () => void;
     onLoginSuccess: () => void;
 }
 
 /**
+ * **LoginDialog Component**
  *
+ * Dialog which holds the LoginForm component.
+ *
+ * @param LoginDialogProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered `LoginDialog` component.
  */
 const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const { handleClose, handleSubmit, recaptchaRef, setState, state } = loginDialogHook(onClose, onLoginSuccess);
+    const { t: i18n } = useTranslation(); // Translation hook
+
+    // Hook initialiser to manage login dialog state and interactions
+    const { handleClose, handleSubmit, recaptchaRef, setState, state } = useLoginDialogHook(onClose, onLoginSuccess);
 
     return (
         state.isDialogVisible && (
             <>
-                {/* Background Overlay */}
                 <div
                     id="background-overlay"
                     className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-200 ${
@@ -35,8 +48,6 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                     }`}
                     onClick={handleClose}
                 />
-
-                {/* Dialog Box */}
                 <div
                     id="dialog-box"
                     className={`fixed inset-0 z-30 flex items-center justify-center transition-all duration-300 ease-in-out ${
@@ -47,7 +58,6 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                         id="login-dialog"
                         className="relative flex w-full max-w-sm flex-col gap-6 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800"
                     >
-                        {/* Close Button */}
                         <button
                             id="close-btn"
                             className="absolute left-4 top-6 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -56,8 +66,6 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                         >
                             <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
                         </button>
-
-                        {/* Login Form */}
                         <div id="login-form-container">
                             <LoginForm
                                 handleSubmit={handleSubmit}
@@ -68,8 +76,6 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                         </div>
                     </div>
                 </div>
-
-                {/* Message Dialog */}
                 {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}

@@ -12,22 +12,21 @@ import { NextApiRequest, NextApiResponse } from "next";
 /**
  * API route to handle Spotify OAuth callback.
  *
- * This endpoint exchanges an authorisation code for an access token and refresh token,
- * encrypts them, and stores them in secure cookies, then redirects the user to a specified URL.
+ * Exchanges an authorisation code for an access token and refresh token, encrypts them,
+ * and stores them in secure cookies, then redirects the user to a specified URL.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const code = req.query.code || null;
     const state = req.query.state || null;
 
     // If no authorisation code is provided, return a 400 error
-    if (!code) {
-        return res.status(400).json({
-            error: "exportSetlist:spotifyCallbackError"
-        });
-    }
+    if (!code) return res.status(400).json({ error: "exportSetlist:spotifyCallbackError" });
 
     try {
-        const baseUrl = getBaseUrl(req);
+        const baseUrl = getBaseUrl(req); // Get base URL for API requests
 
         // Make a POST request to Spotify's token endpoint to exchange the authorisation code for tokens
         const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -41,14 +40,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             method: "POST"
         });
-
-        // Check if the API response is not OK (e.g. 4xx or 5xx status codes)
         if (!response.ok) {
             return res.status(response.status).json({
                 error: "exportSetlist:spotifyCallbackError"
             });
         }
-
         const data = await response.json();
 
         // Set the encrypted access token and refresh token as a secure cookies
@@ -81,8 +77,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.redirect(state ? `${baseUrl}${decodeURIComponent(state as string)}` : baseUrl);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "common:internalServerError"
-        });
+        res.status(500).json({ error: "common:internalServerError" });
     }
 }

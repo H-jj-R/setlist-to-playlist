@@ -10,18 +10,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * API handler to reset a user's password.
+ *
+ * @param {NextApiRequest} req - The incoming API request object.
+ * @param {NextApiResponse} res - The outgoing API response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "common:methodNotAllowed" });
-    }
+    // Ensure the request method is POST
+    if (req.method !== "POST") return res.status(405).json({ error: "common:methodNotAllowed" });
 
     const { email, newPassword, otp } = req.body;
 
     // Validate input fields
-    if (!email || !otp || !newPassword) {
-        return res.status(400).json({ error: "account:allFieldsRequired" });
-    }
+    if (!email || !otp || !newPassword) return res.status(400).json({ error: "account:allFieldsRequired" });
 
     try {
         // Check if OTP exists and is still valid (not expired)
@@ -30,9 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             [email, otp]
         );
 
-        if ((otpRecord as any[]).length === 0) {
-            return res.status(400).json({ error: "account:invalidCode" });
-        }
+        if ((otpRecord as any[]).length === 0) return res.status(400).json({ error: "account:invalidCode" });
 
         // Hash the new password
         const hashedPassword = await bcrypt.hash(newPassword, await bcrypt.genSalt(10));

@@ -7,7 +7,7 @@
 import mysql from "mysql2/promise";
 
 /**
- *  Create a connection pool to the MySQL database.
+ * Create a connection pool to the MySQL database.
  */
 const db = mysql.createPool({
     database: process.env.DB_NAME!,

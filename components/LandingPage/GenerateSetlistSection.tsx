@@ -8,11 +8,15 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
 /**
- * Generate Setlist section for landing page.
+ * **GenerateSetlistSection Component**
+ *
+ * Displays the option to go the ai-generate-setlist page.
+ *
+ * @returns {JSX.Element} The rendered `GenerateSetlistSection` component.
  */
-const GenerateSetlistSection: React.FC = (): JSX.Element => {
-    const router = useRouter();
-    const { t: i18n } = useTranslation();
+const GenerateSetlistSection: React.FC<{}> = (): JSX.Element => {
+    const router = useRouter(); // Router hook
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div

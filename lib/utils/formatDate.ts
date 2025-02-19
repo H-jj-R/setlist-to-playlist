@@ -5,12 +5,12 @@
  */
 
 /**
- * Formats a date string (in "YYYY-MM-DD" format) into a human-readable UK date format.
+ * Formats a date string (in "YYYY-MM-DD" format) into a human-readable date format.
  *
  * @param {string} dateString - The date string to format, expected in "YYYY-MM-DD" format.
- * @returns {string} - The formatted date in "DD MMM YYYY" format (e.g. "01 Jan 1970").
+ * @returns {string} The formatted date in "DD MMM YYYY" format (e.g. "01 Jan 1970").
  */
-export default function formatDate(dateString: string) {
+export default function formatDate(dateString: string): string {
     return new Date(dateString.split("-").reverse().join("-")).toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",

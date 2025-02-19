@@ -9,16 +9,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `SpotifyAuthDialog` component.
+ *
+ * @property {Function} onClose - Function to handle closing the dialog.
+ */
 interface SpotifyAuthDialogProps {
     onClose: () => void;
 }
 
 /**
+ * **SpotifyAuthDialog Component**
  *
+ * Provides a modal interface for users to authenticate with Spotify.
+ *
+ * @param SpotifyAuthDialogProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered component.
  */
 const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.Element => {
-    const router = useRouter();
-    const { t: i18n } = useTranslation();
+    const router = useRouter(); // Router hook
+    const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div id="spotify-auth-dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">

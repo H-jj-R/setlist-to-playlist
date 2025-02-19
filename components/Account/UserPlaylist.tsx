@@ -12,20 +12,34 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialogState from "@constants/messageDialogState";
 import { faChevronDown, faChevronUp, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import userPlaylistHook from "@hooks/userPlaylistHook";
+import useUserPlaylistHook from "@hooks/useUserPlaylistHook";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `UserPlaylist` component.
+ *
+ * @property {Function} onDelete - Function to handle playlist deletion.
+ * @property {Record<string, any>} playlist - Playlist data object.
+ */
 interface UserPlaylistProps {
     onDelete: (playlistId: number) => void;
-    playlist: any;
+    playlist: Record<string, any>;
 }
 
 /**
- * Component to display and manage a user playlist.
+ * **UserPlaylist Component**
+ *
+ * Displays a user-created playlist's full details and contents.
+ *
+ * @param UserPlaylistProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered `UserPlaylist` component.
  */
 const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = userPlaylistHook(
+    const { t: i18n } = useTranslation(); // Translation hook
+
+    // Hook initialiser to manage user playlist actions and state
+    const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = useUserPlaylistHook(
         onDelete,
         playlist
     );
@@ -47,7 +61,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 </div>
                             </div>
                             <div id="edit-btn-container" className="flex items-center space-x-4">
-                                {/* Edit Button */}
                                 <button
                                     id="edit-btn"
                                     className="p-1 text-gray-600 hover:text-gray-900"
@@ -57,8 +70,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 >
                                     <FontAwesomeIcon id="fa-edit-icon" className="text-white" icon={faEdit} size="lg" />
                                 </button>
-
-                                {/* Recovery & Delete Buttons */}
                                 <div id="recovery-delete-btns-container" className="flex flex-col items-center gap-2">
                                     <button
                                         id="recovery-btn"
@@ -77,8 +88,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                         {i18n("common:delete")}
                                     </button>
                                 </div>
-
-                                {/* Expand/Collapse Button */}
                                 <button id="expand-collapse-btns-container" className="p-1" onClick={toggleExpand}>
                                     {state.expanded ? (
                                         <FontAwesomeIcon
@@ -149,7 +158,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                         </div>
                     )}
                 </div>
-
                 {state.expanded && (
                     <div
                         id="user-playlist-contents-container"
@@ -192,8 +200,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                     </div>
                 )}
             </li>
-
-            {/* Spotify Authorisation dialog */}
             {state.showAuthDialog && (
                 <SpotifyAuthDialog
                     onClose={(): void => {
@@ -201,8 +207,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                     }}
                 />
             )}
-
-            {/* Confirmation Modal */}
             {state.showConfirmation && (
                 <ConfirmationModal
                     onCancel={(): void => {
@@ -211,8 +215,6 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                     onConfirm={handleDelete}
                 />
             )}
-
-            {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog
                     message={state.messageDialog.message}

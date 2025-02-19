@@ -8,23 +8,38 @@ import formatDate from "@utils/formatDate";
 import formatLocation from "@utils/formatLocation";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `SetlistChoiceBlock` component.
+ *
+ * @property {boolean} hideEmpty - Determines whether to hide empty setlists (setlists with no songs).
+ * @property {Function} onClick - Callback function triggered when a user clicks on the setlist block.
+ * @property {Record<string, any>} setlist - The setlist data containing event details.
+ */
 interface SetlistChoiceBlockProps {
-    hideEmpty: boolean; // Whether to hide empty setlists
-    onClick: (setlist: Record<string, any>) => void; // The function to be triggered when the setlist block is clicked
-    setlist: Record<string, any>; // The setlist data to be displayed
+    hideEmpty: boolean;
+    onClick: (setlist: Record<string, any>) => void;
+    setlist: Record<string, any>;
 }
 
 /**
+ * **SetlistChoiceBlock Component**
+ *
  * Displays information about a setlist, including event date, artist, location, and song count.
+ *
+ * @param SetlistChoiceBlockProps - The component props.
+ *
+ * @returns {JSX.Element} The rendered `SetlistChoiceBlock` component.
  */
 const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }): JSX.Element => {
-    const { t: i18n } = useTranslation();
+    const { t: i18n } = useTranslation(); // Translation hook
 
     // Calculate the total number of songs in the setlist
     const songCount: number = setlist.sets.set.reduce(
         (count: number, set: Record<string, any>) => count + (set.song?.length || 0),
         0
     );
+
+    // Disable component from being clicked if there are no songs
     const isDisabled: boolean = songCount === 0;
 
     return (

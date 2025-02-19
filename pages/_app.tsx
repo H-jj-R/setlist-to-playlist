@@ -13,11 +13,13 @@ import "@constants/i18n";
 
 /**
  * Custom App component for Next.js.
- * It initialises and wraps every page with a theme provider and props.
+ * Initialises and wraps every page with a theme and authentication providers.
  *
  * @param {AppProps} props - Props passed to the App component, including:
  *  - Component: The page being rendered
  *  - pageProps: Props passed to that page
+ *
+ * @returns {JSX.Element} The rendered `App` component.
  */
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
     return (

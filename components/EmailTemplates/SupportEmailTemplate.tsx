@@ -6,13 +6,25 @@
 
 import { Body, Container, Head, Heading, Html, Section, Text } from "@react-email/components";
 
+/**
+ * Props for the `SupportEmailTemplate` component.
+ *
+ * @property {string} email - The email address of the user sending the support request / feedback.
+ * @property {string} message - The support message or feedback submitted by the user.
+ */
 interface SupportEmailTemplateProps {
     email: string;
     message: string;
 }
 
 /**
+ * **Support Email Template**
  *
+ * Generates a HTML email template for support requests or feedback.
+ *
+ * @param SupportEmailTemplateProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered email template.
  */
 const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }): JSX.Element => {
     return (

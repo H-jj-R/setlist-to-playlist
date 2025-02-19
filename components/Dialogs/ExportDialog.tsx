@@ -7,19 +7,34 @@
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
 import MessageDialogState from "@constants/messageDialogState";
-import exportDialogHook from "@hooks/exportDialogHook";
+import useExportDialogHook from "@hooks/useExportDialogHook";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `ExportDialog` component.
+ *
+ * @property {Record<string, any>} artistData - Data of the artist related to the setlist.
+ * @property {boolean} isOpen - Flag indicating whether the export dialog is open.
+ * @property {Function} onClose - Function to handle closing the dialog.
+ * @property {boolean} [predictedSetlist] - Flag indicating whether the setlist is predicted.
+ * @property {Record<string, any>} setlist - Data of the setlist to be exported.
+ */
 interface ExportDialogProps {
-    artistData: Record<string, any>; // The data of the artist being exported
-    isOpen: boolean; // Controls the visibility of the dialog
-    onClose: () => void; // Close function
-    predictedSetlist?: boolean; // Indicates if the setlist is AI-generated
-    setlist: Record<string, any>; // The setlist data to be exported
+    artistData: Record<string, any>;
+    isOpen: boolean;
+    onClose: () => void;
+    predictedSetlist?: boolean;
+    setlist: Record<string, any>;
 }
 
 /**
- * Dialog allowing user to export chosen setlist to playlist with custom specification.
+ * **ExportDialog Component**
+ *
+ * Allows user to export chosen setlist to Spotify playlist with custom specifications.
+ *
+ * @param ExportDialogProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered `ExportDialog` component.
  */
 const ExportDialog: React.FC<ExportDialogProps> = ({
     artistData,
@@ -28,8 +43,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
     predictedSetlist,
     setlist
 }): JSX.Element => {
-    const { t: i18n } = useTranslation();
-    const { getInputProps, getRootProps, handleExport, resetState, setState, state } = exportDialogHook(
+    const { t: i18n } = useTranslation(); // Translation hook
+
+    // Hook initialiser to manage export functionality and dialog state
+    const { getInputProps, getRootProps, handleExport, resetState, setState, state } = useExportDialogHook(
         artistData,
         isOpen,
         onClose,
@@ -40,7 +57,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
     return (
         isOpen && (
             <>
-                {/* Background Overlay */}
                 <div
                     id="background-overlay"
                     className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-500 ${
@@ -51,8 +67,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                         resetState();
                     }}
                 />
-
-                {/* Dialog Box */}
                 <div
                     id="dialog-box"
                     className={`fixed inset-0 z-30 flex items-center justify-center transition-all duration-500 ease-in-out ${
@@ -63,13 +77,10 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                         id="export-dialog"
                         className="flex h-[30rem] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2"
                     >
-                        {/* Main Export Dialog */}
                         <div id="export-dialog-main" className="flex-1 p-4">
                             <h3 id="export-dialog-title" className="mb-4 text-xl font-semibold">
                                 {i18n("common:exportToSpotify")}
                             </h3>
-
-                            {/* Playlist Name */}
                             <div id="playlist-name" className="mb-4">
                                 <label
                                     id="playlist-name-label"
@@ -95,8 +106,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                     value={state.playlistName}
                                 />
                             </div>
-
-                            {/* Playlist Description */}
                             <div id="playlist-description" className="mb-4">
                                 <label
                                     id="playlist-description-label"
@@ -117,8 +126,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                     value={state.playlistDescription}
                                 />
                             </div>
-
-                            {/* Playlist Cover Dropzone */}
                             <div
                                 id="playlist-cover-dropzone-container"
                                 className="mb-4 flex flex-col items-start gap-4 md:flex-row"
@@ -162,8 +169,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                     )}
                                 </div>
                             </div>
-
-                            {/* Buttons */}
                             <div id="export-dialog-btns" className="mt-4 flex justify-end gap-4 pt-2">
                                 <button
                                     id="cancel-btn"
@@ -184,8 +189,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </button>
                             </div>
                         </div>
-
-                        {/* Setlist Songs Component */}
                         <div
                             id="setlist-songs-wrapper"
                             className="flex h-full flex-1 flex-col items-center justify-center"
@@ -201,8 +204,6 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                         </div>
                     </div>
                 </div>
-
-                {/* Message Dialog */}
                 {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}

@@ -12,18 +12,23 @@ import { Trans, useTranslation } from "react-i18next";
 
 /**
  * Privacy Policy page.
+ *
+ * @returns {JSX.Element} The rendered `/privacy-policy` page.
  */
 export default function PrivacyPolicy(): JSX.Element {
-    const { resolvedTheme } = useTheme();
-    const { t: i18n } = useTranslation();
-    const [mounted, setMounted] = useState(false);
+    const { resolvedTheme } = useTheme(); // Theme setting hook
+    const { t: i18n } = useTranslation(); // Translation hook
+    const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
 
+    /**
+     * Sets the component as mounted when first rendered.
+     */
     useEffect((): void => {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
 
-    if (!mounted) return null;
+    if (!mounted) return null; // Don't render until hook is mounted
 
     return (
         <Layout>

@@ -16,7 +16,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * Props for the AccountSidebar component.
+ * Props for the `AccountSidebar` component.
+ *
+ * @property {Function} handleLogout - Function to handle user logout.
+ * @property {Function} onClose - Function to handle closing the sidebar.
  */
 interface AccountSidebarProps {
     handleLogout: () => void;
@@ -25,21 +28,32 @@ interface AccountSidebarProps {
 
 /**
  * Type declaration for decoded JWT token.
+ *
+ * @property {string} email - The email associated with the token.
+ * @property {number} exp - The expiration timestamp of the token.
+ * @property {string} userId - The unique identifier of the user.
+ * @property {string} username - The username associated with the token.
  */
-interface DecodedToken {
+type DecodedToken = {
     email: string;
     exp: number;
     userId: string;
     username: string;
-}
+};
 
 /**
- * The account sidebar overlay component.
+ * **AccountSidebar Component**
+ *
+ * Overlay showing the user options related to their account.
+ *
+ * @param AccountSidebarProps - Component props.
+ *
+ * @returns {JSX.Element} The rendered `AccountSidebar` component.
  */
 const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }): JSX.Element => {
-    const { resolvedTheme } = useTheme();
-    const router = useRouter();
-    const { t: i18n } = useTranslation();
+    const { resolvedTheme } = useTheme(); // Theme setting hook
+    const router = useRouter(); // Router hook
+    const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
         email: null as null | string, // User's email
         isVisible: false, // Whether the sidebar is fully visible
@@ -66,7 +80,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
     }, []);
 
     /**
-     * Move focus to panel when fully visible for accessibility.
+     * Effect to focus the account settings panel when it becomes visible, for accessibility.
      */
     useEffect((): void => {
         if (state.isVisible) {
@@ -123,7 +137,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
 
     return (
         <div id="account-settings-container" className="fixed inset-0 z-50 flex justify-end">
-            {/* Background overlay with opacity animation */}
             <div
                 id="account-settings-background-overlay"
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
@@ -136,7 +149,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     setTimeout(onClose, 300);
                 }}
             />
-            {/* Settings panel */}
             <div
                 id="account-settings-panel"
                 className={`relative h-full w-1/3 max-w-md transform p-4 shadow-lg transition-transform duration-300 ease-in-out ${
@@ -150,7 +162,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         {i18n("account:account")}
                     </h2>
                     <button
-                        id="account-settings-close-btn"
+                        id="close-account-settings-btn"
                         className="text-xl"
                         aria-label={i18n("account:closeAccountSettings")}
                         onClick={(): void => {
@@ -163,7 +175,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     </button>
                 </div>
                 <div id="account-settings-details-container" className="m-4 rounded-lg border-4 p-4">
-                    {/* Username & Email */}
                     <div id="account-settings-username-email-container" className="mb-2 text-center">
                         <h3 id="account-settings-username-email-header" className="text-lg font-semibold">
                             {state.username && state.email ? (
@@ -187,7 +198,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                             )}
                         </h3>
                     </div>
-                    {/* Logout */}
                     <div id="account-settings-logout-container" className="mt-4 flex justify-center">
                         <button
                             id="account-settings-logout-btn"
@@ -207,10 +217,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         </button>
                     </div>
                 </div>
-                {/* Link to Created Playlists */}
-                <div id="account-settings-playlists-container" className="mt-4 flex justify-center">
+                <div id="account-settings-user-playlists-container" className="mt-4 flex justify-center">
                     <button
-                        id="account-settings-go-to-created-playlists-btn"
+                        id="account-settings-go-to-user-playlists-btn"
                         className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:bg-violet-600 focus:outline-none"
                         aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={(): void => {
@@ -223,7 +232,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         {i18n("userPlaylists:createdPlaylists")}
                     </button>
                 </div>
-                {/* Delete Account */}
                 <div
                     id="account-settings-delete-account-container"
                     className="absolute bottom-4 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center"
@@ -240,7 +248,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         {i18n("account:deleteAccount")}
                     </button>
                 </div>
-                {/* Confirmation Modal */}
                 {state.showConfirmation && (
                     <ConfirmationModal
                         aria-live="assertive"
@@ -251,8 +258,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     />
                 )}
             </div>
-
-            {/* Message Dialog */}
             {state.messageDialog.isOpen && (
                 <MessageDialog
                     aria-live="assertive"
