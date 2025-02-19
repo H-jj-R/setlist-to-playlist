@@ -7,7 +7,7 @@
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
 import MessageDialogState from "@constants/messageDialogState";
-import exportDialogHook from "@hooks/exportDialogHook";
+import useExportDialogHook from "@hooks/useExportDialogHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -46,7 +46,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage export functionality and dialog state
-    const { getInputProps, getRootProps, handleExport, resetState, setState, state } = exportDialogHook(
+    const { getInputProps, getRootProps, handleExport, resetState, setState, state } = useExportDialogHook(
         artistData,
         isOpen,
         onClose,

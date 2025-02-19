@@ -12,7 +12,7 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import MessageDialogState from "@constants/messageDialogState";
 import { faChevronDown, faChevronUp, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import userPlaylistHook from "@hooks/userPlaylistHook";
+import useUserPlaylistHook from "@hooks/useUserPlaylistHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -39,7 +39,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage user playlist actions and state
-    const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = userPlaylistHook(
+    const { handleDelete, handleRecover, handleSave, setState, state, toggleExpand } = useUserPlaylistHook(
         onDelete,
         playlist
     );

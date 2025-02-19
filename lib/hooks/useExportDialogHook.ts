@@ -12,7 +12,7 @@ import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 
 /**
- * **exportDialogHook**
+ * **useExportDialogHook**
  *
  * Custom hook for handling data and state management in the `ExportDialog` component.
  *
@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
  *
  * @returns Hook state and handlers.
  */
-export default function exportDialogHook(
+export default function useExportDialogHook(
     artistData: Record<string, any>,
     isOpen: boolean,
     onClose: () => void,

@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * **userPlaylistHook**
+ * **useUserPlaylistHook**
  *
  * Custom hook for handling data and state management in the `UserPlaylist` component.
  *
@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
  *
  * @returns Hook state and handlers.
  */
-export default function userPlaylistHook(onDelete: (playlistId: number) => void, playlist: Record<string, any>) {
+export default function useUserPlaylistHook(onDelete: (playlistId: number) => void, playlist: Record<string, any>) {
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
         description: (playlist.description || "") as string, // Playlist description

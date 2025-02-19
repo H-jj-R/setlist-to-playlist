@@ -12,7 +12,7 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
 import PageState from "@constants/generateSetlistPageState";
 import { useAuth } from "@context/AuthContext";
-import generateSetlistHook from "@hooks/generateSetlistHook";
+import useGenerateSetlistHook from "@hooks/useGenerateSetlistHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -25,7 +25,7 @@ export default function AIGenerateSetlist(): JSX.Element {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage AI generate setlist page actions and state
-    const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = generateSetlistHook();
+    const { handleCombineSetlists, handleExport, handleSearch, mounted, setState, state } = useGenerateSetlistHook();
 
     if (!mounted) return null; // Don't render until hook is mounted
 

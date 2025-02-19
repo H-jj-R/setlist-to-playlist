@@ -9,7 +9,7 @@ import MessageDialog from "@components/Dialogs/MessageDialog";
 import MessageDialogState from "@constants/messageDialogState";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import loginDialogHook from "@hooks/loginDialogHook";
+import useLoginDialogHook from "@hooks/useLoginDialogHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -36,7 +36,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage login dialog state and interactions
-    const { handleClose, handleSubmit, recaptchaRef, setState, state } = loginDialogHook(onClose, onLoginSuccess);
+    const { handleClose, handleSubmit, recaptchaRef, setState, state } = useLoginDialogHook(onClose, onLoginSuccess);
 
     return (
         state.isDialogVisible && (

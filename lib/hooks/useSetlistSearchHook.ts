@@ -12,13 +12,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * **setlistSearchHook**
+ * **useSetlistSearchHook**
  *
  * Custom hook for handling data and state management in the `/setlist-search` page.
  *
  * @returns Hook state and handlers.
  */
-export default function setlistSearchHook() {
+export default function useSetlistSearchHook() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook

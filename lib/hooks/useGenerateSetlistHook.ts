@@ -10,13 +10,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * **generateSetlistHook**
+ * **useGenerateSetlistHook**
  *
  * Custom hook for handling data and state management in the `/ai-generate-setlist` page.
  *
  * @returns Hook state and handlers.
  */
-export default function generateSetlistHook() {
+export default function useGenerateSetlistHook() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted

@@ -8,7 +8,7 @@ import SetlistChoiceBlock from "@components/SearchAndExport/SetlistChoiceBlock";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import countryCodes from "@constants/countryCodes";
 import SettingsKeys from "@constants/settingsKeys";
-import listOfSetlistsHook from "@hooks/listOfSetlistsHook";
+import useListOfSetlistsHook from "@hooks/useListOfSetlistsHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -35,7 +35,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
-    const { hasMorePages, loadMoreSetlists, state } = listOfSetlistsHook({ ...setlistData });
+    const { hasMorePages, loadMoreSetlists, state } = useListOfSetlistsHook({ ...setlistData });
 
     // Retrieve user's selected country filter from local storage
     const countryFilter = localStorage?.getItem(SettingsKeys.CountryFilter) ?? "";

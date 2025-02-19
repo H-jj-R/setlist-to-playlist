@@ -9,13 +9,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * **listOfSetlistsHook**
+ * **useListOfSetlistsHook**
  *
  * Custom hook for handling data and state management in the `ListOfSetlists` component.
  *
  * @returns Hook state and handlers.
  */
-export default function listOfSetlistsHook(setlistData: Record<string, any>) {
+export default function useListOfSetlistsHook(setlistData: Record<string, any>) {
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
         currentPage: ((setlistData.setlists.page as number) || 1) as number, // Track the current page of setlists

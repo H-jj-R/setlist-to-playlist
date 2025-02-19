@@ -11,7 +11,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 
 /**
- * **loginDialogHook**
+ * **useLoginDialogHook**
  *
  * Custom hook for handling data and state management in the `LoginDialog` component.
  *
@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
  *
  * @returns Hook state and handlers.
  */
-export default function loginDialogHook(onClose: () => void, onLoginSuccess: () => void) {
+export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: () => void) {
     const { t: i18n } = useTranslation(); // Translation hook
     const recaptchaRef = useRef<ReCAPTCHA>(null); // Reference for ReCAPTCHA component
     const [state, setState] = useState({

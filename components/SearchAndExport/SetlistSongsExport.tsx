@@ -6,7 +6,7 @@
 
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
-import setlistSongsExportHook from "@hooks/setlistSongsExportHook";
+import useSetlistSongsExportHook from "@hooks/useSetlistSongsExportHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -42,7 +42,12 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage song data and state
-    const { state, toggleExcludeSong } = setlistSongsExportHook(artistData, onSongsFetched, setlist, predictedSetlist);
+    const { state, toggleExcludeSong } = useSetlistSongsExportHook(
+        artistData,
+        onSongsFetched,
+        setlist,
+        predictedSetlist
+    );
 
     return (
         <div

@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
- * **setlistSongsExportHook**
+ * **useSetlistSongsExportHook**
  *
  * Custom hook for handling data and state management in the `SetlistSongsExport` component.
  *
@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
  *
  * @returns Hook state and handlers.
  */
-export default function setlistSongsExportHook(
+export default function useSetlistSongsExportHook(
     artistData: Record<string, any>,
     onSongsFetched: (songs: Record<string, any>[]) => void,
     setlist: Record<string, any>,

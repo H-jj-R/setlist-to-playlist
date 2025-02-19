@@ -13,7 +13,7 @@ import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
 import PageState from "@constants/setlistSearchPageState";
-import setlistSearchHook from "@hooks/setlistSearchHook";
+import useSetlistSearchHook from "@hooks/useSetlistSearchHook";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -33,7 +33,7 @@ export default function SetlistSearch(): JSX.Element {
         mounted,
         setState,
         state
-    } = setlistSearchHook();
+    } = useSetlistSearchHook();
 
     if (!mounted) return null; // Don't render until hook is mounted
 
