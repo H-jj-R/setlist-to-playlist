@@ -35,11 +35,9 @@ describe("Page Navigation -", () => {
     }, 10000);
 
     it("Go to 404 Page", async () => {
-        // TODO: Improve 404 page before writing test
-    }, 10000);
-
-    it("Go to 500 Page", async () => {
-        // TODO: Improve 500 page before writing test
+        await Promise.all([page.goto("http://localhost:3000/madeuppage"), page.waitForNavigation()]);
+        const pageTitle = await page.waitForSelector("#not-found-page-title");
+        expect(pageTitle).toBeDefined();
     }, 10000);
 
     afterAll(async () => {

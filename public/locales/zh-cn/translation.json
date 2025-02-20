@@ -129,7 +129,7 @@
         "openaiDisabled": "OpenAI API当前已禁用。",
         "predictSetlistFailed": "预测演出歌单失败。",
         "queryLimitReached": "已达到每日查询限制，请稍后再试。",
-        "searchForArtist": "搜索艺术家"
+        "searchForArtist": "搜索艺术家/乐队"
     },
     "landingPage": {
         "feature1Description": "跟踪你创建的播放列表，随时访问它们。",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} 个空setlist被隐藏",
         "hiddenSetlistsMessagePlural": "{{count}} 个空setlist被隐藏",
         "image": "图片",
+        "inCountry": "在{{country}}",
         "interlude": "插曲",
         "intro": "开场",
         "loadMore": "加载更多",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} 首歌",
         "spotifySearchArtistError": "查找Spotify上的艺术家时出错!",
         "unknown": "未知",
+        "unknownCountry": "未知国家",
         "with": "与{{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "排除封面",
         "excludeDuplicateSongs": "排除重复歌曲",
         "excludePlayedOnTape": "排除播放带上的歌曲",
+        "filterByCountry": "按国家筛选",
         "hideEmptySetlists": "隐藏空setlist",
         "hideSongsNotFound": "隐藏未找到的歌曲",
         "lightTheme": "亮色主题",
+        "noFilter": "无筛选",
         "setlistsTitle": "Setlists",
         "settingsTitle": "设置",
         "systemTheme": "系统主题",

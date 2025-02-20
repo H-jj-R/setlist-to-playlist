@@ -129,7 +129,7 @@
         "openaiDisabled": "L'API OpenAI est actuellement désactivée.",
         "predictSetlistFailed": "Échec de la prédiction de la setlist.",
         "queryLimitReached": "Limite quotidienne de requêtes atteinte. Veuillez réessayer plus tard.",
-        "searchForArtist": "Rechercher un artiste"
+        "searchForArtist": "Rechercher un artiste/groupe"
     },
     "landingPage": {
         "feature1Description": "Gardez une trace de vos playlists créées et accédez-y à tout moment.",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} setlist vide est cachée",
         "hiddenSetlistsMessagePlural": "{{count}} setlists vides sont cachées",
         "image": "image",
+        "inCountry": "en {{country}}",
         "interlude": "Interlude",
         "intro": "Intro",
         "loadMore": "Charger plus",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} chansons",
         "spotifySearchArtistError": "Erreur lors de la recherche de l'artiste sur Spotify !",
         "unknown": "Inconnu",
+        "unknownCountry": "Pays inconnu",
         "with": "avec {{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "Exclure les couvertures",
         "excludeDuplicateSongs": "Exclure les chansons en double",
         "excludePlayedOnTape": "Exclure les chansons jouées sur bande",
+        "filterByCountry": "Filtrer par pays",
         "hideEmptySetlists": "Masquer les setlists vides",
         "hideSongsNotFound": "Masquer les chansons non trouvées",
         "lightTheme": "Clair",
+        "noFilter": "Aucun filtre",
         "setlistsTitle": "Setlists",
         "settingsTitle": "Paramètres",
         "systemTheme": "Système",

@@ -5,13 +5,13 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
     const browser = await puppeteer.launch({
         args: ["--no-sandbox", "--start-maximized"],
         devtools: false,
-        headless: false,
+        headless: true,
         ignoreDefaultArgs: ["--disable-extensions"],
-        slowMo: 25
+        slowMo: 5
     });
     const page = await browser.newPage();
-    await page.setDefaultTimeout(400000);
-    await page.setDefaultNavigationTimeout(20000);
+    page.setDefaultTimeout(400000);
+    page.setDefaultNavigationTimeout(20000);
     await page.setViewport({ height: 720, width: 1280 });
     log("Browser launch successful");
 

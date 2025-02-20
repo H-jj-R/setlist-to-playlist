@@ -129,7 +129,7 @@
         "openaiDisabled": "La API de OpenAI está deshabilitada.",
         "predictSetlistFailed": "Error al predecir la lista de canciones.",
         "queryLimitReached": "Se alcanzó el límite de consultas diarias. Por favor, inténtalo más tarde.",
-        "searchForArtist": "Buscar un artista"
+        "searchForArtist": "Buscar un artista/banda"
     },
     "landingPage": {
         "feature1Description": "Mantén un registro de tus listas de reproducción creadas y accede a ellas en cualquier momento.",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} lista de canciones vacía está oculta",
         "hiddenSetlistsMessagePlural": "{{count}} listas de canciones vacías están ocultas",
         "image": "imagen",
+        "inCountry": "en {{country}}",
         "interlude": "Interludio",
         "intro": "Intro",
         "loadMore": "Cargar más",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} canciones",
         "spotifySearchArtistError": "¡Error al buscar artista en Spotify!",
         "unknown": "Desconocido",
+        "unknownCountry": "País desconocido",
         "with": "con {{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "Excluir versiones",
         "excludeDuplicateSongs": "Excluir canciones duplicadas",
         "excludePlayedOnTape": "Excluir canciones reproducidas desde cinta",
+        "filterByCountry": "Filtrar por país",
         "hideEmptySetlists": "Ocultar listas de canciones vacías",
         "hideSongsNotFound": "Ocultar canciones no encontradas",
         "lightTheme": "Claro",
+        "noFilter": "Sin filtro",
         "setlistsTitle": "Listas de canciones",
         "settingsTitle": "Configuraciones",
         "systemTheme": "Sistema",
