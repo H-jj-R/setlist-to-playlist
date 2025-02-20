@@ -7,17 +7,17 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+**Describe the Bug**
 A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior.
 
-**Expected behavior**
+**Expected Behavior**
 A clear and concise description of what you expected to happen.
 
-**Possible fix**
+**Possible Fix**
 If you're able to identify what code or methods could be implemented to fix this bug.
 
-**Additional context**
+**Additional Context**
 Add any other context about the problem here.
