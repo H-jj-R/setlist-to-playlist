@@ -5,6 +5,9 @@ import { delay, launch } from "../utils";
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
+/**
+ * Tests related to choosing a setlist after a valid query has been entered.
+ */
 describe("Choosing Setlist -", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
@@ -48,6 +51,18 @@ describe("Choosing Setlist -", () => {
     }, 10000);
 
     it("Load More button is removed if there are no more setlists", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("", async () => {
         // TODO: Implement test
     }, 10000);
 

@@ -129,7 +129,7 @@
         "openaiDisabled": "OpenAI API वर्तमान में निष्क्रिय है।",
         "predictSetlistFailed": "सेटलिस्ट का पूर्वानुमान करने में विफल!",
         "queryLimitReached": "दैनिक क्वेरी सीमा पार हो गई है। कृपया कुछ देर बाद पुनः प्रयास करें।",
-        "searchForArtist": "कलाकार के लिए खोजें"
+        "searchForArtist": "कलाकार/बैंड खोजें"
     },
     "landingPage": {
         "feature1Description": "आपकी बनाई गई प्लेइस्टों का ट्रैक रखें और इन्हें कभी भी एक्सेस करें।",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} खाली सेटलिस्ट छिपी हुई है",
         "hiddenSetlistsMessagePlural": "{{count}} खाली सेटलिस्ट छिपी हुई हैं",
         "image": "छवि",
+        "inCountry": "{{country}} में",
         "interlude": "इंटरल्यूड",
         "intro": "इंट्रो",
         "loadMore": "और लोड करें",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} गाने",
         "spotifySearchArtistError": "Spotify पर कलाकार खोजने में त्रुटि!",
         "unknown": "अज्ञात",
+        "unknownCountry": "अज्ञात देश",
         "with": "{{withName}} के साथ"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "कवर्स को बाहर करें",
         "excludeDuplicateSongs": "डुप्लिकेट गाने बाहर करें",
         "excludePlayedOnTape": "टेप पर खेले गए गाने बाहर करें",
+        "filterByCountry": "देश के अनुसार फ़िल्टर करें",
         "hideEmptySetlists": "खाली सेटलिस्ट छिपाएं",
         "hideSongsNotFound": "नहीं मिले गाने छिपाएं",
         "lightTheme": "रोशनी",
+        "noFilter": "कोई फ़िल्टर नहीं",
         "setlistsTitle": "सेटलिस्ट्स",
         "settingsTitle": "सेटिंग्स",
         "systemTheme": "सिस्टम",

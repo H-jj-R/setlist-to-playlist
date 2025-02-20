@@ -129,7 +129,7 @@
         "openaiDisabled": "API OpenAI معطلة حاليًا.",
         "predictSetlistFailed": "فشل في التنبؤ بقائمة التشغيل.",
         "queryLimitReached": "تم الوصول إلى حد الاستعلام اليومي. يرجى المحاولة لاحقًا.",
-        "searchForArtist": "ابحث عن فنان"
+        "searchForArtist": "ابحث عن فنان/فرقة"
     },
     "landingPage": {
         "feature1Description": "تتبع قوائم التشغيل التي قمت بإنشائها وادخل إليها في أي وقت.",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "قائمة الأغاني الخالية {{count}} مخفية",
         "hiddenSetlistsMessagePlural": "قوائم الأغاني الخالية {{count}} مخفية",
         "image": "صورة",
+        "inCountry": "في {{country}}",
         "interlude": "فاصل",
         "intro": "مقدمة",
         "loadMore": "تحميل المزيد",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} أغاني",
         "spotifySearchArtistError": "خطأ في العثور على الفنان في Spotify!",
         "unknown": "غير معروف",
+        "unknownCountry": "دولة غير معروفة",
         "with": "مع {{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "استبعاد الأغلفة",
         "excludeDuplicateSongs": "استبعاد الأغاني المكررة",
         "excludePlayedOnTape": "استبعاد الأغاني التي تم تشغيلها من الشريط",
+        "filterByCountry": "التصفية حسب الدولة",
         "hideEmptySetlists": "إخفاء قوائم الأغاني الفارغة",
         "hideSongsNotFound": "إخفاء الأغاني غير الموجودة",
         "lightTheme": "فاتح",
+        "noFilter": "بدون تصفية",
         "setlistsTitle": "قوائم الأغاني",
         "settingsTitle": "الإعدادات",
         "systemTheme": "النظام",

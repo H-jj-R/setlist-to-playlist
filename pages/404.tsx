@@ -18,11 +18,11 @@ export default function Custom404(): JSX.Element {
 
     return (
         <Layout>
-            <div id="404-page-container" className="flex h-1/3 flex-col items-center justify-center text-center">
-                <h1 id="404-page-title" className="mb-4 text-4xl font-bold">
+            <div id="not-found-page-container" className="flex h-1/3 flex-col items-center justify-center text-center">
+                <h1 id="not-found-page-title" className="mb-4 text-4xl font-bold">
                     {i18n("common:404PageTitle")}
                 </h1>
-                <h2 id="404-page-message" className="mb-6 text-xl">
+                <h2 id="not-found-page-message" className="mb-6 text-xl">
                     {i18n("common:404PageMessage")}
                 </h2>
             </div>

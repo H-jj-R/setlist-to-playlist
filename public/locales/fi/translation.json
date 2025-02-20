@@ -129,7 +129,7 @@
         "openaiDisabled": "OpenAI API on tällä hetkellä pois päältä.",
         "predictSetlistFailed": "Soittolistan ennustaminen epäonnistui.",
         "queryLimitReached": "Päivittäinen kyselyraja saavutettu. Yritä myöhemmin uudelleen.",
-        "searchForArtist": "Hae artistia"
+        "searchForArtist": "Etsi artistia/bändiä"
     },
     "landingPage": {
         "feature1Description": "Pysy ajan tasalla luomiesi soittolistojen kanssa ja pääse niihin milloin tahansa.",
@@ -172,6 +172,7 @@
         "hiddenSetlistsMessage": "{{count}} tyhjä setlist on piilotettu",
         "hiddenSetlistsMessagePlural": "{{count}} tyhjää setlistiä on piilotettu",
         "image": "kuva",
+        "inCountry": "{{country}}:ssa",
         "interlude": "Välikohtaus",
         "intro": "Intro",
         "loadMore": "Lataa lisää",
@@ -191,6 +192,7 @@
         "songCountPlural": "{{songCount}} kappaletta",
         "spotifySearchArtistError": "Virhe etsittäessä artistia Spotifysta!",
         "unknown": "Tuntematon",
+        "unknownCountry": "Tuntematon maa",
         "with": "yhdessä {{withName}}"
     },
     "settings": {
@@ -198,9 +200,11 @@
         "excludeCovers": "Sulje kansikuvat",
         "excludeDuplicateSongs": "Sulje duplikaattikappaleet",
         "excludePlayedOnTape": "Sulje nauhalta soitetut kappaleet",
+        "filterByCountry": "Suodata maan mukaan",
         "hideEmptySetlists": "Piilota tyhjät setlistit",
         "hideSongsNotFound": "Piilota ei-löytyneet kappaleet",
         "lightTheme": "Vaaleat",
+        "noFilter": "Ei suodatinta",
         "setlistsTitle": "Setlistit",
         "settingsTitle": "Asetukset",
         "systemTheme": "Järjestelmä",

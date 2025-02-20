@@ -54,6 +54,6 @@
         "build": "next build",
         "dev": "next dev",
         "start": "next start",
-        "test": "jest --config=testing/jest.config.ts"
+        "test": "jest --config=testing/jest.config.ts --runInBand"
     }
 }
