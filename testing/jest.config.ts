@@ -1,7 +1,5 @@
 import type { Config } from "jest";
 
-import { defaults } from "jest-config";
-
 const config: Config = {
     preset: "jest-puppeteer",
     reporters: [
