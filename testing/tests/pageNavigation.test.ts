@@ -1,3 +1,9 @@
+/**
+ * Setlist to Playlist. The MIT License (MIT).
+ * Copyright (c) Henri Roberts (github.com/H-jj-R).
+ * See LICENSE for details.
+ */
+
 import * as puppeteer from "puppeteer";
 
 import { launch } from "../utils";
@@ -5,6 +11,9 @@ import { launch } from "../utils";
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
+/**
+ * Tests related to page navigation.
+ */
 describe("Page Navigation -", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());

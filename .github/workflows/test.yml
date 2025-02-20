@@ -1,32 +1,37 @@
 name: Run Tests
 
 on:
-  push:
-  pull_request:
+    push:
+    pull_request:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.12.2
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.12.2
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Start Next.js app in the background
-        run: npm run dev &
-        env:
-          NODE_ENV: test
+            - name: Build Next.js app
+              run: npm run build
+              env:
+                  NODE_ENV: test
 
-      - name: Wait for Next.js to be ready
-        run: npx wait-on http://localhost:3000
+            - name: Start Next.js app in the background
+              run: npm run start &
+              env:
+                  NODE_ENV: test
 
-      - name: Run Jest/Puppeteer tests
-        run: npm test
+            - name: Wait for Next.js to be ready
+              run: npx wait-on http://localhost:3000
+
+            - name: Run Jest/Puppeteer tests
+              run: npm test
