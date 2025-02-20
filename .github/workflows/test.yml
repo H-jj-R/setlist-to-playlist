@@ -20,10 +20,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start Next.js in the background
-        run: npm run dev
+      - name: Start Next.js app in the background
+        run: npm run dev &
         env:
           NODE_ENV: test
+
+      - name: Wait for Next.js to be ready
+        run: npx wait-on http://localhost:3000
 
       - name: Run Jest/Puppeteer tests
         run: npm test
