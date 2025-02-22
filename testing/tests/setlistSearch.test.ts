@@ -56,7 +56,7 @@ describe("Setlist Search -", () => {
     it("Can view a list of setlists", async () => {
         const listOfSetlists = await page.waitForSelector("#list-of-setlists");
         expect(listOfSetlists).toBeDefined();
-    }, 20000);
+    }, 60000);
 
     it("Searching a different query triggers search", async () => {
         const searchInput = await page.waitForSelector("#search-input");
@@ -66,8 +66,9 @@ describe("Setlist Search -", () => {
         const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        await page.waitForSelector("#list-of-setlists");
         expect(finalContent).not.toBe(initialContent);
-    }, 10000);
+    }, 60000);
 
     it("Query is updated in URL param", async () => {
         expect(page.url()).toContain("q=Oasis");

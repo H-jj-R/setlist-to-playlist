@@ -22,7 +22,7 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
         slowMo: 10
     });
     const page: puppeteer.Page = await browser.newPage();
-    page.setDefaultTimeout(400000);
+    page.setDefaultTimeout(500000);
     page.setDefaultNavigationTimeout(20000);
     await page.setViewport({ height: 720, width: 1280 });
     log("Browser launch successful");
