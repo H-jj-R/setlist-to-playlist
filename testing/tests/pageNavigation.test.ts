@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { launch } from "../utils";
+import { launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;

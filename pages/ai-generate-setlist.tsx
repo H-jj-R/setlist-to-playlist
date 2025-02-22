@@ -57,16 +57,45 @@ export default function AIGenerateSetlist(): JSX.Element {
                             <SearchBar
                                 aria-label={i18n("generateSetlist:searchForArtist")}
                                 isPredicted={true}
+                                locked={state.searchBarLocked}
                                 onSearch={handleSearch}
                             />
                         </div>
                         {state.showLoading && !state.animLoading && (
                             <div id="progress-indicator" className="mt-16 flex flex-col items-center pt-8">
-                                <p id="progress-text" className="mb-2 text-lg font-medium text-gray-700">
-                                    {state.progress < 100
-                                        ? `Generating setlist... (${state.progress}%)`
-                                        : "Finalising..."}
-                                </p>
+                                <div className="mb-2 flex items-center gap-3">
+                                    <svg
+                                        className="h-5 w-5 animate-spin align-middle text-gray-500"
+                                        viewBox="0 0 50 50"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <circle
+                                            className="opacity-30"
+                                            cx={25}
+                                            cy={25}
+                                            fill="none"
+                                            r={20}
+                                            stroke="currentColor"
+                                            strokeWidth={10}
+                                        />
+                                        <circle
+                                            className="opacity-90"
+                                            cx={25}
+                                            cy={25}
+                                            fill="none"
+                                            r={20}
+                                            stroke="currentColor"
+                                            strokeDasharray="31.415, 31.415"
+                                            strokeDashoffset={0}
+                                            strokeWidth={10}
+                                        />
+                                    </svg>
+                                    <p id="progress-text" className="text-lg font-medium text-gray-500">
+                                        {state.progress < 100
+                                            ? `Generating setlist... (${state.progress}%)`
+                                            : "Finalising..."}
+                                    </p>
+                                </div>
                                 <div
                                     id="progress-bar-container"
                                     className="h-2 w-64 overflow-hidden rounded-full bg-gray-300"
