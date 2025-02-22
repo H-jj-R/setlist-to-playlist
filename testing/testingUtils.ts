@@ -17,7 +17,7 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
     const browser: puppeteer.Browser = await puppeteer.launch({
         args: ["--no-sandbox", "--start-maximized"],
         devtools: false,
-        headless: false,
+        headless: "new",
         ignoreDefaultArgs: ["--disable-extensions"],
         slowMo: 10
     });
