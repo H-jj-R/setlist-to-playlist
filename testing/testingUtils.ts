@@ -9,6 +9,7 @@ import * as puppeteer from "puppeteer";
 
 /**
  * Launches a Puppeteer Browser and Page object
+ *
  * @returns {Promise<{ browser: puppeteer.Browser; page: puppeteer.Page }>} Launched Puppeteer Browser and Page objects
  */
 export async function launch(): Promise<{ browser: puppeteer.Browser; page: puppeteer.Page }> {
@@ -16,7 +17,7 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
     const browser: puppeteer.Browser = await puppeteer.launch({
         args: ["--no-sandbox", "--start-maximized"],
         devtools: false,
-        headless: "new",
+        headless: false,
         ignoreDefaultArgs: ["--disable-extensions"],
         slowMo: 10
     });
@@ -35,7 +36,8 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
 
 /**
  * Resets the settings of the site to defaults
- * @param page Puppeteer Page object
+ *
+ * @param {puppeteer.Page} page - Puppeteer Page object
  */
 export async function resetSettings(page: puppeteer.Page): Promise<void> {
     // Open settings
@@ -74,9 +76,20 @@ export async function resetSettings(page: puppeteer.Page): Promise<void> {
 }
 
 /**
+ * Clears the input field
+ *
+ * @param {puppeteer.Page} page - Puppeteer Page object
+ * @param {puppeteer.ElementHandle<Element>} input - Input field to clear
+ */
+export async function clearInput(page: puppeteer.Page, input: puppeteer.ElementHandle<Element>): Promise<void> {
+    await input.click({ clickCount: 3 });
+    await page.keyboard.press("Backspace");
+}
+
+/**
  * Delays the execution of code
+ *
  * @param {number} time - Time to delay in milliseconds
- * @returns {Promise<void>} Promise that resolves after the delay
  */
 export async function delay(time: number): Promise<void> {
     return new Promise((resolve): void => {
