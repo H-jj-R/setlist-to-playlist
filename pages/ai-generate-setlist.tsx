@@ -57,6 +57,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                             <SearchBar
                                 aria-label={i18n("generateSetlist:searchForArtist")}
                                 isPredicted={true}
+                                locked={state.searchBarLocked}
                                 onSearch={handleSearch}
                             />
                         </div>

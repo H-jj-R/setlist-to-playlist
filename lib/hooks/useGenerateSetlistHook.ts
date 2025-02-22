@@ -30,6 +30,7 @@ export default function useGenerateSetlistHook() {
         predictedSetlists: null as null | Record<string, any>, // Stores all AI-generated setlists
         previousQuery: null as null | string, // Stores last searched query to avoid redundant calls
         progress: 0, // Tracks search and generation progress percentage
+        searchBarLocked: false, // Disables the search bar during generation
         searchComplete: false, // Indicates if the search process is complete
         searchTriggered: false, // Flags if a search has been initiated
         showAuthDialog: false, // Displays authentication dialog if needed
@@ -73,6 +74,7 @@ export default function useGenerateSetlistHook() {
                 error: null,
                 pageState: PageState.Idle,
                 progress: 0,
+                searchBarLocked: true,
                 searchComplete: false,
                 searchTriggered: true,
                 showLoading: false
@@ -172,6 +174,7 @@ export default function useGenerateSetlistHook() {
                 setState((prev) => ({
                     ...prev,
                     progress: 0,
+                    searchBarLocked: false,
                     showLoading: false
                 }));
             }
