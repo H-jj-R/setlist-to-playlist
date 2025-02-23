@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { launch } from "../testingUtils";
+import { delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -50,6 +50,7 @@ describe("Page Navigation -", () => {
     }, 10000);
 
     afterAll(async () => {
+        await delay(500);
         await browser.close();
     }, 10000);
 });
