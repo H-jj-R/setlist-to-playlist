@@ -30,6 +30,17 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 20.12.2
+                  cache: "npm"
+
+            - name: Cache Next.js cache
+              uses: actions/cache@v4
+              with:
+              path: |
+                  ~/.npm
+                  ${{ github.workspace }}/.next/cache
+              key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+              restore-keys: |
+                  ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
             - name: Install dependencies
               run: npm install
@@ -45,3 +56,9 @@ jobs:
 
             - name: Run Jest/Puppeteer tests
               run: npm test
+
+            - name: Upload test report folder
+              uses: actions/upload-artifact@v3
+              with:
+                  name: test-reports
+                  path: testing/reports
