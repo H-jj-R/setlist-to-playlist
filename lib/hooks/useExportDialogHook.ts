@@ -56,13 +56,17 @@ export default function useExportDialogHook(
                 ...prev,
                 playlistName: predictedSetlist
                     ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
-                    : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${format(
-                          ((dateString: string): Date => {
-                              const [day, month, year] = dateString.split("-");
-                              return new Date(`${year}-${month}-${day}`);
-                          })(setlist.eventDate),
-                          "MMMM dd, yyyy"
-                      )}`
+                    : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${
+                          setlist.eventDate
+                              ? format(
+                                    ((dateString: string): Date => {
+                                        const [day, month, year] = dateString.split("-");
+                                        return new Date(`${year}-${month}-${day}`);
+                                    })(setlist.eventDate),
+                                    "MMMM dd, yyyy"
+                                )
+                              : i18n("exportSetlist:combined")
+                      }`
             }));
         }
     }, [isOpen, artistData, setlist]);

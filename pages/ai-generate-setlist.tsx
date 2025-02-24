@@ -92,8 +92,8 @@ export default function AIGenerateSetlist(): JSX.Element {
                                     </svg>
                                     <p id="progress-text" className="text-lg font-medium text-gray-500">
                                         {state.progress < 100
-                                            ? `Generating setlist... (${state.progress}%)`
-                                            : "Finalising..."}
+                                            ? `${i18n("generateSetlist:generatingSetlist")}... (${state.progress}%)`
+                                            : `${i18n("generateSetlist:finalising")}...`}
                                     </p>
                                 </div>
                                 <div

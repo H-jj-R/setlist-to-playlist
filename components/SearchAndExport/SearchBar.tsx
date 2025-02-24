@@ -34,8 +34,8 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }): JSX.Element => {
     const { t: i18n } = useTranslation(); // Translation hook
     const [query, setQuery] = useState(""); // State to track the user's search input
-    const [isListening, setIsListening] = useState(false);
-    const recognitionRef = useRef(null);
+    const [isListening, setIsListening] = useState(false); // Tracks whether microphone input is currently active
+    const recognitionRef = useRef(null); // Stores reference to webkit speech recognition API
 
     /**
      * Handles voice search using the browser's built-in speech recognition API.

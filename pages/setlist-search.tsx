@@ -27,6 +27,7 @@ export default function SetlistSearch(): JSX.Element {
     // Hook initialiser to manage setlist search page actions and state
     const {
         handleBackToList,
+        handleCombineSetlists,
         handleExport,
         handleSearchRouterPush,
         handleSetlistChosenRouterPush,
@@ -74,6 +75,7 @@ export default function SetlistSearch(): JSX.Element {
                                     }`}
                                 >
                                     <ListOfSetlists
+                                        handleCombineSetlists={handleCombineSetlists}
                                         onSetlistChosen={handleSetlistChosenRouterPush}
                                         setlistData={state.allSetlistsData}
                                     />
@@ -104,19 +106,21 @@ export default function SetlistSearch(): JSX.Element {
                 />
             )}
             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
-                state.pageState === PageState.Setlist) && (
-                <ExportDialog
-                    artistData={{
-                        setlistfmArtist: state.allSetlistsData.setlistfmArtist,
-                        spotifyArtist: state.allSetlistsData.spotifyArtist
-                    }}
-                    isOpen={state.exportDialogOpen}
-                    onClose={(): void => {
-                        setState((prev) => ({ ...prev, exportDialogOpen: false }));
-                    }}
-                    setlist={state.chosenSetlistData}
-                />
-            )}
+                state.pageState === PageState.ListOfSetlists ||
+                state.pageState === PageState.Setlist) &&
+                state.exportDialogOpen && (
+                    <ExportDialog
+                        artistData={{
+                            setlistfmArtist: state.allSetlistsData.setlistfmArtist,
+                            spotifyArtist: state.allSetlistsData.spotifyArtist
+                        }}
+                        isOpen={state.exportDialogOpen}
+                        onClose={(): void => {
+                            setState((prev) => ({ ...prev, exportDialogOpen: false, mergedSetlistData: null }));
+                        }}
+                        setlist={state.mergedSetlistData || state.chosenSetlistData}
+                    />
+                )}
         </>
     );
 }
