@@ -104,6 +104,7 @@ describe("Setlist Search -", () => {
     }, 10000);
 
     afterAll(async () => {
+        await delay(500);
         await browser.close();
     }, 10000);
 });

@@ -151,7 +151,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
             />
             <div
                 id="account-settings-panel"
-                className={`relative h-full w-1/3 max-w-md transform p-4 shadow-lg transition-transform duration-300 ease-in-out ${
+                className={`relative h-full w-3/4 transform p-4 shadow-lg transition-transform duration-300 ease-in-out sm:w-2/5 md:w-1/3 lg:w-1/4 ${
                     state.isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
                 aria-live="assertive"

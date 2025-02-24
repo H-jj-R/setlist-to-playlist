@@ -15,11 +15,12 @@ import { useTranslation } from "react-i18next";
  * Props for the `ListOfSetlists` component.
  *
  * @property {Function} onSetlistChosen - Callback function that is triggered when a user selects a setlist.
- * @property {Record<string, any>} setlistData - The data containing details about the artist and their setlists.
+ * @property {Record<string, any>} setlistData - The setlist data containing details about the artist and their setlists.
  */
 interface ListOfSetlistsProps {
-    onSetlistChosen: (setlist: Record<string, any>) => void; // Callback function that handles when a user selects a setlist
-    setlistData: Record<string, any>; // The setlist data containing Spotify artist details and associated setlists
+    handleCombineSetlists: (setlist: Record<string, any>) => void;
+    onSetlistChosen: (setlist: Record<string, any>) => void;
+    setlistData: Record<string, any>;
 }
 
 /**
@@ -31,7 +32,11 @@ interface ListOfSetlistsProps {
  *
  * @returns {JSX.Element} The rendered `ListOfSetlists` component.
  */
-const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlistData }): JSX.Element => {
+const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
+    handleCombineSetlists,
+    onSetlistChosen,
+    setlistData
+}): JSX.Element => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
@@ -46,13 +51,15 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
             className="h-[calc(100vh-9rem)] w-full overflow-y-auto rounded-lg border-4 border-gray-300"
         >
             <div id="setlist-header" className="flex w-full flex-col items-center p-4">
-                <div id="artist-info" className="mb-5 flex items-center px-4">
-                    <img
-                        id="artist-img"
-                        className="mr-4 h-16 w-16 rounded-full"
-                        alt={setlistData.spotifyArtist.name}
-                        src={setlistData.spotifyArtist.images[0].url}
-                    />
+                <div id="artist-info" className="flex items-center px-4">
+                    {setlistData.spotifyArtist.images[0]?.url && (
+                        <img
+                            id="artist-img"
+                            className="mr-4 h-16 w-16 rounded-full"
+                            alt={setlistData.spotifyArtist.name}
+                            src={setlistData.spotifyArtist.images[0].url}
+                        />
+                    )}
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
                         ${
@@ -66,6 +73,15 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ onSetlistChosen, setlis
                 </div>
                 {state.setlists.length > 0 ? (
                     <>
+                        <div id="combine-export-btn-container" className="mb-1 flex justify-center p-2">
+                            <button
+                                id="combine-export-btn"
+                                className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
+                                onClick={(): void => handleCombineSetlists(state.setlists)}
+                            >
+                                {i18n("setlistSearch:combineExportAllSetlists")}
+                            </button>
+                        </div>
                         <ul id="setlist-list" className="w-full space-y-3 px-4">
                             {state.setlists.map(
                                 (setlist: Record<string, any>): JSX.Element => (

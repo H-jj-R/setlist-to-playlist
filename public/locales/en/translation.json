@@ -95,6 +95,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Authorise with Spotify",
+        "combined": "Combined",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Drag & drop a playlist cover image here, or click to select one.",
         "enterPlaylistDescription": "Enter playlist description",
@@ -126,6 +127,8 @@
     },
     "generateSetlist": {
         "combineExportAll": "Combine & Export All Predicted Setlists",
+        "finalising": "Finalising",
+        "generatingSetlist": "Generating setlist",
         "openaiDisabled": "OpenAI API is currently disabled.",
         "predictSetlistFailed": "Failed to predict setlist.",
         "queryLimitReached": "Daily query limit reached. Please try again later.",
@@ -168,6 +171,7 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} at {{location}}",
         "backToList": "Back to List",
+        "combineExportAllSetlists": "Combine & Export All Loaded Setlists",
         "cover": "cover",
         "hiddenSetlistsMessage": "{{count}} empty setlist is hidden",
         "hiddenSetlistsMessagePlural": "{{count}} empty setlists are hidden",

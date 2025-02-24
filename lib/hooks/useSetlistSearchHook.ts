@@ -30,6 +30,7 @@ export default function useSetlistSearchHook() {
         countryFilter: "" as string, // Stores the country filter preference
         error: null as null | string, // Stores error messages
         exportDialogOpen: false, // Controls the visibility of the export dialog
+        mergedSetlistData: null as null | Record<string, any>, // Stores combined songs from multiple setlists
         pageState: PageState.Idle, // Manages different UI states
         previousQuery: null as null | string, // Stores the last performed search query to avoid redundant calls
         searchComplete: false, // Tracks if a search operation has finished
@@ -286,8 +287,39 @@ export default function useSetlistSearchHook() {
         }
     }, []);
 
+    /**
+     * Combines all setlists into a single setlist for exporting to Spotify.
+     *
+     * @param {Record<string, any>} allSetlists - All loaded setlists to combine
+     */
+    const handleCombineSetlists = useCallback(
+        async (allSetlists: Record<string, any>): Promise<void> => {
+            // Map each setlist to its song array, defaulting to an empty array if not present.
+            const setsArray = allSetlists.map((setlist: Record<string, any>) => setlist.sets?.set?.[0]?.song ?? []);
+            const songSet = new Set<string>(); // Use a Set to track unique song names to avoid duplicates.
+            const mergedSongs: Record<string, any>[] = []; // Array used to accumulate unique tracks from all setlists.
+
+            // Loop over indices while at least one set in setsArray still has songs at index i.
+            for (let i = 0; setsArray.some((set: Record<string, any>): boolean => i < set.length); i++) {
+                // For each set, get the song at the current index (if it exists).
+                setsArray.forEach((set: Record<string, any>): void => {
+                    const track = set[i];
+                    if (track && !songSet.has(track.name)) {
+                        // Mark the song as added and push it to the mergedSongs array.
+                        songSet.add(track.name);
+                        mergedSongs.push(track);
+                    }
+                });
+            }
+            setState((prev) => ({ ...prev, mergedSetlistData: { sets: { set: [{ song: mergedSongs }] } } }));
+            await handleExport();
+        },
+        [handleExport]
+    );
+
     return {
         handleBackToList,
+        handleCombineSetlists,
         handleExport,
         handleSearchRouterPush,
         handleSetlistChosenRouterPush,

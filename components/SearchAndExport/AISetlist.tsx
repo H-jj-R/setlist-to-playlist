@@ -16,9 +16,9 @@ import { useTranslation } from "react-i18next";
  * @property {Record<string, any>} setlist - The AI-generated setlist data.
  */
 interface AISetlistProps {
-    onExport: (setlist: Record<string, any>) => void; // Function to trigger Spotify export
-    predictionNum: number; // The number of the prediction
-    setlist: Record<string, any>; // The setlist data to be displayed
+    onExport: (setlist: Record<string, any>) => void;
+    predictionNum: number;
+    setlist: Record<string, any>;
 }
 
 /**
