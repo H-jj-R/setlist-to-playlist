@@ -156,9 +156,12 @@ export default function useSetlistSongsExportHook(
     useEffect((): void => {
         if (state.spotifySongs) {
             onSongsFetched(
-                state.spotifySongs.filter(
-                    (song: Record<string, any>, idx: number) => !state.excludedSongs.has(`${song.id}-${idx}`)
-                )
+                state.spotifySongs
+                    .filter((song: null | Record<string, any>): song is Record<string, any> => song !== null)
+                    .filter(
+                        (song: Record<string, any>, idx: number): boolean =>
+                            !state.excludedSongs.has(`${song.id}-${idx}`)
+                    )
             );
         }
     }, [state.spotifySongs, state.excludedSongs]);

@@ -4,7 +4,6 @@ const config: Config = {
     preset: "jest-puppeteer",
     reporters: [
         "default",
-        "<rootDir>/logger.js",
         [
             "<rootDir>/../node_modules/jest-html-reporters",
             {

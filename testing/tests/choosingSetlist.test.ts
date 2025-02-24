@@ -14,7 +14,7 @@ let page: puppeteer.Page;
 /**
  * Tests related to choosing a setlist after a valid query has been entered.
  */
-describe("Choosing Setlist -", () => {
+describe("Choosing Setlist", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);

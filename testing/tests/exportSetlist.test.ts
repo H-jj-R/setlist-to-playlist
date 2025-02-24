@@ -12,9 +12,9 @@ let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
 /**
- * Tests related to user authentication.
+ * Tests related to exporting setlists.
  */
-describe("Authentication", () => {
+describe("Export Setlist", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);

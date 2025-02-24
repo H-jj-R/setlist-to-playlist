@@ -19,17 +19,15 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
         devtools: false,
         headless: "new",
         ignoreDefaultArgs: ["--disable-extensions"],
-        slowMo: 10
+        slowMo: 5
     });
     const page: puppeteer.Page = await browser.newPage();
     page.setDefaultTimeout(500000);
     page.setDefaultNavigationTimeout(20000);
     await page.setViewport({ height: 720, width: 1280 });
-    log("Browser launch successful");
 
     // Go to the site and wait for navigation
     await Promise.all([page.goto("http://localhost:3000/"), page.waitForNavigation()]);
-    log("URL redirect successful");
 
     return { browser, page };
 }
@@ -42,7 +40,8 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
 export async function resetSettings(page: puppeteer.Page): Promise<void> {
     // Open settings
     const settingsBut = await page.waitForSelector("#settings-btn");
-    settingsBut.click();
+    await settingsBut.click();
+    await delay(500);
     // Theme - dark by default
     const themeSelect = await page.waitForSelector("#theme-select");
     await themeSelect.select("dark");
@@ -72,7 +71,7 @@ export async function resetSettings(page: puppeteer.Page): Promise<void> {
     // Close settings
     const closeBut = await page.waitForSelector("#close-settings-btn");
     closeBut.click();
-    await delay(1000);
+    await delay(500);
 }
 
 /**

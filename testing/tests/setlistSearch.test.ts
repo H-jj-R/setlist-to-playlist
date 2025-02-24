@@ -14,7 +14,7 @@ let page: puppeteer.Page;
 /**
  * Tests related to setlist search.
  */
-describe("Setlist Search -", () => {
+describe("Setlist Search", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);

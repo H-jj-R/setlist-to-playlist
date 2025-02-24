@@ -12,9 +12,9 @@ let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
 /**
- * Tests related to user authentication.
+ * Tests related to the About + Support page.
  */
-describe("Authentication", () => {
+describe("About + Support Page", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
