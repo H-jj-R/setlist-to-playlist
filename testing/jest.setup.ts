@@ -9,7 +9,7 @@ export default async (): Promise<void> => {
     await app.prepare();
     server = app.getServer();
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject): void => {
         server.listen(3000, (err: any): void => {
             if (err) return reject(err);
             resolve();

@@ -294,8 +294,20 @@ export default function useSetlistSearchHook() {
      */
     const handleCombineSetlists = useCallback(
         async (allSetlists: Record<string, any>): Promise<void> => {
-            // Map each setlist to its song array, defaulting to an empty array if not present.
-            const setsArray = allSetlists.map((setlist: Record<string, any>) => setlist.sets?.set?.[0]?.song ?? []);
+            // For each setlist, collect all songs from nested sets using a stack.
+            const setsArray = allSetlists.map((setlist: Record<string, any>) => {
+                const songs: Record<string, any>[] = [];
+                // Initialise the stack with the top-level sets (if any).
+                const stack: Record<string, any>[] = setlist.sets?.set ? [...setlist.sets.set] : [];
+                // Process the stack until it's empty.
+                while (stack.length > 0) {
+                    const current = stack.shift();
+                    if (current?.song) songs.push(...current.song); // If there are songs in this set, add them.
+                    if (current?.set) stack.push(...current.set); // If there are nested sets, push them onto the stack.
+                }
+                return songs;
+            });
+
             const songSet = new Set<string>(); // Use a Set to track unique song names to avoid duplicates.
             const mergedSongs: Record<string, any>[] = []; // Array used to accumulate unique tracks from all setlists.
 

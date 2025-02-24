@@ -104,7 +104,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
             />
             <div
                 id="settings-panel"
-                className={`h-full w-3/4 transform p-4 shadow-lg transition-transform duration-300 ease-in-out sm:w-2/5 md:w-1/3 lg:w-1/4 ${
+                className={`h-full w-3/4 transform p-4 shadow-lg transition-transform duration-300 ease-in-out sm:w-2/5 md:w-1/3 lg:w-1/3 ${
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
