@@ -56,6 +56,7 @@
         "signUpSuccess": "Sign-up successful! You can now log in.",
         "userCreatedSuccessfully": "User created successfully.",
         "username": "Username",
+        "usernameError": "Username must be 3-20 characters, and can only contain letters, numbers, underscores, and dashes.",
         "yesDelete": "Yes, Delete"
     },
     "common": {

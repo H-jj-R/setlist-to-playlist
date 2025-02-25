@@ -66,7 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             id="username-input"
                             className="w-full rounded-lg border border-gray-300 px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-200"
                             autoComplete="username"
-                            maxLength={24}
+                            maxLength={20}
                             name="username"
                             placeholder={i18n("account:username")}
                             required
@@ -77,6 +77,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             className="absolute left-3 top-1/2 -translate-y-1/2 transform pl-1 text-gray-200"
                             icon={faUserCircle}
                         />
+                    </div>
+                )}
+                {state.usernameError && (
+                    <div id="username-error" className="text-sm text-red-500">
+                        {state.usernameError}
                     </div>
                 )}
                 {(state.dialogState === LoginDialogState.Login ||
