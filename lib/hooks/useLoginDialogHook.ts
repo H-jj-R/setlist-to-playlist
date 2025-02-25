@@ -32,8 +32,16 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
         passwordError: null as null | string, // Stores password validation errors
         passwordVisible: false, // Tracks password visibility
         recaptchaToken: null as null | string, // Stores the ReCAPTCHA verification token
-        storedEmail: null as null | string // Stores the user's email during password reset
+        storedEmail: null as null | string, // Stores the user's email during password reset
+        usernameError: null as null | string // Stores username validation errors
     });
+
+    /**
+     * Regular expression for validating usernames.
+     * Ensures only letters, numbers, underscores, and dashes,
+     * with a length between 3 and 20 characters.
+     */
+    const USERNAME_REGEX: RegExp = /^[a-zA-Z0-9_-]{3,20}$/;
 
     /**
      * Regular expression for validating passwords.
@@ -99,6 +107,7 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                 const password = formData.get("password") as string;
 
                 if (state.dialogState === LoginDialogState.SignUp) {
+                    if (!(await validateUsername(formData.get("username") as string))) return; // Validate username for signup
                     if (!(await validatePassword(password))) return; // Validate password for signup
                 }
 
@@ -214,6 +223,33 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                 recaptchaToken: null
             }));
         }
+    };
+
+    /**
+     * Validates the user's username based on predefined security rules.
+     *
+     * @param username - The username to validate.
+     * @returns {Promise<boolean>} `true` if the username meets requirements, `false` otherwise.
+     */
+    const validateUsername = async (username: string): Promise<boolean> => {
+        if (!USERNAME_REGEX.test(username)) {
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset(); // Reset reCAPTCHA if username validation fails
+            }
+            setState((prev) => ({
+                ...prev,
+                messageDialog: {
+                    isOpen: false,
+                    message: "",
+                    type: MessageDialogState.Success
+                },
+                recaptchaToken: null,
+                usernameError: i18n("account:usernameError")
+            }));
+            return false;
+        }
+        setState((prev) => ({ ...prev, usernameError: null }));
+        return true;
     };
 
     /**

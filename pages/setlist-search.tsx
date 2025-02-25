@@ -98,10 +98,7 @@ export default function SetlistSearch(): JSX.Element {
             {state.showAuthDialog && (
                 <SpotifyAuthDialog
                     onClose={(): void => {
-                        setState((prev) => ({
-                            ...prev,
-                            showAuthDialog: false
-                        }));
+                        setState((prev) => ({ ...prev, showAuthDialog: false }));
                     }}
                 />
             )}
