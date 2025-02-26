@@ -64,6 +64,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 <button
                                     id="edit-btn"
                                     className="p-1 text-gray-600 hover:text-gray-900"
+                                    aria-label={i18n("common:edit")}
                                     onClick={(): void => {
                                         setState((prev) => ({ ...prev, editing: true }));
                                     }}
@@ -88,7 +89,17 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                         {i18n("common:delete")}
                                     </button>
                                 </div>
-                                <button id="expand-collapse-btns-container" className="p-1" onClick={toggleExpand}>
+                                <button
+                                    id="expand-collapse-btns-container"
+                                    className="p-1"
+                                    aria-expanded={state.expanded}
+                                    aria-label={
+                                        state.expanded
+                                            ? i18n("userPlaylists:collapseContents")
+                                            : i18n("userPlaylists:expandContents")
+                                    }
+                                    onClick={toggleExpand}
+                                >
                                     {state.expanded ? (
                                         <FontAwesomeIcon
                                             id="fa-chevron-up-icon"
@@ -109,6 +120,9 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                         </>
                     ) : (
                         <div id="user-playlist-edit-container" className="w-10/12">
+                            <label id="sr-playlist-name-input" className="sr-only" htmlFor="playlist-name-input">
+                                {i18n("exportSetlist:enterPlaylistName")}
+                            </label>
                             <input
                                 id="playlist-name-input"
                                 className="mb-2 w-full rounded-md border p-2"
@@ -124,6 +138,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             <textarea
                                 id="playlist-description-input"
                                 className="h-32 w-full rounded-md border p-2"
+                                aria-live="polite"
                                 autoComplete="off"
                                 maxLength={300}
                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -136,6 +151,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 <button
                                     id="save-btn"
                                     className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
+                                    aria-controls="user-playlist-edit-container"
+                                    aria-label={i18n("userPlaylists:savePlaylistChanges")}
                                     onClick={handleSave}
                                 >
                                     {i18n("common:save")}
@@ -143,6 +160,8 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 <button
                                     id="cancel-btn"
                                     className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
+                                    aria-controls="user-playlist-edit-container"
+                                    aria-label={i18n("userPlaylists:cancelDiscardChanges")}
                                     onClick={(): void => {
                                         setState((prev) => ({
                                             ...prev,
@@ -162,27 +181,53 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                     <div
                         id="user-playlist-contents-container"
                         className="mt-4 border-t border-gray-200 dark:border-gray-700"
+                        aria-expanded={state.expanded}
+                        aria-labelledby="sr-playlist-contents-title"
+                        role="region"
                     >
+                        <span id="sr-playlist-contents-title" className="sr-only">
+                            {i18n("userPlaylists:playlistContents")}
+                        </span>
                         {state.songsLoading ? (
-                            <div id="loader-container" className="flex justify-center p-6">
+                            <div
+                                id="loader-container"
+                                className="flex justify-center p-6"
+                                aria-busy="true"
+                                aria-live="polite"
+                                role="status"
+                            >
                                 <CustomHashLoader showLoading={true} size={80} />
                             </div>
                         ) : state.songError ? (
-                            <ErrorMessage message={state.songError} />
+                            <div id="error-message-container" role="alert">
+                                <ErrorMessage message={state.songError} />
+                            </div>
                         ) : (
-                            <ul id="user-playlist-tracks" className="space-y-2">
+                            <ul
+                                id="user-playlist-tracks"
+                                className="space-y-2"
+                                aria-labelledby="sr-playlist-contents-title"
+                                role="list"
+                            >
                                 {state.tracks?.map(
                                     (track: Record<string, any>, idx: number): JSX.Element => (
                                         <li
                                             id={`track-${idx}-${track.id}`}
                                             className="mt-4 flex items-center space-x-4"
+                                            aria-describedby={`track-artist-${idx}`}
+                                            aria-labelledby={`track-name-${idx}`}
                                             key={`${idx}-${track.id}`}
+                                            role="listitem"
                                         >
                                             <img
                                                 id="track-img"
                                                 className="h-12 w-12 rounded"
-                                                alt={track.name}
-                                                src={track.album.images[0]?.url}
+                                                alt={
+                                                    track.name
+                                                        ? `${track.name} ${i18n("common:image")}`
+                                                        : i18n("common:songCoverArt")
+                                                }
+                                                src={track.album.images[0]?.url || "/images/song-placeholder.jpg"}
                                             />
                                             <div>
                                                 <p id="track-name" className="font-medium">

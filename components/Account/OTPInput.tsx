@@ -100,7 +100,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
 
     return (
         <fieldset id="otp-fieldset">
-            <legend id="otp-legend" className="sr-only">
+            <legend id="sr-otp-legend" className="sr-only">
                 {i18n("account:enterOTPCode")}
             </legend>
             <div id="otp-inputs-container" className="flex justify-center space-x-2">

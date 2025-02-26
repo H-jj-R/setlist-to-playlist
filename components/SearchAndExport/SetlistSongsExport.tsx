@@ -82,8 +82,15 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                                 <img
                                                     id="song-cover-img"
                                                     className="h-12 w-12 rounded shadow"
-                                                    alt={`${spotifySong.name} ${i18n("setlistSearch:image")}`}
-                                                    src={spotifySong.album.images[0].url}
+                                                    alt={
+                                                        spotifySong.name
+                                                            ? `${spotifySong.name} ${i18n("common:image")}`
+                                                            : i18n("common:songCoverArt")
+                                                    }
+                                                    src={
+                                                        spotifySong.album.images[0]?.url ||
+                                                        "/images/song-placeholder.jpg"
+                                                    }
                                                 />
                                             )}
                                             <div>
