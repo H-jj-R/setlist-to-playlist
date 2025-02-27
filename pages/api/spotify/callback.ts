@@ -5,7 +5,7 @@
  */
 
 import getBaseUrl from "@utils/getBaseUrl";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import CryptoJS from "crypto-js";
 import { NextApiRequest, NextApiResponse } from "next";
 

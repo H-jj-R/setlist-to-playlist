@@ -7,7 +7,7 @@
         "@typescript-eslint/parser": "^8.23.0",
         "bcrypt": "^5.1.1",
         "chalk": "^5.3.0",
-        "cookie": "^0.6.0",
+        "cookie": "^1.0.2",
         "crypto-js": "^4.2.0",
         "date-fns": "^3.6.0",
         "eslint-plugin-perfectionist": "^4.8.0",

@@ -5,7 +5,7 @@
  */
 
 import decryptToken from "@utils/decryptToken";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
