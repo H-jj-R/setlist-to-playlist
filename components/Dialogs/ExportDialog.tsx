@@ -136,7 +136,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                             <img
                                                 id="img-preview"
                                                 className="mr-2 h-24 w-24 rounded-lg object-cover"
-                                                alt="Playlist Cover"
+                                                alt={i18n("exportSetlist:uploadedPlaylistCover")}
                                                 src={state.imagePreview as string}
                                             />
                                             <button

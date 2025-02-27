@@ -5,7 +5,7 @@
  */
 
 import decryptToken from "@utils/decryptToken";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const accessToken = decryptToken(encryptedAccessToken);
-        
+
         // Convert track IDs to a comma-separated string (if an array is received)
         const trackIdsParam = Array.isArray(trackIds) ? trackIds.join(",") : trackIds;
 

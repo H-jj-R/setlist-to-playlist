@@ -35,6 +35,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
         <div
             id="confirmation-modal-background-container"
             className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            aria-describedby="confirmation-modal-message"
+            aria-labelledby="confirmation-modal-title"
+            aria-live="assertive"
+            aria-modal="true"
+            role="dialog"
+            tabIndex={-1}
         >
             <div
                 id="confirmation-modal-container"
@@ -52,6 +58,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                     <button
                         id="confirm-btn"
                         className="rounded bg-red-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-red-700"
+                        aria-label={i18n("account:yesDelete")}
                         onClick={onConfirm}
                     >
                         {i18n("account:yesDelete")}
@@ -59,6 +66,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                     <button
                         id="cancel-btn"
                         className="rounded bg-gray-300 px-4 py-2 text-gray-800 transition-colors duration-300 hover:bg-gray-400"
+                        aria-label={i18n("common:cancel")}
                         onClick={onCancel}
                     >
                         {i18n("common:cancel")}

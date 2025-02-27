@@ -56,6 +56,7 @@
         "signUpSuccess": "Inscription réussie ! Vous pouvez maintenant vous connecter.",
         "userCreatedSuccessfully": "Utilisateur créé avec succès.",
         "username": "Nom d'utilisateur",
+        "usernameError": "Le nom d'utilisateur doit contenir entre 3 et 20 caractères et ne peut inclure que des lettres, des chiffres, des underscores et des tirets.",
         "yesDelete": "Oui, supprimer"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "Annuler",
         "close": "Fermer",
         "delete": "Supprimer",
+        "edit": "Modifier",
         "email": "Email",
         "error": "Erreur !",
         "export": "Exporter",
         "exportToSpotify": "Exporter vers Spotify",
         "hide": "Cacher",
+        "image": "image",
         "internalServerError": "Erreur interne du serveur !",
         "issue": "Problème",
         "loading": "Chargement",
@@ -83,6 +86,8 @@
         "search": "Rechercher",
         "setlist": "Setlist",
         "show": "Afficher",
+        "siteLogo": "Logo du site",
+        "songCoverArt": "Pochette de la chanson",
         "spotifyAccessTokenError": "Aucun token d'accès Spotify trouvé !",
         "spotifyAuthorisationRequired": "Vous devez autoriser Spotify pour continuer !",
         "spotifyAuthorise": "Autoriser avec Spotify",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Autoriser avec Spotify",
+        "combined": "Combiné",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Glissez-déposez une image de couverture de playlist ici, ou cliquez pour en sélectionner une.",
         "enterPlaylistDescription": "Entrez la description de la playlist",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "Erreur lors de la création de la playlist !",
         "spotifyGetUserDataError": "Erreur lors de la récupération des données utilisateur !",
         "spotifySearchTrackError": "Erreur lors de la recherche du morceau sur Spotify !",
-        "unknownSong": "Morceau inconnu"
+        "unknownSong": "Morceau inconnu",
+        "uploadedPlaylistCover": "Couverture de la playlist téléchargée"
     },
     "generateSetlist": {
         "combineExportAll": "Combiner & Exporter toutes les setlists prédites",
+        "finalising": "Finalisation",
+        "generatingSetlist": "Génération de la setlist",
         "openaiDisabled": "L'API OpenAI est actuellement désactivée.",
         "predictSetlistFailed": "Échec de la prédiction de la setlist.",
         "queryLimitReached": "Limite quotidienne de requêtes atteinte. Veuillez réessayer plus tard.",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} à {{location}}",
         "backToList": "Retour à la liste",
+        "combineExportAllSetlists": "Combiner et exporter toutes les setlists chargées",
         "cover": "couverture",
         "hiddenSetlistsMessage": "{{count}} setlist vide est cachée",
         "hiddenSetlistsMessagePlural": "{{count}} setlists vides sont cachées",
-        "image": "image",
         "inCountry": "en {{country}}",
         "interlude": "Interlude",
         "intro": "Intro",
@@ -211,16 +220,21 @@
         "themeTitle": "Thème"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "Annuler et abandonner les modifications",
+        "collapseContents": "Réduire le contenu de la playlist",
         "createdPlaylists": "Playlists créées",
         "detailsUpdated": "Détails de la playlist mis à jour avec succès !",
+        "expandContents": "Développer le contenu de la playlist",
         "missingParameters": "Certains paramètres sont manquants.",
         "missingTrackIds": "IDs de piste manquants.",
         "noPlaylistsCreated": "Vous n'avez pas encore créé de playlists !",
+        "playlistContents": "Contenu de la playlist",
         "playlistDeleted": "Cette playlist a été supprimée.",
         "playlistNotFound": "Playlist non trouvée !",
         "playlistRecovered": "Playlist récupérée avec succès sur votre compte Spotify !",
         "playlistSaved": "Playlist enregistrée avec succès !",
         "recover": "Récupérer",
+        "savePlaylistChanges": "Enregistrer les modifications de la playlist",
         "yourExportedSetlists": "Vos setlists exportées"
     }
 }

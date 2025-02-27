@@ -56,6 +56,7 @@
         "signUpSuccess": "تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.",
         "userCreatedSuccessfully": "تم إنشاء المستخدم بنجاح.",
         "username": "اسم المستخدم",
+        "usernameError": "يجب أن يكون اسم المستخدم من 3 إلى 20 حرفًا، ويمكن أن يحتوي فقط على أحرف وأرقام وشرطات سفلية وشرطات.",
         "yesDelete": "نعم، احذف"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "إلغاء",
         "close": "إغلاق",
         "delete": "حذف",
+        "edit": "تحرير",
         "email": "البريد الإلكتروني",
         "error": "خطأ!",
         "export": "تصدير",
         "exportToSpotify": "تصدير إلى سبوتيفاي",
         "hide": "إخفاء",
+        "image": "صورة",
         "internalServerError": "خطأ في الخادم الداخلي!",
         "issue": "مشكلة",
         "loading": "جارٍ التحميل",
@@ -83,6 +86,8 @@
         "search": "بحث",
         "setlist": "قائمة التشغيل",
         "show": "عرض",
+        "siteLogo": "شعار الموقع",
+        "songCoverArt": "غلاف الأغنية",
         "spotifyAccessTokenError": "لم يتم العثور على رمز وصول سبوتيفاي!",
         "spotifyAuthorisationRequired": "يجب أن تقوم بالتفويض مع سبوتيفاي للمتابعة!",
         "spotifyAuthorise": "تفويض مع سبوتيفاي",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "تفويض مع سبوتيفاي",
+        "combined": "مُدمج",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "اسحب وأفلت صورة غلاف قائمة التشغيل هنا، أو انقر لاختيار واحدة.",
         "enterPlaylistDescription": "أدخل وصف قائمة التشغيل",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "خطأ في إنشاء قائمة التشغيل!",
         "spotifyGetUserDataError": "خطأ في جلب بيانات المستخدم!",
         "spotifySearchTrackError": "خطأ في البحث عن أغنية في سبوتيفاي!",
-        "unknownSong": "أغنية غير معروفة"
+        "unknownSong": "أغنية غير معروفة",
+        "uploadedPlaylistCover": "تم رفع غلاف قائمة التشغيل"
     },
     "generateSetlist": {
         "combineExportAll": "دمج وتصدير جميع قوائم التشغيل المتوقعة",
+        "finalising": "جارٍ الإنهاء",
+        "generatingSetlist": "جارٍ إنشاء قائمة الأغاني",
         "openaiDisabled": "API OpenAI معطلة حاليًا.",
         "predictSetlistFailed": "فشل في التنبؤ بقائمة التشغيل.",
         "queryLimitReached": "تم الوصول إلى حد الاستعلام اليومي. يرجى المحاولة لاحقًا.",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} في {{location}}",
         "backToList": "العودة إلى القائمة",
+        "combineExportAllSetlists": "دمج وتصدير جميع القوائم المحملة",
         "cover": "غلاف",
         "hiddenSetlistsMessage": "قائمة الأغاني الخالية {{count}} مخفية",
         "hiddenSetlistsMessagePlural": "قوائم الأغاني الخالية {{count}} مخفية",
-        "image": "صورة",
         "inCountry": "في {{country}}",
         "interlude": "فاصل",
         "intro": "مقدمة",
@@ -211,16 +220,21 @@
         "themeTitle": "الموضوع"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "إلغاء والتخلي عن التعديلات",
+        "collapseContents": "طي محتويات قائمة التشغيل",
         "createdPlaylists": "قوائم الأغاني التي تم إنشاؤها",
         "detailsUpdated": "تم تحديث تفاصيل القائمة بنجاح!",
+        "expandContents": "توسيع محتويات قائمة التشغيل",
         "missingParameters": "بعض المعلمات مفقودة.",
         "missingTrackIds": "معرفات الأغاني مفقودة.",
         "noPlaylistsCreated": "لم تقم بإنشاء أي قوائم أغاني بعد!",
+        "playlistContents": "محتويات قائمة التشغيل",
         "playlistDeleted": "تم حذف هذه القائمة.",
         "playlistNotFound": "لم يتم العثور على القائمة!",
         "playlistRecovered": "تم استعادة القائمة بنجاح إلى حسابك على Spotify!",
         "playlistSaved": "تم حفظ القائمة بنجاح!",
         "recover": "استعادة",
+        "savePlaylistChanges": "حفظ تعديلات قائمة التشغيل",
         "yourExportedSetlists": "قوائم الأغاني التي قمت بتصديرها"
     }
 }

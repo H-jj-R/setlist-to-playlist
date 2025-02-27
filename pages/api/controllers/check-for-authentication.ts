@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

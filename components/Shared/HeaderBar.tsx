@@ -35,7 +35,12 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
             <div id="header-container" className="flex items-center justify-between px-4 py-2">
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
                     <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
-                        <img id="site-logo" className="h-10 w-auto" alt="Site Logo" src="/images/logo.png" />
+                        <img
+                            id="site-logo"
+                            className="h-10 w-auto"
+                            alt={i18n("common:siteLogo")}
+                            src="/images/logo.png"
+                        />
                         <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist
                         </span>

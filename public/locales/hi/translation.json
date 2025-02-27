@@ -56,6 +56,7 @@
         "signUpSuccess": "साइन अप सफल! अब आप लॉगिन कर सकते हैं।",
         "userCreatedSuccessfully": "उपयोगकर्ता सफलतापूर्वक बनाया गया।",
         "username": "उपयोगकर्ता नाम",
+        "usernameError": "यूज़रनेम 3 से 20 अक्षरों का होना चाहिए और केवल अक्षर, अंक, अंडरस्कोर और डैश शामिल कर सकता है।",
         "yesDelete": "हाँ, हटाएं"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "रद्द करें",
         "close": "बंद करें",
         "delete": "हटाएं",
+        "edit": "संपादित करें",
         "email": "ईमेल",
         "error": "त्रुटि!",
         "export": "निर्यात करें",
         "exportToSpotify": "Spotify पर निर्यात करें",
         "hide": "छिपाएं",
+        "image": "छवि",
         "internalServerError": "आंतरिक सर्वर त्रुटि!",
         "issue": "समस्या",
         "loading": "लोड हो रहा है",
@@ -83,6 +86,8 @@
         "search": "खोजें",
         "setlist": "सेटलिस्ट",
         "show": "दिखाएं",
+        "siteLogo": "साइट लोगो",
+        "songCoverArt": "गाने का कवर आर्ट",
         "spotifyAccessTokenError": "Spotify एक्सेस टोकन नहीं मिला!",
         "spotifyAuthorisationRequired": "आगे बढ़ने के लिए आपको Spotify से प्रमाणित करना होगा!",
         "spotifyAuthorise": "Spotify से प्रमाणित करें",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Spotify से प्रमाणित करें",
+        "combined": "संयुक्त",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "यहां प्लेइस्ट कवर छवि को खींचें और छोड़ें, या एक का चयन करने के लिए क्लिक करें।",
         "enterPlaylistDescription": "प्लेइस्ट विवरण दर्ज करें",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "प्लेइस्ट बनाने में त्रुटि!",
         "spotifyGetUserDataError": "उपयोगकर्ता डेटा प्राप्त करने में त्रुटि!",
         "spotifySearchTrackError": "Spotify पर गाने को खोजने में त्रुटि!",
-        "unknownSong": "अज्ञात गाना"
+        "unknownSong": "अज्ञात गाना",
+        "uploadedPlaylistCover": "अपलोड किया गया प्लेलिस्ट कवर"
     },
     "generateSetlist": {
         "combineExportAll": "सभी पूर्वानुमानित सेटलिस्टों को संयोजित और निर्यात करें",
+        "finalising": "अंतिम रूप दे रहे हैं",
+        "generatingSetlist": "सेटलिस्ट बना रहे हैं",
         "openaiDisabled": "OpenAI API वर्तमान में निष्क्रिय है।",
         "predictSetlistFailed": "सेटलिस्ट का पूर्वानुमान करने में विफल!",
         "queryLimitReached": "दैनिक क्वेरी सीमा पार हो गई है। कृपया कुछ देर बाद पुनः प्रयास करें।",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} at {{location}}",
         "backToList": "सूची में वापस जाएं",
+        "combineExportAllSetlists": "सभी लोडेड सेटलिस्ट को संयोजित और निर्यात करें",
         "cover": "कवर",
         "hiddenSetlistsMessage": "{{count}} खाली सेटलिस्ट छिपी हुई है",
         "hiddenSetlistsMessagePlural": "{{count}} खाली सेटलिस्ट छिपी हुई हैं",
-        "image": "छवि",
         "inCountry": "{{country}} में",
         "interlude": "इंटरल्यूड",
         "intro": "इंट्रो",
@@ -211,16 +220,21 @@
         "themeTitle": "थीम"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "रद्द करें और परिवर्तन त्यागें",
+        "collapseContents": "प्लेलिस्ट सामग्री संक्षिप्त करें",
         "createdPlaylists": "निर्मित प्लेलिस्ट",
         "detailsUpdated": "प्लेलिस्ट विवरण सफलतापूर्वक अपडेट किए गए!",
+        "expandContents": "प्लेलिस्ट सामग्री विस्तार करें",
         "missingParameters": "कुछ पैरामीटर गायब हैं।",
         "missingTrackIds": "ट्रैक ID गायब हैं।",
         "noPlaylistsCreated": "आपने अभी तक कोई प्लेलिस्ट नहीं बनाई है!",
+        "playlistContents": "प्लेलिस्ट सामग्री",
         "playlistDeleted": "यह प्लेलिस्ट हटा दी गई है।",
         "playlistNotFound": "प्लेलिस्ट नहीं मिली!",
         "playlistRecovered": "प्लेलिस्ट सफलतापूर्वक आपके Spotify खाते में पुनः प्राप्त कर ली गई!",
         "playlistSaved": "प्लेलिस्ट सफलतापूर्वक सहेजी गई!",
         "recover": "पुनर्प्राप्त करें",
+        "savePlaylistChanges": "प्लेलिस्ट परिवर्तन सहेजें",
         "yourExportedSetlists": "आपकी निर्यातित सेटलिस्ट्स"
     }
 }
