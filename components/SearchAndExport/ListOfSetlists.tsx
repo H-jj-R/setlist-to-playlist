@@ -52,14 +52,12 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
         >
             <div id="setlist-header" className="flex w-full flex-col items-center p-4">
                 <div id="artist-info" className="flex items-center px-4">
-                    {setlistData.spotifyArtist.images[0]?.url && (
-                        <img
-                            id="artist-img"
-                            className="mr-4 h-16 w-16 rounded-full"
-                            alt={setlistData.spotifyArtist.name}
-                            src={setlistData.spotifyArtist.images[0].url}
-                        />
-                    )}
+                    <img
+                        id="artist-img"
+                        className="mr-4 h-16 w-16 rounded-full"
+                        alt={`${setlistData.spotifyArtist.name} ${i18n("common:image")}`}
+                        src={setlistData.spotifyArtist.images[0]?.url || "/images/artist-placeholder.jpg"}
+                    />
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
                         ${

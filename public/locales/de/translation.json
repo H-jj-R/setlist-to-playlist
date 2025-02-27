@@ -56,6 +56,7 @@
         "signUpSuccess": "Registrierung erfolgreich! Du kannst dich jetzt einloggen.",
         "userCreatedSuccessfully": "Benutzer erfolgreich erstellt.",
         "username": "Benutzername",
+        "usernameError": "Der Benutzername muss 3-20 Zeichen lang sein und darf nur Buchstaben, Zahlen, Unterstriche und Bindestriche enthalten.",
         "yesDelete": "Ja, löschen"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "Abbrechen",
         "close": "Schließen",
         "delete": "Löschen",
+        "edit": "Bearbeiten",
         "email": "E-Mail",
         "error": "Fehler!",
         "export": "Exportieren",
         "exportToSpotify": "Zu Spotify exportieren",
         "hide": "Verstecken",
+        "image": "Bild",
         "internalServerError": "Interner Serverfehler!",
         "issue": "Problem",
         "loading": "Lädt",
@@ -83,6 +86,8 @@
         "search": "Suchen",
         "setlist": "Setlist",
         "show": "Zeigen",
+        "siteLogo": "Seitenlogo",
+        "songCoverArt": "Songcover",
         "spotifyAccessTokenError": "Kein Spotify-Zugangstoken gefunden!",
         "spotifyAuthorisationRequired": "Du musst dich bei Spotify autorisieren, um fortzufahren!",
         "spotifyAuthorise": "Mit Spotify autorisieren",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Mit Spotify autorisieren",
+        "combined": "Kombiniert",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Ziehe ein Playlist-Coverbild hierher oder klicke, um eines auszuwählen.",
         "enterPlaylistDescription": "Playlist-Beschreibung eingeben",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "Fehler beim Erstellen der Playlist!",
         "spotifyGetUserDataError": "Fehler beim Abrufen der Benutzerdaten!",
         "spotifySearchTrackError": "Fehler bei der Suche nach dem Song auf Spotify!",
-        "unknownSong": "Unbekannter Song"
+        "unknownSong": "Unbekannter Song",
+        "uploadedPlaylistCover": "Hochgeladenes Playlist-Cover"
     },
     "generateSetlist": {
         "combineExportAll": "Alle vorhergesagten Setlists kombinieren & exportieren",
+        "finalising": "Abschließen",
+        "generatingSetlist": "Setlist wird generiert",
         "openaiDisabled": "OpenAI API ist derzeit deaktiviert.",
         "predictSetlistFailed": "Fehler beim Vorhersagen der Setlist.",
         "queryLimitReached": "Tägliches Anfrage-Limit erreicht. Bitte versuche es später erneut.",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} in {{location}}",
         "backToList": "Zurück zur Liste",
+        "combineExportAllSetlists": "Alle geladenen Setlists kombinieren & exportieren",
         "cover": "Cover",
         "hiddenSetlistsMessage": "{{count}} leere Setlist ist verborgen",
         "hiddenSetlistsMessagePlural": "{{count}} leere Setlists sind verborgen",
-        "image": "Bild",
         "inCountry": "in {{country}}",
         "interlude": "Interlude",
         "intro": "Intro",
@@ -211,16 +220,21 @@
         "themeTitle": "Thema"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "Abbrechen und Änderungen verwerfen",
+        "collapseContents": "Playlist-Inhalt einklappen",
         "createdPlaylists": "Erstellte Playlists",
         "detailsUpdated": "Playlist-Details erfolgreich aktualisiert!",
+        "expandContents": "Playlist-Inhalt ausklappen",
         "missingParameters": "Einige Parameter fehlen.",
         "missingTrackIds": "Fehlende Track-IDs.",
         "noPlaylistsCreated": "Du hast noch keine Playlists erstellt!",
+        "playlistContents": "Playlist-Inhalt",
         "playlistDeleted": "Diese Playlist wurde gelöscht.",
         "playlistNotFound": "Playlist nicht gefunden!",
         "playlistRecovered": "Playlist erfolgreich in dein Spotify-Konto wiederhergestellt!",
         "playlistSaved": "Playlist erfolgreich gespeichert!",
         "recover": "Wiederherstellen",
+        "savePlaylistChanges": "Playlist-Änderungen speichern",
         "yourExportedSetlists": "Deine exportierten Setlists"
     }
 }

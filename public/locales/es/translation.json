@@ -56,6 +56,7 @@
         "signUpSuccess": "¡Registro exitoso! Ahora puedes iniciar sesión.",
         "userCreatedSuccessfully": "Usuario creado con éxito.",
         "username": "Nombre de usuario",
+        "usernameError": "El nombre de usuario debe tener entre 3 y 20 caracteres y solo puede contener letras, números, guiones bajos y guiones.",
         "yesDelete": "Sí, eliminar"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "Cancelar",
         "close": "Cerrar",
         "delete": "Eliminar",
+        "edit": "Editar",
         "email": "Correo electrónico",
         "error": "¡Error!",
         "export": "Exportar",
         "exportToSpotify": "Exportar a Spotify",
         "hide": "Ocultar",
+        "image": "Imagen",
         "internalServerError": "¡Error interno del servidor!",
         "issue": "Problema",
         "loading": "Cargando",
@@ -83,6 +86,8 @@
         "search": "Buscar",
         "setlist": "Lista de canciones",
         "show": "Mostrar",
+        "siteLogo": "Logotipo del sitio",
+        "songCoverArt": "Portada de la canción",
         "spotifyAccessTokenError": "¡No se encontró un token de acceso de Spotify!",
         "spotifyAuthorisationRequired": "¡Necesitas autorizarte con Spotify para continuar!",
         "spotifyAuthorise": "Autorizar con Spotify",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Autorizar con Spotify",
+        "combined": "Combinado",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Arrastra y suelta una imagen de portada de lista de reproducción aquí, o haz clic para seleccionar una.",
         "enterPlaylistDescription": "Ingresa la descripción de la lista de reproducción",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "¡Error al crear la lista de reproducción!",
         "spotifyGetUserDataError": "¡Error al obtener los datos del usuario!",
         "spotifySearchTrackError": "¡Error al buscar canción en Spotify!",
-        "unknownSong": "Canción desconocida"
+        "unknownSong": "Canción desconocida",
+        "uploadedPlaylistCover": "Portada de la lista de reproducción subida"
     },
     "generateSetlist": {
         "combineExportAll": "Combinar y exportar todas las listas de canciones predichas",
+        "finalising": "Finalizando",
+        "generatingSetlist": "Generando lista de reproducción",
         "openaiDisabled": "La API de OpenAI está deshabilitada.",
         "predictSetlistFailed": "Error al predecir la lista de canciones.",
         "queryLimitReached": "Se alcanzó el límite de consultas diarias. Por favor, inténtalo más tarde.",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} en {{location}}",
         "backToList": "Volver a la lista",
+        "combineExportAllSetlists": "Combinar y exportar todas las listas cargadas",
         "cover": "portada",
         "hiddenSetlistsMessage": "{{count}} lista de canciones vacía está oculta",
         "hiddenSetlistsMessagePlural": "{{count}} listas de canciones vacías están ocultas",
-        "image": "imagen",
         "inCountry": "en {{country}}",
         "interlude": "Interludio",
         "intro": "Intro",
@@ -211,16 +220,21 @@
         "themeTitle": "Tema"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "Cancelar y descartar cambios",
+        "collapseContents": "Colapsar contenido de la lista",
         "createdPlaylists": "Listas de reproducción creadas",
         "detailsUpdated": "¡Detalles de la lista de reproducción actualizados con éxito!",
+        "expandContents": "Expandir contenido de la lista",
         "missingParameters": "Faltan algunos parámetros.",
         "missingTrackIds": "Faltan identificadores de pistas.",
         "noPlaylistsCreated": "¡No has creado ninguna lista de reproducción todavía!",
+        "playlistContents": "Contenido de la lista",
         "playlistDeleted": "Esta lista de reproducción ha sido eliminada.",
         "playlistNotFound": "¡Lista de reproducción no encontrada!",
         "playlistRecovered": "¡Lista de reproducción recuperada exitosamente en tu cuenta de Spotify!",
         "playlistSaved": "¡Lista de reproducción guardada con éxito!",
         "recover": "Recuperar",
+        "savePlaylistChanges": "Guardar cambios de la lista",
         "yourExportedSetlists": "Tus listas de canciones exportadas"
     }
 }

@@ -56,6 +56,7 @@
         "signUpSuccess": "注册成功！现在可以登录。",
         "userCreatedSuccessfully": "用户创建成功。",
         "username": "用户名",
+        "usernameError": "用户名必须为 3-20 个字符，并且只能包含字母、数字、下划线和短横线。",
         "yesDelete": "是的，删除"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "取消",
         "close": "关闭",
         "delete": "删除",
+        "edit": "编辑",
         "email": "电子邮件",
         "error": "错误！",
         "export": "导出",
         "exportToSpotify": "导出到Spotify",
         "hide": "隐藏",
+        "image": "图片",
         "internalServerError": "服务器内部错误！",
         "issue": "问题",
         "loading": "加载中",
@@ -83,6 +86,8 @@
         "search": "搜索",
         "setlist": "演出歌单",
         "show": "显示",
+        "siteLogo": "网站标志",
+        "songCoverArt": "歌曲封面",
         "spotifyAccessTokenError": "未找到Spotify访问令牌!",
         "spotifyAuthorisationRequired": "你需要授权Spotify才能继续!",
         "spotifyAuthorise": "授权与Spotify",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "授权与Spotify",
+        "combined": "合并",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "拖放一个播放列表封面图片到这里，或点击选择。",
         "enterPlaylistDescription": "输入播放列表描述",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "创建播放列表时出错！",
         "spotifyGetUserDataError": "获取用户数据时出错！",
         "spotifySearchTrackError": "在Spotify搜索歌曲时出错!",
-        "unknownSong": "未知歌曲"
+        "unknownSong": "未知歌曲",
+        "uploadedPlaylistCover": "已上传的播放列表封面"
     },
     "generateSetlist": {
         "combineExportAll": "合并并导出所有预测的演出歌单",
+        "finalising": "正在完成",
+        "generatingSetlist": "正在生成歌单",
         "openaiDisabled": "OpenAI API当前已禁用。",
         "predictSetlistFailed": "预测演出歌单失败。",
         "queryLimitReached": "已达到每日查询限制，请稍后再试。",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} 在 {{location}}",
         "backToList": "返回列表",
+        "combineExportAllSetlists": "合并并导出所有已加载的歌单",
         "cover": "封面",
         "hiddenSetlistsMessage": "{{count}} 个空setlist被隐藏",
         "hiddenSetlistsMessagePlural": "{{count}} 个空setlist被隐藏",
-        "image": "图片",
         "inCountry": "在{{country}}",
         "interlude": "插曲",
         "intro": "开场",
@@ -211,16 +220,21 @@
         "themeTitle": "主题"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "取消并放弃更改",
+        "collapseContents": "折叠播放列表内容",
         "createdPlaylists": "已创建的播放列表",
         "detailsUpdated": "播放列表详情更新成功！",
+        "expandContents": "展开播放列表内容",
         "missingParameters": "缺少一些参数。",
         "missingTrackIds": "缺少歌曲ID。",
         "noPlaylistsCreated": "您还没有创建任何播放列表！",
+        "playlistContents": "播放列表内容",
         "playlistDeleted": "此播放列表已删除。",
         "playlistNotFound": "未找到播放列表！",
         "playlistRecovered": "播放列表成功恢复到您的Spotify帐户!",
         "playlistSaved": "播放列表保存成功！",
         "recover": "恢复",
+        "savePlaylistChanges": "保存播放列表更改",
         "yourExportedSetlists": "您的导出setlists"
     }
 }

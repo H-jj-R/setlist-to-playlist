@@ -56,6 +56,7 @@
         "signUpSuccess": "Rekisteröityminen onnistui! Voit nyt kirjautua sisään.",
         "userCreatedSuccessfully": "Käyttäjä luotu onnistuneesti.",
         "username": "Käyttäjätunnus",
+        "usernameError": "Käyttäjänimen on oltava 3-20 merkkiä pitkä, ja se voi sisältää vain kirjaimia, numeroita, alaviivoja ja väliviivoja.",
         "yesDelete": "Kyllä, poista"
     },
     "common": {
@@ -69,11 +70,13 @@
         "cancel": "Peruuta",
         "close": "Sulje",
         "delete": "Poista",
+        "edit": "Muokkaa",
         "email": "Sähköposti",
         "error": "Virhe!",
         "export": "Vie",
         "exportToSpotify": "Vie Spotifyhin",
         "hide": "Piilota",
+        "image": "kuva",
         "internalServerError": "Sisäinen palvelinvirhe!",
         "issue": "Ongelma",
         "loading": "Ladataan",
@@ -83,6 +86,8 @@
         "search": "Hae",
         "setlist": "Setlist",
         "show": "Näytä",
+        "siteLogo": "Sivuston logo",
+        "songCoverArt": "Kappaleen kansikuva",
         "spotifyAccessTokenError": "Spotify-käyttöoikeustunnusta ei löytynyt!",
         "spotifyAuthorisationRequired": "Sinun täytyy valtuuttaa Spotify jatkaaksesi!",
         "spotifyAuthorise": "Valtuuta Spotify",
@@ -95,6 +100,7 @@
     },
     "exportSetlist": {
         "authoriseWithSpotify": "Valtuuta Spotify",
+        "combined": "Yhdistetty",
         "dropzoneFileTypes": "( .jpg / .jpeg / .png )",
         "dropzoneMessage": "Raahaa ja pudota soittolistan kansikuva tähän tai klikkaa valitaksesi sen.",
         "enterPlaylistDescription": "Syötä soittolistan kuvaus",
@@ -122,10 +128,13 @@
         "spotifyCreatePlaylistError": "Virhe soittolistan luomisessa!",
         "spotifyGetUserDataError": "Virhe käyttäjätietojen hakemisessa!",
         "spotifySearchTrackError": "Virhe kappaleen hakemisessa Spotifyssa!",
-        "unknownSong": "Tuntematon kappale"
+        "unknownSong": "Tuntematon kappale",
+        "uploadedPlaylistCover": "Ladattu soittolistan kansikuva"
     },
     "generateSetlist": {
         "combineExportAll": "Yhdistä & Vie kaikki ennustetut soittolistat",
+        "finalising": "Viimeistellään",
+        "generatingSetlist": "Luodaan soittolistaa",
         "openaiDisabled": "OpenAI API on tällä hetkellä pois päältä.",
         "predictSetlistFailed": "Soittolistan ennustaminen epäonnistui.",
         "queryLimitReached": "Päivittäinen kyselyraja saavutettu. Yritä myöhemmin uudelleen.",
@@ -168,10 +177,10 @@
     "setlistSearch": {
         "artistAtVenue": "{{artistName}} esiintyy {{location}}:ssa",
         "backToList": "Takaisin listaan",
+        "combineExportAllSetlists": "Yhdistä ja vie kaikki ladatut soittolistat",
         "cover": "kansi",
         "hiddenSetlistsMessage": "{{count}} tyhjä setlist on piilotettu",
         "hiddenSetlistsMessagePlural": "{{count}} tyhjää setlistiä on piilotettu",
-        "image": "kuva",
         "inCountry": "{{country}}:ssa",
         "interlude": "Välikohtaus",
         "intro": "Intro",
@@ -211,16 +220,21 @@
         "themeTitle": "Teema"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "Peru ja hylkää muutokset",
+        "collapseContents": "Pienennä soittolistan sisältö",
         "createdPlaylists": "Luodut soittolistat",
         "detailsUpdated": "Soittolistan tiedot päivitetty onnistuneesti!",
+        "expandContents": "Laajenna soittolistan sisältö",
         "missingParameters": "Joitakin parametreja puuttuu.",
         "missingTrackIds": "Puuttuvat kappaleiden ID:t.",
         "noPlaylistsCreated": "Et ole vielä luonut soittolistoja!",
+        "playlistContents": "Soittolistan sisältö",
         "playlistDeleted": "Tämä soittolista on poistettu.",
         "playlistNotFound": "Soittolistaa ei löytynyt!",
         "playlistRecovered": "Soittolista palautettu onnistuneesti Spotify-tilillesi!",
         "playlistSaved": "Soittolista tallennettu onnistuneesti!",
         "recover": "Palauta",
+        "savePlaylistChanges": "Tallenna soittolistan muutokset",
         "yourExportedSetlists": "Viety setlistisi"
     }
 }

@@ -70,11 +70,13 @@
         "cancel": "Cancel",
         "close": "Close",
         "delete": "Delete",
+        "edit": "Edit",
         "email": "Email",
         "error": "Error!",
         "export": "Export",
         "exportToSpotify": "Export to Spotify",
         "hide": "Hide",
+        "image": "image",
         "internalServerError": "Internal server error!",
         "issue": "Issue",
         "loading": "Loading",
@@ -84,6 +86,8 @@
         "search": "Search",
         "setlist": "Setlist",
         "show": "Show",
+        "siteLogo": "Site logo",
+        "songCoverArt": "Song cover art",
         "spotifyAccessTokenError": "No Spotify access token found!",
         "spotifyAuthorisationRequired": "You need to authorise with Spotify to continue!",
         "spotifyAuthorise": "Authorise with Spotify",
@@ -124,7 +128,8 @@
         "spotifyCreatePlaylistError": "Error creating playlist!",
         "spotifyGetUserDataError": "Error fetching user data!",
         "spotifySearchTrackError": "Error searching for song on Spotify!",
-        "unknownSong": "Unknown Song"
+        "unknownSong": "Unknown Song",
+        "uploadedPlaylistCover": "Uploaded playlist cover"
     },
     "generateSetlist": {
         "combineExportAll": "Combine & Export All Predicted Setlists",
@@ -176,7 +181,6 @@
         "cover": "cover",
         "hiddenSetlistsMessage": "{{count}} empty setlist is hidden",
         "hiddenSetlistsMessagePlural": "{{count}} empty setlists are hidden",
-        "image": "image",
         "inCountry": "in {{country}}",
         "interlude": "Interlude",
         "intro": "Intro",
@@ -184,6 +188,7 @@
         "loadSetlistsFailed": "Failed to load more setlists",
         "noSongsFound": "No songs found!",
         "playedFromTape": "Played from tape",
+        "removed": "image",
         "searchForSetlist": "Search for an artist/band or setlist.fm link",
         "setlistDate": "Date: {{date}}",
         "setlistFmNoSetlistsError": "No setlists found!",
@@ -216,16 +221,21 @@
         "themeTitle": "Theme"
     },
     "userPlaylists": {
+        "cancelDiscardChanges": "Cancel and discard changes",
+        "collapseContents": "Collapse playlist contents",
         "createdPlaylists": "Created Playlists",
         "detailsUpdated": "Playlist details updated successfully!",
+        "expandContents": "Expand playlist contents",
         "missingParameters": "Some parameters are missing.",
         "missingTrackIds": "Missing track IDs.",
         "noPlaylistsCreated": "You haven't created any playlists yet!",
+        "playlistContents": "Playlist Contents",
         "playlistDeleted": "This playlist has been deleted.",
         "playlistNotFound": "Playlist not found!",
         "playlistRecovered": "Playlist successfully recovered to your Spotify account!",
         "playlistSaved": "Playlist saved successfully!",
         "recover": "Recover",
+        "savePlaylistChanges": "Save playlist changes",
         "yourExportedSetlists": "Your Exported Setlists"
     }
 }
