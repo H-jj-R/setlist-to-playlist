@@ -107,7 +107,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }):
                         size="lg"
                     />
                 </button>
-
                 <button
                     id="search-btn"
                     className={`h-12 rounded-r-lg bg-gradient-to-bl from-blue-400 to-blue-600 px-6 py-2 font-semibold text-white hover:from-blue-500 hover:to-blue-700 ${

@@ -19,7 +19,7 @@ const config: Config = {
     testEnvironment: "jest-environment-puppeteer", // Use Puppeteer test environment for browser testing
     testMatch: ["<rootDir>/tests/**/*.test.ts"], // Match all test files inside the "tests" folder with .test.ts extension
     transform: { "^.+\\.tsx?$": "ts-jest" }, // Use ts-jest to transpile TypeScript files as Jest doesn't natively support TypeScript
-    verbose: false // More detailed console output
+    verbose: true // More detailed console output
 };
 
 export default config;

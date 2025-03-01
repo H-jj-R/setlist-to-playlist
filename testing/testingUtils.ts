@@ -85,6 +85,15 @@ export async function clearInput(page: puppeteer.Page, input: puppeteer.ElementH
 }
 
 /**
+ * Logs test user into system.
+ *
+ * @param {puppeteer.Page} page - Puppeteer Page object.
+ */
+export async function login(page: puppeteer.Page): Promise<void> {
+    // TODO: Implement function and make test account details to store in env
+}
+
+/**
  * Delays the execution of code.
  *
  * @param {number} time - Time to delay in milliseconds.
