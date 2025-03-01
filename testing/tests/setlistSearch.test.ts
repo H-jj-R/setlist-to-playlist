@@ -34,10 +34,10 @@ describe("Setlist Search", () => {
         await clearInput(page, searchInput);
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
 
@@ -46,10 +46,10 @@ describe("Setlist Search", () => {
         await searchInput.type("Metallica");
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
     }, 10000);
 
@@ -68,11 +68,11 @@ describe("Setlist Search", () => {
         await searchInput.type("Oasis");
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await page.waitForSelector("#list-of-setlists");
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
     }, 30000);
 
@@ -84,10 +84,10 @@ describe("Setlist Search", () => {
         await page.waitForSelector("#list-of-setlists");
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
 
@@ -96,10 +96,10 @@ describe("Setlist Search", () => {
         const searchButton = await page.waitForSelector("#search-btn");
         await clearInput(page, searchInput);
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
 

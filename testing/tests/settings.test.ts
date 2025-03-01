@@ -20,19 +20,17 @@ describe("Settings", () => {
         await resetSettings(page);
     }, 20000);
 
-    describe("Settings panel", () => {
-        it("Settings panel can be opened", async () => {
-            // TODO: Implement test
-        }, 10000);
+    it("Settings panel can be opened", async () => {
+        // TODO: Implement test
+    }, 10000);
 
-        it("Settings panel can be closed using close button", async () => {
-            // TODO: Implement test
-        }, 10000);
+    it("Settings panel can be closed using close button", async () => {
+        // TODO: Implement test
+    }, 10000);
 
-        it("Settings panel can be closed by clicking outside of settings panel", async () => {
-            // TODO: Implement test
-        }, 10000);
-    });
+    it("Settings panel can be closed by clicking outside of settings panel", async () => {
+        // TODO: Implement test
+    }, 10000);
 
     it("Theme", async () => {
         // TODO: Implement test
