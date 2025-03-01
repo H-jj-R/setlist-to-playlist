@@ -56,10 +56,10 @@ describe("Choosing Setlist", () => {
     it("Choosing same setlist doesn't change contents of setlist component", async () => {
         const item = await page.waitForSelector("[id^=setlist-item-]");
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await item.click();
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
 
@@ -67,11 +67,11 @@ describe("Choosing Setlist", () => {
         const items = await page.$$("[id^=setlist-item-]");
         expect(items.length).toBeGreaterThan(1);
         await delay(1000);
-        const initialContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content before clicking
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await items[1].click();
         await page.waitForSelector("#setlist-display");
         await delay(1000);
-        const finalContent = await page.evaluate(() => document.body.innerHTML); // Capture the page content after clicking
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
     }, 10000);
 
