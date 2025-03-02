@@ -32,7 +32,10 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
 
     return (
         <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
-            <div id="header-container" className="flex items-center justify-between px-4 py-2">
+            <div
+                id="header-container"
+                className="flex items-center justify-between overflow-hidden whitespace-nowrap px-4 py-2"
+            >
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
                     <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
                         <img
@@ -46,7 +49,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                         </span>
                     </Link>
                 </div>
-                <div id="actions-container" className="flex items-center space-x-4">
+                <div id="actions-container" className="flex items-center space-x-3">
                     {isAuthenticated ? (
                         <div id="account-btn-container" className="relative">
                             <button
@@ -76,7 +79,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                     )}
                     <button
                         id="settings-btn"
-                        className="text rounded p-2"
+                        className="text rounded pr-2 sm:pl-4"
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showSettings: true }));
                         }}

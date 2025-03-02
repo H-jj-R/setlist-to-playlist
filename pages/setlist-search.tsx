@@ -85,6 +85,7 @@ export default function SetlistSearch(): JSX.Element {
                                 state.pageState === PageState.Setlist) && (
                                 <div id="setlist-display" className={`w-full animate-fadeIn`}>
                                     <Setlist
+                                        isAlone={state.pageState === PageState.Setlist}
                                         onClose={handleBackToList}
                                         onExport={handleExport}
                                         setlist={state.chosenSetlistData}
