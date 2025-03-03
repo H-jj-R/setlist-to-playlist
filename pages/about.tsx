@@ -216,6 +216,8 @@ export default function About(): JSX.Element {
                                                 id="spotify-link"
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                                 href="https://spotify.com/"
+                                                rel="noopener noreferrer"
+                                                target="_blank"
                                             />
                                         )
                                     }}
@@ -231,6 +233,8 @@ export default function About(): JSX.Element {
                                                 id="setlist-fm-link"
                                                 className="cursor-pointer text-blue-500 hover:text-blue-700 hover:underline"
                                                 href="https://www.setlist.fm/"
+                                                rel="noopener noreferrer"
+                                                target="_blank"
                                             />
                                         )
                                     }}

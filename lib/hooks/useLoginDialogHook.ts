@@ -107,8 +107,7 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                 const password = formData.get("password") as string;
 
                 if (state.dialogState === LoginDialogState.SignUp) {
-                    if (!(await validateUsername(formData.get("username") as string))) return; // Validate username for signup
-                    if (!(await validatePassword(password))) return; // Validate password for signup
+                    if (!(await validateUserInput(formData.get("username") as string, password))) return;
                 }
 
                 if (state.dialogState === LoginDialogState.SignUp) {
@@ -158,9 +157,8 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                 };
             }
         } catch (error) {
-            if (recaptchaRef.current) {
-                recaptchaRef.current.reset(); // Reset signup reCAPTCHA on login failure
-            }
+            if (recaptchaRef.current) recaptchaRef.current.reset(); // Reset signup reCAPTCHA on login failure
+
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -210,9 +208,8 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                 };
             }
         } catch (error) {
-            if (recaptchaRef.current) {
-                recaptchaRef.current.reset(); // Reset reCAPTCHA on signup failure
-            }
+            if (recaptchaRef.current) recaptchaRef.current.reset(); // Reset reCAPTCHA on signup failure
+
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -226,43 +223,34 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
     };
 
     /**
-     * Validates the user's username based on predefined security rules.
+     * Validates the user's username and/or password based on predefined security rules.
      *
-     * @param username - The username to validate.
-     * @returns {Promise<boolean>} `true` if the username meets requirements, `false` otherwise.
+     * @param {string | undefined} username - The username to validate (optionally can be `undefined`).
+     * @param {string | undefined} password - The password to validate (optionally can be `undefined`).
+     * @returns {Promise<boolean>} `true` if all provided inputs meet requirements, `false` otherwise.
      */
-    const validateUsername = async (username: string): Promise<boolean> => {
-        if (!USERNAME_REGEX.test(username)) {
-            if (recaptchaRef.current) {
-                recaptchaRef.current.reset(); // Reset reCAPTCHA if username validation fails
-            }
-            setState((prev) => ({
-                ...prev,
-                messageDialog: {
-                    isOpen: false,
-                    message: "",
-                    type: MessageDialogState.Success
-                },
-                recaptchaToken: null,
-                usernameError: i18n("account:usernameError")
-            }));
-            return false;
-        }
-        setState((prev) => ({ ...prev, usernameError: null }));
-        return true;
-    };
+    const validateUserInput = async (username: string | undefined, password: string | undefined): Promise<boolean> => {
+        let isValid = true;
+        let errors: { passwordError?: null | string; usernameError?: null | string } = {
+            passwordError: null,
+            usernameError: null
+        };
 
-    /**
-     * Validates the user's password based on predefined security rules.
-     *
-     * @param password - The password to validate.
-     * @returns {Promise<boolean>} `true` if the password meets requirements, `false` otherwise.
-     */
-    const validatePassword = async (password: string): Promise<boolean> => {
-        if (!PASSWORD_REGEX.test(password)) {
-            if (recaptchaRef.current) {
-                recaptchaRef.current.reset(); // Reset reCAPTCHA if password validation fails
-            }
+        // Validate username
+        if (username !== undefined && !USERNAME_REGEX.test(username)) {
+            errors.usernameError = i18n("account:usernameError");
+            isValid = false;
+        }
+
+        // Validate password
+        if (password !== undefined && !PASSWORD_REGEX.test(password)) {
+            errors.passwordError = i18n("account:passwordError");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            if (recaptchaRef.current) recaptchaRef.current.reset(); // Reset reCAPTCHA if validation fails
+
             setState((prev) => ({
                 ...prev,
                 messageDialog: {
@@ -270,13 +258,19 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                     message: "",
                     type: MessageDialogState.Success
                 },
-                passwordError: i18n("account:passwordError"),
-                recaptchaToken: null
+                passwordError: errors.passwordError,
+                recaptchaToken: null,
+                usernameError: errors.usernameError
             }));
-            return false;
+        } else {
+            setState((prev) => ({
+                ...prev,
+                passwordError: password !== undefined ? errors.passwordError : prev.passwordError,
+                usernameError: username !== undefined ? errors.usernameError : prev.usernameError
+            }));
         }
-        setState((prev) => ({ ...prev, passwordError: null }));
-        return true;
+
+        return isValid;
     };
 
     /**
@@ -285,9 +279,7 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
      * @returns {Promise<boolean>} `true` if the reCAPTCHA verification is successful, `false` otherwise.
      */
     const verifyRecaptcha = async (): Promise<boolean> => {
-        if (recaptchaRef.current) {
-            recaptchaRef.current.reset(); // Reset reCAPTCHA before verifying
-        }
+        if (recaptchaRef.current) recaptchaRef.current.reset(); // Reset reCAPTCHA before verifying
 
         // Ensure a valid reCAPTCHA token exists before proceeding
         if (!state.recaptchaToken) {
@@ -369,7 +361,7 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
      * @param {string} newPassword - The new password entered by the user.
      */
     const handleResetPassword = async (newPassword: string): Promise<void> => {
-        if (!(await validatePassword(newPassword))) return; // Validate password before proceeding
+        if (!(await validateUserInput(undefined, newPassword))) return; // Validate password before proceeding
 
         try {
             // Send reset password request to the API

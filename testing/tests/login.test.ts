@@ -12,15 +12,75 @@ let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
 /**
- * Tests related to user playlists.
+ * Tests related to user logging in and logging out.
  */
-describe("User Playlists", () => {
+describe("Login", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
     }, 20000);
 
-    it("Login to site makes account settings panel appear", async () => {
+    it("Can open Login / Sign Up dialog", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'Forgot Password' link opens Forgot Password", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can go back to Login using 'Back to Login' link", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'No account?' link opens Signup", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can go back to Login using 'Already have an account?' link", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can type in email field", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can type in password field", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'Show' button shows password input to user", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'Hide' button hides password input from user", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Cannot login with blank inputs", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Cannot login with blank password", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Cannot login with blank email", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Cannot login with invalid email", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Cannot login with incorrect password", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can login with valid details", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Logging in shows account settings button", async () => {
         // TODO: Implement test
     }, 10000);
 
@@ -28,67 +88,11 @@ describe("User Playlists", () => {
         // TODO: Implement test
     }, 10000);
 
-    it("User playlists are empty", async () => {
+    it("Logout button logs out user", async () => {
         // TODO: Implement test
     }, 10000);
 
-    it("Exporting setlist adds it to user playlists page", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Expanding playlist loads then displays songs in that playlist", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Collapsing playlist hides songs in that playlist", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Edit icon button opens editing mode", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Cancel button closes editing mode", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Edit icon button re-opens editing mode", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Name field contains existing name", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Description field contains existing description", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Name field can be edited", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Description field can be edited", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Submitting with empty name isn't allowed", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Submitting with valid name and description shows success message", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("Name and description are updated", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("'Recover' button recovers playlist on Spotify", async () => {
-        // TODO: Implement test
-    }, 10000);
-
-    it("'Delete' button deletes playlist from user playlists", async () => {
+    it("Can log back in after logging out", async () => {
         // TODO: Implement test
     }, 10000);
 

@@ -103,6 +103,19 @@ describe("Setlist Search", () => {
         expect(finalContent).toBe(initialContent);
     }, 10000);
 
+    it("Can search for query using 'Enter' key", async () => {
+        const searchInput = await page.waitForSelector("#search-input");
+        await clearInput(page, searchInput);
+        await searchInput.type("Linkin Park");
+        await delay(1000);
+        const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
+        await page.keyboard.press("Enter");
+        await page.waitForSelector("#list-of-setlists");
+        await delay(1000);
+        const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
+        expect(finalContent).not.toBe(initialContent);
+    }, 10000);
+
     afterAll(async () => {
         await delay(500);
         await browser.close();

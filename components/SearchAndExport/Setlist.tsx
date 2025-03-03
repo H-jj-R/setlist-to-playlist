@@ -13,11 +13,13 @@ import { useTranslation } from "react-i18next";
 /**
  * Props for the `Setlist` component.
  *
+ * @property {boolean} [isAlone] - Whether the setlist should be formatted differently based on what else is on the page.
  * @property {Function} onClose - Function to handle closing the setlist view (navigate back to the list).
  * @property {Function} onExport - Function to trigger exporting the setlist to Spotify.
  * @property {Record<string, any>} setlist - The setlist data retrieved from setlist.fm.
  */
 interface SetlistProps {
+    isAlone?: boolean;
     onClose: () => void;
     onExport: () => void;
     setlist: Record<string, any>;
@@ -32,32 +34,40 @@ interface SetlistProps {
  *
  * @returns {JSX.Element} The rendered `Setlist` component.
  */
-const Setlist: React.FC<SetlistProps> = ({ onClose, onExport, setlist }): JSX.Element => {
+const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, setlist }): JSX.Element => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div
             id="setlist-container"
-            className="h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200"
+            className={`h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200 ${isAlone ? "mx-auto w-4/5 sm:w-1/2" : "w-full"}`}
         >
             <div id="setlist-btns-container" className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
-                <div id="setlist-btns" className="mb-6 flex items-center justify-between pb-2 pt-4">
-                    <button
-                        id="back-btn"
-                        className="w-full rounded bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 focus:ring focus:ring-red-300 sm:w-auto"
-                        onClick={onClose}
-                    >
-                        {i18n("setlistSearch:backToList")}
-                    </button>
+                <div
+                    id="setlist-btns"
+                    className={`mb-6 flex items-stretch justify-between pb-2 pt-4 ${!isAlone && "space-x-8"}`}
+                >
+                    {!isAlone ? (
+                        <button
+                            id="back-btn"
+                            className="min-h-[44px] w-full rounded bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 focus:ring focus:ring-red-300 sm:w-auto"
+                            onClick={onClose}
+                        >
+                            {i18n("setlistSearch:backToList")}
+                        </button>
+                    ) : (
+                        <div id="back-btn-placeholder" className="flex-1" />
+                    )}
                     <button
                         id="export-spotify-btn"
-                        className="w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
+                        className="min-h-[44px] w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
                         onClick={onExport}
                     >
                         {i18n("common:exportToSpotify")}
                     </button>
                 </div>
             </div>
+
             <div id="setlist-header" className="mb-4">
                 <h2 id="setlist-artist" className="text-3xl font-bold">
                     {setlist.artist.name}

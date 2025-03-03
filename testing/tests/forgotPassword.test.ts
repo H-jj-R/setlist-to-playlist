@@ -14,14 +14,18 @@ let page: puppeteer.Page;
 /**
  * Tests related to user authentication.
  */
-describe("Authentication", () => {
+describe("Forgot Password", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
     }, 20000);
 
+    it("Can open Login / Sign Up dialog", async () => {
+        // TODO: Implement test
+    }, 10000);
+
     it("Test", async () => {
-        // TODO: Implement tests
+        // TODO: Implement test
     }, 10000);
 
     afterAll(async () => {

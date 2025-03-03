@@ -20,8 +20,36 @@ describe("AI Generated Setlists", () => {
         await resetSettings(page);
     }, 20000);
 
-    it("Test", async () => {
-        // TODO: Implement tests
+    it("Go to AI generate setlist page", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("If user isn't logged in, show 'Authentication Required'", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can log in from AI generate setlist page", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("If user is logged in, doesn't show 'Authentication Required'", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Can type in search bar", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Pressing Search with empty search query does nothing", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Pressing Search with valid search query triggers search and locks search bar", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("Generates three predicted setlists", async () => {
+        // TODO: Implement test
     }, 10000);
 
     afterAll(async () => {
