@@ -25,7 +25,6 @@ describe("About + Support Page", () => {
         await settingsBut.click();
         await delay(500);
         const aboutSupportLink = await page.waitForSelector("#about-support-link");
-        await aboutSupportLink.click();
         await Promise.all([aboutSupportLink.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/about");
     }, 10000);
