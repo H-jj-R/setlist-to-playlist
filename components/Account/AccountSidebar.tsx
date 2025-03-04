@@ -48,9 +48,9 @@ type DecodedToken = {
  *
  * @param AccountSidebarProps - Component props.
  *
- * @returns {JSX.Element} The rendered `AccountSidebar` component.
+ * @returns The rendered `AccountSidebar` component.
  */
-const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }): JSX.Element => {
+const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }) => {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook
@@ -157,13 +157,13 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 aria-live="assertive"
                 tabIndex={-1}
             >
-                <div id="account-settings-header" className="mb-6 mr-5 flex items-center justify-between">
+                <div id="account-settings-header" className="mr-5 mb-6 flex items-center justify-between">
                     <h2 id="account-settings-header-title" className="text-xl font-bold">
                         {i18n("account:account")}
                     </h2>
                     <button
                         id="close-account-settings-btn"
-                        className="text-xl"
+                        className="text-xl hover:cursor-pointer"
                         aria-label={i18n("account:closeAccountSettings")}
                         onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting
@@ -174,7 +174,10 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
                 </div>
-                <div id="account-settings-details-container" className="m-4 rounded-lg border-4 p-4">
+                <div
+                    id="account-settings-details-container"
+                    className="m-4 rounded-lg border-4 border-gray-500 p-4 dark:border-gray-200"
+                >
                     <div id="account-settings-username-email-container" className="mb-2 text-center">
                         <h3 id="account-settings-username-email-header" className="text-lg font-semibold">
                             {state.username && state.email ? (
@@ -182,7 +185,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                                     <div id="account-settings-username">
                                         <FontAwesomeIcon
                                             id="fa-user-circle-icon"
-                                            className="mr-2 text-xl text-gray-200"
+                                            className="mr-2 text-xl text-gray-500 dark:text-gray-200"
                                             icon={faUserCircle}
                                         />
                                         {state.username}
@@ -201,7 +204,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     <div id="account-settings-logout-container" className="mt-4 flex justify-center">
                         <button
                             id="account-settings-logout-btn"
-                            className="w-3/4 rounded bg-gradient-to-r from-red-500 to-orange-500 px-4 py-2 text-white transition-colors duration-300 hover:from-red-600 hover:to-orange-600"
+                            className="w-3/4 rounded-sm bg-linear-to-r from-red-500 to-orange-500 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:from-red-600 hover:to-orange-600"
                             aria-label={i18n("account:logout")}
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, isVisible: false }));
@@ -220,7 +223,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 <div id="account-settings-user-playlists-container" className="mt-4 flex justify-center">
                     <button
                         id="account-settings-go-to-user-playlists-btn"
-                        className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:bg-violet-600 focus:outline-none"
+                        className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:cursor-pointer hover:bg-violet-600 focus:outline-hidden"
                         aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting, then redirect to user-playlists
@@ -238,7 +241,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                 >
                     <button
                         id="account-settings-delete-account-btn"
-                        className="w-full rounded bg-gradient-to-r from-red-700 to-red-500 px-4 py-2 text-white transition-colors duration-300 hover:from-red-800 hover:to-red-600"
+                        className="w-full rounded-sm bg-linear-to-r from-red-700 to-red-500 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:from-red-800 hover:to-red-600"
                         aria-label={i18n("account:deleteAccount")}
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showConfirmation: true }));

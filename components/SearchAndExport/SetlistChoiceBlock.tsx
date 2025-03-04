@@ -28,9 +28,9 @@ interface SetlistChoiceBlockProps {
  *
  * @param SetlistChoiceBlockProps - The component props.
  *
- * @returns {JSX.Element} The rendered `SetlistChoiceBlock` component.
+ * @returns The rendered `SetlistChoiceBlock` component.
  */
-const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }): JSX.Element => {
+const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Calculate the total number of songs in the setlist
@@ -45,7 +45,7 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onCl
     return (
         <li
             id={`setlist-item-${setlist.id}`}
-            className={`rounded-lg border border-gray-200 p-4 shadow-sm transition-shadow ${
+            className={`rounded-lg border border-gray-800 p-4 shadow-sm transition-shadow dark:border-gray-200 ${
                 isDisabled && hideEmpty
                     ? "hidden"
                     : isDisabled

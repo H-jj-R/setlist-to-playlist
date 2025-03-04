@@ -19,9 +19,9 @@ import { useTranslation } from "react-i18next";
 /**
  * Main page for viewing setlists.
  *
- * @returns {JSX.Element} The rendered `/setlist-search` page.
+ * @returns The rendered `/setlist-search` page.
  */
-export default function SetlistSearch(): JSX.Element {
+export default function SetlistSearch() {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist search page actions and state
@@ -70,8 +70,8 @@ export default function SetlistSearch(): JSX.Element {
                                     id="list-of-setlists"
                                     className={`${
                                         state.setlistChosen
-                                            ? "mx-auto hidden w-4/5 max-w-3xl animate-fadeIn sm:block"
-                                            : "mx-auto block w-4/5 max-w-3xl animate-fadeIn"
+                                            ? "animate-fadeIn mx-auto hidden w-4/5 max-w-3xl sm:block"
+                                            : "animate-fadeIn mx-auto block w-4/5 max-w-3xl"
                                     }`}
                                 >
                                     <ListOfSetlists
@@ -83,7 +83,7 @@ export default function SetlistSearch(): JSX.Element {
                             )}
                             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                                 state.pageState === PageState.Setlist) && (
-                                <div id="setlist-display" className={`w-full animate-fadeIn`}>
+                                <div id="setlist-display" className={`animate-fadeIn w-full`}>
                                     <Setlist
                                         isAlone={state.pageState === PageState.Setlist}
                                         onClose={handleBackToList}

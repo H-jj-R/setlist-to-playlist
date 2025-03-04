@@ -1,18 +1,19 @@
+const nextPlugin = require("@next/eslint-plugin-next");
 const tsParser = require("@typescript-eslint/parser");
 const perfectionist = require("eslint-plugin-perfectionist");
 
-// Run with npx eslint --fix
+// Run with: npx eslint .
 module.exports = [
     {
         files: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js", "**/*.json"],
         ignores: [".next/**", "node_modules/**", "testing/reports/**", "package-lock.json", "package.json"],
-        languageOptions: {
-            parser: tsParser
-        },
+        languageOptions: { parser: tsParser },
         plugins: {
+            "@next/next": nextPlugin, // Documentation: https://nextjs.org/docs/app/api-reference/config/eslint
             perfectionist // Documentation: https://perfectionist.dev/
         },
         rules: {
+            ...nextPlugin.configs.recommended.rules,
             "perfectionist/sort-array-includes": [
                 "error",
                 {

@@ -10,6 +10,7 @@ import Settings from "@components/Shared/Settings";
 import { useAuth } from "@context/AuthContext";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,9 +20,9 @@ import { useTranslation } from "react-i18next";
  *
  * The main header bar displayed at the top of the page.
  *
- * @returns {JSX.Element} The rendered `HeaderBar` component.
+ * @returns The rendered `HeaderBar` component.
  */
-const HeaderBar: React.FC<{}> = (): JSX.Element => {
+const HeaderBar: React.FC<{}> = () => {
     const { isAuthenticated, login, logout } = useAuth(); // Authentication context
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
@@ -31,18 +32,20 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
     });
 
     return (
-        <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
+        <header id="site-header" className="bg-linear-to-tr from-gray-700 to-gray-800 text-white">
             <div
                 id="header-container"
-                className="flex items-center justify-between overflow-hidden whitespace-nowrap px-4 py-2"
+                className="flex items-center justify-between overflow-hidden px-4 py-2 whitespace-nowrap"
             >
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
-                    <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
-                        <img
+                    <Link id="site-logo-link" className="flex items-center transition hover:text-gray-300" href="/">
+                        <Image
                             id="site-logo"
                             className="h-10 w-auto"
                             alt={i18n("common:siteLogo")}
+                            height={900}
                             src="/images/logo.png"
+                            width={900}
                         />
                         <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist
@@ -54,7 +57,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                         <div id="account-btn-container" className="relative">
                             <button
                                 id="account-btn"
-                                className="text rounded p-2"
+                                className="text rounded-sm p-2 transition hover:cursor-pointer"
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, showAccountSidebar: true }));
                                 }}
@@ -69,7 +72,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                     ) : (
                         <button
                             id="login-btn"
-                            className="rounded-full bg-gradient-to-br from-green-500 to-green-600 px-4 py-2 text-white hover:from-green-600 hover:to-green-700"
+                            className="rounded-full bg-linear-to-br from-green-500 to-green-600 px-4 py-2 text-white transition hover:cursor-pointer hover:from-green-600 hover:to-green-700"
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, showLoginDialog: true }));
                             }}
@@ -79,7 +82,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                     )}
                     <button
                         id="settings-btn"
-                        className="text rounded pr-2 sm:pl-4"
+                        className="text rounded-sm pr-2 transition hover:cursor-pointer sm:pl-4"
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showSettings: true }));
                         }}

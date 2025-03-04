@@ -25,16 +25,16 @@ interface ConfirmationModalProps {
  *
  * @param ConfirmationModalProps - Component props.
  *
- * @returns {JSX.Element} The rendered `ConfirmationModal` component.
+ * @returns The rendered `ConfirmationModal` component.
  */
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }): JSX.Element => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }) => {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div
             id="confirmation-modal-background-container"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             aria-describedby="confirmation-modal-message"
             aria-labelledby="confirmation-modal-title"
             aria-live="assertive"
@@ -57,7 +57,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                 <div id="confirmation-modal-btns-container" className="flex justify-between">
                     <button
                         id="confirm-btn"
-                        className="rounded bg-red-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-red-700"
+                        className="rounded-sm bg-red-600 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:bg-red-700"
                         aria-label={i18n("account:yesDelete")}
                         onClick={onConfirm}
                     >
@@ -65,7 +65,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                     </button>
                     <button
                         id="cancel-btn"
-                        className="rounded bg-gray-300 px-4 py-2 text-gray-800 transition-colors duration-300 hover:bg-gray-400"
+                        className="rounded-sm bg-gray-300 px-4 py-2 text-gray-800 transition duration-300 hover:cursor-pointer hover:bg-gray-400"
                         aria-label={i18n("common:cancel")}
                         onClick={onCancel}
                     >

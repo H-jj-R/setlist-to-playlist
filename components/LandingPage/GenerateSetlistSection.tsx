@@ -12,21 +12,21 @@ import { useTranslation } from "react-i18next";
  *
  * Displays the option to go the ai-generate-setlist page.
  *
- * @returns {JSX.Element} The rendered `GenerateSetlistSection` component.
+ * @returns The rendered `GenerateSetlistSection` component.
  */
-const GenerateSetlistSection: React.FC<{}> = (): JSX.Element => {
+const GenerateSetlistSection: React.FC<{}> = () => {
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div
             id="generate-setlist-hero"
-            className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-sky-500 to-purple-700 px-10 py-6 text-white lg:flex-row"
+            className="flex min-h-[33.333333%] grow flex-col items-center justify-between bg-linear-to-r from-sky-500 to-purple-700 px-10 py-6 text-white lg:flex-row"
         >
-            <div id="generate-setlist-btn-container" className="order-last lg:order-first lg:ml-auto lg:mr-auto">
+            <div id="generate-setlist-btn-container" className="order-last lg:order-first lg:mr-auto lg:ml-auto">
                 <button
                     id="go-to-ai-generate-setlist-btn"
-                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-purple-600 shadow-lg transition hover:bg-gray-100 focus:outline-none lg:mb-0"
+                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-purple-600 shadow-lg transition hover:cursor-pointer hover:bg-gray-200 focus:outline-hidden lg:mb-0"
                     onClick={(): Promise<boolean> => router.push("/ai-generate-setlist")}
                 >
                     {i18n("landingPage:goToAIGenerateSetlist")}

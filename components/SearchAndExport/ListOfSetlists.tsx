@@ -9,6 +9,7 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import countryCodes from "@constants/countryCodes";
 import SettingsKeys from "@constants/settingsKeys";
 import useListOfSetlistsHook from "@hooks/useListOfSetlistsHook";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -30,13 +31,9 @@ interface ListOfSetlistsProps {
  *
  * @param ListOfSetlistsProps - The component props.
  *
- * @returns {JSX.Element} The rendered `ListOfSetlists` component.
+ * @returns The rendered `ListOfSetlists` component.
  */
-const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
-    handleCombineSetlists,
-    onSetlistChosen,
-    setlistData
-}): JSX.Element => {
+const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, onSetlistChosen, setlistData }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
@@ -52,11 +49,13 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
         >
             <div id="setlist-header" className="flex w-full flex-col items-center p-4">
                 <div id="artist-info" className="flex items-center px-4">
-                    <img
+                    <Image
                         id="artist-img"
                         className="mr-4 h-16 w-16 rounded-full"
                         alt={`${setlistData.spotifyArtist.name} ${i18n("common:image")}`}
+                        height={700}
                         src={setlistData.spotifyArtist.images[0]?.url || "/images/artist-placeholder.jpg"}
+                        width={700}
                     />
                     <h2 id="setlist-title" className="text-3xl font-bold">
                         {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
@@ -74,23 +73,21 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                         <div id="combine-export-btn-container" className="mb-1 flex justify-center p-2">
                             <button
                                 id="combine-export-btn"
-                                className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
+                                className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
                                 onClick={(): void => handleCombineSetlists(state.setlists)}
                             >
                                 {i18n("setlistSearch:combineExportAllSetlists")}
                             </button>
                         </div>
                         <ul id="setlist-list" className="w-full space-y-3 px-4">
-                            {state.setlists.map(
-                                (setlist: Record<string, any>): JSX.Element => (
-                                    <SetlistChoiceBlock
-                                        hideEmpty={state.hideEmptySetlists}
-                                        key={setlist.id}
-                                        onClick={onSetlistChosen}
-                                        setlist={setlist}
-                                    />
-                                )
-                            )}
+                            {state.setlists.map((setlist: Record<string, any>) => (
+                                <SetlistChoiceBlock
+                                    hideEmpty={state.hideEmptySetlists}
+                                    key={setlist.id}
+                                    onClick={onSetlistChosen}
+                                    setlist={setlist}
+                                />
+                            ))}
                         </ul>
                         {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
                             <p id="hidden-setlists-count" className="mt-4 text-gray-500">
@@ -105,7 +102,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                         {hasMorePages && (
                             <button
                                 id="load-more-btn"
-                                className="mt-4 rounded bg-blue-500 px-6 py-2 text-white hover:bg-blue-600"
+                                className="mt-4 rounded-sm bg-blue-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-blue-600"
                                 disabled={state.isLoading}
                                 onClick={loadMoreSetlists}
                             >

@@ -30,9 +30,9 @@ interface LoginDialogProps {
  *
  * @param LoginDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered `LoginDialog` component.
+ * @returns The rendered `LoginDialog` component.
  */
-const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {
+const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage login dialog state and interactions
@@ -43,8 +43,8 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
             <>
                 <div
                     id="background-overlay"
-                    className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-200 ${
-                        state.isVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                    className={`fixed inset-0 z-20 bg-black transition-opacity duration-200 ${
+                        state.isVisible ? "opacity-50" : "pointer-events-none opacity-0"
                     }`}
                     onClick={handleClose}
                 />
@@ -60,11 +60,11 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                     >
                         <button
                             id="close-btn"
-                            className="absolute left-4 top-6 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                            className="absolute top-6 left-4 text-gray-500 transition hover:cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                             aria-label={i18n("common:close")}
                             onClick={handleClose}
                         >
-                            <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
+                            <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                         </button>
                         <div id="login-form-container">
                             <LoginForm
