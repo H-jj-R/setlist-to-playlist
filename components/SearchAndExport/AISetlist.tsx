@@ -42,10 +42,10 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
             className="h-[calc(100vh-12rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200"
         >
             <div id="export-btn-container" className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
-                <div id="export-spotify-btn-container" className="mb-4 flex items-center justify-between pb-2 pt-4">
+                <div id="export-spotify-btn-container" className="mb-4 flex items-center justify-between pt-4 pb-2">
                     <button
                         id="export-spotify-btn"
-                        className="ml-auto mr-auto w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
+                        className="mr-auto ml-auto w-full rounded-sm bg-green-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-green-600 focus:ring-3 focus:ring-green-300 sm:w-auto"
                         onClick={(): void => onExport(setlistData)}
                     >
                         {i18n("common:exportToSpotify")}

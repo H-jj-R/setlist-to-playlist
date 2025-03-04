@@ -108,13 +108,13 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
             >
-                <div id="settings-header" className="mb-6 mr-5 flex items-center justify-between">
+                <div id="settings-header" className="mr-5 mb-6 flex items-center justify-between">
                     <h2 id="settings-title" className="text-xl font-bold">
                         {i18n("settings:settingsTitle")}
                     </h2>
                     <button
                         id="close-settings-btn"
-                        className="text-xl"
+                        className="text-xl hover:cursor-pointer"
                         onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
@@ -131,7 +131,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="theme-label" className="flex items-center space-x-2 p-2">
                         <select
                             id="theme-select"
-                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-hidden ${
                                 resolvedTheme === "dark"
                                     ? "border-gray-600 bg-gray-700 text-gray-200"
                                     : "border-gray-400 bg-white text-gray-800"
@@ -160,7 +160,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="hide-empty-setlists" className="flex items-center space-x-2 p-2">
                         <input
                             id="hide-empty-setlists-checkbox"
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
@@ -170,7 +170,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="filter-by-country" className="flex items-center space-x-2 p-2">
                         <select
                             id="country-select"
-                            className={`w-1/2 max-w-52 cursor-pointer rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            className={`w-1/2 max-w-52 cursor-pointer rounded-md border px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-hidden ${
                                 resolvedTheme === "dark"
                                     ? "border-gray-600 bg-gray-700 text-gray-200"
                                     : "border-gray-400 bg-white text-gray-800"
@@ -200,7 +200,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="hide-songs-not-found" className="flex items-center space-x-2 p-2">
                         <input
                             id="hide-songs-not-found-checkbox"
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
@@ -210,7 +210,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="exclude-covers" className="flex items-center space-x-2 p-2">
                         <input
                             id="exclude-covers-checkbox"
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
@@ -220,7 +220,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="exclude-duplicate-songs" className="flex items-center space-x-2 p-2">
                         <input
                             id="exclude-duplicate-songs-checkbox"
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
@@ -230,7 +230,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
                     <label id="exclude-played-on-tape" className="flex items-center space-x-2 p-2">
                         <input
                             id="exclude-played-on-tape-checkbox"
-                            className="h-7 w-7 flex-shrink-0 cursor-pointer"
+                            className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"

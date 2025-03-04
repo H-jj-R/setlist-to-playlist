@@ -74,7 +74,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                         <div id="combine-export-btn-container" className="mb-1 flex justify-center p-2">
                             <button
                                 id="combine-export-btn"
-                                className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
+                                className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
                                 onClick={(): void => handleCombineSetlists(state.setlists)}
                             >
                                 {i18n("setlistSearch:combineExportAllSetlists")}
@@ -105,7 +105,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                         {hasMorePages && (
                             <button
                                 id="load-more-btn"
-                                className="mt-4 rounded bg-blue-500 px-6 py-2 text-white hover:bg-blue-600"
+                                className="mt-4 rounded-sm bg-blue-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-blue-600"
                                 disabled={state.isLoading}
                                 onClick={loadMoreSetlists}
                             >

@@ -31,13 +31,13 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
     });
 
     return (
-        <header id="site-header" className="bg-gradient-to-tr from-gray-700 to-gray-800 text-white">
+        <header id="site-header" className="bg-linear-to-tr from-gray-700 to-gray-800 text-white">
             <div
                 id="header-container"
-                className="flex items-center justify-between overflow-hidden whitespace-nowrap px-4 py-2"
+                className="flex items-center justify-between overflow-hidden px-4 py-2 whitespace-nowrap"
             >
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
-                    <Link id="site-logo-link" className="flex items-center hover:text-gray-300" href="/">
+                    <Link id="site-logo-link" className="flex items-center transition hover:text-gray-300" href="/">
                         <img
                             id="site-logo"
                             className="h-10 w-auto"
@@ -54,7 +54,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                         <div id="account-btn-container" className="relative">
                             <button
                                 id="account-btn"
-                                className="text rounded p-2"
+                                className="text rounded-sm p-2 transition hover:cursor-pointer"
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, showAccountSidebar: true }));
                                 }}
@@ -69,7 +69,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                     ) : (
                         <button
                             id="login-btn"
-                            className="rounded-full bg-gradient-to-br from-green-500 to-green-600 px-4 py-2 text-white hover:from-green-600 hover:to-green-700"
+                            className="rounded-full bg-linear-to-br from-green-500 to-green-600 px-4 py-2 text-white transition hover:cursor-pointer hover:from-green-600 hover:to-green-700"
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, showLoginDialog: true }));
                             }}
@@ -79,7 +79,7 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
                     )}
                     <button
                         id="settings-btn"
-                        className="text rounded pr-2 sm:pl-4"
+                        className="text rounded-sm pr-2 transition hover:cursor-pointer sm:pl-4"
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showSettings: true }));
                         }}

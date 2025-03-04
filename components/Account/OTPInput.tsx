@@ -107,7 +107,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
                 {otp.map((digit: string, idx: number) => (
                     <input
                         id={`otp-input-${idx}`}
-                        className="h-12 w-12 rounded-md border border-gray-500 text-center text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-12 w-12 rounded-md border border-gray-500 bg-white text-center text-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:bg-black"
                         aria-label={i18n("account:digitOfOTP", { digit: idx + 1 })}
                         aria-required="true"
                         autoComplete="one-time-code"

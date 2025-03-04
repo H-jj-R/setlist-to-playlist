@@ -59,8 +59,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
             <>
                 <div
                     id="background-overlay"
-                    className={`fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity duration-500 ${
-                        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+                    className={`fixed inset-0 z-20 transition-opacity duration-500 ${
+                        isOpen ? "opacity-50" : "pointer-events-none opacity-0"
                     }`}
                     onClick={(): void => {
                         onClose();
@@ -75,7 +75,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                 >
                     <div
                         id="export-dialog"
-                        className="flex h-[30rem] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800 sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2"
+                        className="flex h-[30rem] w-full max-w-full flex-col gap-6 overflow-y-auto rounded-lg bg-white p-2 shadow-lg sm:w-11/12 md:w-3/4 md:flex-row lg:w-2/3 xl:w-1/2 dark:bg-gray-800"
                     >
                         <div id="export-dialog-main" className="flex-1 p-4">
                             <h3 id="export-dialog-title" className="mb-4 text-xl font-semibold">
@@ -94,7 +94,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </label>
                                 <input
                                     id="playlist-name-input"
-                                    className="mt-1 w-full rounded-lg border p-2"
+                                    className="mt-1 w-full rounded-lg border bg-white p-2 dark:bg-black"
                                     autoComplete="off"
                                     maxLength={100}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -116,7 +116,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </label>
                                 <textarea
                                     id="playlist-description-input"
-                                    className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border p-2"
+                                    className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border bg-white p-2 dark:bg-black"
                                     autoComplete="off"
                                     maxLength={300}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -141,7 +141,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                             />
                                             <button
                                                 id="remove-img-btn"
-                                                className="text-red-500 hover:text-red-700 focus:outline-none"
+                                                className="text-red-500 transition hover:cursor-pointer hover:text-red-700 focus:outline-hidden"
                                                 onClick={(): void => {
                                                     setState((prev) => ({ ...prev, image: null, imagePreview: null }));
                                                 }}
@@ -172,7 +172,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                             <div id="export-dialog-btns" className="mt-4 flex justify-end gap-4 pt-2">
                                 <button
                                     id="cancel-btn"
-                                    className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+                                    className="rounded-sm bg-red-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-red-600"
                                     onClick={(): void => {
                                         onClose();
                                         resetState();
@@ -182,7 +182,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </button>
                                 <button
                                     id="export-btn"
-                                    className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+                                    className="rounded-sm bg-green-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                                     onClick={handleExport}
                                 >
                                     {i18n("common:export")}

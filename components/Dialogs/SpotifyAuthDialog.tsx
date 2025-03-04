@@ -33,7 +33,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.E
 
     return (
         <div id="spotify-auth-dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">
-            <div id="background-overlay" className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
+            <div id="background-overlay" className="absolute inset-0 bg-black/50" onClick={onClose} />
             <div
                 id="spotify-auth-dialog-box"
                 className={
@@ -42,7 +42,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.E
             >
                 <button
                     id="close-btn"
-                    className="absolute left-2 top-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className="absolute top-3 left-2 text-gray-500 transition hover:cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     aria-label={i18n("common:close")}
                     onClick={onClose}
                 >
@@ -60,7 +60,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.E
                     </p>
                     <button
                         id="spotify-auth-btn"
-                        className="rounded-lg bg-green-500 px-4 py-2 text-white transition hover:bg-green-600"
+                        className="rounded-lg bg-green-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                         onClick={(): void => {
                             router.push(
                                 `/api/spotify/authorise?${new URLSearchParams({

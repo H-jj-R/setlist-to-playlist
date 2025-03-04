@@ -33,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
                 <title>Setlist to Playlist</title>
             </Head>
             <HeaderBar />
-            <main id="main-content" className="flex flex-grow flex-col overflow-auto">
+            <main id="main-content" className="flex grow flex-col overflow-auto">
                 {children}
             </main>
         </div>

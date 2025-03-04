@@ -21,7 +21,7 @@ const SetlistSearchSection: React.FC<{}> = (): JSX.Element => {
     return (
         <div
             id="setlist-search-section"
-            className="flex min-h-[33.333333%] flex-grow flex-col items-center justify-between bg-gradient-to-r from-pink-600 to-orange-500 px-10 py-6 text-white lg:flex-row"
+            className="flex min-h-[33.333333%] grow flex-col items-center justify-between bg-linear-to-r from-pink-600 to-orange-500 px-10 py-6 text-white lg:flex-row"
         >
             <div id="setlist-search-text" className="text-center lg:mb-0 lg:w-1/2 lg:text-left">
                 <h1 id="setlist-search-title" className="text-4xl font-extrabold">
@@ -34,7 +34,7 @@ const SetlistSearchSection: React.FC<{}> = (): JSX.Element => {
             <div id="setlist-search-btn-container" className="lg:mx-auto">
                 <button
                     id="go-to-setlist-search-btn"
-                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:bg-gray-100 focus:outline-none"
+                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:cursor-pointer hover:bg-gray-200 focus:outline-hidden"
                     onClick={(): Promise<boolean> => router.push("/setlist-search")}
                 >
                     {i18n("landingPage:goToSetlistSearch")}

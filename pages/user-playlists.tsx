@@ -83,7 +83,7 @@ export default function UserPlaylists(): JSX.Element {
                     <div id="unauthenticated-dialog" className="mt-8 flex items-center justify-center">
                         <div
                             id="auth-required-message"
-                            className="relative top-2/3 rounded-lg bg-gradient-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg"
+                            className="relative top-2/3 rounded-lg bg-linear-to-r from-red-500 to-orange-600 p-8 text-center text-white shadow-lg"
                         >
                             <h2 id="auth-required-title" className="mb-4 text-2xl font-bold">
                                 {i18n("common:authenticationRequired")}

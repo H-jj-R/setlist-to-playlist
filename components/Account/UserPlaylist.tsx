@@ -63,7 +63,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             <div id="edit-btn-container" className="flex items-center space-x-4">
                                 <button
                                     id="edit-btn"
-                                    className="p-1 text-gray-600 hover:text-gray-900"
+                                    className="p-1 text-gray-600 transition hover:cursor-pointer hover:text-gray-900"
                                     aria-label={i18n("common:edit")}
                                     onClick={(): void => {
                                         setState((prev) => ({ ...prev, editing: true }));
@@ -74,14 +74,14 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 <div id="recovery-delete-btns-container" className="flex flex-col items-center gap-2">
                                     <button
                                         id="recovery-btn"
-                                        className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
+                                        className="w-32 rounded-sm bg-green-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                                         onClick={handleRecover}
                                     >
                                         {i18n("userPlaylists:recover")}
                                     </button>
                                     <button
                                         id="delete-btn"
-                                        className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
+                                        className="w-32 rounded-sm bg-red-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-red-600"
                                         onClick={(): void => {
                                             setState((prev) => ({ ...prev, showConfirmation: true }));
                                         }}
@@ -91,7 +91,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 </div>
                                 <button
                                     id="expand-collapse-btns-container"
-                                    className="p-1"
+                                    className="p-1 transition hover:cursor-pointer"
                                     aria-expanded={state.expanded}
                                     aria-label={
                                         state.expanded
@@ -125,7 +125,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             </label>
                             <input
                                 id="playlist-name-input"
-                                className="mb-2 w-full rounded-md border p-2"
+                                className="mb-2 w-full rounded-md border bg-white p-2 dark:bg-black"
                                 autoComplete="off"
                                 maxLength={100}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -137,7 +137,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             />
                             <textarea
                                 id="playlist-description-input"
-                                className="h-32 w-full rounded-md border p-2"
+                                className="h-32 w-full rounded-md border bg-white p-2 dark:bg-black"
                                 aria-live="polite"
                                 autoComplete="off"
                                 maxLength={300}
@@ -150,7 +150,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             <div id="save-cancel-btns-container" className="mt-2 flex justify-center space-x-2 p-2">
                                 <button
                                     id="save-btn"
-                                    className="w-32 rounded bg-green-500 px-6 py-2 text-white hover:bg-green-600"
+                                    className="w-32 rounded-sm bg-green-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                                     aria-controls="user-playlist-edit-container"
                                     aria-label={i18n("userPlaylists:savePlaylistChanges")}
                                     onClick={handleSave}
@@ -159,7 +159,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 </button>
                                 <button
                                     id="cancel-btn"
-                                    className="w-32 rounded bg-red-500 px-6 py-2 text-white hover:bg-red-600"
+                                    className="w-32 rounded-sm bg-red-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-red-600"
                                     aria-controls="user-playlist-edit-container"
                                     aria-label={i18n("userPlaylists:cancelDiscardChanges")}
                                     onClick={(): void => {
@@ -221,7 +221,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                         >
                                             <img
                                                 id="track-img"
-                                                className="h-12 w-12 rounded"
+                                                className="h-12 w-12 rounded-sm"
                                                 alt={
                                                     track.name
                                                         ? `${track.name} ${i18n("common:image")}`

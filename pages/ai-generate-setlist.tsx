@@ -35,7 +35,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                 <div id="unauthenticated-dialog" className="flex items-center justify-center">
                     <div
                         id="auth-required-message"
-                        className="relative top-2/3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg"
+                        className="relative top-2/3 rounded-lg bg-linear-to-r from-purple-500 to-indigo-600 p-8 text-center text-white shadow-lg"
                     >
                         <h2 id="auth-required-title" className="mb-4 text-2xl font-bold">
                             {i18n("common:authenticationRequired")}
@@ -119,7 +119,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                                     <div id="combine-export-btn-container" className="mt-6 flex justify-center">
                                         <button
                                             id="combine-export-btn"
-                                            className="shadow-mdtransition rounded-lg bg-gradient-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white duration-300 hover:from-green-500 hover:to-green-700"
+                                            className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
                                             onClick={handleCombineSetlists}
                                         >
                                             {i18n("generateSetlist:combineExportAll")}
@@ -131,7 +131,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                                         (setlist: Record<string, any>, idx: number): JSX.Element => (
                                             <div
                                                 id={`setlist-display-${idx}`}
-                                                className="w-full animate-fadeIn"
+                                                className="animate-fadeIn w-full"
                                                 key={idx}
                                             >
                                                 <AISetlist

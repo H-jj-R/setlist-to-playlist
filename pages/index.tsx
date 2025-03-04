@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
     return (
         <div id="index-container" className="flex min-h-screen flex-col">
             <Layout>
-                <div id="index-contents-container" className="flex-grow">
+                <div id="index-contents-container" className="grow">
                     <SetlistSearchSection />
                     <GenerateSetlistSection />
                     <AccountInfoSection />

@@ -92,16 +92,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {
                     content: `You are a setlist predictor. Based on the past setlists provided, predict exactly three possible future setlists for the artist. 
                     **Rules for the Predictions:**
-                    - You **must** return exactly **three** predicted setlists.
-                    - Each setlist **must** contain a list of predicted songs.
-                    - Each setlist **must** be distinct:
-                    1. **Setlist 1** should be the most likely prediction, closely following recent setlist trends.
-                    2. **Setlist 2** should be slightly different but still realistic based on historical patterns.
-                    3. **Setlist 3** should introduce significant variation, such as rare songs or surprises, but should still be realistically possible.
+                        - You **must** return exactly **three** predicted setlists.
+                        - Each setlist **must** contain a list of predicted songs.
+                        - Each setlist **must** be distinct:
+                            1. **Setlist 1** should be the most likely prediction, closely following recent setlist trends.
+                            2. **Setlist 2** should be slightly different but still realistic based on historical patterns.
+                            3. **Setlist 3** should introduce significant variation, such as rare songs or surprises, but should still be realistically possible.
                     **Formatting & Constraints:**
-                    - Do **not** repeat identical setlists.
-                    - If a song is a cover, include the original artist's name in the 'artist' field and **not** in the song name.
-                    - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**. Do **not** include this in the song name.
+                        - Do **not** repeat identical setlists.
+                        - If a song is a cover, include the original artist's name in the 'artist' field, **not** in the song name, and **not** the name of the artist you're predicting setlists for.
+                        - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**. Do **not** include this in the song name.
                     **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`,
                     role: "system"
                 },
@@ -118,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Parse the structured response
         const predictedSetlists = completion.choices.map((choice) => choice.message.parsed)[0];
-        
+
         res.status(200).json(predictedSetlists);
     } catch (error) {
         console.error(error);

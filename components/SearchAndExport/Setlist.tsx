@@ -45,12 +45,12 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
             <div id="setlist-btns-container" className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
                 <div
                     id="setlist-btns"
-                    className={`mb-6 flex items-stretch justify-between pb-2 pt-4 ${!isAlone && "space-x-8"}`}
+                    className={`mb-6 flex items-stretch justify-between pt-4 pb-2 ${!isAlone && "space-x-8"}`}
                 >
                     {!isAlone ? (
                         <button
                             id="back-btn"
-                            className="min-h-[44px] w-full rounded bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 focus:ring focus:ring-red-300 sm:w-auto"
+                            className="min-h-[44px] w-full rounded-sm bg-red-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-red-600 focus:ring-3 focus:ring-red-300 sm:w-auto"
                             onClick={onClose}
                         >
                             {i18n("setlistSearch:backToList")}
@@ -60,7 +60,7 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
                     )}
                     <button
                         id="export-spotify-btn"
-                        className="min-h-[44px] w-full rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-600 focus:ring focus:ring-green-300 sm:w-auto"
+                        className="min-h-[44px] w-full rounded-sm bg-green-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-green-600 focus:ring-3 focus:ring-green-300 sm:w-auto"
                         onClick={onExport}
                     >
                         {i18n("common:exportToSpotify")}

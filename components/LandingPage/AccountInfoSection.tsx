@@ -18,7 +18,7 @@ const AccountInfoSection: React.FC<{}> = (): JSX.Element => {
     return (
         <div
             id="why-create-account-section"
-            className="min-h-[33.333333%] flex-grow bg-gradient-to-b from-green-500 to-green-600 px-10 py-6 text-gray-100"
+            className="min-h-[33.333333%] grow bg-linear-to-b from-green-500 to-green-600 px-10 py-6 text-gray-100"
         >
             <div id="why-create-account-container" className="mx-auto max-w-4xl">
                 <h2 id="why-create-account-title" className="mb-6 text-center text-3xl font-bold">
