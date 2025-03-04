@@ -143,6 +143,7 @@ export default function useSetlistSearchHook() {
             ...prev,
             chosenSetlistData: null,
             error: null,
+            pageState: PageState.Idle,
             searchComplete: false,
             searchTriggered: true,
             setlistChosen: false,
