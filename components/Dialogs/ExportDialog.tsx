@@ -207,7 +207,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                         </div>
                     </div>
                 </div>
-                {!state.messageDialog.isOpen && (
+                {state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}
                         onClose={(): void => {
