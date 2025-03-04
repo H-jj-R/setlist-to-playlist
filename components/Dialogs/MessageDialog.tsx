@@ -29,16 +29,16 @@ interface MessageDialogProps {
  *
  * @param MessageDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered `MessageDialog` component.
+ * @returns The rendered `MessageDialog` component.
  */
-const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }): JSX.Element => {
+const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (
         <div id="dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">
             <div
                 id="background-overlay"
-                className="absolute inset-0 bg-black bg-opacity-50"
+                className="absolute inset-0 bg-black/50"
                 onClick={type === MessageDialogState.Loading ? onClose : undefined}
             />
             <div
@@ -83,7 +83,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
                 {type !== MessageDialogState.Loading && (
                     <button
                         id="close-btn"
-                        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                        className="mt-4 rounded-sm bg-blue-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-blue-600"
                         onClick={onClose}
                     >
                         {i18n("common:close")}

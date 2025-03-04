@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { error } = await resend.emails.send({
             from: "Support <support@setlist-to-playlist.com>",
             headers: { "X-Entity-Ref-ID": `ref-${Date.now()}` }, // Unique identifier for the email request
-            react: SupportEmailTemplate({ email, message }),
+            react: await SupportEmailTemplate({ email, message }),
             subject: "Support/Feedback",
             to: ["support@setlist-to-playlist.com"]
         });

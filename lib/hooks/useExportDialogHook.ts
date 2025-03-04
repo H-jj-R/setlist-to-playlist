@@ -6,7 +6,6 @@
 
 import MessageDialogState from "@constants/messageDialogState";
 import { useAuth } from "@context/AuthContext";
-import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
@@ -58,13 +57,15 @@ export default function useExportDialogHook(
                     ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
                     : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${
                           setlist.eventDate
-                              ? format(
-                                    ((dateString: string): Date => {
-                                        const [day, month, year] = dateString.split("-");
-                                        return new Date(`${year}-${month}-${day}`);
-                                    })(setlist.eventDate),
-                                    "MMMM dd, yyyy"
-                                )
+                              ? (() => {
+                                    const [day, month, year] = setlist.eventDate.split("-");
+                                    const date = new Date(`${year}-${month}-${day}`);
+                                    return new Intl.DateTimeFormat("en-US", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric"
+                                    }).format(date);
+                                })()
                               : i18n("exportSetlist:combined")
                       }`
             }));

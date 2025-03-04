@@ -19,9 +19,9 @@ import "@constants/i18n";
  *  - Component: The page being rendered
  *  - pageProps: Props passed to that page
  *
- * @returns {JSX.Element} The rendered `App` component.
+ * @returns The rendered `App` component.
  */
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
             <AuthProvider>

@@ -13,9 +13,9 @@ import { Trans, useTranslation } from "react-i18next";
 /**
  * Privacy Policy page.
  *
- * @returns {JSX.Element} The rendered `/privacy-policy` page.
+ * @returns The rendered `/privacy-policy` page.
  */
-export default function PrivacyPolicy(): JSX.Element {
+export default function PrivacyPolicy() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted

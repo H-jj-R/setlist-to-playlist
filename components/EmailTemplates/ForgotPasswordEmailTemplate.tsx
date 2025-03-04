@@ -23,9 +23,9 @@ interface ForgotPasswordEmailTemplateProps {
  *
  * @param ForgotPasswordEmailTemplateProps - Component props.
  *
- * @returns {JSX.Element} The rendered email template.
+ * @returns The rendered email template.
  */
-const ForgotPasswordEmailTemplate: React.FC<Readonly<ForgotPasswordEmailTemplateProps>> = ({ otp }): JSX.Element => {
+const ForgotPasswordEmailTemplate: React.FC<Readonly<ForgotPasswordEmailTemplateProps>> = ({ otp }) => {
     return (
         <Html>
             <Head />

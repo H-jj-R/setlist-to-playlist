@@ -15,9 +15,9 @@ import { Trans, useTranslation } from "react-i18next";
 /**
  * About page, containing details about the site, and a support/feedback form.
  *
- * @returns {JSX.Element} The rendered `/about` page.
+ * @returns The rendered `/about` page.
  */
-export default function About(): JSX.Element {
+export default function About() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
@@ -117,7 +117,7 @@ export default function About(): JSX.Element {
                             </p>
                             <button
                                 id="submit-another-btn"
-                                className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                className="text-md mx-4 rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition hover:cursor-pointer hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                                 onClick={(): void => {
                                     setState((prev) => ({
                                         ...prev,
@@ -136,7 +136,7 @@ export default function About(): JSX.Element {
                                     {i18n("common:email")}
                                     <input
                                         id="email-input"
-                                        className="mt-1 w-full rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        className="mt-1 w-full rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
                                         autoComplete="email"
                                         maxLength={320}
                                         name="email"
@@ -157,7 +157,7 @@ export default function About(): JSX.Element {
                                     {i18n("about:message")}
                                     <textarea
                                         id="message-input"
-                                        className="mt-1 w-full resize-none overflow-hidden rounded border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        className="mt-1 w-full resize-none overflow-hidden rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
                                         maxLength={MAX_MESSAGE_LENGTH}
                                         name="message"
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -178,7 +178,7 @@ export default function About(): JSX.Element {
                                 </label>
                                 <div
                                     id="message-length-counter"
-                                    className="absolute bottom-2 right-2 text-sm text-gray-500 dark:text-gray-400"
+                                    className="absolute right-2 bottom-2 text-sm text-gray-500 dark:text-gray-400"
                                 >
                                     {state.formData.message.length}/{MAX_MESSAGE_LENGTH}
                                 </div>
@@ -186,7 +186,7 @@ export default function About(): JSX.Element {
                             <div id="submit-btn-container" className="flex">
                                 <button
                                     id="submit-btn"
-                                    className="rounded-md bg-blue-600 px-8 py-3 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                    className="rounded-md bg-blue-600 px-8 py-3 text-white transition hover:cursor-pointer hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                                     type="submit"
                                 >
                                     {i18n("common:submit")}

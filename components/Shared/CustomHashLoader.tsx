@@ -26,9 +26,9 @@ interface CustomHashLoaderProps {
  *
  * @param CustomHashLoaderProps - The component props.
  *
- * @returns {JSX.Element} The rendered `CustomHashLoader` component.
+ * @returns The rendered `CustomHashLoader` component.
  */
-const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }): JSX.Element => {
+const CustomHashLoader: React.FC<CustomHashLoaderProps> = ({ showLoading, size }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (

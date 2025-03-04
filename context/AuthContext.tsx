@@ -41,9 +41,9 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
  * Manages the authentication state and provides authentication-related functions.
  *
  * @param AuthProviderProps - Component props.
- * @returns {JSX.Element} The AuthContext provider.
+ * @returns The AuthContext provider.
  */
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }): JSX.Element => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     /**

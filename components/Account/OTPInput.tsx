@@ -23,9 +23,9 @@ interface OTPInputProps {
  *
  * @param OTPInputProps - Component props.
  *
- * @returns {JSX.Element} The rendered `OTPInput` component.
+ * @returns The rendered `OTPInput` component.
  */
-const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
+const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
     const { t: i18n } = useTranslation(); // Translation hook
     const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]); // Tracks state of each input
 
@@ -107,7 +107,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
                 {otp.map((digit: string, idx: number) => (
                     <input
                         id={`otp-input-${idx}`}
-                        className="h-12 w-12 rounded-md border border-gray-500 text-center text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-12 w-12 rounded-md border border-gray-900 bg-white text-center text-xl text-black focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
                         aria-label={i18n("account:digitOfOTP", { digit: idx + 1 })}
                         aria-required="true"
                         autoComplete="one-time-code"

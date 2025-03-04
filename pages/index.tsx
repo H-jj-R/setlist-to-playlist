@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 /**
  * The landing page of the site.
  *
- * @returns {JSX.Element} The rendered index page.
+ * @returns The rendered index page.
  */
-export default function Home(): JSX.Element {
+export default function Home() {
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
 
     /**
@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
     return (
         <div id="index-container" className="flex min-h-screen flex-col">
             <Layout>
-                <div id="index-contents-container" className="flex-grow">
+                <div id="index-contents-container" className="grow">
                     <SetlistSearchSection />
                     <GenerateSetlistSection />
                     <AccountInfoSection />
