@@ -126,7 +126,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             </label>
                             <input
                                 id="playlist-name-input"
-                                className="mb-2 w-full rounded-md border bg-white p-2 dark:bg-black"
+                                className="mb-2 w-full rounded-md border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
                                 autoComplete="off"
                                 maxLength={100}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -138,7 +138,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                             />
                             <textarea
                                 id="playlist-description-input"
-                                className="h-32 w-full rounded-md border bg-white p-2 dark:bg-black"
+                                className="h-32 w-full rounded-md border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
                                 aria-live="polite"
                                 autoComplete="off"
                                 maxLength={300}

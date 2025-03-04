@@ -64,7 +64,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     <div id="username-input-container" className="relative">
                         <input
                             id="username-input"
-                            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:bg-black"
+                            className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
                             autoComplete="username"
                             maxLength={20}
                             name="username"
@@ -74,7 +74,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         />
                         <FontAwesomeIcon
                             id="fa-user-circle-icon"
-                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-200"
+                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                             icon={faUserCircle}
                         />
                     </div>
@@ -90,7 +90,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     <div id="email-input-container" className="relative">
                         <input
                             id="email-input"
-                            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:bg-black"
+                            className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
                             autoComplete="email"
                             maxLength={320}
                             name="email"
@@ -100,7 +100,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         />
                         <FontAwesomeIcon
                             id="fa-envelope-icon"
-                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-200"
+                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                             icon={faEnvelope}
                         />
                     </div>
@@ -109,7 +109,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     <div id="password-input-container" className="relative">
                         <input
                             id="password-input"
-                            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:bg-black"
+                            className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
                             maxLength={32}
                             name="password"
                             placeholder={i18n("account:password")}
@@ -118,12 +118,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         />
                         <FontAwesomeIcon
                             id="fa-lock-icon"
-                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-200"
+                            className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                             icon={faLock}
                         />
                         <button
                             id="toggle-password-visibility-btn"
-                            className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 transition hover:cursor-pointer hover:text-gray-500"
+                            className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                             }}
@@ -135,7 +135,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                 )}
                 {state.dialogState === LoginDialogState.ResetPassword && (
                     <>
-                        <p id="reset-password-message" className="flex justify-center text-center">
+                        <p
+                            id="reset-password-message"
+                            className="flex justify-center text-center text-gray-900 dark:text-gray-100"
+                        >
                             {i18n("account:resetPasswordMessage")}
                         </p>
                         <OTPInput
@@ -146,7 +149,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         <div id="new-password-input-container" className="relative">
                             <input
                                 id="new-password-input"
-                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pl-10 text-lg transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:bg-black"
+                                className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
                                 maxLength={32}
                                 name="password"
                                 placeholder={i18n("account:newPassword")}
@@ -155,12 +158,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             />
                             <FontAwesomeIcon
                                 id="fa-lock-icon"
-                                className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-200"
+                                className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                                 icon={faLock}
                             />
                             <button
                                 id="toggle-new-password-visibility-btn"
-                                className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-400 transition hover:cursor-pointer hover:text-gray-500"
+                                className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                                 }}

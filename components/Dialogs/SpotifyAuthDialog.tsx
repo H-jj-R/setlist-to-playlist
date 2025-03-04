@@ -46,7 +46,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.E
                     aria-label={i18n("common:close")}
                     onClick={onClose}
                 >
-                    <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
+                    <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                 </button>
                 <div id="dialog-contents" className="p-4">
                     <h2

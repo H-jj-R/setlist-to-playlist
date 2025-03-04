@@ -136,7 +136,7 @@ export default function About(): JSX.Element {
                                     {i18n("common:email")}
                                     <input
                                         id="email-input"
-                                        className="mt-1 w-full rounded-sm border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        className="mt-1 w-full rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
                                         autoComplete="email"
                                         maxLength={320}
                                         name="email"
@@ -157,7 +157,7 @@ export default function About(): JSX.Element {
                                     {i18n("about:message")}
                                     <textarea
                                         id="message-input"
-                                        className="mt-1 w-full resize-none overflow-hidden rounded-sm border bg-gray-100 p-2 dark:bg-gray-800 dark:text-white"
+                                        className="mt-1 w-full resize-none overflow-hidden rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
                                         maxLength={MAX_MESSAGE_LENGTH}
                                         name="message"
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {

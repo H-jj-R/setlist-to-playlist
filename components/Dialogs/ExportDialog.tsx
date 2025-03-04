@@ -60,8 +60,8 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
             <>
                 <div
                     id="background-overlay"
-                    className={`fixed inset-0 z-20 transition-opacity duration-500 ${
-                        isOpen ? "opacity-50" : "pointer-events-none opacity-0"
+                    className={`fixed inset-0 z-20 bg-black/50 transition-opacity duration-500 ${
+                        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
                     }`}
                     onClick={(): void => {
                         onClose();
@@ -95,7 +95,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </label>
                                 <input
                                     id="playlist-name-input"
-                                    className="mt-1 w-full rounded-lg border bg-white p-2 dark:bg-black"
+                                    className="mt-1 w-full rounded-lg border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
                                     autoComplete="off"
                                     maxLength={100}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -117,7 +117,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 </label>
                                 <textarea
                                     id="playlist-description-input"
-                                    className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border bg-white p-2 dark:bg-black"
+                                    className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
                                     autoComplete="off"
                                     maxLength={300}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -207,7 +207,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                         </div>
                     </div>
                 </div>
-                {state.messageDialog.isOpen && (
+                {!state.messageDialog.isOpen && (
                     <MessageDialog
                         message={state.messageDialog.message}
                         onClose={(): void => {

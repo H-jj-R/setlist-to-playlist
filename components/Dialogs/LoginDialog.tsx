@@ -64,7 +64,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): J
                             aria-label={i18n("common:close")}
                             onClick={handleClose}
                         >
-                            <FontAwesomeIcon id="fa-times-icon" className="h-6 w-6" icon={faTimes} />
+                            <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                         </button>
                         <div id="login-form-container">
                             <LoginForm
