@@ -13,10 +13,10 @@
         "jsonwebtoken": "^9.0.2",
         "jwt-decode": "^4.0.0",
         "mysql2": "^3.11.3",
-        "next": "^15.2.0",
+        "next": "^15.2.1",
         "next-i18next": "^15.4.0",
         "next-themes": "^0.3.0",
-        "openai": "^4.77.0",
+        "openai": "^4.86.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-dropzone": "^14.3.5",
@@ -24,7 +24,7 @@
         "react-i18next": "^15.1.1",
         "react-spinners": "^0.14.1",
         "resend": "^4.1.2",
-        "zod": "^3.24.1"
+        "zod": "^3.24.2"
     },
     "devDependencies": {
         "@types/jest": "^29.5.12",
@@ -39,7 +39,7 @@
         "jest-puppeteer": "^11.0.0",
         "postcss": "^8.4.49",
         "prettier-plugin-tailwindcss": "^0.6.11",
-        "puppeteer": "^24.3.0",
+        "puppeteer": "^24.3.1",
         "tailwindcss": "^3.4.15",
         "ts-jest": "^29.2.6",
         "typescript": "5.4.5"
