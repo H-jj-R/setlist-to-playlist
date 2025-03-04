@@ -13,6 +13,7 @@ import MessageDialogState from "@constants/messageDialogState";
 import { faChevronDown, faChevronUp, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useUserPlaylistHook from "@hooks/useUserPlaylistHook";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -219,7 +220,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                             key={`${idx}-${track.id}`}
                                             role="listitem"
                                         >
-                                            <img
+                                            <Image
                                                 id="track-img"
                                                 className="h-12 w-12 rounded-sm"
                                                 alt={
@@ -227,7 +228,9 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                                         ? `${track.name} ${i18n("common:image")}`
                                                         : i18n("common:songCoverArt")
                                                 }
+                                                height={700}
                                                 src={track.album.images[0]?.url || "/images/song-placeholder.jpg"}
+                                                width={700}
                                             />
                                             <div>
                                                 <p id="track-name" className="font-medium">

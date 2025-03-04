@@ -8,6 +8,7 @@ import MessageDialog from "@components/Dialogs/MessageDialog";
 import SetlistSongsExport from "@components/SearchAndExport/SetlistSongsExport";
 import MessageDialogState from "@constants/messageDialogState";
 import useExportDialogHook from "@hooks/useExportDialogHook";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -133,11 +134,13 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
                                 <div id="playlist-cover-dropzone" className="max-h-40 flex-1 overflow-hidden">
                                     {state.imagePreview ? (
                                         <div id="playlist-cover-container" className="flex items-center">
-                                            <img
+                                            <Image
                                                 id="img-preview"
                                                 className="mr-2 h-24 w-24 rounded-lg object-cover"
                                                 alt={i18n("exportSetlist:uploadedPlaylistCover")}
+                                                height={700}
                                                 src={state.imagePreview as string}
+                                                width={700}
                                             />
                                             <button
                                                 id="remove-img-btn"

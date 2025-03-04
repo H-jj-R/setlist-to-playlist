@@ -10,6 +10,7 @@ import Settings from "@components/Shared/Settings";
 import { useAuth } from "@context/AuthContext";
 import { faCog, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -38,11 +39,13 @@ const HeaderBar: React.FC<{}> = (): JSX.Element => {
             >
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
                     <Link id="site-logo-link" className="flex items-center transition hover:text-gray-300" href="/">
-                        <img
+                        <Image
                             id="site-logo"
                             className="h-10 w-auto"
                             alt={i18n("common:siteLogo")}
+                            height={900}
                             src="/images/logo.png"
+                            width={900}
                         />
                         <span id="site-title" className="ml-2 text-lg font-bold">
                             Setlist to Playlist

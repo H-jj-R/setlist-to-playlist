@@ -7,6 +7,7 @@
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
 import useSetlistSongsExportHook from "@hooks/useSetlistSongsExportHook";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -79,7 +80,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                     >
                                         <div id="song-details-container" className="flex items-center space-x-4">
                                             {spotifySong?.album?.images[0]?.url && (
-                                                <img
+                                                <Image
                                                     id="song-cover-img"
                                                     className="h-12 w-12 rounded-sm shadow-sm"
                                                     alt={
@@ -87,10 +88,12 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                                             ? `${spotifySong.name} ${i18n("common:image")}`
                                                             : i18n("common:songCoverArt")
                                                     }
+                                                    height={700}
                                                     src={
                                                         spotifySong.album.images[0]?.url ||
                                                         "/images/song-placeholder.jpg"
                                                     }
+                                                    width={700}
                                                 />
                                             )}
                                             <div>
