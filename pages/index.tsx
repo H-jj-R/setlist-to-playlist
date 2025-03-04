@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 /**
  * The landing page of the site.
  *
- * @returns {JSX.Element} The rendered index page.
+ * @returns The rendered index page.
  */
-export default function Home(): JSX.Element {
+export default function Home() {
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
 
     /**

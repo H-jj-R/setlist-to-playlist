@@ -25,9 +25,9 @@ interface SpotifyAuthDialogProps {
  *
  * @param SpotifyAuthDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered component.
+ * @returns The rendered component.
  */
-const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }): JSX.Element => {
+const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook
 

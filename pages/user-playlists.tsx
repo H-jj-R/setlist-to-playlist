@@ -16,9 +16,9 @@ import { useTranslation } from "react-i18next";
 /**
  * Main page for viewing user playlists.
  *
- * @returns {JSX.Element} The rendered `/user-playlists` page.
+ * @returns The rendered `/user-playlists` page.
  */
-export default function UserPlaylists(): JSX.Element {
+export default function UserPlaylists() {
     const { isAuthenticated } = useAuth(); // Authentication context
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
@@ -112,28 +112,26 @@ export default function UserPlaylists(): JSX.Element {
                             </h2>
                         ) : (
                             <ul id="playlists-list" className="space-y-4">
-                                {state.playlists.map(
-                                    (playlist: Record<string, any>, idx: number): JSX.Element => (
-                                        <div
-                                            id={`user-playlist-${playlist.playlistId}-container`}
-                                            className="flex items-center justify-center"
-                                            key={`${idx}-${playlist.playlistId}`}
-                                        >
-                                            <UserPlaylist
-                                                onDelete={(playlistId: number): void => {
-                                                    setState((prev) => ({
-                                                        ...prev,
-                                                        playlists: prev.playlists.filter(
-                                                            (playlist: Record<string, any>): boolean =>
-                                                                playlist.playlistId !== playlistId
-                                                        )
-                                                    }));
-                                                }}
-                                                playlist={playlist}
-                                            />
-                                        </div>
-                                    )
-                                )}
+                                {state.playlists.map((playlist: Record<string, any>, idx: number) => (
+                                    <div
+                                        id={`user-playlist-${playlist.playlistId}-container`}
+                                        className="flex items-center justify-center"
+                                        key={`${idx}-${playlist.playlistId}`}
+                                    >
+                                        <UserPlaylist
+                                            onDelete={(playlistId: number): void => {
+                                                setState((prev) => ({
+                                                    ...prev,
+                                                    playlists: prev.playlists.filter(
+                                                        (playlist: Record<string, any>): boolean =>
+                                                            playlist.playlistId !== playlistId
+                                                    )
+                                                }));
+                                            }}
+                                            playlist={playlist}
+                                        />
+                                    </div>
+                                ))}
                             </ul>
                         )}
                     </div>

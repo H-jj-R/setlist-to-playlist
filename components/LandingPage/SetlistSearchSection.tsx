@@ -12,9 +12,9 @@ import { useTranslation } from "react-i18next";
  *
  * Displays the option to go the setlist-search page.
  *
- * @returns {JSX.Element} The rendered `SetlistSearchSection` component.
+ * @returns The rendered `SetlistSearchSection` component.
  */
-const SetlistSearchSection: React.FC<{}> = (): JSX.Element => {
+const SetlistSearchSection: React.FC<{}> = () => {
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook
 

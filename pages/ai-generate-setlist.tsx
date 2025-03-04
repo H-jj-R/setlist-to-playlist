@@ -18,9 +18,9 @@ import { useTranslation } from "react-i18next";
 /**
  * Main page for AI generating, then viewing predicted setlists.
  *
- * @returns {JSX.Element} The rendered `/ai-generate-setlist` page.
+ * @returns The rendered `/ai-generate-setlist` page.
  */
-export default function AIGenerateSetlist(): JSX.Element {
+export default function AIGenerateSetlist() {
     const { isAuthenticated } = useAuth(); // Authentication context
     const { t: i18n } = useTranslation(); // Translation hook
 
@@ -127,8 +127,9 @@ export default function AIGenerateSetlist(): JSX.Element {
                                     </div>
                                 </div>
                                 <div id="setlist-container" className="mt-2 flex gap-4">
-                                    {state.predictedSetlists.slice(0, 3).map(
-                                        (setlist: Record<string, any>, idx: number): JSX.Element => (
+                                    {state.predictedSetlists
+                                        .slice(0, 3)
+                                        .map((setlist: Record<string, any>, idx: number) => (
                                             <div
                                                 id={`setlist-display-${idx}`}
                                                 className="animate-fadeIn w-full"
@@ -140,8 +141,7 @@ export default function AIGenerateSetlist(): JSX.Element {
                                                     setlist={[setlist]}
                                                 />
                                             </div>
-                                        )
-                                    )}
+                                        ))}
                                 </div>
                             </>
                         )}

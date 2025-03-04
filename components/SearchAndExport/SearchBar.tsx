@@ -29,9 +29,9 @@ interface SearchBarProps {
  *
  * @param SearchBarProps - The component props.
  *
- * @returns {JSX.Element} The rendered `SearchBar` component.
+ * @returns The rendered `SearchBar` component.
  */
-const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }): JSX.Element => {
+const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) => {
     const { t: i18n } = useTranslation(); // Translation hook
     const [query, setQuery] = useState(""); // State to track the user's search input
     const [isListening, setIsListening] = useState(false); // Tracks whether microphone input is currently active

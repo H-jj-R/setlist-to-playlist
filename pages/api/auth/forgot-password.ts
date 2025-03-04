@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { error } = await resend.emails.send({
             from: "Setlist to Playlist <account.management@setlist-to-playlist.com>",
             headers: { "X-Entity-Ref-ID": `ref-${Date.now()}` }, // Unique identifier for the email request
-            react: ForgotPasswordEmailTemplate({ otp }),
+            react: await ForgotPasswordEmailTemplate({ otp }),
             subject: "Forgot Password - Setlist to Playlist",
             to: [email]
         });

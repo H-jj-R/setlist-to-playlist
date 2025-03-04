@@ -20,9 +20,9 @@ import { useTranslation } from "react-i18next";
  *
  * The main header bar displayed at the top of the page.
  *
- * @returns {JSX.Element} The rendered `HeaderBar` component.
+ * @returns The rendered `HeaderBar` component.
  */
-const HeaderBar: React.FC<{}> = (): JSX.Element => {
+const HeaderBar: React.FC<{}> = () => {
     const { isAuthenticated, login, logout } = useAuth(); // Authentication context
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({

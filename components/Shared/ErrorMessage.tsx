@@ -25,9 +25,9 @@ interface ErrorMessageProps {
  *
  * @param ErrorMessageProps - The component props.
  *
- * @returns {JSX.Element} The rendered `ErrorMessage` component.
+ * @returns The rendered `ErrorMessage` component.
  */
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }): JSX.Element => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
     return (
         <div
             id="error-container"

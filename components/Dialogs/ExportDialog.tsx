@@ -35,15 +35,9 @@ interface ExportDialogProps {
  *
  * @param ExportDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered `ExportDialog` component.
+ * @returns The rendered `ExportDialog` component.
  */
-const ExportDialog: React.FC<ExportDialogProps> = ({
-    artistData,
-    isOpen,
-    onClose,
-    predictedSetlist,
-    setlist
-}): JSX.Element => {
+const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose, predictedSetlist, setlist }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage export functionality and dialog state

@@ -11,9 +11,9 @@ import { useTranslation } from "react-i18next";
  * Renders a custom 404 error page.
  * It displays a friendly error message when a page is not found.
  *
- * @returns {JSX.Element} The rendered custom 404 page.
+ * @returns The rendered custom 404 page.
  */
-export default function Custom404(): JSX.Element {
+export default function Custom404() {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (

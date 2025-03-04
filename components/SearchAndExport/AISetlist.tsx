@@ -28,9 +28,9 @@ interface AISetlistProps {
  *
  * @param AISetlistProps - Component props.
  *
- * @returns {JSX.Element} The rendered `AISetlist` component.
+ * @returns The rendered `AISetlist` component.
  */
-const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }): JSX.Element => {
+const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Safely access the first element of the setlist array
@@ -59,42 +59,40 @@ const AISetlist: React.FC<AISetlistProps> = ({ onExport, predictionNum, setlist 
             </div>
             {setlistData.predictedSongs && setlistData.predictedSongs.length > 0 ? (
                 <ul id="songs-list" className="space-y-1 pb-6">
-                    {setlistData.predictedSongs.map(
-                        (song: any, songIdx: number): JSX.Element => (
-                            <li
-                                id={`song-item-${song.name || "unknown"}`}
-                                className={`py-2 ${
-                                    songIdx !== setlistData.predictedSongs.length - 1
-                                        ? "border-b border-gray-200 dark:border-gray-700"
-                                        : ""
-                                }`}
-                                key={`${songIdx}-${song.name || "unknown"}`}
-                            >
-                                <div id="song-details-container" className="flex items-center justify-between">
-                                    <div id="song-name-container" className="flex items-center space-x-2">
-                                        {song.tape && (
-                                            <FontAwesomeIcon
-                                                id="fa-record-vinyl-icon"
-                                                className="opacity-80"
-                                                icon={faRecordVinyl}
-                                                title={i18n("setlistSearch:playedFromTape")}
-                                            />
-                                        )}
-                                        <span id="song-name" className={"font-medium"}>
-                                            {song.name}
-                                        </span>
-                                    </div>
-                                    <div
-                                        id="additional-song-details"
-                                        className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400"
-                                    >
-                                        {song.cover &&
-                                            `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}`}
-                                    </div>
+                    {setlistData.predictedSongs.map((song: any, songIdx: number) => (
+                        <li
+                            id={`song-item-${song.name || "unknown"}`}
+                            className={`py-2 ${
+                                songIdx !== setlistData.predictedSongs.length - 1
+                                    ? "border-b border-gray-200 dark:border-gray-700"
+                                    : ""
+                            }`}
+                            key={`${songIdx}-${song.name || "unknown"}`}
+                        >
+                            <div id="song-details-container" className="flex items-center justify-between">
+                                <div id="song-name-container" className="flex items-center space-x-2">
+                                    {song.tape && (
+                                        <FontAwesomeIcon
+                                            id="fa-record-vinyl-icon"
+                                            className="opacity-80"
+                                            icon={faRecordVinyl}
+                                            title={i18n("setlistSearch:playedFromTape")}
+                                        />
+                                    )}
+                                    <span id="song-name" className={"font-medium"}>
+                                        {song.name}
+                                    </span>
                                 </div>
-                            </li>
-                        )
-                    )}
+                                <div
+                                    id="additional-song-details"
+                                    className="max-w-[60%] text-right text-sm text-gray-500 dark:text-gray-400"
+                                >
+                                    {song.cover &&
+                                        `${song.cover.name} ${song.tape ? i18n("setlistSearch:song") : i18n("setlistSearch:cover")}`}
+                                </div>
+                            </div>
+                        </li>
+                    ))}
                 </ul>
             ) : (
                 <p id="no-songs-message" className="text-center italic">

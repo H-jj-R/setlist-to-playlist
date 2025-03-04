@@ -31,13 +31,9 @@ interface ListOfSetlistsProps {
  *
  * @param ListOfSetlistsProps - The component props.
  *
- * @returns {JSX.Element} The rendered `ListOfSetlists` component.
+ * @returns The rendered `ListOfSetlists` component.
  */
-const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
-    handleCombineSetlists,
-    onSetlistChosen,
-    setlistData
-}): JSX.Element => {
+const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, onSetlistChosen, setlistData }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
@@ -84,16 +80,14 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                             </button>
                         </div>
                         <ul id="setlist-list" className="w-full space-y-3 px-4">
-                            {state.setlists.map(
-                                (setlist: Record<string, any>): JSX.Element => (
-                                    <SetlistChoiceBlock
-                                        hideEmpty={state.hideEmptySetlists}
-                                        key={setlist.id}
-                                        onClick={onSetlistChosen}
-                                        setlist={setlist}
-                                    />
-                                )
-                            )}
+                            {state.setlists.map((setlist: Record<string, any>) => (
+                                <SetlistChoiceBlock
+                                    hideEmpty={state.hideEmptySetlists}
+                                    key={setlist.id}
+                                    onClick={onSetlistChosen}
+                                    setlist={setlist}
+                                />
+                            ))}
                         </ul>
                         {state.hiddenSetlistsCount > 0 && state.hideEmptySetlists === true && (
                             <p id="hidden-setlists-count" className="mt-4 text-gray-500">

@@ -23,9 +23,9 @@ interface OTPInputProps {
  *
  * @param OTPInputProps - Component props.
  *
- * @returns {JSX.Element} The rendered `OTPInput` component.
+ * @returns The rendered `OTPInput` component.
  */
-const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }): JSX.Element => {
+const OTPInput: React.FC<OTPInputProps> = ({ setOtpInput }) => {
     const { t: i18n } = useTranslation(); // Translation hook
     const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]); // Tracks state of each input
 

@@ -25,9 +25,9 @@ interface ConfirmationModalProps {
  *
  * @param ConfirmationModalProps - Component props.
  *
- * @returns {JSX.Element} The rendered `ConfirmationModal` component.
+ * @returns The rendered `ConfirmationModal` component.
  */
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }): JSX.Element => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfirm }) => {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
 

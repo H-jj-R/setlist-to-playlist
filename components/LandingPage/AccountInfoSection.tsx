@@ -10,9 +10,9 @@ import { useTranslation } from "react-i18next";
  *
  * Displays information on why to create an account.
  *
- * @returns {JSX.Element} The rendered `AccountInfoSection` component.
+ * @returns The rendered `AccountInfoSection` component.
  */
-const AccountInfoSection: React.FC<{}> = (): JSX.Element => {
+const AccountInfoSection: React.FC<{}> = () => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (

@@ -29,9 +29,9 @@ interface MessageDialogProps {
  *
  * @param MessageDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered `MessageDialog` component.
+ * @returns The rendered `MessageDialog` component.
  */
-const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }): JSX.Element => {
+const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (

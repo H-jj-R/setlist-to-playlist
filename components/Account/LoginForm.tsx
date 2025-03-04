@@ -33,9 +33,9 @@ interface LoginFormProps {
  *
  * @param LoginFormProps - Component props.
  *
- * @returns {JSX.Element} The rendered `LoginForm` component.
+ * @returns The rendered `LoginForm` component.
  */
-const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setState, state }): JSX.Element => {
+const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setState, state }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     /**

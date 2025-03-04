@@ -24,9 +24,9 @@ interface SupportEmailTemplateProps {
  *
  * @param SupportEmailTemplateProps - Component props.
  *
- * @returns {JSX.Element} The rendered email template.
+ * @returns The rendered email template.
  */
-const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }): JSX.Element => {
+const SupportEmailTemplate: React.FC<Readonly<SupportEmailTemplateProps>> = ({ email, message }) => {
     return (
         <Html>
             <Head />

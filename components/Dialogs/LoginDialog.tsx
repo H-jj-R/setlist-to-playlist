@@ -30,9 +30,9 @@ interface LoginDialogProps {
  *
  * @param LoginDialogProps - Component props.
  *
- * @returns {JSX.Element} The rendered `LoginDialog` component.
+ * @returns The rendered `LoginDialog` component.
  */
-const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }): JSX.Element => {
+const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage login dialog state and interactions

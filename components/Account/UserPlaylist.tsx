@@ -34,9 +34,9 @@ interface UserPlaylistProps {
  *
  * @param UserPlaylistProps - Component props.
  *
- * @returns {JSX.Element} The rendered `UserPlaylist` component.
+ * @returns The rendered `UserPlaylist` component.
  */
-const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.Element => {
+const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage user playlist actions and state
@@ -210,39 +210,37 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }): JSX.
                                 aria-labelledby="sr-playlist-contents-title"
                                 role="list"
                             >
-                                {state.tracks?.map(
-                                    (track: Record<string, any>, idx: number): JSX.Element => (
-                                        <li
-                                            id={`track-${idx}-${track.id}`}
-                                            className="mt-4 flex items-center space-x-4"
-                                            aria-describedby={`track-artist-${idx}`}
-                                            aria-labelledby={`track-name-${idx}`}
-                                            key={`${idx}-${track.id}`}
-                                            role="listitem"
-                                        >
-                                            <Image
-                                                id="track-img"
-                                                className="h-12 w-12 rounded-sm"
-                                                alt={
-                                                    track.name
-                                                        ? `${track.name} ${i18n("common:image")}`
-                                                        : i18n("common:songCoverArt")
-                                                }
-                                                height={700}
-                                                src={track.album.images[0]?.url || "/images/song-placeholder.jpg"}
-                                                width={700}
-                                            />
-                                            <div>
-                                                <p id="track-name" className="font-medium">
-                                                    {track.name}
-                                                </p>
-                                                <p id="track-artist" className="text-sm text-gray-500">
-                                                    {track.artists[0]?.name}
-                                                </p>
-                                            </div>
-                                        </li>
-                                    )
-                                )}
+                                {state.tracks?.map((track: Record<string, any>, idx: number) => (
+                                    <li
+                                        id={`track-${idx}-${track.id}`}
+                                        className="mt-4 flex items-center space-x-4"
+                                        aria-describedby={`track-artist-${idx}`}
+                                        aria-labelledby={`track-name-${idx}`}
+                                        key={`${idx}-${track.id}`}
+                                        role="listitem"
+                                    >
+                                        <Image
+                                            id="track-img"
+                                            className="h-12 w-12 rounded-sm"
+                                            alt={
+                                                track.name
+                                                    ? `${track.name} ${i18n("common:image")}`
+                                                    : i18n("common:songCoverArt")
+                                            }
+                                            height={700}
+                                            src={track.album.images[0]?.url || "/images/song-placeholder.jpg"}
+                                            width={700}
+                                        />
+                                        <div>
+                                            <p id="track-name" className="font-medium">
+                                                {track.name}
+                                            </p>
+                                            <p id="track-artist" className="text-sm text-gray-500">
+                                                {track.artists[0]?.name}
+                                            </p>
+                                        </div>
+                                    </li>
+                                ))}
                             </ul>
                         )}
                     </div>

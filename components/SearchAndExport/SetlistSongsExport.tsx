@@ -32,14 +32,14 @@ interface SetlistSongsExportProps {
  *
  * @param SetlistSongsExportProps - The component props.
  *
- * @returns {JSX.Element} The rendered `SetlistSongsExport` component.
+ * @returns The rendered `SetlistSongsExport` component.
  */
 const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
     artistData,
     onSongsFetched,
     predictedSetlist,
     setlist
-}): JSX.Element => {
+}) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage song data and state
@@ -67,70 +67,66 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         {i18n("exportSetlist:songs")}
                     </h4>
                     <ul id="exported-setlist-tracks" className="space-y-1">
-                        {state.spotifySongs?.map(
-                            (spotifySong: Record<string, any>, idx: number): JSX.Element =>
-                                spotifySong?.name ? (
-                                    <li
-                                        id={`song-item-${spotifySong?.id}`}
-                                        className={`cursor-pointer py-2 ${
-                                            state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
-                                        }`}
-                                        key={`${idx}-${spotifySong.name || "unknown"}`}
-                                        onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
-                                    >
-                                        <div id="song-details-container" className="flex items-center space-x-4">
-                                            {spotifySong?.album?.images[0]?.url && (
-                                                <Image
-                                                    id="song-cover-img"
-                                                    className="h-12 w-12 rounded-sm shadow-sm"
-                                                    alt={
-                                                        spotifySong.name
-                                                            ? `${spotifySong.name} ${i18n("common:image")}`
-                                                            : i18n("common:songCoverArt")
-                                                    }
-                                                    height={700}
-                                                    src={
-                                                        spotifySong.album.images[0]?.url ||
-                                                        "/images/song-placeholder.jpg"
-                                                    }
-                                                    width={700}
-                                                />
-                                            )}
-                                            <div>
-                                                <p id="song-name" className="font-medium">
-                                                    {spotifySong?.name}
-                                                </p>
-                                                <p id="song-artist" className="text-sm text-gray-500">
-                                                    {spotifySong?.artists?.[0]?.name}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                ) : (
-                                    !state.hideSongsNotFound && (
-                                        <li
-                                            id={`song-not-found-${idx}`}
-                                            className="py-2 text-red-500"
-                                            key={`${idx}-${spotifySong?.name || "unknown"}`}
-                                        >
-                                            <ErrorMessage
-                                                message={`${i18n("exportSetlist:songNotFound")}: ${
-                                                    predictedSetlist
-                                                        ? setlist?.predictedSongs?.[idx]?.name ||
-                                                          i18n("exportSetlist:unknownSong")
-                                                        : ((setlist?.sets?.set?.flatMap(
-                                                              (set: Record<string, any>) => set.song
-                                                          ) ?? [])[
-                                                              setlist?.sets?.set?.[0]?.song?.[0]?.name !== ""
-                                                                  ? idx
-                                                                  : idx + 1
-                                                          ]?.name ?? i18n("exportSetlist:unknownSong"))
-                                                }`}
-                                                small={true}
+                        {state.spotifySongs?.map((spotifySong: Record<string, any>, idx: number) =>
+                            spotifySong?.name ? (
+                                <li
+                                    id={`song-item-${spotifySong?.id}`}
+                                    className={`cursor-pointer py-2 ${
+                                        state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
+                                    }`}
+                                    key={`${idx}-${spotifySong.name || "unknown"}`}
+                                    onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
+                                >
+                                    <div id="song-details-container" className="flex items-center space-x-4">
+                                        {spotifySong?.album?.images[0]?.url && (
+                                            <Image
+                                                id="song-cover-img"
+                                                className="h-12 w-12 rounded-sm shadow-sm"
+                                                alt={
+                                                    spotifySong.name
+                                                        ? `${spotifySong.name} ${i18n("common:image")}`
+                                                        : i18n("common:songCoverArt")
+                                                }
+                                                height={700}
+                                                src={spotifySong.album.images[0]?.url || "/images/song-placeholder.jpg"}
+                                                width={700}
                                             />
-                                        </li>
-                                    )
+                                        )}
+                                        <div>
+                                            <p id="song-name" className="font-medium">
+                                                {spotifySong?.name}
+                                            </p>
+                                            <p id="song-artist" className="text-sm text-gray-500">
+                                                {spotifySong?.artists?.[0]?.name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                            ) : (
+                                !state.hideSongsNotFound && (
+                                    <li
+                                        id={`song-not-found-${idx}`}
+                                        className="py-2 text-red-500"
+                                        key={`${idx}-${spotifySong?.name || "unknown"}`}
+                                    >
+                                        <ErrorMessage
+                                            message={`${i18n("exportSetlist:songNotFound")}: ${
+                                                predictedSetlist
+                                                    ? setlist?.predictedSongs?.[idx]?.name ||
+                                                      i18n("exportSetlist:unknownSong")
+                                                    : ((setlist?.sets?.set?.flatMap(
+                                                          (set: Record<string, any>) => set.song
+                                                      ) ?? [])[
+                                                          setlist?.sets?.set?.[0]?.song?.[0]?.name !== ""
+                                                              ? idx
+                                                              : idx + 1
+                                                      ]?.name ?? i18n("exportSetlist:unknownSong"))
+                                            }`}
+                                            small={true}
+                                        />
+                                    </li>
                                 )
+                            )
                         )}
                     </ul>
                 </>

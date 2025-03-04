@@ -30,9 +30,9 @@ interface SettingsProps {
  *
  * @param SettingsProps - The component props.
  *
- * @returns {JSX.Element} The rendered `Settings` component.
+ * @returns The rendered `Settings` component.
  */
-const Settings: React.FC<SettingsProps> = ({ onClose }): JSX.Element => {
+const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     const { resolvedTheme, setTheme, theme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [isVisible, setIsVisible] = useState(false); // State to manage visibility of the settings panel

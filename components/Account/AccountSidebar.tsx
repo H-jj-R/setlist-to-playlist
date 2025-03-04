@@ -48,9 +48,9 @@ type DecodedToken = {
  *
  * @param AccountSidebarProps - Component props.
  *
- * @returns {JSX.Element} The rendered `AccountSidebar` component.
+ * @returns The rendered `AccountSidebar` component.
  */
-const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }): JSX.Element => {
+const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }) => {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook

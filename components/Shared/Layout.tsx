@@ -24,9 +24,9 @@ interface LayoutProps {
  *
  * @param LayoutProps - The component props.
  *
- * @returns {JSX.Element} The rendered `Layout` component.
+ * @returns The rendered `Layout` component.
  */
-const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div id="main-container" className="flex h-screen flex-col">
             <Head>

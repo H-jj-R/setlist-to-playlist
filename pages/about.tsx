@@ -15,9 +15,9 @@ import { Trans, useTranslation } from "react-i18next";
 /**
  * About page, containing details about the site, and a support/feedback form.
  *
- * @returns {JSX.Element} The rendered `/about` page.
+ * @returns The rendered `/about` page.
  */
-export default function About(): JSX.Element {
+export default function About() {
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [mounted, setMounted] = useState(false); // Tracks if the component has mounted
