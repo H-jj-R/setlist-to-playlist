@@ -175,14 +175,14 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     </button>
                 </div>
                 <div
-                    id="account-settings-details-container"
+                    id="details-container"
                     className="m-4 rounded-lg border-4 border-gray-500 p-4 dark:border-gray-200"
                 >
-                    <div id="account-settings-username-email-container" className="mb-2 text-center">
-                        <h3 id="account-settings-username-email-header" className="text-lg font-semibold">
+                    <div id="username-email-container" className="mb-2 text-center">
+                        <h3 id="username-email-header" className="text-lg font-semibold">
                             {state.username && state.email ? (
                                 <>
-                                    <div id="account-settings-username">
+                                    <div id="username-container">
                                         <FontAwesomeIcon
                                             id="fa-user-circle-icon"
                                             className="mr-2 text-xl text-gray-500 dark:text-gray-200"
@@ -190,7 +190,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                                         />
                                         {state.username}
                                     </div>
-                                    <div id="account-settings-email" className="pt-2 text-sm">
+                                    <div id="email-container" className="pt-2 text-sm">
                                         {state.email}
                                     </div>
                                 </>
@@ -201,9 +201,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                             )}
                         </h3>
                     </div>
-                    <div id="account-settings-logout-container" className="mt-4 flex justify-center">
+                    <div id="logout-container" className="mt-4 flex justify-center">
                         <button
-                            id="account-settings-logout-btn"
+                            id="logout-btn"
                             className="w-3/4 rounded-sm bg-linear-to-r from-red-500 to-orange-500 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:from-red-600 hover:to-orange-600"
                             aria-label={i18n("account:logout")}
                             onClick={(): void => {
@@ -220,9 +220,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         </button>
                     </div>
                 </div>
-                <div id="account-settings-user-playlists-container" className="mt-4 flex justify-center">
+                <div id="user-playlists-container" className="mt-4 flex justify-center">
                     <button
-                        id="account-settings-go-to-user-playlists-btn"
+                        id="go-to-user-playlists-btn"
                         className="mt-4 w-3/4 rounded-md bg-violet-500 px-2 py-5 font-semibold text-white shadow-lg transition hover:cursor-pointer hover:bg-violet-600 focus:outline-hidden"
                         aria-label={i18n("userPlaylists:createdPlaylists")}
                         onClick={(): void => {
@@ -236,11 +236,11 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     </button>
                 </div>
                 <div
-                    id="account-settings-delete-account-container"
+                    id="delete-account-container"
                     className="absolute bottom-4 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center"
                 >
                     <button
-                        id="account-settings-delete-account-btn"
+                        id="delete-account-btn"
                         className="w-full rounded-sm bg-linear-to-r from-red-700 to-red-500 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:from-red-800 hover:to-red-600"
                         aria-label={i18n("account:deleteAccount")}
                         onClick={(): void => {

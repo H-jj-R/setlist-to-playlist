@@ -54,7 +54,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                 <p id="confirmation-modal-message" className="mb-6">
                     {i18n("account:permanentAction")}
                 </p>
-                <div id="confirmation-modal-btns-container" className="flex justify-between">
+                <div id="confirmation-modal-btns-container" className="flex justify-between space-x-2">
                     <button
                         id="confirm-btn"
                         className="rounded-sm bg-red-600 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:bg-red-700"

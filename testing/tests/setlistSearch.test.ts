@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInput, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -31,7 +31,7 @@ describe("Setlist Search", () => {
 
     it("Pressing Search with empty search query does nothing", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
@@ -64,7 +64,7 @@ describe("Setlist Search", () => {
 
     it("Searching a different query triggers search", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         await searchInput.type("Oasis");
         const searchButton = await page.waitForSelector("#search-btn");
         await delay(1000);
@@ -94,7 +94,7 @@ describe("Setlist Search", () => {
     it("Searching with empty query after a query has been performed doesn't refresh query", async () => {
         const searchInput = await page.waitForSelector("#search-input");
         const searchButton = await page.waitForSelector("#search-btn");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         await delay(1000);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
@@ -105,7 +105,7 @@ describe("Setlist Search", () => {
 
     it("Can search for query using 'Enter' key", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         await searchInput.type("Linkin Park");
         await delay(1000);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking

@@ -52,6 +52,7 @@
         "build": "next build",
         "dev": "next dev",
         "start": "next start",
-        "test": "jest --config=testing/jest.config.ts"
+        "test": "jest --config=testing/jest.config.ts",
+        "test-env": "set NEXT_PUBLIC_APP_ENV=test && next dev"
     }
 }
