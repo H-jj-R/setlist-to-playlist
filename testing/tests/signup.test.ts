@@ -215,8 +215,12 @@ describe("Signup", () => {
         await emailInput.type("testuser@example.com");
         await passwordInput.type("TestPassword123!");
         await submitBtn.click();
-        const messageDialogTile = await page.waitForSelector("#message-dialog-title");
-        const titleText = await messageDialogTile.evaluate((el): string => el.textContent);
+        await page.waitForFunction((): boolean => {
+            const titleElement = document.querySelector("#message-dialog-title");
+            return titleElement && !titleElement.textContent.includes("Loading");
+        });
+        const messageDialogTitle = await page.waitForSelector("#message-dialog-title");
+        const titleText = await messageDialogTitle.evaluate((el): string => el.textContent);
         expect(titleText.includes("Error")).toBeTruthy();
     }, 10000);
 
