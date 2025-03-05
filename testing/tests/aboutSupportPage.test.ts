@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInput, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -48,8 +48,7 @@ describe("About + Support Page", () => {
     it("Email and message input fields can be cleared", async () => {
         const emailInput = await page.waitForSelector("#email-input");
         const messageInput = await page.waitForSelector("#message-input");
-        await clearInput(page, emailInput);
-        await clearInput(page, messageInput);
+        await clearInputs(page, [emailInput, messageInput]);
         const emailValue = await page.evaluate((input: HTMLInputElement): string => input.value, emailInput);
         const messageValue = await page.evaluate((input: HTMLInputElement): string => input.value, emailInput);
         expect(emailValue).toBe("");
@@ -70,7 +69,7 @@ describe("About + Support Page", () => {
         await submitBtn.click();
         const error = await page.waitForSelector("#email-input:invalid");
         expect(error).toBeTruthy();
-        await clearInput(page, messageInput);
+        await clearInputs(page, [messageInput]);
     }, 10000);
 
     it("Cannot submit with email but empty message", async () => {
@@ -80,7 +79,7 @@ describe("About + Support Page", () => {
         await submitBtn.click();
         const error = await page.waitForSelector("#message-input:invalid");
         expect(error).toBeTruthy();
-        await clearInput(page, emailInput);
+        await clearInputs(page, [emailInput]);
     }, 10000);
 
     it("Cannot submit with invalid email", async () => {
@@ -92,8 +91,7 @@ describe("About + Support Page", () => {
         await submitBtn.click();
         const error = await page.waitForSelector("#email-input:invalid");
         expect(error).toBeTruthy();
-        await clearInput(page, emailInput);
-        await clearInput(page, messageInput);
+        await clearInputs(page, [emailInput, messageInput]);
     }, 10000);
 
     it("Typing in message field correctly updates character counter", async () => {
@@ -101,7 +99,7 @@ describe("About + Support Page", () => {
         await messageInput.type("Message counter test!");
         const counterText = await page.$eval("#message-length-counter", (el: Element): string => el.textContent);
         expect(counterText).toContain("21");
-        await clearInput(page, messageInput);
+        await clearInputs(page, [messageInput]);
     }, 10000);
 
     it("Cannot type over character limit (1000)", async () => {
@@ -112,7 +110,7 @@ describe("About + Support Page", () => {
         }, longText);
         const value = await page.evaluate((input: HTMLInputElement): string => input.value, messageInput);
         expect(value.length).toBe(1000);
-        await clearInput(page, messageInput);
+        await clearInputs(page, [messageInput]);
     }, 10000);
 
     it("Valid email and message submits form", async () => {

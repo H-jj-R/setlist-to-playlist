@@ -8,6 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             NODE_ENV: test
+            NEXT_PUBLIC_APP_ENV: test
             DB_HOST: ${{ secrets.DB_HOST }}
             DB_NAME: ${{ secrets.DB_NAME }}
             DB_PASSWORD: ${{ secrets.DB_PASSWORD }}

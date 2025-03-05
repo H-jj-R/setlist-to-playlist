@@ -30,14 +30,14 @@ interface ErrorMessageProps {
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, small }) => {
     return (
         <div
-            id="error-container"
+            id="error-message-container"
             className={`flex ${small ? "items-center gap-4" : "flex-col items-center gap-2"} ${
                 small ? "p-4" : "p-6"
             } rounded-lg border border-red-300 bg-red-100 text-red-700 shadow-md`}
         >
             <FontAwesomeIcon
                 id="fa-triangle-exclamation-icon"
-                className={`text-red-500 ${small ? "h-6 w-6" : "h-10 w-10"}`}
+                className={`text-red-500 ${small ? "text-2xl" : "text-3xl"}`}
                 icon={faTriangleExclamation}
             />
             <span

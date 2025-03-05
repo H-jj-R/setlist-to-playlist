@@ -15,12 +15,15 @@ import { NextApiRequest, NextApiResponse } from "next";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        // Get the encrypted refresh token from cookies
-        const cookies = cookie.parse(req.headers.cookie || "");
-        const encryptedRefreshToken = cookies.spotify_user_refresh_token;
+        // Don't require Spotify authentication if in test environment
+        if (!process.env.NEXT_PUBLIC_APP_ENV?.includes("test")) {
+            // Get the encrypted refresh token from cookies
+            const cookies = cookie.parse(req.headers.cookie || "");
+            const encryptedRefreshToken = cookies.spotify_user_refresh_token;
 
-        // If no refresh token is found in the cookies, respond with an error
-        if (!encryptedRefreshToken) return res.status(401).json({ error: "common:spotifyAccessTokenError" });
+            // If no refresh token is found in the cookies, respond with an error
+            if (!encryptedRefreshToken) return res.status(401).json({ error: "common:spotifyAccessTokenError" });
+        }
 
         res.status(200).json({ success: true });
     } catch (error) {

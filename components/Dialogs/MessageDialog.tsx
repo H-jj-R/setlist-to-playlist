@@ -35,14 +35,14 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
     const { t: i18n } = useTranslation(); // Translation hook
 
     return (
-        <div id="dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">
+        <div id="message-dialog-container" className="fixed inset-0 z-50 flex items-center justify-center">
             <div
                 id="background-overlay"
                 className="absolute inset-0 bg-black/50"
                 onClick={type === MessageDialogState.Loading ? onClose : undefined}
             />
             <div
-                id="dialog-box"
+                id="message-dialog-box"
                 className={`relative w-1/3 max-w-md rounded-lg bg-white p-6 text-center shadow-lg dark:bg-gray-800 ${
                     type === MessageDialogState.Success
                         ? "border-green-500"
@@ -52,7 +52,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
                 } border`}
             >
                 <h2
-                    id="dialog-title"
+                    id="message-dialog-title"
                     className={`mb-4 text-xl font-semibold ${
                         type === MessageDialogState.Success
                             ? "text-green-500"
@@ -67,9 +67,9 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
                           ? i18n("common:error")
                           : `${i18n("common:loading")}...`}
                 </h2>
-                <span id="dialog-message" className="text-gray-700 dark:text-gray-300">
+                <span id="message-dialog-message" className="text-gray-700 dark:text-gray-300">
                     {type === MessageDialogState.Loading ? (
-                        <div className="flex h-full items-center justify-center">
+                        <div id="loader" className="flex h-full items-center justify-center">
                             <CustomHashLoader showLoading={true} size={100} />
                         </div>
                     ) : type === MessageDialogState.Success ? (

@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInput, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -77,7 +77,7 @@ describe("Choosing Setlist", () => {
 
     it("Can't open setlist with 0 songs", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         await searchInput.type("Heriot");
         const searchButton = await page.waitForSelector("#search-btn");
         await searchButton.click();
@@ -96,7 +96,7 @@ describe("Choosing Setlist", () => {
 
     it("Load More button loads more setlists", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await clearInput(page, searchInput);
+        await clearInputs(page, [searchInput]);
         await searchInput.type("Frank Ocean");
         const searchButton = await page.waitForSelector("#search-btn");
         await searchButton.click();

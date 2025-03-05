@@ -74,14 +74,16 @@ export async function resetSettings(page: puppeteer.Page): Promise<void> {
 }
 
 /**
- * Clears an input field.
+ * Clears input fields.
  *
  * @param {puppeteer.Page} page - Puppeteer Page object.
- * @param {puppeteer.ElementHandle<Element>} input - Input field to clear.
+ * @param {puppeteer.ElementHandle<Element>[]} inputs - Input fields to clear.
  */
-export async function clearInput(page: puppeteer.Page, input: puppeteer.ElementHandle<Element>): Promise<void> {
-    await input.click({ clickCount: 3 });
-    await page.keyboard.press("Backspace");
+export async function clearInputs(page: puppeteer.Page, inputs: puppeteer.ElementHandle<Element>[]): Promise<void> {
+    for (let input of inputs) {
+        await input.click({ clickCount: 3 });
+        await page.keyboard.press("Backspace");
+    }
 }
 
 /**
@@ -90,7 +92,7 @@ export async function clearInput(page: puppeteer.Page, input: puppeteer.ElementH
  * @param {puppeteer.Page} page - Puppeteer Page object.
  */
 export async function login(page: puppeteer.Page): Promise<void> {
-    // TODO: Implement function and make test account details to store in env
+    // TODO: Implement function
 }
 
 /**
