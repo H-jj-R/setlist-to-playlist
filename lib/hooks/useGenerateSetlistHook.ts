@@ -6,7 +6,7 @@
 
 import PageState from "@constants/generateSetlistPageState";
 import { useTheme } from "next-themes";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -26,6 +26,7 @@ export default function useGenerateSetlistHook() {
         chosenSetlist: null as null | Record<string, any>, // Stores setlist selected for export
         error: null as null | string, // Stores error messages
         exportDialogOpen: false, // Tracks export dialog visibility
+        isThinView: false, // Indicated whether or not view type should be changed based on page width
         pageState: PageState.Idle, // Manages different UI states
         predictedSetlists: null as null | Record<string, any>, // Stores all AI-generated setlists
         previousQuery: null as null | string, // Stores last searched query to avoid redundant calls
@@ -36,6 +37,7 @@ export default function useGenerateSetlistHook() {
         showAuthDialog: false, // Displays authentication dialog if needed
         showLoading: false // Controls overall loading state
     });
+    const prevThinView = useRef<boolean>(state.isThinView); // Used for preventing re-rendering with every screen width change
 
     /**
      * Effect hook that runs when the component mounts or theme changes.
@@ -44,6 +46,23 @@ export default function useGenerateSetlistHook() {
         setMounted(true);
         document.body.style.backgroundColor = resolvedTheme === "dark" ? "#111827" : "#f9f9f9";
     }, [resolvedTheme]);
+
+    /**
+     * Effect hook which checks if page width goes above or below 850px,
+     * allowing the contents of the page to re-render when this changes.
+     */
+    useEffect((): (() => void) => {
+        const handleResize = (): void => {
+            const newThinView = window.innerWidth < 850;
+            if (newThinView !== prevThinView.current) {
+                setState((prev) => ({ ...prev, isThinView: newThinView }));
+                prevThinView.current = newThinView;
+            }
+        };
+        handleResize(); // Run on mount
+        window.addEventListener("resize", handleResize);
+        return (): void => window.removeEventListener("resize", handleResize);
+    }, []);
 
     /**
      * Handles searching for setlists based on a user query.
@@ -90,22 +109,24 @@ export default function useGenerateSetlistHook() {
                 setState((prev) => ({ ...prev, progress: 0 }));
                 await new Promise((t): NodeJS.Timeout => setTimeout(t, 500)); // Timeout used to show the loading bar starting at 0%
 
-                // Check if the user has exceeded query limits
-                const queryLimitResponse = await fetch(`/api/database/check-query-limit`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
-                        "Content-Type": "application/json"
-                    },
-                    method: "POST"
-                });
-                if (!queryLimitResponse.ok) {
-                    const errorResponse = await queryLimitResponse.json();
-                    throw {
-                        error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
-                        status: queryLimitResponse.status
-                    };
+                if (!process.env.NEXT_PUBLIC_APP_ENV?.includes("test")) {
+                    // Check if the user has exceeded query limits
+                    const queryLimitResponse = await fetch(`/api/database/check-query-limit`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                            "Content-Type": "application/json"
+                        },
+                        method: "POST"
+                    });
+                    if (!queryLimitResponse.ok) {
+                        const errorResponse = await queryLimitResponse.json();
+                        throw {
+                            error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                            status: queryLimitResponse.status
+                        };
+                    }
+                    setState((prev) => ({ ...prev, progress: 10 }));
                 }
-                setState((prev) => ({ ...prev, progress: 10 }));
 
                 // Fetch first page of setlists from setlist.fm based on the query
                 const setlistResponse = await fetch(
@@ -166,10 +187,7 @@ export default function useGenerateSetlistHook() {
                     searchComplete: true
                 }));
             } catch (error) {
-                setState((prev) => ({
-                    ...prev,
-                    error: error.error
-                }));
+                setState((prev) => ({ ...prev, error: error.error }));
             } finally {
                 setState((prev) => ({
                     ...prev,
@@ -188,11 +206,7 @@ export default function useGenerateSetlistHook() {
      * @param {Record<string, any>} setlist - The setlist to be exported.
      */
     const handleExport = useCallback(async (setlist: Record<string, any>): Promise<void> => {
-        setState((prev) => ({
-            ...prev,
-            chosenSetlist: setlist,
-            exportDialogOpen: true
-        }));
+        setState((prev) => ({ ...prev, chosenSetlist: setlist, exportDialogOpen: true }));
     }, []);
 
     /**
