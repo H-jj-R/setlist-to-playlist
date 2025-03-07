@@ -18,6 +18,7 @@ describe("Signup", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
+        
     }, 20000);
 
     it("Can open 'Login / Sign Up' dialog", async () => {

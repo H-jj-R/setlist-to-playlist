@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { delay, launch, resetSettings } from "../testingUtils";
+import { delay, launch, login, resetSettings } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -18,6 +18,7 @@ describe("AI Generated Setlists", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
+        await login(page);
     }, 20000);
 
     it("Go to AI generate setlist page", async () => {

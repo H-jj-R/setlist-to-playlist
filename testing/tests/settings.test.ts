@@ -76,7 +76,6 @@ describe("Settings", () => {
 
     it("Hide Empty Setlists", async () => {
         // TODO: Implement test
-        
     }, 10000);
 
     it("Filter by Country", async () => {

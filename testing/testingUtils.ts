@@ -92,7 +92,16 @@ export async function clearInputs(page: puppeteer.Page, inputs: puppeteer.Elemen
  * @param {puppeteer.Page} page - Puppeteer Page object.
  */
 export async function login(page: puppeteer.Page): Promise<void> {
-    // TODO: Implement function
+    const loginBtn = await page.waitForSelector("#login-btn");
+    await loginBtn.click();
+    await page.waitForSelector("#login-dialog");
+    const submitBtn = await page.waitForSelector("#submit-btn");
+    const emailInput = await page.waitForSelector("#email-input");
+    const passwordInput = await page.waitForSelector("#password-input");
+    await emailInput.type("tester@setlisttoplaylist.com");
+    await passwordInput.type("TesterPassword123!");
+    await submitBtn.click();
+    await page.waitForSelector("#account-btn");
 }
 
 /**
