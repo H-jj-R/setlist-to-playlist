@@ -18,6 +18,7 @@ describe("Signup", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
         await resetSettings(page);
+        
     }, 20000);
 
     it("Can open 'Login / Sign Up' dialog", async () => {
@@ -30,6 +31,7 @@ describe("Signup", () => {
     it("'No account?' link opens Signup", async () => {
         const switchLink = await page.waitForSelector("#switch-login-signup-link");
         await switchLink.click();
+        await delay(200);
         const dialogTitle = await page.waitForSelector("#login-form-title");
         const titleText = await dialogTitle.evaluate((el): string => el.textContent);
         expect(titleText.includes("Sign Up")).toBeTruthy();
@@ -38,6 +40,7 @@ describe("Signup", () => {
     it("'Already have an account?' link opens Login", async () => {
         const switchLink = await page.waitForSelector("#switch-login-signup-link");
         await switchLink.click();
+        await delay(200);
         const dialogTitle = await page.waitForSelector("#login-form-title");
         const titleText = await dialogTitle.evaluate((el): string => el.textContent);
         expect(titleText.includes("Login")).toBeTruthy();
@@ -46,6 +49,7 @@ describe("Signup", () => {
     it("'No account?' link re-opens Signup", async () => {
         const switchLink = await page.waitForSelector("#switch-login-signup-link");
         await switchLink.click();
+        await delay(200);
         const dialogTitle = await page.waitForSelector("#login-form-title");
         const titleText = await dialogTitle.evaluate((el): string => el.textContent);
         expect(titleText.includes("Sign Up")).toBeTruthy();
@@ -222,12 +226,12 @@ describe("Signup", () => {
         const messageDialogTitle = await page.waitForSelector("#message-dialog-title");
         const titleText = await messageDialogTitle.evaluate((el): string => el.textContent);
         expect(titleText.includes("Error")).toBeTruthy();
-    }, 10000);
-
-    it("Can login with newly created user details", async () => {
         const messageDialog = await page.waitForSelector("#message-dialog-box");
         const closeMessageBtn = await messageDialog.waitForSelector("#close-btn");
         await closeMessageBtn.click();
+    }, 10000);
+
+    it("Can login with newly created user details", async () => {
         const switchLink = await page.waitForSelector("#switch-login-signup-link");
         await switchLink.click();
         const submitBtn = await page.waitForSelector("#submit-btn");

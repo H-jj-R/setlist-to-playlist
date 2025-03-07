@@ -72,9 +72,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
             <div id="search-input-wrapper" className="flex w-full max-w-xl sm:w-[70vw]">
                 <input
                     id="search-input"
-                    className={
-                        "h-12 flex-1 rounded-l-lg border border-gray-300 bg-white px-4 py-2 text-lg dark:bg-black"
-                    }
+                    className="h-12 flex-1 rounded-l-lg border border-gray-300 bg-white px-4 py-2 text-lg dark:bg-black"
                     autoComplete="off"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setQuery(e.target.value)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -88,7 +86,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
                 />
                 <button
                     id="mic-btn"
-                    className={`relative flex h-12 w-12 items-center justify-center bg-gray-200 text-gray-700 transition hover:cursor-pointer hover:bg-gray-300 ${
+                    className={`relative flex h-12 w-12 items-center justify-center border-y border-gray-300 bg-gray-200 text-gray-700 transition hover:cursor-pointer hover:bg-gray-300 ${
                         locked ? "cursor-not-allowed opacity-50" : ""
                     }`}
                     disabled={locked}

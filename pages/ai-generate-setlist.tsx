@@ -127,21 +127,33 @@ export default function AIGenerateSetlist() {
                                     </div>
                                 </div>
                                 <div id="setlist-container" className="mt-2 flex gap-4">
-                                    {state.predictedSetlists
-                                        .slice(0, 3)
-                                        .map((setlist: Record<string, any>, idx: number) => (
-                                            <div
-                                                id={`setlist-display-${idx}`}
-                                                className="animate-fadeIn w-full"
-                                                key={idx}
-                                            >
-                                                <AISetlist
-                                                    onExport={handleExport}
-                                                    predictionNum={idx + 1}
-                                                    setlist={[setlist]}
-                                                />
-                                            </div>
-                                        ))}
+                                    {state.isThinView ? (
+                                        <div id={`setlist-display-all`} className="animate-fadeIn w-full">
+                                            <AISetlist
+                                                isThinView={true}
+                                                onExport={handleExport}
+                                                predictionNum={0}
+                                                setlist={state.predictedSetlists}
+                                            />
+                                        </div>
+                                    ) : (
+                                        state.predictedSetlists
+                                            .slice(0, 3)
+                                            .map((setlist: Record<string, any>, idx: number) => (
+                                                <div
+                                                    id={`setlist-display-${idx}`}
+                                                    className="animate-fadeIn w-full"
+                                                    key={idx}
+                                                >
+                                                    <AISetlist
+                                                        isThinView={false}
+                                                        onExport={handleExport}
+                                                        predictionNum={idx + 1}
+                                                        setlist={[setlist]}
+                                                    />
+                                                </div>
+                                            ))
+                                    )}
                                 </div>
                             </>
                         )}
