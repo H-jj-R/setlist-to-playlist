@@ -55,7 +55,7 @@ jobs:
             - name: Wait for Next.js to be ready
               run: npx wait-on http://localhost:3000
 
-            - name: Run Jest/Puppeteer tests
+            - name: Run Vitest tests
               run: npm test
 
             - name: Upload test report folder
