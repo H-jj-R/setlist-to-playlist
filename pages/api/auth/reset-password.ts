@@ -5,7 +5,7 @@
  */
 
 import db from "@constants/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**

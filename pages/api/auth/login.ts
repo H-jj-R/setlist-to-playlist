@@ -5,7 +5,7 @@
  */
 
 import db from "@constants/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 

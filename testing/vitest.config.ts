@@ -5,6 +5,6 @@ export default defineConfig({
         environment: "node",
         globals: true,
         include: ["testing/tests/**/*.test.ts"],
-        reporters: ["default", ["html", { outputFile: "testing/reports/vitest-report.html" }]]
+        reporters: ["verbose", ["html", { outputFile: "testing/reports/vitest-report.html" }]]
     }
 });

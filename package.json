@@ -3,7 +3,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
         "@react-email/components": "^0.0.33",
-        "bcrypt": "^5.1.1",
+        "bcryptjs": "^3.0.2",
         "cookie": "^1.0.2",
         "crypto-js": "^4.2.0",
         "i18next": "^24.2.2",
