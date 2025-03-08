@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const userId = decoded.userId;
 
         // Delete the user from the database
-        await db.execute("DELETE FROM Users WHERE user_id = ?", [userId]);
+        await db.query("DELETE FROM Users WHERE user_id = ?", [userId]);
 
         res.status(200).json({ success: true });
     } catch (error) {
