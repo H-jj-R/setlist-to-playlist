@@ -59,6 +59,7 @@ jobs:
               run: npm test
 
             - name: Upload test report folder
+              if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: test-reports
