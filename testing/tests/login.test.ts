@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,7 +17,6 @@ let page: puppeteer.Page;
 describe("Login", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
     }, 20000);
 
     it("Can open Login / Sign Up dialog", async () => {
@@ -175,7 +174,7 @@ describe("Login", () => {
     it("Account settings panel can be opened", async () => {
         const accountBtn = await page.waitForSelector("#account-btn");
         await accountBtn.click();
-        await delay(500);
+        await delay(400);
         const accountSettingsPanel = await page.waitForSelector("#account-settings-panel");
         expect(accountSettingsPanel).toBeDefined();
     }, 10000);
@@ -183,7 +182,7 @@ describe("Login", () => {
     it("Logout button closes account settings panel and logs out user", async () => {
         const logoutBtn = await page.waitForSelector("#logout-btn");
         await logoutBtn.click();
-        await delay(500);
+        await delay(400);
         const accountSettingsPanel = await page.$("#account-settings-panel");
         expect(accountSettingsPanel).toBeNull();
         const loginBtn = await page.waitForSelector("#login-btn");
@@ -209,7 +208,7 @@ describe("Login", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

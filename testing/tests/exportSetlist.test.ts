@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { delay, launch, resetSettings } from "../testingUtils";
+import { delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,15 +17,30 @@ let page: puppeteer.Page;
 describe("Export Setlist", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
     }, 20000);
 
-    it("Test", async () => {
+    it("'Export' button appears on setlist searched by setlist.fm link", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'Combine & Export All' button appears on list of setlists", async () => {
+        // TODO: Implement test
+    }, 10000);
+
+    it("'Export' button appears on chosen setlist", async () => {
+        // TODO: Implement tests
+    }, 10000);
+
+    it("Clicking on 'Export' button opens Export dialog", async () => {
+        // TODO: Implement tests
+    }, 10000);
+
+    it("Export dialog displays songs from Spotify", async () => {
         // TODO: Implement tests
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

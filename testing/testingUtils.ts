@@ -27,6 +27,7 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
 
     // Go to the site and wait for navigation
     await Promise.all([page.goto("http://localhost:3000/"), page.waitForNavigation()]);
+    await delay(100);
 
     return { browser, page };
 }
@@ -37,40 +38,53 @@ export async function launch(): Promise<{ browser: puppeteer.Browser; page: pupp
  * @param {puppeteer.Page} page - Puppeteer Page object.
  */
 export async function resetSettings(page: puppeteer.Page): Promise<void> {
+    await setSetting(page, async () => {
+        // Theme - dark by default
+        const themeSelect = await page.waitForSelector("#theme-select");
+        await themeSelect.select("dark");
+        // Hide empty setlists - false by default
+        const hesCheckbox = await page.waitForSelector("#hide-empty-setlists-checkbox");
+        const hesIsChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, hesCheckbox);
+        if (hesIsChecked) await hesCheckbox.click();
+        // Filter by country - no filter by default
+        const countrySelect = await page.waitForSelector("#country-select");
+        await countrySelect.select("");
+        // Hide songs not found - false by default
+        const hsnfCheckbox = await page.waitForSelector("#hide-songs-not-found-checkbox");
+        const hsnfIsChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, hsnfCheckbox);
+        if (hsnfIsChecked) await hsnfCheckbox.click();
+        // Exclude covers - false by default
+        const ecCheckbox = await page.waitForSelector("#exclude-covers-checkbox");
+        const ecChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, ecCheckbox);
+        if (ecChecked) await ecCheckbox.click();
+        // Exclude duplicate songs - false by default
+        const edCheckbox = await page.waitForSelector("#exclude-duplicate-songs-checkbox");
+        const edChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, edCheckbox);
+        if (edChecked) await edCheckbox.click();
+        // Exclude songs played on tape - false by default
+        const etCheckbox = await page.waitForSelector("#exclude-played-on-tape-checkbox");
+        const etChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, etCheckbox);
+        if (etChecked) await etCheckbox.click();
+    });
+}
+
+/**
+ * Runs a provided function to set any setting, by opening then closing the settings tab.
+ *
+ * @param {puppeteer.Page} page - Puppeteer Page object.
+ * @param {Function} settingFunction - Function to run in order to change any settings.
+ */
+export async function setSetting(page: puppeteer.Page, settingFunction: () => Promise<void>): Promise<void> {
     // Open settings
     const settingsBut = await page.waitForSelector("#settings-btn");
     await settingsBut.click();
-    await delay(500);
-    // Theme - dark by default
-    const themeSelect = await page.waitForSelector("#theme-select");
-    await themeSelect.select("dark");
-    // Hide empty setlists - false by default
-    const hesCheckbox = await page.waitForSelector("#hide-empty-setlists-checkbox");
-    const hesIsChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, hesCheckbox);
-    if (hesIsChecked) await hesCheckbox.click();
-    // Filter by country - no filter by default
-    const countrySelect = await page.waitForSelector("#country-select");
-    await countrySelect.select("");
-    // Hide songs not found - false by default
-    const hsnfCheckbox = await page.waitForSelector("#hide-songs-not-found-checkbox");
-    const hsnfIsChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, hsnfCheckbox);
-    if (hsnfIsChecked) await hsnfCheckbox.click();
-    // Exclude covers - false by default
-    const ecCheckbox = await page.waitForSelector("#exclude-covers-checkbox");
-    const ecChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, ecCheckbox);
-    if (ecChecked) await ecCheckbox.click();
-    // Exclude duplicate songs - false by default
-    const edCheckbox = await page.waitForSelector("#exclude-duplicate-songs-checkbox");
-    const edChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, edCheckbox);
-    if (edChecked) await edCheckbox.click();
-    // Exclude songs played on tape - false by default
-    const etCheckbox = await page.waitForSelector("#exclude-played-on-tape-checkbox");
-    const etChecked = await page.evaluate((el: HTMLInputElement): boolean => el.checked, etCheckbox);
-    if (etChecked) await etCheckbox.click();
+    await delay(400);
+    // Run provided settings change function
+    await settingFunction();
     // Close settings
-    const closeBut = await page.waitForSelector("#close-settings-btn");
-    closeBut.click();
-    await delay(500);
+    const closeBtn = await page.waitForSelector("#close-settings-btn");
+    await closeBtn.click();
+    await delay(400);
 }
 
 /**

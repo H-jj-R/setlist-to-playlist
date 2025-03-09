@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,7 +17,6 @@ let page: puppeteer.Page;
 describe("Signup", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
     }, 20000);
 
     it("Can open 'Login / Sign Up' dialog", async () => {
@@ -247,7 +246,7 @@ describe("Signup", () => {
     it("'Delete Account' button brings up 'Are You Sure' message", async () => {
         const accountBtn = await page.waitForSelector("#account-btn");
         await accountBtn.click();
-        await delay(500);
+        await delay(400);
         const deleteAccountBtn = await page.waitForSelector("#delete-account-btn");
         await deleteAccountBtn.click();
         const confirmationModal = await page.waitForSelector("#confirmation-modal-container");
@@ -291,7 +290,7 @@ describe("Signup", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,13 +17,12 @@ let page: puppeteer.Page;
 describe("About + Support Page", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
     }, 20000);
 
     it("Go to About + Support page", async () => {
         const settingsBut = await page.waitForSelector("#settings-btn");
         await settingsBut.click();
-        await delay(500);
+        await delay(400);
         const aboutSupportLink = await page.waitForSelector("#about-support-link");
         await Promise.all([aboutSupportLink.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/about");
@@ -159,7 +158,7 @@ describe("About + Support Page", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

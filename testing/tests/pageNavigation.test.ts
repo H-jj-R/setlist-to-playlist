@@ -46,7 +46,7 @@ describe("Page Navigation", () => {
     it("Go to About + Support page", async () => {
         const settingsBut = await page.waitForSelector("#settings-btn");
         await settingsBut.click();
-        await delay(500);
+        await delay(400);
         const aboutSupportLink = await page.waitForSelector("#about-support-link");
         await Promise.all([aboutSupportLink.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/about");
@@ -55,7 +55,7 @@ describe("Page Navigation", () => {
     it("Go to Privacy Policy page", async () => {
         const settingsBut = await page.waitForSelector("#settings-btn");
         await settingsBut.click();
-        await delay(500);
+        await delay(400);
         const privacyPolicyLink = await page.waitForSelector("#privacy-policy-link");
         await Promise.all([privacyPolicyLink.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/privacy-policy");
@@ -68,7 +68,7 @@ describe("Page Navigation", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

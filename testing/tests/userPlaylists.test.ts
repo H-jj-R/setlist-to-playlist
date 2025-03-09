@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { delay, launch, login, resetSettings } from "../testingUtils";
+import { delay, launch, login } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,7 +17,6 @@ let page: puppeteer.Page;
 describe("User Playlists", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
         await login(page);
     }, 20000);
 
@@ -94,7 +93,7 @@ describe("User Playlists", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });

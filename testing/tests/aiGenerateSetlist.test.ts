@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { delay, launch, login, resetSettings } from "../testingUtils";
+import { delay, launch, login } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,12 +17,13 @@ let page: puppeteer.Page;
 describe("AI Generated Setlists", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
         await login(page);
     }, 20000);
 
     it("Go to AI generate setlist page", async () => {
-        // TODO: Implement test
+        const generateSetlistBtn = await page.waitForSelector("#go-to-ai-generate-setlist-btn");
+        await Promise.all([generateSetlistBtn.click(), page.waitForNavigation()]);
+        expect(page.url()).toContain("/ai-generate-setlist");
     }, 10000);
 
     it("If user isn't logged in, show 'Authentication Required'", async () => {
@@ -54,7 +55,7 @@ describe("AI Generated Setlists", () => {
     }, 10000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });
