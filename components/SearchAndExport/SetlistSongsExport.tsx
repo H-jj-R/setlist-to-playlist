@@ -78,20 +78,19 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                     onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
                                 >
                                     <div id="song-details-container" className="flex items-center space-x-4">
-                                        {spotifySong?.album?.images[0]?.url && (
-                                            <Image
-                                                id="song-cover-img"
-                                                className="h-12 w-12 rounded-sm shadow-sm"
-                                                alt={
-                                                    spotifySong.name
-                                                        ? `${spotifySong.name} ${i18n("common:image")}`
-                                                        : i18n("common:songCoverArt")
-                                                }
-                                                height={700}
-                                                src={spotifySong.album.images[0]?.url || "/images/song-placeholder.jpg"}
-                                                width={700}
-                                            />
-                                        )}
+                                        <Image
+                                            id="song-cover-img"
+                                            className="h-12 w-12 rounded-sm shadow-sm"
+                                            alt={
+                                                spotifySong.name
+                                                    ? `${spotifySong.name} ${i18n("common:image")}`
+                                                    : i18n("common:songCoverArt")
+                                            }
+                                            height={700}
+                                            src={spotifySong.album.images[0]?.url || "/images/song-placeholder.jpg"}
+                                            width={700}
+                                        />
+
                                         <div>
                                             <p id="song-name" className="font-medium">
                                                 {spotifySong?.name}

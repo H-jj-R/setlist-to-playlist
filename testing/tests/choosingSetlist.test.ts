@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { clearInputs, delay, launch, resetSettings } from "../testingUtils";
+import { clearInputs, delay, launch } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -17,7 +17,6 @@ let page: puppeteer.Page;
 describe("Choosing Setlist", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
-        await resetSettings(page);
         await Promise.all([page.goto("http://localhost:3000/setlist-search"), page.waitForNavigation()]);
     }, 20000);
 
@@ -121,7 +120,7 @@ describe("Choosing Setlist", () => {
     }, 20000);
 
     afterAll(async () => {
-        await delay(500);
+        await delay(100);
         await browser.close();
     }, 10000);
 });
