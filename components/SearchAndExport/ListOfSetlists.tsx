@@ -44,10 +44,10 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
 
     return (
         <div
-            id="setlist-container"
+            id="list-of-setlists-container"
             className="h-[calc(100vh-9rem)] w-full overflow-y-auto rounded-lg border-4 border-gray-300"
         >
-            <div id="setlist-header" className="flex w-full flex-col items-center p-4">
+            <div id="list-of-setlists-header" className="flex w-full flex-col items-center p-4">
                 <div id="artist-info" className="flex items-center px-4">
                     <Image
                         id="artist-img"
@@ -57,7 +57,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
                         src={setlistData.spotifyArtist.images[0]?.url || "/images/artist-placeholder.jpg"}
                         width={700}
                     />
-                    <h2 id="setlist-title" className="text-3xl font-bold">
+                    <h2 id="list-of-setlists-title" className="text-3xl font-bold">
                         {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
                         ${
                             countryFilter
@@ -111,7 +111,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
                         )}
                     </>
                 ) : (
-                    <div id="error-message-container" className="w-4/5">
+                    <div id="error-message-container" className="w-4/5 mt-4">
                         <ErrorMessage message={i18n("setlistSearch:setlistFmNoSetlistsError")} />
                     </div>
                 )}
