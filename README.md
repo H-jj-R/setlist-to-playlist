@@ -48,7 +48,7 @@ RESEND_API_KEY=your_resend_api_key
 SETLIST_FM_API_KEY=your_setlist_fm_api_key
 SPOTIFY_API_C_ID=your_spotify_client_id
 SPOTIFY_API_C_SECRET=your_spotify_client_secret
-SPOTIFY_API_REDIRECT_URI=your_spotify_redirect_uri (likely http://localhost:3000/api/spotify/callback)
+SPOTIFY_API_REDIRECT_URI=http://localhost:3000/api/spotify/callback
 ```
 
 Make sure you replace the placeholder values with actual credentials and values.
