@@ -118,6 +118,7 @@
         "playlistName": "Soittolistan nimi",
         "predictedSetlist": "Ennustettu soittolista",
         "removeImage": "Poista kuva",
+        "selectToExclude": "Valitse kappaleet, jotka haluat jättää viennin ulkopuolelle.",
         "songNotFound": "Kappaletta ei löytynyt",
         "songs": "Kappaleet",
         "spotifyAddImageError": "Virhe kuvan lisäämisessä soittolistaan!",

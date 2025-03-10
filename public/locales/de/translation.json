@@ -118,6 +118,7 @@
         "playlistName": "Playlist-Name",
         "predictedSetlist": "Vorhergesagte Setlist",
         "removeImage": "Bild entfernen",
+        "selectToExclude": "Wählen Sie hier Lieder aus, um sie vom Export auszuschließen.",
         "songNotFound": "Song nicht gefunden",
         "songs": "Songs",
         "spotifyAddImageError": "Fehler beim Hinzufügen des Bildes zur Playlist!",

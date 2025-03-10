@@ -118,6 +118,7 @@
         "playlistName": "Nombre de la lista de reproducción",
         "predictedSetlist": "Lista de canciones predicha",
         "removeImage": "Eliminar imagen",
+        "selectToExclude": "Selecciona canciones aquí para excluirlas de la exportación.",
         "songNotFound": "Canción no encontrada",
         "songs": "Canciones",
         "spotifyAddImageError": "¡Error al agregar imagen a la lista de reproducción!",

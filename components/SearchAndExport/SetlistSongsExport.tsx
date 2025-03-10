@@ -6,6 +6,8 @@
 
 import CustomHashLoader from "@components/Shared/CustomHashLoader";
 import ErrorMessage from "@components/Shared/ErrorMessage";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useSetlistSongsExportHook from "@hooks/useSetlistSongsExportHook";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -63,16 +65,20 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                 <ErrorMessage message={state.error} />
             ) : (
                 <>
-                    <h4 id="exported-setlist-title" className="mb-2 text-lg font-semibold">
+                    <h4 id="exported-setlist-title" className="mb-1 text-lg font-semibold">
                         {i18n("exportSetlist:songs")}
                     </h4>
+                    <h5 id="exported-setlist-song-info" className="mb-1 text-sm italic opacity-85">
+                        <FontAwesomeIcon className="mr-1 text-sm" icon={faQuestionCircle} />
+                        {i18n("exportSetlist:selectToExclude")}
+                    </h5>
                     <ul id="exported-setlist-tracks" className="space-y-1">
                         {state.spotifySongs?.map((spotifySong: Record<string, any>, idx: number) =>
                             spotifySong?.name ? (
                                 <li
                                     id={`song-item-${spotifySong?.id}`}
                                     className={`cursor-pointer py-2 ${
-                                        state.excludedSongs.has(`${spotifySong?.id}-${idx}`) ? "opacity-20" : ""
+                                        state.excludedSongs.has(`${spotifySong?.id}-${idx}`) && "opacity-20"
                                     }`}
                                     key={`${idx}-${spotifySong.name || "unknown"}`}
                                     onClick={(): void => toggleExcludeSong(spotifySong.id, idx)}
@@ -90,9 +96,14 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                                             src={spotifySong.album.images[0]?.url || "/images/song-placeholder.jpg"}
                                             width={700}
                                         />
-
                                         <div>
-                                            <p id="song-name" className="font-medium">
+                                            <p
+                                                id="song-name"
+                                                className={`font-medium ${
+                                                    state.excludedSongs.has(`${spotifySong?.id}-${idx}`) &&
+                                                    "line-through"
+                                                }`}
+                                            >
                                                 {spotifySong?.name}
                                             </p>
                                             <p id="song-artist" className="text-sm text-gray-500">
