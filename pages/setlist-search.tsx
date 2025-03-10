@@ -77,6 +77,7 @@ export default function SetlistSearch() {
                                     <ListOfSetlists
                                         handleCombineSetlists={handleCombineSetlists}
                                         onSetlistChosen={handleSetlistChosenRouterPush}
+                                        selectedSetlistId={state.chosenSetlistData?.id}
                                         setlistData={state.allSetlistsData}
                                     />
                                 </div>

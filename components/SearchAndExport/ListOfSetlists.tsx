@@ -15,12 +15,15 @@ import { useTranslation } from "react-i18next";
 /**
  * Props for the `ListOfSetlists` component.
  *
- * @property {Function} onSetlistChosen - Callback function that is triggered when a user selects a setlist.
+ * @property {Function} handleCombineSetlists - Callback function which is triggered when user presses 'Combine + Export All' button.
+ * @property {Function} onSetlistChosen - Callback function that is triggered when user selects a setlist.
+ * @property {string} selectedSetlistId - ID of a selected setlist, if there is one.
  * @property {Record<string, any>} setlistData - The setlist data containing details about the artist and their setlists.
  */
 interface ListOfSetlistsProps {
     handleCombineSetlists: (setlist: Record<string, any>) => void;
     onSetlistChosen: (setlist: Record<string, any>) => void;
+    selectedSetlistId: string;
     setlistData: Record<string, any>;
 }
 
@@ -33,7 +36,12 @@ interface ListOfSetlistsProps {
  *
  * @returns The rendered `ListOfSetlists` component.
  */
-const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, onSetlistChosen, setlistData }) => {
+const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
+    handleCombineSetlists,
+    onSetlistChosen,
+    selectedSetlistId,
+    setlistData
+}) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
@@ -45,7 +53,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
     return (
         <div
             id="list-of-setlists-container"
-            className="h-[calc(100vh-9rem)] w-full overflow-y-auto rounded-lg border-4 border-gray-300"
+            className="animate-fade-in h-[calc(100vh-9rem)] w-full overflow-y-auto rounded-lg border-4 border-gray-300"
         >
             <div id="list-of-setlists-header" className="flex w-full flex-col items-center p-4">
                 <div id="artist-info" className="flex items-center px-4">
@@ -85,6 +93,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
                                     hideEmpty={state.hideEmptySetlists}
                                     key={setlist.id}
                                     onClick={onSetlistChosen}
+                                    selected={setlist.id === selectedSetlistId}
                                     setlist={setlist}
                                 />
                             ))}
@@ -111,7 +120,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({ handleCombineSetlists, 
                         )}
                     </>
                 ) : (
-                    <div id="error-message-container" className="w-4/5 mt-4">
+                    <div id="error-message-container" className="mt-4 w-4/5">
                         <ErrorMessage message={i18n("setlistSearch:setlistFmNoSetlistsError")} />
                     </div>
                 )}
