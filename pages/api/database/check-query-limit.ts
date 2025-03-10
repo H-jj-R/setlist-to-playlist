@@ -11,7 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const DAILY_QUERY_LIMIT = 5;
 
 /**
- * API handler to check the current query limit for a user, and increase it by 1 if the limit hasn't been reached.
+ * API handler to check the current query limit for a user.
  *
  * @param {NextApiRequest} req - The incoming API request object.
  * @param {NextApiResponse} res - The outgoing API response object.

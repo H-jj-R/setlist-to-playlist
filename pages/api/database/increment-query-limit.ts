@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
- * API handler to check the current query limit for a user, and increase it by 1 if the limit hasn't been reached.
+ * API handler to increase a user's query limit by 1.
  *
  * @param {NextApiRequest} req - The incoming API request object.
  * @param {NextApiResponse} res - The outgoing API response object.
