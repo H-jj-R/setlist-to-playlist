@@ -40,7 +40,7 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
     return (
         <div
             id="setlist-container"
-            className={`h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200 ${isAlone ? "mx-auto w-4/5 sm:w-1/2" : "w-full"}`}
+            className={`animate-fade-in h-[calc(100vh-9rem)] overflow-y-auto rounded-lg border-4 border-gray-300 bg-white px-5 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-gray-200 ${isAlone ? "mx-auto w-4/5 sm:w-1/2" : "w-full"}`}
         >
             <div id="setlist-btns-container" className="sticky top-0 z-10 w-full bg-white dark:bg-gray-800">
                 <div

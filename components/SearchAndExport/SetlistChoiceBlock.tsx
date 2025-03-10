@@ -13,11 +13,13 @@ import { useTranslation } from "react-i18next";
  *
  * @property {boolean} hideEmpty - Determines whether to hide empty setlists (setlists with no songs).
  * @property {Function} onClick - Callback function triggered when a user clicks on the setlist block.
+ * @property {boolean} selected - Used to visually display if this setlist has been chosen.
  * @property {Record<string, any>} setlist - The setlist data containing event details.
  */
 interface SetlistChoiceBlockProps {
     hideEmpty: boolean;
     onClick: (setlist: Record<string, any>) => void;
+    selected: boolean;
     setlist: Record<string, any>;
 }
 
@@ -30,7 +32,7 @@ interface SetlistChoiceBlockProps {
  *
  * @returns The rendered `SetlistChoiceBlock` component.
  */
-const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, setlist }) => {
+const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onClick, selected, setlist }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Calculate the total number of songs in the setlist
@@ -45,13 +47,7 @@ const SetlistChoiceBlock: React.FC<SetlistChoiceBlockProps> = ({ hideEmpty, onCl
     return (
         <li
             id={`setlist-item-${setlist.id}`}
-            className={`rounded-lg border border-gray-800 p-4 shadow-sm transition-shadow dark:border-gray-200 ${
-                isDisabled && hideEmpty
-                    ? "hidden"
-                    : isDisabled
-                      ? "cursor-not-allowed opacity-50"
-                      : "cursor-pointer hover:shadow-md"
-            }`}
+            className={`rounded-lg border border-gray-800 p-4 shadow-sm transition-all duration-150 dark:border-gray-200 ${isDisabled && hideEmpty ? "hidden" : ""} ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:shadow-md"} ${selected && "border-6"}`}
             onClick={(): void => !isDisabled && onClick(setlist)}
         >
             <div id="setlist-date" className={`text-lg font-semibold ${isDisabled && "text-sm"}`}>

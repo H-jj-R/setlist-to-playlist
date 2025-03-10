@@ -96,6 +96,13 @@ export default function useSetlistSearchHook() {
         if (q && !setlist) {
             if (state.pageState !== PageState.LosSetlist || q !== state.previousQuery) {
                 handleSearch(q as string, null); // Trigger a new search
+            } else if (state.pageState === PageState.LosSetlist) {
+                setState((prev) => ({
+                    ...prev,
+                    chosenSetlistData: null,
+                    pageState: PageState.ListOfSetlists,
+                    setlistChosen: false
+                }));
             }
         } else if (setlist && !q) {
             handleSearch(null, setlist as string); // Fetch specific setlist
@@ -103,7 +110,11 @@ export default function useSetlistSearchHook() {
             if (!state.searchComplete) {
                 handleSearch(q as string, setlist as string); // Search the query and set the setlist
             } else {
-                setState((prev) => ({ ...prev, pageState: PageState.LosSetlist, setlistChosen: true }));
+                if (state.chosenSetlistData !== null) {
+                    setState((prev) => ({ ...prev, pageState: PageState.LosSetlist, setlistChosen: true }));
+                } else {
+                    handleSearch(q as string, setlist as string); // Search the query and set the setlist
+                }
             }
         } else {
             setState((prev) => ({ ...prev, animLoading: true, pageState: PageState.Idle, searchTriggered: false }));
