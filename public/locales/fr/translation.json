@@ -118,6 +118,7 @@
         "playlistName": "Nom de la playlist",
         "predictedSetlist": "Setlist prédit",
         "removeImage": "Supprimer l'image",
+        "selectToExclude": "Sélectionnez des chansons ici pour les exclure de l'exportation.",
         "songNotFound": "Morceau non trouvé",
         "songs": "Morceaux",
         "spotifyAddImageError": "Erreur lors de l'ajout de l'image à la playlist !",

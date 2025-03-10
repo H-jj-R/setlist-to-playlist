@@ -125,7 +125,7 @@ export default function useGenerateSetlistHook() {
                             status: queryLimitResponse.status
                         };
                     }
-                    setState((prev) => ({ ...prev, progress: 10 }));
+                    setState((prev) => ({ ...prev, progress: 5 }));
                 }
 
                 // Fetch first page of setlists from setlist.fm based on the query
@@ -140,10 +140,10 @@ export default function useGenerateSetlistHook() {
                     };
                 }
                 const setlistData = await setlistResponse.json();
-                setState((prev) => ({ ...prev, allSetlistsData: setlistData, progress: 15 }));
+                setState((prev) => ({ ...prev, allSetlistsData: setlistData, progress: 10 }));
 
                 // Simulate gradual progress while waiting for OpenAI API response
-                let simulatedProgress = 15;
+                let simulatedProgress = 10;
                 const interval = setInterval((): void => {
                     simulatedProgress += 5;
                     setState((prev) => ({ ...prev, progress: simulatedProgress }));
@@ -169,6 +169,25 @@ export default function useGenerateSetlistHook() {
                     };
                 }
                 const openAIData = await openAIResponse.json();
+
+                if (!process.env.NEXT_PUBLIC_APP_ENV?.includes("test")) {
+                    // Increment query limit counter
+                    const incrementQueryResponse = await fetch(`/api/database/increment-query-limit`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage?.getItem("authToken")}`,
+                            "Content-Type": "application/json"
+                        },
+                        method: "POST"
+                    });
+                    if (!incrementQueryResponse.ok) {
+                        const errorResponse = await incrementQueryResponse.json();
+                        throw {
+                            error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                            status: incrementQueryResponse.status
+                        };
+                    }
+                    setState((prev) => ({ ...prev, progress: 10 }));
+                }
 
                 clearInterval(interval);
                 setState((prev) => ({ ...prev, progress: 100 }));

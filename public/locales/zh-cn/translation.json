@@ -118,6 +118,7 @@
         "playlistName": "播放列表名称",
         "predictedSetlist": "预测的演出歌单",
         "removeImage": "移除图片",
+        "selectToExclude": "在这里选择歌曲以将其排除在导出之外。",
         "songNotFound": "歌曲未找到",
         "songs": "歌曲",
         "spotifyAddImageError": "向播放列表添加图片时出错！",

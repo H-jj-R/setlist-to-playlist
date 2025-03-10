@@ -19,8 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Construct the query parameters for the Setlist.fm API
     const queryParams: Record<string, string> = {
         artistMbid: artistMbid as string,
-        p: page as string,
-        sort: "recency"
+        p: page as string
     };
     if (country && country !== "null" && country !== "undefined") queryParams.countryCode = country as string;
 

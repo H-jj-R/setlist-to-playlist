@@ -114,7 +114,6 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
                     state.dialogState === LoginDialogState.SignUp &&
                     !process.env.NEXT_PUBLIC_APP_ENV?.includes("test") // Don't verify reCAPTCHA if in test environment
                 ) {
-                    console.log("Verify captcha");
                     if (!(await verifyRecaptcha())) return; // Verify reCAPTCHA for signup
                 }
 

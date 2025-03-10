@@ -60,17 +60,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!ISACTIVE) res.status(500).json({ error: "generateSetlist:openaiDisabled" });
 
     try {
-        // Filter and format the past setlists for input
         const { pastSetlists } = req.body;
+
+        // If all sets have no songs, return an error.
+        if (
+            pastSetlists.filter((setlist: Record<string, any>): boolean => setlist.sets && setlist.sets.set.length > 0)
+                .length === 0
+        ) {
+            throw new Error();
+        }
+
+        // Filter and format the past setlists for input
         const input = pastSetlists
-            .filter((setlist: any) => setlist.sets && setlist.sets.set.length > 0) // Only include setlists with songs
+            .filter((setlist: Record<string, any>) => setlist.sets && setlist.sets.set.length > 0) // Only include setlists with songs
             .slice(0, 20) // Limit to the first 20 setlists
-            .map((setlist: any) => {
+            .map((setlist: Record<string, any>) => {
                 const artistName = setlist.artist.name;
                 const eventDate = setlist.eventDate;
                 // Flatten the song list from all sets
-                const songs = setlist.sets.set.flatMap((set: any) =>
-                    set.song.map((song: any): string => {
+                const songs = setlist.sets.set.flatMap((set: Record<string, any>) =>
+                    set.song.map((song: Record<string, any>): string => {
                         // Check if the song has a cover and append it to the name
                         return `${song.name}${song.cover ? ` (${song.cover.name} cover)` : ""}${
                             song.tape ? " (Played on tape)" : ""
@@ -80,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 return { artistName, eventDate, songs };
             })
-            .map((setlist): string => {
+            .map((setlist: Record<string, any>): string => {
                 return `Setlist for ${setlist.artistName} on ${setlist.eventDate}: ${setlist.songs.join(", ")}`;
             })
             .join("\n");

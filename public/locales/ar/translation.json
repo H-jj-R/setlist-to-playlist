@@ -118,6 +118,7 @@
         "playlistName": "اسم قائمة التشغيل",
         "predictedSetlist": "قائمة تشغيل متوقعة",
         "removeImage": "إزالة الصورة",
+        "selectToExclude": "حدد الأغاني هنا لاستبعادها من التصدير.",
         "songNotFound": "الأغنية غير موجودة",
         "songs": "أغاني",
         "spotifyAddImageError": "خطأ في إضافة صورة إلى قائمة التشغيل!",

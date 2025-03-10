@@ -11,7 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const DAILY_QUERY_LIMIT = 5;
 
 /**
- * API handler to check the current query limit for a user, and increase it by 1 if the limit hasn't been reached.
+ * API handler to check the current query limit for a user.
  *
  * @param {NextApiRequest} req - The incoming API request object.
  * @param {NextApiResponse} res - The outgoing API response object.
@@ -66,9 +66,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(429).json({ error: "generateSetlist:queryLimitReached" });
             }
         }
-
-        // Increment the query count for the user
-        await db.execute("UPDATE UserQueryLimits SET queries_today = queries_today + 1 WHERE user_id = ?", [userId]);
 
         res.status(200).json({ success: true });
     } catch (error) {

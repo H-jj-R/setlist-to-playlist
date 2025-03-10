@@ -118,6 +118,7 @@
         "playlistName": "Playlist Name",
         "predictedSetlist": "Predicted Setlist",
         "removeImage": "Remove Image",
+        "selectToExclude": "Select songs here to exclude them from export.",
         "songNotFound": "Song not found",
         "songs": "Songs",
         "spotifyAddImageError": "Error adding image to playlist!",
