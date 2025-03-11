@@ -26,7 +26,7 @@ describe("Setlist Search", () => {
     }, 10000);
 
     it("Can type in search bar", async () => {
-        const inputTest = "My test input";
+        const inputTest = "Test input";
         const searchInput = await page.waitForSelector("#search-input");
         await searchInput.type(inputTest);
         const value = await page.evaluate((input: HTMLInputElement): string => input.value, searchInput);
@@ -37,10 +37,10 @@ describe("Setlist Search", () => {
         const searchInput = await page.waitForSelector("#search-input");
         await clearInputs(page, [searchInput]);
         const searchButton = await page.waitForSelector("#search-btn");
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
@@ -49,10 +49,10 @@ describe("Setlist Search", () => {
         const searchInput = await page.waitForSelector("#search-input");
         await searchInput.type("Metallica");
         const searchButton = await page.waitForSelector("#search-btn");
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
     }, 10000);
@@ -64,21 +64,21 @@ describe("Setlist Search", () => {
     it("Can view a list of setlists", async () => {
         const listOfSetlists = await page.waitForSelector("#list-of-setlists");
         expect(listOfSetlists).toBeDefined();
-    }, 30000);
+    }, 20000);
 
     it("Searching a different query triggers search", async () => {
         const searchInput = await page.waitForSelector("#search-input");
         await clearInputs(page, [searchInput]);
         await searchInput.type("Oasis");
         const searchButton = await page.waitForSelector("#search-btn");
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
         await page.waitForSelector("#list-of-setlists");
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
-    }, 30000);
+    }, 20000);
 
     it("Query is updated in URL param", async () => {
         expect(page.url()).toContain("q=Oasis");
@@ -87,10 +87,10 @@ describe("Setlist Search", () => {
     it("Searching same query doesn't trigger search", async () => {
         await page.waitForSelector("#list-of-setlists");
         const searchButton = await page.waitForSelector("#search-btn");
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
@@ -99,10 +99,10 @@ describe("Setlist Search", () => {
         const searchInput = await page.waitForSelector("#search-input");
         const searchButton = await page.waitForSelector("#search-btn");
         await clearInputs(page, [searchInput]);
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await searchButton.click();
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).toBe(initialContent);
     }, 10000);
@@ -111,11 +111,11 @@ describe("Setlist Search", () => {
         const searchInput = await page.waitForSelector("#search-input");
         await clearInputs(page, [searchInput]);
         await searchInput.type("Linkin Park");
-        await delay(1000);
+        await delay(200);
         const initialContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content before clicking
         await page.keyboard.press("Enter");
         await page.waitForSelector("#list-of-setlists");
-        await delay(1000);
+        await delay(200);
         const finalContent = await page.evaluate((): string => document.body.innerHTML); // Capture the page content after clicking
         expect(finalContent).not.toBe(initialContent);
     }, 10000);

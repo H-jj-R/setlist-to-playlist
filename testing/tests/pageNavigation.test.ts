@@ -6,7 +6,7 @@
 
 import * as puppeteer from "puppeteer";
 
-import { delay, launch } from "../testingUtils";
+import { delay, launch, login } from "../testingUtils";
 
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
@@ -60,6 +60,16 @@ describe("Page Navigation", () => {
         await Promise.all([privacyPolicyLink.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/privacy-policy");
     }, 10000);
+
+    it("Go to User Playlists page", async () => {
+        await login(page);
+        const accountBtn = await page.waitForSelector("#account-btn");
+        await accountBtn.click();
+        await delay(400);
+        const userPlaylistsBtn = await page.waitForSelector("#go-to-user-playlists-btn");
+        await Promise.all([userPlaylistsBtn.click(), page.waitForNavigation()]);
+        expect(page.url()).toContain("/user-playlists");
+    });
 
     it("Go to 404 Page", async () => {
         await Promise.all([page.goto("http://localhost:3000/madeuppage"), page.waitForNavigation()]);
