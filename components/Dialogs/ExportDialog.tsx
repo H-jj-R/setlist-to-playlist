@@ -54,7 +54,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
             <>
                 <div
                     id="background-overlay"
-                    className={`fixed inset-0 z-20 bg-black/50 transition-opacity duration-500 ${
+                    className={`animate-fade-in fixed inset-0 z-20 bg-black/50 transition-opacity duration-500 ${
                         isOpen ? "opacity-100" : "pointer-events-none opacity-0"
                     }`}
                     onClick={(): void => {

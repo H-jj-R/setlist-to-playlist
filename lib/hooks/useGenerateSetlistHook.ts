@@ -71,7 +71,7 @@ export default function useGenerateSetlistHook() {
      */
     const handleSearch = useCallback(
         async (query: string): Promise<void> => {
-            if (query === state.previousQuery) return; // Prevent redundant searches
+            if (!query || query === state.previousQuery) return; // Prevent empty or redundant searches
 
             setState((prev) => ({ ...prev, previousQuery: query })); // Store the new query in state
 

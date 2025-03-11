@@ -70,8 +70,8 @@ export default function SetlistSearch() {
                                     id="list-of-setlists"
                                     className={`${
                                         state.setlistChosen
-                                            ? "animate-fadeIn mx-auto hidden w-4/5 max-w-3xl sm:block"
-                                            : "animate-fadeIn mx-auto block w-4/5 max-w-3xl"
+                                            ? "animate-fade-in mx-auto hidden w-4/5 max-w-3xl sm:block"
+                                            : "animate-fade-in mx-auto block w-4/5 max-w-3xl"
                                     }`}
                                 >
                                     <ListOfSetlists
@@ -84,7 +84,7 @@ export default function SetlistSearch() {
                             )}
                             {((state.setlistChosen && !state.animLoading && state.pageState === PageState.LosSetlist) ||
                                 state.pageState === PageState.Setlist) && (
-                                <div id="setlist-display" className={`animate-fadeIn w-full`}>
+                                <div id="setlist-display" className={`animate-fade-in w-full`}>
                                     <Setlist
                                         isAlone={state.pageState === PageState.Setlist}
                                         onClose={handleBackToList}
