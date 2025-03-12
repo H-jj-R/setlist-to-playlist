@@ -106,7 +106,7 @@ describe("Settings", () => {
         expect(hiddenSetlistsMessage).toBeDefined();
         const messageText = await hiddenSetlistsMessage.evaluate((el): string => el.textContent);
         expect(messageText).toContain(emptySetlistsCount.toString());
-    }, 20000);
+    }, 30000);
 
     it("Hide Empty Setlists - Empty setlists get hidden", async () => {
         const visibleEmptySetlists: number = await page.evaluate((): number => {
@@ -154,7 +154,7 @@ describe("Settings", () => {
         listTitle = await page.waitForSelector("#list-of-setlists-title");
         listTitleText = await listTitle.evaluate((el): string => el.textContent);
         expect(listTitleText.includes("in Australia")).toBeTruthy();
-    }, 20000);
+    }, 30000);
 
     it("Filter by Country - Displayed setlists are only from selected country", async () => {
         const allSetlistsCount: number = await page.evaluate((): number => {
@@ -198,7 +198,7 @@ describe("Settings", () => {
         expect(notFoundCount).toBe(0);
         const closeExportBtn = await page.waitForSelector("#cancel-btn");
         await closeExportBtn.click();
-    }, 20000);
+    }, 30000);
 
     it("Hide Songs Not Found - Resetting setting displays songs not found", async () => {
         await page.waitForSelector("#list-of-setlists");

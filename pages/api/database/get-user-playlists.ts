@@ -27,8 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
 
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Fetch all playlists belonging to the user
-        const [playlists] = await db.execute(
+        const [playlists] = await dbConn.execute(
             `
             SELECT 
                 p.playlist_id AS playlistId,
@@ -45,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Fetch tracks for each playlist
         const playlistsWithTracks = await Promise.all(
             (playlists as any[]).map(async (playlist): Promise<any> => {
-                const [tracks] = await db.execute(
+                const [tracks] = await dbConn.execute(
                     `
                     SELECT 
                         ps.song_id AS songID,

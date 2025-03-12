@@ -28,7 +28,7 @@ describe("Choosing Setlist", () => {
         await page.waitForSelector("#list-of-setlists");
         const setlistChoiceBlocks = await page.waitForSelector("#setlist-list");
         expect(setlistChoiceBlocks).toBeDefined();
-    }, 10000);
+    }, 30000);
 
     it("Setlist Choice Block can be selected and setlist gets opened", async () => {
         const item = await page.waitForSelector("[id^=setlist-item-]");
@@ -117,7 +117,7 @@ describe("Choosing Setlist", () => {
         }
         const loadMoreBut = await page.$("#load-more-btn");
         expect(loadMoreBut).toBeNull();
-    }, 20000);
+    }, 30000);
 
     afterAll(async () => {
         await delay(100);

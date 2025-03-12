@@ -24,8 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!email || !otp || !newPassword) return res.status(400).json({ error: "account:allFieldsRequired" });
 
     try {
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Check if OTP exists and is still valid (not expired)
-        const [otpRecord] = await db.execute(
+        const [otpRecord] = await dbConn.execute(
             "SELECT * FROM PasswordResetTokens WHERE email = ? AND otp = ? AND created_at >= NOW() - INTERVAL 10 MINUTE",
             [email, otp]
         );
@@ -36,10 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const hashedPassword = await bcrypt.hash(newPassword, await bcrypt.genSalt(10));
 
         // Update the user's password
-        await db.execute("UPDATE Users SET password_hash = ? WHERE email = ?", [hashedPassword, email]);
+        await dbConn.execute("UPDATE Users SET password_hash = ? WHERE email = ?", [hashedPassword, email]);
 
         // Delete used OTP
-        await db.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
+        await dbConn.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
 
         res.status(200).json({ success: true });
     } catch (error) {

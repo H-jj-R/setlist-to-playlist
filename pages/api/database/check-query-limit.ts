@@ -29,8 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
 
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Check if the user exists in the UserQueryLimits table
-        const [rows]: [any[], any] = await db.execute("SELECT * FROM UserQueryLimits WHERE user_id = ? LIMIT 1", [
+        const [rows]: [any[], any] = await dbConn.execute("SELECT * FROM UserQueryLimits WHERE user_id = ? LIMIT 1", [
             userId
         ]);
 
@@ -38,13 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // If the user's query limit doesn't yet exist in the database, insert a new record
         if (!userQueryLimit) {
-            await db.execute(
+            await dbConn.execute(
                 "INSERT INTO UserQueryLimits (user_id, queries_today, last_query_date) VALUES (?, 0, CURRENT_DATE)",
                 [userId]
             );
 
             // Fetch the newly inserted row
-            const [newRows]: [any[], any] = await db.execute(
+            const [newRows]: [any[], any] = await dbConn.execute(
                 "SELECT * FROM UserQueryLimits WHERE user_id = ? LIMIT 1",
                 [userId]
             );
@@ -56,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Reset queries_today if the last query date is before today
         if (new Date(last_query_date).toISOString().split("T")[0] < new Date().toISOString().split("T")[0]) {
-            await db.execute(
+            await dbConn.execute(
                 "UPDATE UserQueryLimits SET queries_today = 0, last_query_date = CURRENT_DATE WHERE user_id = ?",
                 [userId]
             );
