@@ -27,8 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const decoded = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
 
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Delete the user from the database
-        await db.query("DELETE FROM Users WHERE user_id = ?", [userId]);
+        await dbConn.query("DELETE FROM Users WHERE user_id = ?", [userId]);
 
         res.status(200).json({ success: true });
     } catch (error) {

@@ -27,8 +27,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
         const userId = decoded.userId;
 
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Increment the query count for the user
-        await db.execute("UPDATE UserQueryLimits SET queries_today = queries_today + 1 WHERE user_id = ?", [userId]);
+        await dbConn.execute("UPDATE UserQueryLimits SET queries_today = queries_today + 1 WHERE user_id = ?", [userId]);
 
         res.status(200).json({ success: true });
     } catch (error) {

@@ -33,8 +33,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Verify required params are provided
         if (!playlistId || !playlistName) return res.status(400).json({ error: "userPlaylists:missingParameters" });
 
+        // Connect to database through pool
+        const dbConn = await db.getConnection();
+
         // Update the playlist details in the database
-        const [result]: any = await db.execute(
+        const [result]: any = await dbConn.execute(
             `
             UPDATE Playlists
             SET playlist_name = ?, playlist_description = ?
