@@ -179,11 +179,42 @@ describe("Settings", () => {
     }, 10000);
 
     it("Hide Songs Not Found - Songs not found get hidden", async () => {
-        // TODO: Implement test
-    }, 10000);
+        const searchInput = await page.waitForSelector("#search-input");
+        await clearInputs(page, [searchInput]);
+        await searchInput.type("Taylor Swift");
+        const searchButton = await page.waitForSelector("#search-btn");
+        await searchButton.click();
+        await page.waitForSelector("#list-of-setlists");
+        await setSetting(page, async () => {
+            const hsnfCheckbox = await page.waitForSelector("#hide-songs-not-found-checkbox");
+            await hsnfCheckbox.click();
+        });
+        const exportAllBtn = await page.waitForSelector("#combine-export-btn");
+        await exportAllBtn.click();
+        await page.waitForSelector("#exported-setlist-tracks");
+        const notFoundCount = await page.evaluate((): number => {
+            return document.querySelectorAll("#exported-setlist-tracks [id^='song-not-found-']").length;
+        });
+        expect(notFoundCount).toBe(0);
+        const closeExportBtn = await page.waitForSelector("#cancel-btn");
+        await closeExportBtn.click();
+    }, 20000);
 
     it("Hide Songs Not Found - Resetting setting displays songs not found", async () => {
-        // TODO: Implement test
+        await page.waitForSelector("#list-of-setlists");
+        await setSetting(page, async () => {
+            const hsnfCheckbox = await page.waitForSelector("#hide-songs-not-found-checkbox");
+            await hsnfCheckbox.click();
+        });
+        const exportAllBtn = await page.waitForSelector("#combine-export-btn");
+        await exportAllBtn.click();
+        await page.waitForSelector("#exported-setlist-tracks");
+        const notFoundCount = await page.evaluate((): number => {
+            return document.querySelectorAll("#exported-setlist-tracks [id^='song-not-found-']").length;
+        });
+        expect(notFoundCount).toBeGreaterThan(0);
+        const closeExportBtn = await page.waitForSelector("#cancel-btn");
+        await closeExportBtn.click();
     }, 10000);
 
     it("Exclude Covers - Covers get excluded from export", async () => {
