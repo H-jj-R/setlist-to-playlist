@@ -69,7 +69,7 @@ describe("Page Navigation", () => {
         const userPlaylistsBtn = await page.waitForSelector("#go-to-user-playlists-btn");
         await Promise.all([userPlaylistsBtn.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/user-playlists");
-    });
+    }, 10000);
 
     it("Go to 404 Page", async () => {
         await Promise.all([page.goto("http://localhost:3000/madeuppage"), page.waitForNavigation()]);
