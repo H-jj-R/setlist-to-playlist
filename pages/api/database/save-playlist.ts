@@ -31,11 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const { description, name, spotifyPlaylistID, tracks } = playlistDetails;
 
-        // Connect to database through pool
-        const dbConn = await db.getConnection();
-
         // Insert playlist into the Playlists table
-        const [playlistResult] = await dbConn.execute(
+        const [playlistResult] = await db.query(
             "INSERT INTO Playlists (user_id, spotify_playlist_id, playlist_name, playlist_description) VALUES (?, ?, ?, ?)",
             [userId, spotifyPlaylistID, name, description]
         );
@@ -45,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Insert tracks into the Tracks table
         for (const track of tracks) {
             const { position, songID } = track;
-            await dbConn.execute("INSERT INTO PlaylistSongs (playlist_id, song_id, position) VALUES (?, ?, ?)", [
+            await db.query("INSERT INTO PlaylistSongs (playlist_id, song_id, position) VALUES (?, ?, ?)", [
                 playlistId,
                 songID,
                 position

@@ -24,18 +24,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!username || !email || !password) return res.status(400).json({ error: "account:allFieldsRequired" });
 
     try {
-        // Connect to database through pool
-        const dbConn = await db.getConnection();
-
         // Check if email already exists in the database
-        const [existingUser] = await dbConn.execute("SELECT * FROM Users WHERE email = ?", [email]);
+        const [existingUser] = await db.query("SELECT * FROM Users WHERE email = ?", [email]);
         if ((existingUser as any[]).length > 0) return res.status(400).json({ error: "account:emailInUse" });
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
 
         // Insert user into the database
-        await dbConn.execute("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)", [
+        await db.query("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)", [
             username,
             email,
             hashedPassword

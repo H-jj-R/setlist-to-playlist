@@ -25,11 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!email || !password) return res.status(400).json({ error: "account:emailPasswordRequired" });
 
     try {
-        // Connect to database through pool
-        const dbConn = await db.getConnection();
-
         // Get the user with corresponding email
-        const [rows] = await dbConn.execute("SELECT * FROM Users WHERE email = ?", [email]);
+        const [rows] = await db.query("SELECT * FROM Users WHERE email = ?", [email]);
         const users = rows as any[];
 
         // Ensure the user exists
