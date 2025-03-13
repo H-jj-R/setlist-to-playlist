@@ -34,14 +34,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Generate a random 6-digit OTP for password reset
         const otp: string = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Connect to database through pool
-        const dbConn = await db.getConnection();
-
         // Remove any existing OTPs associated with this email
-        await dbConn.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
+        await db.query("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
 
         // Store the new OTP in the database
-        await dbConn.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
+        await db.query("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
 
         // Send the password reset email using Resend API
         const resend = new Resend(process.env.RESEND_API_KEY!);
