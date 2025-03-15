@@ -4,10 +4,11 @@
  * See LICENSE for details.
  */
 
+import ChangePasswordDialog from "@components/Dialogs/ChangePasswordDialog";
 import ConfirmationModal from "@components/Dialogs/ConfirmationModal";
 import MessageDialog from "@components/Dialogs/MessageDialog";
 import MessageDialogState from "@constants/messageDialogState";
-import { faChevronRight, faRightFromBracket, faTrash, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faKey, faRightFromBracket, faTrash, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from "jwt-decode";
 import { useTheme } from "next-themes";
@@ -55,6 +56,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
     const router = useRouter(); // Router hook
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
+        changePasswordOpen: false, // Whether to display the change password dialog
         email: null as null | string, // User's email
         isVisible: false, // Whether the sidebar is fully visible
         messageDialog: { isOpen: false, message: "", type: MessageDialogState.Success }, // Properties for message dialog
@@ -236,6 +238,22 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                     </button>
                 </div>
                 <div
+                    id="change-password-container"
+                    className="absolute bottom-20 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center"
+                >
+                    <button
+                        id="change-password-btn"
+                        className="w-full rounded-sm bg-linear-to-r from-sky-500 to-blue-600 px-4 py-2 text-white transition duration-300 hover:cursor-pointer hover:from-sky-600 hover:to-blue-700"
+                        aria-label={i18n("account:changePassword")}
+                        onClick={(): void => {
+                            setState((prev) => ({ ...prev, changePasswordOpen: true }));
+                        }}
+                    >
+                        <FontAwesomeIcon id="fa-key-icon" className="text-l mr-2 text-gray-200" icon={faKey} />
+                        {i18n("account:changePassword")}
+                    </button>
+                </div>
+                <div
                     id="delete-account-container"
                     className="absolute bottom-4 left-1/2 flex w-3/4 -translate-x-1/2 transform justify-center"
                 >
@@ -272,6 +290,14 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         }));
                     }}
                     type={state.messageDialog.type}
+                />
+            )}
+            {state.changePasswordOpen && (
+                <ChangePasswordDialog
+                    email={state.email}
+                    onClose={(): void => {
+                        setState((prev) => ({ ...prev, changePasswordOpen: false }));
+                    }}
                 />
             )}
         </div>
