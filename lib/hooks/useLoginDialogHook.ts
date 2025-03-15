@@ -368,7 +368,7 @@ export default function useLoginDialogHook(onClose: () => void, onLoginSuccess: 
 
         try {
             // Send reset password request to the API
-            const response = await fetch("/api/auth/reset-password", {
+            const response = await fetch("/api/auth/reset-password-otp", {
                 body: JSON.stringify({ email: state.storedEmail, newPassword, otp: state.otpInput }),
                 headers: {
                     "Content-Type": "application/json"

@@ -15,13 +15,13 @@ import { useTranslation } from "react-i18next";
  * Props for the `LoginForm` component.
  *
  * @property {Function} handleSubmit - Function to handle form submission.
- * @property {React.MutableRefObject<ReCAPTCHA>} recaptchaRef - Reference to the reCAPTCHA instance.
+ * @property {React.RefObject<ReCAPTCHA>} recaptchaRef - Reference to the reCAPTCHA instance.
  * @property {Function} setState - Function to update component state.
  * @property {any} state - Current state of the login form.
  */
 interface LoginFormProps {
     handleSubmit: (e: React.FormEvent) => Promise<void>;
-    recaptchaRef: React.MutableRefObject<ReCAPTCHA>;
+    recaptchaRef: React.RefObject<ReCAPTCHA>;
     setState: Function;
     state: any;
 }
