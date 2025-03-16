@@ -226,11 +226,13 @@
         "themeTitle": "الموضوع"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "إنشاء قائمة أغاني بواسطة الذكاء الاصطناعي",
         "cancelDiscardChanges": "إلغاء والتخلي عن التعديلات",
         "collapseContents": "طي محتويات قائمة التشغيل",
         "createdPlaylists": "قوائم الأغاني التي تم إنشاؤها",
         "detailsUpdated": "تم تحديث تفاصيل القائمة بنجاح!",
         "expandContents": "توسيع محتويات قائمة التشغيل",
+        "exportFirstPlaylist": "صدّر أول قائمة تشغيل لك:",
         "missingParameters": "بعض المعلمات مفقودة.",
         "missingTrackIds": "معرفات الأغاني مفقودة.",
         "noPlaylistsCreated": "لم تقم بإنشاء أي قوائم أغاني بعد!",
@@ -241,6 +243,7 @@
         "playlistSaved": "تم حفظ القائمة بنجاح!",
         "recover": "استعادة",
         "savePlaylistChanges": "حفظ تعديلات قائمة التشغيل",
+        "searchSetlists": "بحث في قوائم الأغاني",
         "yourExportedSetlists": "قوائم الأغاني التي قمت بتصديرها"
     }
 }

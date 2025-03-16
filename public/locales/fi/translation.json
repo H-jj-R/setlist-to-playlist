@@ -226,11 +226,13 @@
         "themeTitle": "Teema"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "Luo soittolista tekoälyllä",
         "cancelDiscardChanges": "Peru ja hylkää muutokset",
         "collapseContents": "Pienennä soittolistan sisältö",
         "createdPlaylists": "Luodut soittolistat",
         "detailsUpdated": "Soittolistan tiedot päivitetty onnistuneesti!",
         "expandContents": "Laajenna soittolistan sisältö",
+        "exportFirstPlaylist": "Vie ensimmäinen soittolistasi:",
         "missingParameters": "Joitakin parametreja puuttuu.",
         "missingTrackIds": "Puuttuvat kappaleiden ID:t.",
         "noPlaylistsCreated": "Et ole vielä luonut soittolistoja!",
@@ -241,6 +243,7 @@
         "playlistSaved": "Soittolista tallennettu onnistuneesti!",
         "recover": "Palauta",
         "savePlaylistChanges": "Tallenna soittolistan muutokset",
+        "searchSetlists": "Etsi soittolistoja",
         "yourExportedSetlists": "Viety setlistisi"
     }
 }

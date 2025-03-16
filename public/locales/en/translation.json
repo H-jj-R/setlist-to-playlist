@@ -227,11 +227,13 @@
         "themeTitle": "Theme"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "AI Generate a Setlist",
         "cancelDiscardChanges": "Cancel and discard changes",
         "collapseContents": "Collapse playlist contents",
         "createdPlaylists": "Created Playlists",
         "detailsUpdated": "Playlist details updated successfully!",
         "expandContents": "Expand playlist contents",
+        "exportFirstPlaylist": "Export your first playlist:",
         "missingParameters": "Some parameters are missing.",
         "missingTrackIds": "Missing track IDs.",
         "noPlaylistsCreated": "You haven't created any playlists yet!",
@@ -242,6 +244,7 @@
         "playlistSaved": "Playlist saved successfully!",
         "recover": "Recover",
         "savePlaylistChanges": "Save playlist changes",
+        "searchSetlists": "Search Setlists",
         "yourExportedSetlists": "Your Exported Setlists"
     }
 }
