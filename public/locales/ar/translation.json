@@ -21,7 +21,11 @@
         "allfieldsRequired": "جميع الحقول مطلوبة.",
         "alreadyHaveAccount": "هل لديك حساب بالفعل؟ تسجيل الدخول",
         "backToLogin": "العودة إلى تسجيل الدخول",
+        "changePassword": "تغيير كلمة المرور",
+        "changePasswordFailed": "فشل تغيير كلمة المرور: {{message}}",
+        "changePasswordSuccess": "تم تغيير كلمة المرور بنجاح!",
         "closeAccountSettings": "إغلاق إعدادات الحساب",
+        "currentPassword": "كلمة المرور الحالية",
         "deleteAccount": "حذف الحساب",
         "deleteFailed": "فشل حذف الحساب!",
         "deleteSuccess": "تم حذف الحساب بنجاح!",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "نسيت كلمة المرور",
         "invalidCode": "الرمز المقدم غير صالح أو منتهي الصلاحية.",
         "invalidEmailPassword": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+        "invalidPassword": "كلمة المرور الحالية غير صحيحة!",
         "login": "تسجيل الدخول",
         "loginFailed": "فشل تسجيل الدخول: {{message}}",
         "loginSignUp": "تسجيل الدخول / الاشتراك",
@@ -221,11 +226,13 @@
         "themeTitle": "الموضوع"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "إنشاء قائمة أغاني بواسطة الذكاء الاصطناعي",
         "cancelDiscardChanges": "إلغاء والتخلي عن التعديلات",
         "collapseContents": "طي محتويات قائمة التشغيل",
         "createdPlaylists": "قوائم الأغاني التي تم إنشاؤها",
         "detailsUpdated": "تم تحديث تفاصيل القائمة بنجاح!",
         "expandContents": "توسيع محتويات قائمة التشغيل",
+        "exportFirstPlaylist": "صدّر أول قائمة تشغيل لك:",
         "missingParameters": "بعض المعلمات مفقودة.",
         "missingTrackIds": "معرفات الأغاني مفقودة.",
         "noPlaylistsCreated": "لم تقم بإنشاء أي قوائم أغاني بعد!",
@@ -236,6 +243,7 @@
         "playlistSaved": "تم حفظ القائمة بنجاح!",
         "recover": "استعادة",
         "savePlaylistChanges": "حفظ تعديلات قائمة التشغيل",
+        "searchSetlists": "بحث في قوائم الأغاني",
         "yourExportedSetlists": "قوائم الأغاني التي قمت بتصديرها"
     }
 }

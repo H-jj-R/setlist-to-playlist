@@ -21,7 +21,11 @@
         "allfieldsRequired": "सभी फ़ील्ड आवश्यक हैं।",
         "alreadyHaveAccount": "क्या आपके पास पहले से खाता है? लॉगिन करें",
         "backToLogin": "लॉगिन पर वापस जाएं",
+        "changePassword": "पासवर्ड बदलें",
+        "changePasswordFailed": "पासवर्ड बदलने में विफल: {{message}}",
+        "changePasswordSuccess": "पासवर्ड सफलतापूर्वक बदला गया!",
         "closeAccountSettings": "खाता सेटिंग्स बंद करें",
+        "currentPassword": "वर्तमान पासवर्ड",
         "deleteAccount": "खाता हटाएं",
         "deleteFailed": "खाता हटाने में विफल!",
         "deleteSuccess": "खाता सफलतापूर्वक हटाया गया!",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "पासवर्ड भूल गए",
         "invalidCode": "दिया गया कोड अमान्य या समाप्त हो चुका है।",
         "invalidEmailPassword": "अमान्य ईमेल या पासवर्ड।",
+        "invalidPassword": "अमान्य वर्तमान पासवर्ड!",
         "login": "लॉगिन",
         "loginFailed": "लॉगिन विफल: {{message}}",
         "loginSignUp": "लॉगिन / साइन अप",
@@ -221,11 +226,13 @@
         "themeTitle": "थीम"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "एआई से सेटलिस्ट तैयार करें",
         "cancelDiscardChanges": "रद्द करें और परिवर्तन त्यागें",
         "collapseContents": "प्लेलिस्ट सामग्री संक्षिप्त करें",
         "createdPlaylists": "निर्मित प्लेलिस्ट",
         "detailsUpdated": "प्लेलिस्ट विवरण सफलतापूर्वक अपडेट किए गए!",
         "expandContents": "प्लेलिस्ट सामग्री विस्तार करें",
+        "exportFirstPlaylist": "अपनी पहली प्लेलिस्ट निर्यात करें:",
         "missingParameters": "कुछ पैरामीटर गायब हैं।",
         "missingTrackIds": "ट्रैक ID गायब हैं।",
         "noPlaylistsCreated": "आपने अभी तक कोई प्लेलिस्ट नहीं बनाई है!",
@@ -236,6 +243,7 @@
         "playlistSaved": "प्लेलिस्ट सफलतापूर्वक सहेजी गई!",
         "recover": "पुनर्प्राप्त करें",
         "savePlaylistChanges": "प्लेलिस्ट परिवर्तन सहेजें",
+        "searchSetlists": "सेटलिस्ट खोजें",
         "yourExportedSetlists": "आपकी निर्यातित सेटलिस्ट्स"
     }
 }

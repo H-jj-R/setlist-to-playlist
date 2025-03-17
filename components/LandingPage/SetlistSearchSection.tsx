@@ -34,7 +34,7 @@ const SetlistSearchSection: React.FC<{}> = () => {
             <div id="setlist-search-btn-container" className="lg:mx-auto">
                 <button
                     id="go-to-setlist-search-btn"
-                    className="rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:cursor-pointer hover:bg-gray-200 focus:outline-hidden"
+                    className="animate-pulse-border rounded-full bg-white px-12 py-5 text-lg font-semibold text-pink-600 shadow-lg transition hover:cursor-pointer hover:bg-gray-200 focus:outline-hidden"
                     onClick={(): Promise<boolean> => router.push("/setlist-search")}
                 >
                     {i18n("landingPage:goToSetlistSearch")}

@@ -21,7 +21,11 @@
         "allfieldsRequired": "Tous les champs sont requis.",
         "alreadyHaveAccount": "Vous avez déjà un compte ? Connectez-vous",
         "backToLogin": "Retour à la connexion",
+        "changePassword": "Changer le mot de passe",
+        "changePasswordFailed": "Échec du changement de mot de passe : {{message}}",
+        "changePasswordSuccess": "Mot de passe changé avec succès !",
         "closeAccountSettings": "Fermer les paramètres du compte",
+        "currentPassword": "Mot de passe actuel",
         "deleteAccount": "Supprimer le compte",
         "deleteFailed": "Échec de la suppression du compte !",
         "deleteSuccess": "Compte supprimé avec succès !",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "Mot de passe oublié",
         "invalidCode": "Le code fourni est invalide ou expiré.",
         "invalidEmailPassword": "Email ou mot de passe invalide.",
+        "invalidPassword": "Mot de passe actuel incorrect !",
         "login": "Se connecter",
         "loginFailed": "Échec de la connexion : {{message}}",
         "loginSignUp": "Connexion / Inscription",
@@ -221,11 +226,13 @@
         "themeTitle": "Thème"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "Générer une setlist avec l'IA",
         "cancelDiscardChanges": "Annuler et abandonner les modifications",
         "collapseContents": "Réduire le contenu de la playlist",
         "createdPlaylists": "Playlists créées",
         "detailsUpdated": "Détails de la playlist mis à jour avec succès !",
         "expandContents": "Développer le contenu de la playlist",
+        "exportFirstPlaylist": "Exportez votre première playlist :",
         "missingParameters": "Certains paramètres sont manquants.",
         "missingTrackIds": "IDs de piste manquants.",
         "noPlaylistsCreated": "Vous n'avez pas encore créé de playlists !",
@@ -236,6 +243,7 @@
         "playlistSaved": "Playlist enregistrée avec succès !",
         "recover": "Récupérer",
         "savePlaylistChanges": "Enregistrer les modifications de la playlist",
+        "searchSetlists": "Rechercher des setlists",
         "yourExportedSetlists": "Vos setlists exportées"
     }
 }

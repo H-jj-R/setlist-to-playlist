@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const userId = decoded.userId;
 
         // Fetch all playlists belonging to the user
-        const [playlists] = await db.execute(
+        const [playlists] = await db.query(
             `
             SELECT 
                 p.playlist_id AS playlistId,
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Fetch tracks for each playlist
         const playlistsWithTracks = await Promise.all(
             (playlists as any[]).map(async (playlist): Promise<any> => {
-                const [tracks] = await db.execute(
+                const [tracks] = await db.query(
                     `
                     SELECT 
                         ps.song_id AS songID,

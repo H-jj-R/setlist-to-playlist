@@ -21,7 +21,11 @@
         "allfieldsRequired": "Todos los campos son obligatorios.",
         "alreadyHaveAccount": "¿Ya tienes cuenta? Inicia sesión",
         "backToLogin": "Volver al inicio de sesión",
+        "changePassword": "Cambiar contraseña",
+        "changePasswordFailed": "Error al cambiar la contraseña: {{message}}",
+        "changePasswordSuccess": "¡Contraseña cambiada con éxito!",
         "closeAccountSettings": "Cerrar la configuración de la cuenta",
+        "currentPassword": "Contraseña actual",
         "deleteAccount": "Eliminar cuenta",
         "deleteFailed": "¡Error al eliminar la cuenta!",
         "deleteSuccess": "¡Cuenta eliminada con éxito!",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "Olvidé la contraseña",
         "invalidCode": "El código proporcionado es inválido o ha expirado.",
         "invalidEmailPassword": "Correo electrónico o contraseña inválidos.",
+        "invalidPassword": "¡Contraseña actual incorrecta!",
         "login": "Iniciar sesión",
         "loginFailed": "Inicio de sesión fallido: {{message}}",
         "loginSignUp": "Iniciar sesión / Registrarse",
@@ -221,11 +226,13 @@
         "themeTitle": "Tema"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "Generar una lista de canciones con IA",
         "cancelDiscardChanges": "Cancelar y descartar cambios",
         "collapseContents": "Colapsar contenido de la lista",
         "createdPlaylists": "Listas de reproducción creadas",
         "detailsUpdated": "¡Detalles de la lista de reproducción actualizados con éxito!",
         "expandContents": "Expandir contenido de la lista",
+        "exportFirstPlaylist": "Exporta tu primera lista de reproducción:",
         "missingParameters": "Faltan algunos parámetros.",
         "missingTrackIds": "Faltan identificadores de pistas.",
         "noPlaylistsCreated": "¡No has creado ninguna lista de reproducción todavía!",
@@ -236,6 +243,7 @@
         "playlistSaved": "¡Lista de reproducción guardada con éxito!",
         "recover": "Recuperar",
         "savePlaylistChanges": "Guardar cambios de la lista",
+        "searchSetlists": "Buscar listas de canciones",
         "yourExportedSetlists": "Tus listas de canciones exportadas"
     }
 }

@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!playlistId) return res.status(400).json({ error: "userPlaylists:missingParameters" });
 
         // Update the playlist to set deleted = true
-        const [result]: any = await db.execute(
+        const [result]: any = await db.query(
             `
             UPDATE Playlists 
             SET deleted = 1

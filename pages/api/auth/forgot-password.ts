@@ -35,10 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const otp: string = Math.floor(100000 + Math.random() * 900000).toString();
 
         // Remove any existing OTPs associated with this email
-        await db.execute("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
+        await db.query("DELETE FROM PasswordResetTokens WHERE email = ?", [email]);
 
         // Store the new OTP in the database
-        await db.execute("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
+        await db.query("INSERT INTO PasswordResetTokens (email, otp) VALUES (?, ?)", [email, otp]);
 
         // Send the password reset email using Resend API
         const resend = new Resend(process.env.RESEND_API_KEY!);

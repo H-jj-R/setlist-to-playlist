@@ -21,7 +21,11 @@
         "allfieldsRequired": "All fields are required.",
         "alreadyHaveAccount": "Already have an account? Login",
         "backToLogin": "Back to login",
+        "changePassword": "Change Password",
+        "changePasswordFailed": "Password change failed: {{message}}",
+        "changePasswordSuccess": "Password changed successfully!",
         "closeAccountSettings": "Close account settings",
+        "currentPassword": "Current Password",
         "deleteAccount": "Delete Account",
         "deleteFailed": "Account deletion failed!",
         "deleteSuccess": "Account deleted successfully!",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "Forgot Password",
         "invalidCode": "The provided code is either invalid or expired.",
         "invalidEmailPassword": "Invalid email or password.",
+        "invalidPassword": "Incorrect current password!",
         "login": "Login",
         "loginFailed": "Login failed: {{message}}",
         "loginSignUp": "Login / Sign Up",
@@ -162,7 +167,7 @@
         "accountInformationContent": "Username, email address, and password (stored securely as a hash).",
         "contactUs": "5. Contact Us",
         "contactUsContent": "If you have any questions or requests regarding your privacy, please contact us through our <aboutLink>support page</aboutLink>.",
-        "dataWeCollect": "2. Data we Collect",
+        "dataWeCollect": "2. Data We Collect",
         "howWeUseData": "3. How We Use Your Data",
         "howWeUseDataContent": "We use your data to provide and improve our services, generate Spotify playlists, personalise your experience, ensure security, and comply with legal obligations. We do not sell your data.",
         "introduction": "1. Introduction",
@@ -222,11 +227,13 @@
         "themeTitle": "Theme"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "AI Generate a Setlist",
         "cancelDiscardChanges": "Cancel and discard changes",
         "collapseContents": "Collapse playlist contents",
         "createdPlaylists": "Created Playlists",
         "detailsUpdated": "Playlist details updated successfully!",
         "expandContents": "Expand playlist contents",
+        "exportFirstPlaylist": "Export your first playlist:",
         "missingParameters": "Some parameters are missing.",
         "missingTrackIds": "Missing track IDs.",
         "noPlaylistsCreated": "You haven't created any playlists yet!",
@@ -237,6 +244,7 @@
         "playlistSaved": "Playlist saved successfully!",
         "recover": "Recover",
         "savePlaylistChanges": "Save playlist changes",
+        "searchSetlists": "Search Setlists",
         "yourExportedSetlists": "Your Exported Setlists"
     }
 }

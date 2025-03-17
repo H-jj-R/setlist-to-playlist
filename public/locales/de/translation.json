@@ -21,7 +21,11 @@
         "allfieldsRequired": "Alle Felder sind erforderlich.",
         "alreadyHaveAccount": "Hast du bereits ein Konto? Einloggen",
         "backToLogin": "Zurück zum Login",
+        "changePassword": "Passwort ändern",
+        "changePasswordFailed": "Passwortänderung fehlgeschlagen: {{message}}",
+        "changePasswordSuccess": "Passwort erfolgreich geändert!",
         "closeAccountSettings": "Kontoeinstellungen schließen",
+        "currentPassword": "Aktuelles Passwort",
         "deleteAccount": "Konto löschen",
         "deleteFailed": "Konto-Löschung fehlgeschlagen!",
         "deleteSuccess": "Konto erfolgreich gelöscht!",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "Passwort vergessen",
         "invalidCode": "Der angegebene Code ist ungültig oder abgelaufen.",
         "invalidEmailPassword": "Ungültige E-Mail oder Passwort.",
+        "invalidPassword": "Falsches aktuelles Passwort!",
         "login": "Einloggen",
         "loginFailed": "Login fehlgeschlagen: {{message}}",
         "loginSignUp": "Einloggen / Registrieren",
@@ -221,11 +226,13 @@
         "themeTitle": "Thema"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "Setlist mit KI erstellen",
         "cancelDiscardChanges": "Abbrechen und Änderungen verwerfen",
         "collapseContents": "Playlist-Inhalt einklappen",
         "createdPlaylists": "Erstellte Playlists",
         "detailsUpdated": "Playlist-Details erfolgreich aktualisiert!",
         "expandContents": "Playlist-Inhalt ausklappen",
+        "exportFirstPlaylist": "Exportiere deine erste Playlist:",
         "missingParameters": "Einige Parameter fehlen.",
         "missingTrackIds": "Fehlende Track-IDs.",
         "noPlaylistsCreated": "Du hast noch keine Playlists erstellt!",
@@ -236,6 +243,7 @@
         "playlistSaved": "Playlist erfolgreich gespeichert!",
         "recover": "Wiederherstellen",
         "savePlaylistChanges": "Playlist-Änderungen speichern",
+        "searchSetlists": "Setlists durchsuchen",
         "yourExportedSetlists": "Deine exportierten Setlists"
     }
 }

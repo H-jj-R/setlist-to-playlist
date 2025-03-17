@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!playlistId || !playlistName) return res.status(400).json({ error: "userPlaylists:missingParameters" });
 
         // Update the playlist details in the database
-        const [result]: any = await db.execute(
+        const [result]: any = await db.query(
             `
             UPDATE Playlists
             SET playlist_name = ?, playlist_description = ?

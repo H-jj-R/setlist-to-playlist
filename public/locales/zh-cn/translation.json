@@ -21,7 +21,11 @@
         "allfieldsRequired": "所有字段均为必填。",
         "alreadyHaveAccount": "已有账户？登录",
         "backToLogin": "返回登录",
+        "changePassword": "更改密码",
+        "changePasswordFailed": "更改密码失败：{{message}}",
+        "changePasswordSuccess": "密码更改成功！",
         "closeAccountSettings": "关闭账户设置",
+        "currentPassword": "当前密码",
         "deleteAccount": "删除账户",
         "deleteFailed": "账户删除失败！",
         "deleteSuccess": "账户已成功删除！",
@@ -33,6 +37,7 @@
         "forgotPasswordTitle": "忘记密码",
         "invalidCode": "提供的验证码无效或已过期。",
         "invalidEmailPassword": "无效的电子邮件或密码。",
+        "invalidPassword": "当前密码不正确！",
         "login": "登录",
         "loginFailed": "登录失败：{{message}}",
         "loginSignUp": "登录 / 注册",
@@ -221,11 +226,13 @@
         "themeTitle": "主题"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "AI生成歌单",
         "cancelDiscardChanges": "取消并放弃更改",
         "collapseContents": "折叠播放列表内容",
         "createdPlaylists": "已创建的播放列表",
         "detailsUpdated": "播放列表详情更新成功！",
         "expandContents": "展开播放列表内容",
+        "exportFirstPlaylist": "导出你的第一个播放列表：",
         "missingParameters": "缺少一些参数。",
         "missingTrackIds": "缺少歌曲ID。",
         "noPlaylistsCreated": "您还没有创建任何播放列表！",
@@ -236,6 +243,7 @@
         "playlistSaved": "播放列表保存成功！",
         "recover": "恢复",
         "savePlaylistChanges": "保存播放列表更改",
+        "searchSetlists": "搜索歌单",
         "yourExportedSetlists": "您的导出setlists"
     }
 }
