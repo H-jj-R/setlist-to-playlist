@@ -53,7 +53,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (req.query.redirect) {
             // If a redirect path is provided, redirect back to that path
-            res.redirect(307, req.query.redirect as string);
+            const target = req.query.redirect as string;
+            if (target.startsWith("/")) res.redirect(307, target); // Ensure only internal redirects
         } else {
             // If no redirect path is provided, respond with a success message
             res.status(200).json({ success: true });
