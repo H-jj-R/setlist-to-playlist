@@ -10,6 +10,7 @@ import ErrorMessage from "@components/Shared/ErrorMessage";
 import Layout from "@components/Shared/Layout";
 import { useAuth } from "@context/AuthContext";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,6 +20,7 @@ import { useTranslation } from "react-i18next";
  * @returns The rendered `/user-playlists` page.
  */
 export default function UserPlaylists() {
+    const router = useRouter(); // Router hook
     const { isAuthenticated } = useAuth(); // Authentication context
     const { resolvedTheme } = useTheme(); // Theme setting hook
     const { t: i18n } = useTranslation(); // Translation hook
@@ -107,9 +109,33 @@ export default function UserPlaylists() {
                             {i18n("userPlaylists:yourExportedSetlists")}
                         </h1>
                         {state.playlists.length === 0 ? (
-                            <h2 id="no-playlists-message" className="flex justify-center pt-5 text-xl font-bold">
-                                {i18n("userPlaylists:noPlaylistsCreated")}
-                            </h2>
+                            <>
+                                <h2 id="no-playlists-message" className="flex justify-center pt-5 text-xl font-bold">
+                                    {i18n("userPlaylists:noPlaylistsCreated")}
+                                </h2>
+                                <h3
+                                    id="no-playlists-message"
+                                    className="mt-18 flex justify-center pt-5 text-xl font-bold"
+                                >
+                                    {i18n("userPlaylists:exportFirstPlaylist")}
+                                </h3>
+                                <div className="mt-6 flex justify-center gap-4">
+                                    <button
+                                        id="go-to-setlist-search-btn"
+                                        className="min-w-[18rem] rounded-full bg-linear-to-r from-pink-600 to-orange-500 px-12 py-5 text-lg font-semibold text-white shadow-md transition hover:cursor-pointer hover:bg-gray-700 focus:outline-none"
+                                        onClick={(): Promise<boolean> => router.push("/setlist-search")}
+                                    >
+                                        {i18n("userPlaylists:searchSetlists")}
+                                    </button>
+                                    <button
+                                        id="go-to-ai-generate-setlist-btn"
+                                        className="min-w-[18rem] rounded-full bg-linear-to-r from-sky-500 to-purple-700 px-12 py-5 text-lg font-semibold text-white shadow-md transition hover:cursor-pointer hover:bg-gray-700 focus:outline-none"
+                                        onClick={(): Promise<boolean> => router.push("/ai-generate-setlist")}
+                                    >
+                                        {i18n("userPlaylists:aiGenerateSetlist")}
+                                    </button>
+                                </div>
+                            </>
                         ) : (
                             <ul id="playlists-list" className="space-y-4">
                                 {state.playlists.map((playlist: Record<string, any>, idx: number) => (

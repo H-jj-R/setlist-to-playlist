@@ -226,11 +226,13 @@
         "themeTitle": "Tema"
     },
     "userPlaylists": {
+        "aiGenerateSetlist": "Generar una lista de canciones con IA",
         "cancelDiscardChanges": "Cancelar y descartar cambios",
         "collapseContents": "Colapsar contenido de la lista",
         "createdPlaylists": "Listas de reproducción creadas",
         "detailsUpdated": "¡Detalles de la lista de reproducción actualizados con éxito!",
         "expandContents": "Expandir contenido de la lista",
+        "exportFirstPlaylist": "Exporta tu primera lista de reproducción:",
         "missingParameters": "Faltan algunos parámetros.",
         "missingTrackIds": "Faltan identificadores de pistas.",
         "noPlaylistsCreated": "¡No has creado ninguna lista de reproducción todavía!",
@@ -241,6 +243,7 @@
         "playlistSaved": "¡Lista de reproducción guardada con éxito!",
         "recover": "Recuperar",
         "savePlaylistChanges": "Guardar cambios de la lista",
+        "searchSetlists": "Buscar listas de canciones",
         "yourExportedSetlists": "Tus listas de canciones exportadas"
     }
 }
