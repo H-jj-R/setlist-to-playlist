@@ -17,6 +17,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { setlistId } = req.query;
 
     /**
+     * Regular expression to validate a Setlist.fm setlist ID.
+     */
+    const SETLIST_ID_REGEX: RegExp = /^[0-9a-fA-F]{8}$/;
+
+    // Validate the Setlist ID format
+    if (!setlistId || !SETLIST_ID_REGEX.test(setlistId as string)) {
+        return res.status(400).json({ error: "common:invalidParam" });
+    }
+
+    /**
      * Fetches a setlist from the Setlist.fm API, with retry logic for handling rate limits (429 errors).
      *
      * @param retries - The current retry attempt number.

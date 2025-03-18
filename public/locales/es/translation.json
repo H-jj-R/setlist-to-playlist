@@ -83,6 +83,7 @@
         "hide": "Ocultar",
         "image": "Imagen",
         "internalServerError": "¡Error interno del servidor!",
+        "invalidParam": "¡Parámetro no válido proporcionado!",
         "issue": "Problema",
         "loading": "Cargando",
         "methodNotAllowed": "Método no permitido.",

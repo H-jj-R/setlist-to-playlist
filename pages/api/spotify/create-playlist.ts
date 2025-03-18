@@ -22,6 +22,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) return res.status(401).json({ error: "common:spotifyAccessTokenError" });
 
+    /**
+     * Regular expression to validate Spotify user ID.
+     */
+    const USER_ID_REGEX = /^[0-9a-zA-Z_-]+$/;
+
+    // Validate userId format
+    if (!userId || !USER_ID_REGEX.test(userId as string)) {
+        return res.status(400).json({ error: "common:invalidParam" });
+    }
+
     try {
         const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
             body: JSON.stringify({

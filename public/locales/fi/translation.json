@@ -83,6 +83,7 @@
         "hide": "Piilota",
         "image": "kuva",
         "internalServerError": "Sisäinen palvelinvirhe!",
+        "invalidParam": "Virheellinen parametri annettu!",
         "issue": "Ongelma",
         "loading": "Ladataan",
         "methodNotAllowed": "Metodi ei ole sallittu.",
