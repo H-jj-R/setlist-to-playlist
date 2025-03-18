@@ -83,6 +83,7 @@
         "hide": "छिपाएं",
         "image": "छवि",
         "internalServerError": "आंतरिक सर्वर त्रुटि!",
+        "invalidParam": "अमान्य पैरामीटर प्रदान किया गया!",
         "issue": "समस्या",
         "loading": "लोड हो रहा है",
         "methodNotAllowed": "विधि की अनुमति नहीं है।",

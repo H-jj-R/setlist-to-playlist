@@ -83,6 +83,7 @@
         "hide": "إخفاء",
         "image": "صورة",
         "internalServerError": "خطأ في الخادم الداخلي!",
+        "invalidParam": "تم توفير مُعلمة غير صالحة!",
         "issue": "مشكلة",
         "loading": "جارٍ التحميل",
         "methodNotAllowed": "الطريقة غير مسموح بها.",

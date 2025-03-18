@@ -83,6 +83,7 @@
         "hide": "Verstecken",
         "image": "Bild",
         "internalServerError": "Interner Serverfehler!",
+        "invalidParam": "Ungültiger Parameter angegeben!",
         "issue": "Problem",
         "loading": "Lädt",
         "methodNotAllowed": "Methode nicht erlaubt.",

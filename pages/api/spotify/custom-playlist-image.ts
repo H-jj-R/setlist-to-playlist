@@ -22,6 +22,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If no access token is found in the cookies, respond with an error
     if (!encryptedAccessToken) return res.status(401).json({ error: "common:spotifyAccessTokenError" });
 
+    /**
+     * Regular expression to validate a Spotify playlist ID.
+     */
+    const PLAYLIST_ID_REGEX: RegExp = /^[0-9a-zA-Z]{22}$/;
+
+    // Validate playlistId format
+    if (!playlistId || !PLAYLIST_ID_REGEX.test(playlistId as string)) {
+        return res.status(400).json({ error: "common:invalidParam" });
+    }
+
     try {
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
             body: image.replace(/^data:image\/\w+;base64,/, ""),
