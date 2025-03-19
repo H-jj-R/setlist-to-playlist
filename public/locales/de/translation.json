@@ -88,6 +88,7 @@
         "loading": "Lädt",
         "methodNotAllowed": "Methode nicht erlaubt.",
         "needToLogIn": "Du musst dich einloggen, um diese Funktion zu nutzen!",
+        "queryNotAllowed": "Entschuldigung, diese Abfrage ist nicht erlaubt.",
         "save": "Speichern",
         "search": "Suchen",
         "setlist": "Setlist",

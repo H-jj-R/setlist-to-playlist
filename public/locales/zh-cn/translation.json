@@ -88,6 +88,7 @@
         "loading": "加载中",
         "methodNotAllowed": "方法不被允许。",
         "needToLogIn": "你需要登录才能访问此功能！",
+        "queryNotAllowed": "很抱歉，不允许此查询。",
         "save": "保存",
         "search": "搜索",
         "setlist": "演出歌单",

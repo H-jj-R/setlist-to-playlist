@@ -88,6 +88,7 @@
         "loading": "Cargando",
         "methodNotAllowed": "Método no permitido.",
         "needToLogIn": "¡Necesitas iniciar sesión para acceder a esta función!",
+        "queryNotAllowed": "Lo siento, esta consulta no está permitida.",
         "save": "Guardar",
         "search": "Buscar",
         "setlist": "Lista de canciones",

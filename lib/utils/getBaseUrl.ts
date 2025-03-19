@@ -14,6 +14,7 @@ import { NextApiRequest } from "next";
  */
 export default function getBaseUrl(req: NextApiRequest): string {
     const protocol = req.headers["x-forwarded-proto"] || "http"; // Determine the protocol being used
+    if (!["http", "https"].includes(protocol as string)) return; // Only allow http and https
     const host = req.headers.host!; // Get the host from req headers
     return `${protocol}://${host}`; // Construct and return the base URL
 }
