@@ -43,7 +43,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
             />
             <div
                 id="message-dialog-box"
-                className={`relative w-1/3 max-w-md rounded-lg bg-white p-6 text-center shadow-lg dark:bg-gray-800 ${
+                className={`relative w-3/4 max-w-md rounded-lg bg-white p-6 text-center shadow-lg sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 dark:bg-gray-800 ${
                     type === MessageDialogState.Success
                         ? "border-green-500"
                         : type === MessageDialogState.Error

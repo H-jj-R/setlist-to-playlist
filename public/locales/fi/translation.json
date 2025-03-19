@@ -88,6 +88,7 @@
         "loading": "Ladataan",
         "methodNotAllowed": "Metodi ei ole sallittu.",
         "needToLogIn": "Sinun täytyy kirjautua sisään päästäksesi tähän ominaisuuteen!",
+        "queryNotAllowed": "Pahoittelut, tämä kysely ei ole sallittu.",
         "save": "Tallenna",
         "search": "Hae",
         "setlist": "Setlist",

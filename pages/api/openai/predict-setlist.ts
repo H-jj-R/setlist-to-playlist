@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const songs = setlist.sets.set.flatMap((set: Record<string, any>) =>
                     set.song.map((song: Record<string, any>): string => {
                         // Check if the song has a cover and append it to the name
-                        return `${song.name}${song.cover ? ` (${song.cover.name} cover)` : ""}${
+                        return `${song.name}${song.cover ? ` (This song is a cover, originally performed by ${song.cover.name})` : ""}${
                             song.tape ? " (Played on tape)" : ""
                         }`;
                     })
@@ -109,8 +109,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             3. **Setlist 3** should introduce significant variation, such as rare songs or surprises, but should still be realistically possible.
                     **Formatting & Constraints:**
                         - Do **not** repeat identical setlists.
-                        - If a song is a cover, include the original artist's name in the 'artist' field, **not** in the song name, and **not** the name of the artist you're predicting setlists for.
-                        - If a song is played on tape, set 'tape' to **true**; otherwise, set it to **false**. Do **not** include this in the song name.
+                        - If a song is a cover:
+                            - Set the name of the artist who **originally performed** the song in the **'artist'** field, rather than the artist for the setlist you're predicting.
+                            - Keep the song title clean (do **not** include the original artist's name in the song title).
+                        - If a song is played on tape:
+                            - Set 'tape' to **true**; otherwise, set it to **false**. 
+                            - Do **not** include this in the song name.
                     **Final Requirement:** You **must** return a structured JSON response that follows the provided schema exactly. If you are unsure, ensure that three unique setlists are always included.`,
                     role: "system"
                 },
@@ -121,7 +125,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ],
             model: "gpt-4o-mini",
             response_format: zodResponseFormat(PredictedSetlistSchema, "predictedSetlists"),
-            temperature: 0.6,
+            temperature: 0.5,
             top_p: 1
         });
 

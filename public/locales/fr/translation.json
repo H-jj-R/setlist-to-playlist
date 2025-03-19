@@ -88,6 +88,7 @@
         "loading": "Chargement",
         "methodNotAllowed": "Méthode non autorisée.",
         "needToLogIn": "Vous devez vous connecter pour accéder à cette fonctionnalité !",
+        "queryNotAllowed": "Désolé, cette requête n'est pas autorisée.",
         "save": "Enregistrer",
         "search": "Rechercher",
         "setlist": "Setlist",

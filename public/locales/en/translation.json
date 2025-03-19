@@ -88,6 +88,7 @@
         "loading": "Loading",
         "methodNotAllowed": "Method not allowed.",
         "needToLogIn": "You need to log in to access this feature!",
+        "queryNotAllowed": "Sorry, this query is not allowed.",
         "save": "Save",
         "search": "Search",
         "setlist": "Setlist",

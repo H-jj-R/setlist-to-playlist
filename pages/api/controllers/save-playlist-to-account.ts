@@ -23,6 +23,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const baseUrl = getBaseUrl(req); // Get base URL for API requests
 
+        /**
+         * Regular expression to validate a Spotify playlist ID.
+         */
+        const PLAYLIST_ID_REGEX: RegExp = /^[0-9a-zA-Z]{22}$/;
+
+        // Validate playlistId format
+        if (!playlistId || !PLAYLIST_ID_REGEX.test(playlistId as string)) {
+            return res.status(400).json({ error: "common:invalidParam" });
+        }
+
         // Step 1. Fetch playlist details from Spotify API
         const playlistDetailsResponse = await fetch(`${baseUrl}/api/spotify/get-playlist?playlistId=${playlistId}`, {
             headers: { cookie: req.headers.cookie || "" } // Forward client cookies for access token
