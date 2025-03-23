@@ -68,11 +68,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
     };
 
     return (
-        <div id="search-container" className="mt-4 flex w-full items-center justify-center px-2 sm:px-4">
+        <div id="search-container" className="mt-4 flex w-full items-center justify-center px-2 sm:px-4" role="search">
             <div id="search-input-wrapper" className="flex w-full max-w-xl sm:w-[70vw]">
                 <input
                     id="search-input"
                     className="h-12 flex-1 rounded-l-lg border border-gray-300 bg-white px-4 py-2 text-lg dark:bg-black"
+                    aria-label={i18n("common:search")}
                     autoComplete="off"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setQuery(e.target.value)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -81,6 +82,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
                     placeholder={`${
                         !isPredicted ? i18n("setlistSearch:searchForSetlist") : i18n("generateSetlist:searchForArtist")
                     }...`}
+                    role="searchbox"
                     type="text"
                     value={query}
                 />
@@ -89,10 +91,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
                     className={`relative flex h-12 w-12 items-center justify-center border-y border-gray-300 bg-gray-200 text-gray-700 transition hover:cursor-pointer hover:bg-gray-300 ${
                         locked ? "cursor-not-allowed opacity-50" : ""
                     }`}
+                    aria-label={
+                        isListening ? i18n("setlistSearch:stopListening") : i18n("setlistSearch:startVoiceSearch")
+                    }
                     disabled={locked}
                     onClick={handleVoiceSearch}
+                    role="button"
                 >
                     <div
+                        id="mic-btn-listening-animation"
                         className={`pointer-events-none absolute inset-0 rounded border-4 border-red-500 shadow-inner shadow-red-500/50 transition-opacity duration-300 ${
                             isListening ? "animate-pulse opacity-100" : "opacity-0"
                         }`}
@@ -114,6 +121,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
                     }`}
                     disabled={locked}
                     onClick={(): void => onSearch(query)}
+                    role="button"
                 >
                     {i18n("common:search")}
                 </button>

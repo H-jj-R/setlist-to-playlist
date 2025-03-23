@@ -125,6 +125,7 @@ export default function About() {
                                         submitted: false
                                     }));
                                 }}
+                                role="button"
                             >
                                 {i18n("about:submitAnother")}
                             </button>
@@ -132,11 +133,16 @@ export default function About() {
                     ) : (
                         <form id="support-feedback-form" className="mt-4" onSubmit={handleSubmit}>
                             <div id="email-field" className="mb-4">
-                                <label id="email-label" className="block text-gray-700 dark:text-gray-300">
+                                <label
+                                    id="email-label"
+                                    className="block text-gray-700 dark:text-gray-300"
+                                    htmlFor="email-input"
+                                >
                                     {i18n("common:email")}
                                     <input
                                         id="email-input"
                                         className="mt-1 w-full rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
+                                        aria-label={i18n("common:email")}
                                         autoComplete="email"
                                         maxLength={320}
                                         name="email"
@@ -146,6 +152,7 @@ export default function About() {
                                                 formData: { ...state.formData, [e.target.name]: e.target.value }
                                             }));
                                         }}
+                                        placeholder={i18n("common:email")}
                                         required
                                         type="email"
                                         value={state.formData.email}
@@ -153,11 +160,16 @@ export default function About() {
                                 </label>
                             </div>
                             <div id="message-field" className="relative mb-4">
-                                <label id="message-label" className="block text-gray-700 dark:text-gray-300">
+                                <label
+                                    id="message-label"
+                                    className="block text-gray-700 dark:text-gray-300"
+                                    htmlFor="message-input"
+                                >
                                     {i18n("about:message")}
                                     <textarea
                                         id="message-input"
                                         className="mt-1 w-full resize-none overflow-hidden rounded-sm border border-gray-900 bg-gray-100 p-2 dark:border-gray-300 dark:bg-gray-800 dark:text-white"
+                                        aria-label={i18n("about:message")}
                                         maxLength={MAX_MESSAGE_LENGTH}
                                         name="message"
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -187,6 +199,7 @@ export default function About() {
                                 <button
                                     id="submit-btn"
                                     className="rounded-md bg-blue-600 px-8 py-3 text-white transition hover:cursor-pointer hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                    role="button"
                                     type="submit"
                                 >
                                     {i18n("common:submit")}

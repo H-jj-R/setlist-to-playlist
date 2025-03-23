@@ -65,6 +65,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         <input
                             id="username-input"
                             className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                            aria-describedby={state.usernameError ? "username-error" : undefined}
+                            aria-label={i18n("account:username")}
                             autoComplete="username"
                             maxLength={20}
                             name="username"
@@ -80,7 +82,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     </div>
                 )}
                 {state.usernameError && (
-                    <div id="username-error" className="text-sm text-red-500">
+                    <div id="username-error" className="text-sm text-red-500" aria-live="assertive">
                         {state.usernameError}
                     </div>
                 )}
@@ -91,6 +93,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         <input
                             id="email-input"
                             className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                            aria-label={i18n("common:email")}
                             autoComplete="email"
                             maxLength={320}
                             name="email"
@@ -110,6 +113,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         <input
                             id="password-input"
                             className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                            aria-describedby={state.passwordError ? "password-error" : undefined}
+                            aria-label={i18n("account:password")}
                             maxLength={32}
                             name="password"
                             placeholder={i18n("account:password")}
@@ -127,6 +132,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                             }}
+                            role="button"
                             type="button"
                         >
                             {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
@@ -150,6 +156,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             <input
                                 id="new-password-input"
                                 className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                                aria-label={i18n("account:newPassword")}
                                 maxLength={32}
                                 name="password"
                                 placeholder={i18n("account:newPassword")}
@@ -167,6 +174,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                                 }}
+                                role="button"
                                 type="button"
                             >
                                 {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
@@ -175,7 +183,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     </>
                 )}
                 {state.passwordError && (
-                    <div id="password-error" className="text-sm text-red-500">
+                    <div id="password-error" className="text-sm text-red-500" aria-live="assertive">
                         {state.passwordError}
                     </div>
                 )}
@@ -183,6 +191,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                     <div id="recaptcha-container" className="flex justify-center">
                         <ReCAPTCHA
                             id="recaptcha"
+                            aria-describedby="recaptcha-description"
                             onChange={(token: string): void => {
                                 setState((prev) => ({ ...prev, recaptchaToken: token }));
                             }}
@@ -192,6 +201,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             ref={recaptchaRef}
                             sitekey={RECAPTCHA_SITE_KEY}
                         />
+                        <p id="recaptcha-description" className="sr-only">
+                            {i18n("account:recaptchaDescription")}
+                        </p>
                     </div>
                 )}
                 {state.dialogState === LoginDialogState.Login && (
@@ -202,6 +214,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, dialogState: LoginDialogState.ForgotPassword }));
                             }}
+                            role="button"
                         >
                             {i18n("account:forgotPassword")}
                         </p>
@@ -210,6 +223,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                 <button
                     id="submit-btn"
                     className="rounded-lg bg-linear-to-br from-purple-600 to-blue-600 px-4 py-3 text-lg text-white transition duration-300 hover:cursor-pointer hover:from-purple-600 hover:to-blue-700 focus:outline-hidden"
+                    role="button"
                     type="submit"
                 >
                     {state.dialogState === LoginDialogState.Login
@@ -228,6 +242,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, dialogState: LoginDialogState.Login }));
                         }}
+                        role="button"
                     >
                         {i18n("account:backToLogin")}
                     </p>
@@ -245,6 +260,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                                         : LoginDialogState.Login
                             }));
                         }}
+                        role="button"
                     >
                         {state.dialogState === LoginDialogState.SignUp
                             ? i18n("account:alreadyHaveAccount")

@@ -68,6 +68,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onCancel, onConfi
                         className="rounded-sm bg-gray-300 px-4 py-2 text-gray-800 transition duration-300 hover:cursor-pointer hover:bg-gray-400"
                         aria-label={i18n("common:cancel")}
                         onClick={onCancel}
+                        role="button"
                     >
                         {i18n("common:cancel")}
                     </button>

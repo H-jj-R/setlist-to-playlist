@@ -172,6 +172,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                             setState((prev) => ({ ...prev, isVisible: false }));
                             setTimeout(onClose, 300);
                         }}
+                        role="button"
                     >
                         <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
@@ -212,6 +213,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                                 setState((prev) => ({ ...prev, isVisible: false }));
                                 setTimeout(handleLogout, 300);
                             }}
+                            role="button"
                         >
                             <FontAwesomeIcon
                                 id="fa-right-from-bracket-icon"
@@ -233,6 +235,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                             setTimeout(onClose, 300);
                             router.push("/user-playlists");
                         }}
+                        role="button"
                     >
                         {i18n("userPlaylists:createdPlaylists")}
                     </button>
@@ -248,6 +251,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, changePasswordOpen: true }));
                         }}
+                        role="button"
                     >
                         <FontAwesomeIcon id="fa-key-icon" className="text-l mr-2 text-gray-200" icon={faKey} />
                         {i18n("account:changePassword")}
@@ -264,6 +268,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ handleLogout, onClose }
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showConfirmation: true }));
                         }}
+                        role="button"
                     >
                         <FontAwesomeIcon id="fa-trash-icon" className="text-l mr-2 text-gray-200" icon={faTrash} />
                         {i18n("account:deleteAccount")}

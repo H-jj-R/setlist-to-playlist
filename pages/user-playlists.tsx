@@ -124,6 +124,7 @@ export default function UserPlaylists() {
                                         id="go-to-setlist-search-btn"
                                         className="min-w-[18rem] rounded-full bg-linear-to-r from-pink-600 to-orange-500 px-12 py-5 text-lg font-semibold text-white shadow-md transition hover:cursor-pointer hover:bg-gray-700 focus:outline-none"
                                         onClick={(): Promise<boolean> => router.push("/setlist-search")}
+                                        role="button"
                                     >
                                         {i18n("userPlaylists:searchSetlists")}
                                     </button>
@@ -131,6 +132,7 @@ export default function UserPlaylists() {
                                         id="go-to-ai-generate-setlist-btn"
                                         className="min-w-[18rem] rounded-full bg-linear-to-r from-sky-500 to-purple-700 px-12 py-5 text-lg font-semibold text-white shadow-md transition hover:cursor-pointer hover:bg-gray-700 focus:outline-none"
                                         onClick={(): Promise<boolean> => router.push("/ai-generate-setlist")}
+                                        role="button"
                                     >
                                         {i18n("userPlaylists:aiGenerateSetlist")}
                                     </button>

@@ -38,7 +38,12 @@ const HeaderBar: React.FC<{}> = () => {
                 className="flex items-center justify-between overflow-hidden px-4 py-2 whitespace-nowrap"
             >
                 <div id="logo-container" className="space-x-2 text-lg font-bold">
-                    <Link id="site-logo-link" className="flex items-center transition hover:text-gray-300" href="/">
+                    <Link
+                        id="site-logo-link"
+                        className="flex items-center transition hover:text-gray-300"
+                        aria-label={i18n("common:homePage")}
+                        href="/"
+                    >
                         <Image
                             id="site-logo"
                             className="h-10 w-auto"
@@ -58,9 +63,12 @@ const HeaderBar: React.FC<{}> = () => {
                             <button
                                 id="account-btn"
                                 className="text rounded-sm p-2 transition hover:cursor-pointer"
+                                aria-expanded={state.showAccountSidebar ? "true" : "false"}
+                                aria-label={i18n("account:accountSettings")}
                                 onClick={(): void => {
                                     setState((prev) => ({ ...prev, showAccountSidebar: true }));
                                 }}
+                                role="button"
                             >
                                 <FontAwesomeIcon
                                     id="fa-user-circle-icon"
@@ -73,9 +81,11 @@ const HeaderBar: React.FC<{}> = () => {
                         <button
                             id="login-btn"
                             className="rounded-full bg-linear-to-br from-green-500 to-green-600 px-4 py-2 text-white transition hover:cursor-pointer hover:from-green-600 hover:to-green-700"
+                            aria-label={i18n("account:loginSignUp")}
                             onClick={(): void => {
                                 setState((prev) => ({ ...prev, showLoginDialog: true }));
                             }}
+                            role="button"
                         >
                             {i18n("account:loginSignUp")}
                         </button>
@@ -83,9 +93,12 @@ const HeaderBar: React.FC<{}> = () => {
                     <button
                         id="settings-btn"
                         className="text rounded-sm pr-2 transition hover:cursor-pointer sm:pl-4"
+                        aria-expanded={state.showSettings ? "true" : "false"}
+                        aria-label={i18n("settings:settingsTitle")}
                         onClick={(): void => {
                             setState((prev) => ({ ...prev, showSettings: true }));
                         }}
+                        role="button"
                     >
                         <FontAwesomeIcon id="fa-cog-icon" className="text-xl text-gray-200" icon={faCog} />
                     </button>

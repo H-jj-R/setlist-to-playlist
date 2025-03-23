@@ -52,6 +52,7 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
                             id="back-btn"
                             className="min-h-[44px] w-full rounded-sm bg-red-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-red-600 focus:ring-3 focus:ring-red-300 sm:w-auto"
                             onClick={onClose}
+                            role="button"
                         >
                             {i18n("setlistSearch:backToList")}
                         </button>
@@ -62,6 +63,7 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
                         id="export-spotify-btn"
                         className="min-h-[44px] w-full rounded-sm bg-green-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-green-600 focus:ring-3 focus:ring-green-300 sm:w-auto"
                         onClick={onExport}
+                        role="button"
                     >
                         {i18n("common:exportToSpotify")}
                     </button>

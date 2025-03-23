@@ -62,6 +62,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                             className="absolute top-6 left-4 text-gray-500 transition hover:cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                             aria-label={i18n("common:close")}
                             onClick={handleClose}
+                            role="button"
                         >
                             <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                         </button>
@@ -76,6 +77,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                 <input
                                     id="password-input"
                                     className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                                    aria-label={i18n("account:currentPassword")}
                                     maxLength={32}
                                     name="password"
                                     placeholder={i18n("account:currentPassword")}
@@ -93,6 +95,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                     onClick={(): void => {
                                         setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
                                     }}
+                                    role="button"
                                     type="button"
                                 >
                                     {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
@@ -102,6 +105,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                 <input
                                     id="new-password-input"
                                     className="w-full rounded-lg border border-gray-900 bg-white px-4 py-3 pl-10 text-lg text-black transition duration-300 focus:border-blue-500 focus:ring-3 focus:ring-blue-200 focus:outline-hidden dark:border-gray-300 dark:bg-black dark:text-white"
+                                    aria-label={i18n("account:newPassword")}
                                     maxLength={32}
                                     name="newPassword"
                                     placeholder={i18n("account:newPassword")}
@@ -122,6 +126,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                             newPasswordVisible: !state.newPasswordVisible
                                         }));
                                     }}
+                                    role="button"
                                     type="button"
                                 >
                                     {state.newPasswordVisible ? i18n("common:hide") : i18n("common:show")}
@@ -135,6 +140,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                             <button
                                 id="submit-btn"
                                 className="rounded-lg bg-linear-to-br from-purple-600 to-blue-600 px-4 py-3 text-lg text-white transition duration-300 hover:cursor-pointer hover:from-purple-600 hover:to-blue-700 focus:outline-hidden"
+                                role="button"
                                 type="submit"
                             >
                                 {i18n("account:changePassword")}

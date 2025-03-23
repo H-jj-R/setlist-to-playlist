@@ -87,9 +87,13 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                         *
                                     </span>
                                 </label>
+                                <label id="sr-playlist-name-input" className="sr-only" htmlFor="playlist-name-input">
+                                    {i18n("exportSetlist:enterPlaylistName")}
+                                </label>
                                 <input
                                     id="playlist-name-input"
                                     className="mt-1 w-full rounded-lg border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
+                                    aria-labelledby="sr-playlist-name-input"
                                     autoComplete="off"
                                     maxLength={100}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -109,9 +113,13 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                 >
                                     {i18n("exportSetlist:playlistDescription")}
                                 </label>
+                                <label id="sr-playlist-desc-input" className="sr-only" htmlFor="playlist-desc-input">
+                                    {i18n("exportSetlist:enterPlaylistDescription")}
+                                </label>
                                 <textarea
                                     id="playlist-description-input"
                                     className="mt-1 min-h-24 w-full resize-none overflow-auto rounded-lg border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
+                                    aria-labelledby="sr-playlist-desc-input"
                                     autoComplete="off"
                                     maxLength={300}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -142,6 +150,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                                 onClick={(): void => {
                                                     setState((prev) => ({ ...prev, image: null, imagePreview: null }));
                                                 }}
+                                                role="button"
                                                 type="button"
                                             >
                                                 {i18n("exportSetlist:removeImage")}
@@ -150,12 +159,19 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                     ) : (
                                         <div
                                             id="dropzone-container"
+                                            aria-describedby="dropzone-instructions"
+                                            aria-labelledby="dropzone-message dropzone-file-types"
+                                            role="button"
                                             {...getRootProps({
                                                 className:
                                                     "border-dashed border-2 border-gray-300 p-4 text-center cursor-pointer h-full flex flex-col justify-center overflow-hidden"
                                             })}
                                         >
-                                            <input id="dropzone" {...getInputProps()} />
+                                            <input
+                                                id="dropzone"
+                                                aria-labelledby="dropzone-message dropzone-file-types"
+                                                {...getInputProps()}
+                                            />
                                             <p id="dropzone-message" className="overflow-hidden text-sm">
                                                 {i18n("exportSetlist:dropzoneMessage")}
                                             </p>
@@ -174,6 +190,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                         onClose();
                                         resetState();
                                     }}
+                                    role="button"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
@@ -181,6 +198,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                     id="export-btn"
                                     className="rounded-sm bg-green-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                                     onClick={handleExport}
+                                    role="button"
                                 >
                                     {i18n("common:export")}
                                 </button>
