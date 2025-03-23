@@ -63,6 +63,7 @@ const LoginDialog: React.FC<LoginDialogProps> = ({ onClose, onLoginSuccess }) =>
                             className="absolute top-6 left-4 text-gray-500 transition hover:cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                             aria-label={i18n("common:close")}
                             onClick={handleClose}
+                            role="button"
                         >
                             <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                         </button>

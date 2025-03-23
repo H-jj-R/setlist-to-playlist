@@ -96,6 +96,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                 className={`absolute inset-0 bg-black transition-opacity duration-300 ${
                     isVisible ? "opacity-70" : "opacity-0"
                 }`}
+                aria-hidden={isVisible ? "false" : "true"}
                 onClick={(): void => {
                     // Trigger the slide-out and undimming animation before unmounting
                     setIsVisible(false);
@@ -107,6 +108,8 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                 className={`h-full w-3/4 transform p-4 shadow-lg transition-transform duration-300 ease-in-out sm:w-2/5 md:w-1/3 lg:w-1/3 ${
                     isVisible ? "translate-x-0" : "translate-x-full"
                 } ${resolvedTheme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`}
+                aria-live="assertive"
+                tabIndex={-1}
             >
                 <div id="settings-header" className="mr-5 mb-6 flex items-center justify-between">
                     <h2 id="settings-title" className="text-xl font-bold">
@@ -115,20 +118,22 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                     <button
                         id="close-settings-btn"
                         className="text-xl hover:cursor-pointer"
+                        aria-label={i18n("settings:closeSettings")}
                         onClick={(): void => {
                             // Trigger the slide-out and undimming animation before unmounting
                             setIsVisible(false);
                             setTimeout(onClose, 300);
                         }}
+                        role="button"
                     >
                         <FontAwesomeIcon id="fa-chevron-right-icon" icon={faChevronRight} size="lg" />
                     </button>
                 </div>
-                <div id="theme-setting" className="mb-4">
+                <div id="theme-setting" className="mb-4" aria-live="polite">
                     <h3 id="theme-title" className="text-lg font-medium">
                         {i18n("settings:themeTitle")}
                     </h3>
-                    <label id="theme-label" className="flex items-center space-x-2 p-2">
+                    <label id="theme-label" className="flex items-center space-x-2 p-2" htmlFor="theme-select">
                         <select
                             id="theme-select"
                             className={`w-full cursor-pointer rounded-md border px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-hidden ${
@@ -136,7 +141,8 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                                     ? "border-gray-600 bg-gray-700 text-gray-200"
                                     : "border-gray-400 bg-white text-gray-800"
                             }`}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                            aria-labelledby="theme-title theme-label"
+                            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                                 setTheme(event.target.value);
                             }}
                             value={theme}
@@ -153,21 +159,26 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                         </select>
                     </label>
                 </div>
-                <div id="setlists-settings" className="mb-4">
+                <div id="setlists-settings" className="mb-4" aria-live="polite">
                     <h3 id="setlists-title" className="text-lg font-medium">
                         {i18n("settings:setlistsTitle")}
                     </h3>
-                    <label id="hide-empty-setlists" className="flex items-center space-x-2 p-2">
+                    <label
+                        id="hide-empty-setlists"
+                        className="flex items-center space-x-2 p-2"
+                        htmlFor="hide-empty-setlists-checkbox"
+                    >
                         <input
                             id="hide-empty-setlists-checkbox"
                             className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
+                            aria-labelledby="hide-empty-setlists-span"
                             checked={settings.hideEmptySetlists}
                             onChange={handleSettingChange(SettingsKeys.HideEmptySetlists)}
                             type="checkbox"
                         />
                         <span id="hide-empty-setlists-span">{i18n("settings:hideEmptySetlists")}</span>
                     </label>
-                    <label id="filter-by-country" className="flex items-center space-x-2 p-2">
+                    <label id="filter-by-country" className="flex items-center space-x-2 p-2" htmlFor="country-select">
                         <select
                             id="country-select"
                             className={`w-1/2 max-w-52 cursor-pointer rounded-md border px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-hidden ${
@@ -175,6 +186,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                                     ? "border-gray-600 bg-gray-700 text-gray-200"
                                     : "border-gray-400 bg-white text-gray-800"
                             }`}
+                            aria-labelledby="filter-by-country-span"
                             onChange={handleSettingChange(SettingsKeys.CountryFilter)}
                             value={settings.countryFilter}
                         >
@@ -193,44 +205,64 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
                         <span id="filter-by-country-span">{i18n("settings:filterByCountry")}</span>
                     </label>
                 </div>
-                <div id="export-settings" className="mb-4">
+                <div id="export-settings" className="mb-4" aria-live="polite">
                     <h3 id="export-title" className="text-lg font-medium">
                         {i18n("common:export")}
                     </h3>
-                    <label id="hide-songs-not-found" className="flex items-center space-x-2 p-2">
+                    <label
+                        id="hide-songs-not-found"
+                        className="flex items-center space-x-2 p-2"
+                        htmlFor="hide-songs-not-found-checkbox"
+                    >
                         <input
                             id="hide-songs-not-found-checkbox"
                             className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
+                            aria-labelledby="hide-songs-not-found-span"
                             checked={settings.hideSongsNotFound}
                             onChange={handleSettingChange(SettingsKeys.HideSongsNotFound)}
                             type="checkbox"
                         />
                         <span id="hide-songs-not-found-span">{i18n("settings:hideSongsNotFound")}</span>
                     </label>
-                    <label id="exclude-covers" className="flex items-center space-x-2 p-2">
+                    <label
+                        id="exclude-covers"
+                        className="flex items-center space-x-2 p-2"
+                        htmlFor="exclude-covers-checkbox"
+                    >
                         <input
                             id="exclude-covers-checkbox"
                             className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
+                            aria-labelledby="exclude-covers-span"
                             checked={settings.excludeCovers}
                             onChange={handleSettingChange(SettingsKeys.ExcludeCovers)}
                             type="checkbox"
                         />
                         <span id="exclude-covers-span">{i18n("settings:excludeCovers")}</span>
                     </label>
-                    <label id="exclude-duplicate-songs" className="flex items-center space-x-2 p-2">
+                    <label
+                        id="exclude-duplicate-songs"
+                        className="flex items-center space-x-2 p-2"
+                        htmlFor="exclude-duplicate-songs-checkbox"
+                    >
                         <input
                             id="exclude-duplicate-songs-checkbox"
                             className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
+                            aria-labelledby="exclude-duplicate-songs-span"
                             checked={settings.excludeDuplicateSongs}
                             onChange={handleSettingChange(SettingsKeys.ExcludeDuplicateSongs)}
                             type="checkbox"
                         />
                         <span id="exclude-duplicate-songs-span">{i18n("settings:excludeDuplicateSongs")}</span>
                     </label>
-                    <label id="exclude-played-on-tape" className="flex items-center space-x-2 p-2">
+                    <label
+                        id="exclude-played-on-tape"
+                        className="flex items-center space-x-2 p-2"
+                        htmlFor="exclude-played-on-tape-checkbox"
+                    >
                         <input
                             id="exclude-played-on-tape-checkbox"
                             className="h-7 w-7 shrink-0 cursor-pointer bg-white dark:bg-black"
+                            aria-labelledby="exclude-played-on-tape-span"
                             checked={settings.excludePlayedOnTape}
                             onChange={handleSettingChange(SettingsKeys.ExcludePlayedOnTape)}
                             type="checkbox"

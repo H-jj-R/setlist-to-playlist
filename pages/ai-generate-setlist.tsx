@@ -129,6 +129,7 @@ export default function AIGenerateSetlist() {
                                                 id="combine-export-btn"
                                                 className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
                                                 onClick={handleCombineSetlists}
+                                                role="button"
                                             >
                                                 {i18n("generateSetlist:combineExportAll")}
                                             </button>

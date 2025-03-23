@@ -28,6 +28,7 @@ const GenerateSetlistSection: React.FC<{}> = () => {
                     id="go-to-ai-generate-setlist-btn"
                     className="animate-pulse-border rounded-full bg-white px-12 py-5 text-lg font-semibold text-purple-600 shadow-lg transition hover:cursor-pointer hover:bg-gray-200 focus:outline-hidden lg:mb-0"
                     onClick={(): Promise<boolean> => router.push("/ai-generate-setlist")}
+                    role="button"
                 >
                     {i18n("landingPage:goToAIGenerateSetlist")}
                 </button>

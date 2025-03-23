@@ -83,6 +83,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                                 id="combine-export-btn"
                                 className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
                                 onClick={(): void => handleCombineSetlists(state.setlists)}
+                                role="button"
                             >
                                 {i18n("setlistSearch:combineExportAllSetlists")}
                             </button>
@@ -114,6 +115,7 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                                 className="mt-4 rounded-sm bg-blue-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-blue-600"
                                 disabled={state.isLoading}
                                 onClick={loadMoreSetlists}
+                                role="button"
                             >
                                 {state.isLoading ? `${i18n("common:loading")}...` : i18n("setlistSearch:loadMore")}
                             </button>

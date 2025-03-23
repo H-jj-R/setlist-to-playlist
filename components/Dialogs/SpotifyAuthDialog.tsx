@@ -45,6 +45,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
                     className="absolute top-3 left-2 text-gray-500 transition hover:cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     aria-label={i18n("common:close")}
                     onClick={onClose}
+                    role="button"
                 >
                     <FontAwesomeIcon id="fa-times-icon" className="text-2xl" icon={faTimes} />
                 </button>
@@ -68,6 +69,7 @@ const SpotifyAuthDialog: React.FC<SpotifyAuthDialogProps> = ({ onClose }) => {
                                 }).toString()}`
                             );
                         }}
+                        role="button"
                     >
                         {i18n("exportSetlist:authoriseWithSpotify")}
                     </button>

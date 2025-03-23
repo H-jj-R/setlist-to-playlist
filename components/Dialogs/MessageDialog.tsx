@@ -85,6 +85,7 @@ const MessageDialog: React.FC<MessageDialogProps> = ({ message, onClose, type })
                         id="close-btn"
                         className="mt-4 rounded-sm bg-blue-500 px-4 py-2 text-white transition hover:cursor-pointer hover:bg-blue-600"
                         onClick={onClose}
+                        role="button"
                     >
                         {i18n("common:close")}
                     </button>

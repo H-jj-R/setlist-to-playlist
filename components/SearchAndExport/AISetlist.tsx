@@ -54,6 +54,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ isThinView, onExport, predictionN
                             id="export-spotify-btn"
                             className="mr-auto ml-auto w-full rounded-sm bg-green-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-green-600 focus:ring-3 focus:ring-green-300"
                             onClick={(): void => onExport(setlistDataArray[0])}
+                            role="button"
                         >
                             {i18n("common:exportToSpotify")}
                         </button>
@@ -75,6 +76,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ isThinView, onExport, predictionN
                                 id={`export-spotify-btn-${idx}`}
                                 className="mr-auto mb-4 ml-auto w-full rounded-sm bg-green-500 px-4 py-2 font-semibold text-white transition hover:cursor-pointer hover:bg-green-600 focus:ring-3 focus:ring-green-300"
                                 onClick={(): void => onExport(setlistData)}
+                                role="button"
                             >
                                 {i18n("common:exportToSpotify")}
                             </button>

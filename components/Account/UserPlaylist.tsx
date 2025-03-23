@@ -69,6 +69,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                     onClick={(): void => {
                                         setState((prev) => ({ ...prev, editing: true }));
                                     }}
+                                    role="button"
                                 >
                                     <FontAwesomeIcon id="fa-edit-icon" className="text-white" icon={faEdit} size="lg" />
                                 </button>
@@ -77,6 +78,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                         id="recovery-btn"
                                         className="w-32 rounded-sm bg-green-500 px-6 py-2 text-white transition hover:cursor-pointer hover:bg-green-600"
                                         onClick={handleRecover}
+                                        role="button"
                                     >
                                         {i18n("userPlaylists:recover")}
                                     </button>
@@ -86,6 +88,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                         onClick={(): void => {
                                             setState((prev) => ({ ...prev, showConfirmation: true }));
                                         }}
+                                        role="button"
                                     >
                                         {i18n("common:delete")}
                                     </button>
@@ -100,6 +103,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                             : i18n("userPlaylists:expandContents")
                                     }
                                     onClick={toggleExpand}
+                                    role="button"
                                 >
                                     {state.expanded ? (
                                         <FontAwesomeIcon
@@ -127,6 +131,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                             <input
                                 id="playlist-name-input"
                                 className="mb-2 w-full rounded-md border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
+                                aria-labelledby="sr-playlist-name-input"
                                 autoComplete="off"
                                 maxLength={100}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -136,10 +141,13 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                 required
                                 value={state.name}
                             />
+                            <label id="sr-playlist-desc-input" className="sr-only" htmlFor="playlist-desc-input">
+                                {i18n("exportSetlist:enterPlaylistDescription")}
+                            </label>
                             <textarea
-                                id="playlist-description-input"
+                                id="playlist-desc-input"
                                 className="h-32 w-full rounded-md border border-gray-900 bg-white p-2 dark:border-gray-300 dark:bg-black"
-                                aria-live="polite"
+                                aria-labelledby="sr-playlist-desc-input"
                                 autoComplete="off"
                                 maxLength={300}
                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -155,6 +163,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                     aria-controls="user-playlist-edit-container"
                                     aria-label={i18n("userPlaylists:savePlaylistChanges")}
                                     onClick={handleSave}
+                                    role="button"
                                 >
                                     {i18n("common:save")}
                                 </button>
@@ -171,6 +180,7 @@ const UserPlaylist: React.FC<UserPlaylistProps> = ({ onDelete, playlist }) => {
                                             name: state.initialName
                                         }));
                                     }}
+                                    role="button"
                                 >
                                     {i18n("common:cancel")}
                                 </button>
