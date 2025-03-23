@@ -89,17 +89,19 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                     className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                                     icon={faLock}
                                 />
-                                <button
-                                    id="toggle-password-visibility-btn"
-                                    className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
-                                    onClick={(): void => {
-                                        setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
-                                    }}
-                                    role="button"
-                                    type="button"
-                                >
-                                    {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
-                                </button>
+                                {!(window.navigator.userAgent.toLowerCase().indexOf("edg") > -1) && (
+                                    <button
+                                        id="toggle-password-visibility-btn"
+                                        className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
+                                        onClick={(): void => {
+                                            setState((prev) => ({ ...prev, passwordVisible: !state.passwordVisible }));
+                                        }}
+                                        role="button"
+                                        type="button"
+                                    >
+                                        {state.passwordVisible ? i18n("common:hide") : i18n("common:show")}
+                                    </button>
+                                )}
                             </div>
                             <div id="new-password-input-container" className="relative">
                                 <input
@@ -117,20 +119,22 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({ email, onCl
                                     className="absolute top-1/2 left-3 -translate-y-1/2 transform pl-1 text-gray-800 dark:text-gray-200"
                                     icon={faLock}
                                 />
-                                <button
-                                    id="toggle-new-password-visibility-btn"
-                                    className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
-                                    onClick={(): void => {
-                                        setState((prev) => ({
-                                            ...prev,
-                                            newPasswordVisible: !state.newPasswordVisible
-                                        }));
-                                    }}
-                                    role="button"
-                                    type="button"
-                                >
-                                    {state.newPasswordVisible ? i18n("common:hide") : i18n("common:show")}
-                                </button>
+                                {!(window.navigator.userAgent.toLowerCase().indexOf("edg") > -1) && (
+                                    <button
+                                        id="toggle-new-password-visibility-btn"
+                                        className="absolute inset-y-0 right-3 flex items-center pr-2 text-gray-700 transition hover:cursor-pointer hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-500"
+                                        onClick={(): void => {
+                                            setState((prev) => ({
+                                                ...prev,
+                                                newPasswordVisible: !state.newPasswordVisible
+                                            }));
+                                        }}
+                                        role="button"
+                                        type="button"
+                                    >
+                                        {state.newPasswordVisible ? i18n("common:hide") : i18n("common:show")}
+                                    </button>
+                                )}
                             </div>
                             {state.passwordError && (
                                 <div id="password-error" className="text-sm text-red-500">
