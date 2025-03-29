@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          * Regular expression to validate a valid query.
          */
         const VALID_QUERY_REGEX: RegExp =
-            /^[\p{L}\p{N}\s\-.'/&!?@#*+%:\u00a9\u00ae\u2000-\u3300\ud83c\ud000-\udfff\ud83d\ud000-\udfff\ud83e\ud000-\udfff]+$/u;
+            /^[\p{L}\p{N}\s\-_.'/&!?@#*+%:\u00a9\u00ae\u2000-\u3300\ud83c\ud000-\udfff\ud83d\ud000-\udfff\ud83e\ud000-\udfff]+$/u;
 
         // Validate query format
         if (!query || !VALID_QUERY_REGEX.test(query as string)) {

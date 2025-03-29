@@ -87,7 +87,7 @@ const Setlist: React.FC<SetlistProps> = ({ isAlone = false, onClose, onExport, s
                         (set: Record<string, any>, setIdx: number, setArray: Record<string, any>[]) =>
                             set.song.map((song: Record<string, any>, songIdx: number) => (
                                 <li
-                                    id={`song-item-${song.name || "unknown"}`}
+                                    id={`setlist-song-item-${song.name || "unknown"}`}
                                     className={`py-2 ${
                                         setIdx === setArray.length - 1 && songIdx === set.song.length - 1
                                             ? ""

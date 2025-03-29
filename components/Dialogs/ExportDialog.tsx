@@ -113,7 +113,11 @@ const ExportDialog: React.FC<ExportDialogProps> = ({ artistData, isOpen, onClose
                                 >
                                     {i18n("exportSetlist:playlistDescription")}
                                 </label>
-                                <label id="sr-playlist-desc-input" className="sr-only" htmlFor="playlist-desc-input">
+                                <label
+                                    id="sr-playlist-desc-input"
+                                    className="sr-only"
+                                    htmlFor="playlist-description-input"
+                                >
                                     {i18n("exportSetlist:enterPlaylistDescription")}
                                 </label>
                                 <textarea

@@ -120,6 +120,22 @@ describe("Setlist Search", () => {
         expect(finalContent).not.toBe(initialContent);
     }, 10000);
 
+    it("Can search by specific setlist.fm link", async () => {
+        const searchInput = await page.waitForSelector("#search-input");
+        const searchButton = await page.waitForSelector("#search-btn");
+        await clearInputs(page, [searchInput]);
+        await searchInput.type(
+            "https://www.setlist.fm/setlist/the-beatles/1969/apple-corps-rooftop-london-england-53d6f3ad.html"
+        );
+        await searchButton.click();
+        const setlist = await page.waitForSelector("#setlist-display");
+        expect(setlist).toBeDefined();
+    }, 10000);
+
+    it("Searching by specific setlist.fm link updates URL param correctly", async () => {
+        expect(page.url()).toContain("setlist=53d6f3ad");
+    }, 10000);
+
     afterAll(async () => {
         await delay(100);
         await browser.close();
