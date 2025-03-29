@@ -89,7 +89,7 @@ const AISetlist: React.FC<AISetlistProps> = ({ isThinView, onExport, predictionN
                         <ul id="songs-list" className="space-y-1 pb-6">
                             {setlistData.predictedSongs.map((song: any, songIdx: number) => (
                                 <li
-                                    id={`song-item-${song.name || "unknown"}`}
+                                    id={`setlist-song-item-${song.name || "unknown"}`}
                                     className={`py-2 ${
                                         songIdx !== setlistData.predictedSongs.length - 1
                                             ? "border-b border-gray-200 dark:border-gray-700"
