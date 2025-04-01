@@ -58,7 +58,7 @@ export default function SetlistSearch() {
                             <CustomHashLoader showLoading={state.showLoading} size={150} />
                         </div>
                     )}
-                    {state.error && (
+                    {state.error && !state.animLoading && (
                         <div id="error-message" className="mx-auto mt-5 max-w-4xl pt-8">
                             <ErrorMessage message={state.error} />
                         </div>

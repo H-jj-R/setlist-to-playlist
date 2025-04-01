@@ -76,7 +76,7 @@ const SetlistSongsExport: React.FC<SetlistSongsExportProps> = ({
                         {state.spotifySongs?.map((spotifySong: Record<string, any>, idx: number) =>
                             spotifySong?.name ? (
                                 <li
-                                    id={`song-item-${spotifySong?.id}`}
+                                    id={`export-song-item-${spotifySong?.id}`}
                                     className={`cursor-pointer py-2 ${
                                         state.excludedSongs.has(`${spotifySong?.id}-${idx}`) && "opacity-20"
                                     }`}
