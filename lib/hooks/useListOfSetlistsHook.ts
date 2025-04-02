@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
  *
  * @returns Hook state and handlers.
  */
-export default function useListOfSetlistsHook(setlistData: Record<string, any>) {
+export default function useListOfSetlistsHook(setlistData: Record<string, any>, userId: null | string) {
     const { t: i18n } = useTranslation(); // Translation hook
     const [state, setState] = useState({
         currentPage: ((setlistData.setlists.page as number) || 1) as number, // Track the current page of setlists
@@ -94,12 +94,20 @@ export default function useListOfSetlistsHook(setlistData: Record<string, any>) 
         setState((prev) => ({ ...prev, isLoading: true }));
         try {
             // Fetch the next page of setlists from the API
-            const response = await fetch(
-                `/api/setlist-fm/search-setlists?${new URLSearchParams({
-                    artistMbid: setlistData.setlistfmArtist.mbid,
-                    page: (state.currentPage + 1).toString()
-                }).toString()}`
-            );
+            const response = setlistData.setlistfmArtist?.mbid
+                ? await fetch(
+                      `/api/setlist-fm/search-setlists?${new URLSearchParams({
+                          artistMbid: setlistData.setlistfmArtist.mbid,
+                          page: (state.currentPage + 1).toString()
+                      }).toString()}`
+                  )
+                : await fetch(
+                      `/api/setlist-fm/user-attended?${new URLSearchParams({
+                          page: (state.currentPage + 1).toString(),
+                          userId: userId
+                      }).toString()}`
+                  );
+
             const responseJson = await response.json();
             if (!response.ok) {
                 throw {
@@ -109,8 +117,7 @@ export default function useListOfSetlistsHook(setlistData: Record<string, any>) 
             }
 
             // Append new setlists to the existing ones
-            const newData = responseJson;
-            const newSetlists = newData.setlist || [];
+            const newSetlists = responseJson.setlist || responseJson.setlists.setlist || [];
             setState((prev) => ({
                 ...prev,
                 currentPage: prev.currentPage + 1,
@@ -121,7 +128,7 @@ export default function useListOfSetlistsHook(setlistData: Record<string, any>) 
         } finally {
             setState((prev) => ({ ...prev, isLoading: false }));
         }
-    }, [state.currentPage, setlistData.setlistfmArtist.mbid]);
+    }, [state.currentPage, setlistData.setlistfmArtist?.mbid, userId]);
 
     return { hasMorePages, loadMoreSetlists, state };
 }

@@ -215,6 +215,7 @@
         "stopListening": "Hören stoppen",
         "unknown": "Unbekannt",
         "unknownCountry": "Unbekanntes Land",
+        "userAttendedTitle": "Setlists, an denen {{userId}} teilgenommen hat",
         "with": "mit {{withName}}"
     },
     "settings": {

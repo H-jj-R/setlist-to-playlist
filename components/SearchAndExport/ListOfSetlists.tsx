@@ -19,12 +19,14 @@ import { useTranslation } from "react-i18next";
  * @property {Function} onSetlistChosen - Callback function that is triggered when user selects a setlist.
  * @property {string} selectedSetlistId - ID of a selected setlist, if there is one.
  * @property {Record<string, any>} setlistData - The setlist data containing details about the artist and their setlists.
+ * @property {null | string} [userId] - The ID of the user, if searching by user ID.
  */
 interface ListOfSetlistsProps {
     handleCombineSetlists: (setlist: Record<string, any>) => void;
     onSetlistChosen: (setlist: Record<string, any>) => void;
     selectedSetlistId: string;
     setlistData: Record<string, any>;
+    userId?: null | string;
 }
 
 /**
@@ -40,12 +42,13 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
     handleCombineSetlists,
     onSetlistChosen,
     selectedSetlistId,
-    setlistData
+    setlistData,
+    userId
 }) => {
     const { t: i18n } = useTranslation(); // Translation hook
 
     // Hook initialiser to manage setlist state and pagination
-    const { hasMorePages, loadMoreSetlists, state } = useListOfSetlistsHook({ ...setlistData });
+    const { hasMorePages, loadMoreSetlists, state } = useListOfSetlistsHook({ ...setlistData }, userId);
 
     // Retrieve user's selected country filter from local storage
     const countryFilter = localStorage?.getItem(SettingsKeys.CountryFilter) ?? "";
@@ -56,17 +59,19 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
             className="animate-fade-in h-[calc(100vh-9rem)] w-full overflow-y-auto rounded-lg border-4 border-gray-300"
         >
             <div id="list-of-setlists-header" className="flex w-full flex-col items-center p-4">
-                <div id="artist-info" className="flex items-center px-4">
-                    <Image
-                        id="artist-img"
-                        className="mr-4 h-16 w-16 rounded-full"
-                        alt={`${setlistData.spotifyArtist.name} ${i18n("common:image")}`}
-                        height={700}
-                        src={setlistData.spotifyArtist.images[0]?.url || "/images/artist-placeholder.jpg"}
-                        width={700}
-                    />
-                    <h2 id="list-of-setlists-title" className="text-3xl font-bold">
-                        {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
+                {setlistData.spotifyArtist ? (
+                    <>
+                        <div id="artist-info" className="flex items-center px-4">
+                            <Image
+                                id="artist-img"
+                                className="mr-4 h-16 w-16 rounded-full"
+                                alt={`${setlistData.spotifyArtist.name} ${i18n("common:image")}`}
+                                height={700}
+                                src={setlistData.spotifyArtist.images[0]?.url || "/images/artist-placeholder.jpg"}
+                                width={700}
+                            />
+                            <h2 id="list-of-setlists-title" className="text-3xl font-bold">
+                                {`${i18n("setlistSearch:setlistListTitle", { artistName: setlistData.spotifyArtist.name })}${" "}
                         ${
                             countryFilter
                                 ? `${i18n("setlistSearch:inCountry", {
@@ -74,20 +79,30 @@ const ListOfSetlists: React.FC<ListOfSetlistsProps> = ({
                                   })}`
                                 : ""
                         }`}
-                    </h2>
-                </div>
+                            </h2>
+                        </div>
+                        {state.setlists.length > 0 && (
+                            <div id="combine-export-btn-container" className="mb-1 flex justify-center p-2">
+                                <button
+                                    id="combine-export-btn"
+                                    className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
+                                    onClick={(): void => handleCombineSetlists(state.setlists)}
+                                    role="button"
+                                >
+                                    {i18n("setlistSearch:combineExportAllSetlists")}
+                                </button>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <div id="user-info" className="flex items-center px-4 pb-6">
+                        <h2 id="list-of-setlists-title" className="text-3xl font-bold">
+                            {`${i18n("setlistSearch:userAttendedTitle", { userId: userId })}`}
+                        </h2>
+                    </div>
+                )}
                 {state.setlists.length > 0 ? (
                     <>
-                        <div id="combine-export-btn-container" className="mb-1 flex justify-center p-2">
-                            <button
-                                id="combine-export-btn"
-                                className="rounded-lg bg-linear-to-bl from-green-400 to-green-600 px-6 py-3 font-semibold text-white shadow-md transition duration-300 hover:cursor-pointer hover:from-green-500 hover:to-green-700"
-                                onClick={(): void => handleCombineSetlists(state.setlists)}
-                                role="button"
-                            >
-                                {i18n("setlistSearch:combineExportAllSetlists")}
-                            </button>
-                        </div>
                         <ul id="setlist-list" className="w-full space-y-3 px-4">
                             {state.setlists.map((setlist: Record<string, any>) => (
                                 <SetlistChoiceBlock

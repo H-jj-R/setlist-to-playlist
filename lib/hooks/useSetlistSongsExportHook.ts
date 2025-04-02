@@ -38,6 +38,26 @@ export default function useSetlistSongsExportHook(
         spotifySongs: null as null | Record<string, any>[] // Stores fetched Spotify songs
     });
 
+    // Memoize the artist data if not previously provided to prevent unnecessary re-renders
+    if (artistData.spotifyArtist === undefined) {
+        try {
+            const spotifyData = (async (): Promise<Record<string, any>> => {
+                const response = await fetch(
+                    `/api/spotify/search-artist?${new URLSearchParams({ query: setlist.artist.name }).toString()}`
+                );
+                if (!response.ok) {
+                    const errorResponse = await response.json();
+                    throw {
+                        error: i18n(errorResponse.error) || i18n("common:unexpectedError"),
+                        status: response.status
+                    };
+                }
+                return (await response.json()) as Record<string, any>;
+            })();
+            artistData.spotifyArtist = spotifyData;
+        } catch (error) {}
+    }
+
     /**
      * Effect hook to listen for changes in local storage and update settings accordingly.
      */
@@ -72,11 +92,12 @@ export default function useSetlistSongsExportHook(
     useEffect((): void => {
         (async (): Promise<void> => {
             setState((prev) => ({ ...prev, error: null, loading: true }));
+            const spotifyArtist = await artistData.spotifyArtist;
             try {
                 // Make an API request to fetch Spotify songs
                 const response = await fetch(
                     `/api/controllers/get-spotify-songs?${new URLSearchParams({
-                        artist: artistData.spotifyArtist.name,
+                        artist: spotifyArtist.name,
                         isPredicted: predictedSetlist ? "true" : "false"
                     }).toString()}`,
                     {
@@ -100,7 +121,7 @@ export default function useSetlistSongsExportHook(
                 // Exclude cover songs
                 if (state.excludeCovers) {
                     responseJson.forEach((song: Record<string, any>, idx: number): void => {
-                        if (song.artists?.[0]?.name !== artistData.spotifyArtist.name) {
+                        if (song.artists?.[0]?.name !== spotifyArtist.name) {
                             excludedSongs.push({ idx: idx, songId: song.id });
                         }
                     });
