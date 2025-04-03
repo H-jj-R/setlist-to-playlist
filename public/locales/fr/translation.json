@@ -215,6 +215,7 @@
         "stopListening": "Arrêter d'écouter",
         "unknown": "Inconnu",
         "unknownCountry": "Pays inconnu",
+        "userAttendedTitle": "Setlists auxquelles {{userId}} a assisté",
         "with": "avec {{withName}}"
     },
     "settings": {

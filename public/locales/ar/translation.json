@@ -215,6 +215,7 @@
         "stopListening": "إيقاف الاستماع",
         "unknown": "غير معروف",
         "unknownCountry": "دولة غير معروفة",
+        "userAttendedTitle": "قوائم الأغاني التي حضرها {{userId}}",
         "with": "مع {{withName}}"
     },
     "settings": {

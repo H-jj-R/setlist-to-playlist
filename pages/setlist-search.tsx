@@ -79,6 +79,7 @@ export default function SetlistSearch() {
                                         onSetlistChosen={handleSetlistChosenRouterPush}
                                         selectedSetlistId={state.chosenSetlistData?.id}
                                         setlistData={state.allSetlistsData}
+                                        userId={state.userId}
                                     />
                                 </div>
                             )}

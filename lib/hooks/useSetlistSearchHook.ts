@@ -37,7 +37,8 @@ export default function useSetlistSearchHook() {
         searchTriggered: false, // Tracks if a search operation has triggered
         setlistChosen: false, // Indicates whether a setlist has been selected
         showAuthDialog: false, // Controls Spotify authentication dialog visibility
-        showLoading: false // Manages loading state during API calls
+        showLoading: false, // Manages loading state during API calls
+        userId: null as null | string // Stores the user ID for fetching user-specific setlists
     });
 
     /**
@@ -57,10 +58,7 @@ export default function useSetlistSearchHook() {
      */
     useEffect((): (() => void) => {
         const handleStorageChange = (): void => {
-            setState((prev) => ({
-                ...prev,
-                countryFilter: localStorage?.getItem(SettingsKeys.CountryFilter)
-            }));
+            setState((prev) => ({ ...prev, countryFilter: localStorage?.getItem(SettingsKeys.CountryFilter) }));
         };
 
         // Listen for changes to the CountryFilter setting
@@ -79,10 +77,10 @@ export default function useSetlistSearchHook() {
         const { q } = router.query;
         if (q) {
             if (state.pageState !== PageState.LosSetlist || q !== state.previousQuery) {
-                handleSearch(q as string, null);
+                handleSearch(q as string, null, null);
             } else if (state.pageState === PageState.LosSetlist) {
                 handleBackToList();
-                handleSearch(q as string, null);
+                handleSearch(q as string, null, null);
             }
         }
     }, [state.countryFilter]);
@@ -91,11 +89,11 @@ export default function useSetlistSearchHook() {
      * Effect hook which triggers a UI update whenever the router updates.
      */
     useEffect((): void => {
-        const { q, setlist } = router.query;
+        const { q, setlist, userid } = router.query;
 
-        if (q && !setlist) {
+        if (q && !setlist && !userid) {
             if (state.pageState !== PageState.LosSetlist || q !== state.previousQuery) {
-                handleSearch(q as string, null); // Trigger a new search
+                handleSearch(q as string, null, null); // Trigger a new search
             } else if (state.pageState === PageState.LosSetlist) {
                 setState((prev) => ({
                     ...prev,
@@ -104,17 +102,35 @@ export default function useSetlistSearchHook() {
                     setlistChosen: false
                 }));
             }
-        } else if (setlist && !q) {
-            handleSearch(null, setlist as string); // Fetch specific setlist
-        } else if (setlist && q) {
+        } else if (setlist && !q && !userid) {
+            handleSearch(null, setlist as string, null); // Fetch specific setlist
+        } else if (setlist && q && !userid) {
             if (!state.searchComplete) {
-                handleSearch(q as string, setlist as string); // Search the query and set the setlist
+                handleSearch(q as string, setlist as string, null); // Search the query and set the setlist
             } else {
                 if (state.chosenSetlistData !== null) {
                     setState((prev) => ({ ...prev, pageState: PageState.LosSetlist, setlistChosen: true }));
                 } else {
-                    handleSearch(q as string, setlist as string); // Search the query and set the setlist
+                    handleSearch(q as string, setlist as string, null); // Search the query and set the setlist
                 }
+            }
+        } else if (userid && !setlist) {
+            if (state.pageState !== PageState.LosSetlist) {
+                setState((prev) => ({ ...prev, userId: userid as string }));
+                handleSearch(null, null, userid as string); // Search user attended setlists
+            } else if (state.pageState === PageState.LosSetlist) {
+                setState((prev) => ({
+                    ...prev,
+                    chosenSetlistData: null,
+                    pageState: PageState.ListOfSetlists,
+                    setlistChosen: false
+                }));
+            }
+        } else if (userid && setlist) {
+            if (!state.searchComplete || state.chosenSetlistData === null) {
+                handleSearch(null, setlist as string, userid as string); // Search the user setlists and set the setlist
+            } else {
+                setState((prev) => ({ ...prev, pageState: PageState.LosSetlist, setlistChosen: true }));
             }
         } else {
             setState((prev) => ({ ...prev, animLoading: true, pageState: PageState.Idle, searchTriggered: false }));
@@ -122,7 +138,7 @@ export default function useSetlistSearchHook() {
 
         // Store the current query for future reference
         setState((prev) => ({ ...prev, previousQuery: router.query.q as string }));
-    }, [router.query.q, router.query.setlist]);
+    }, [router.query.q, router.query.setlist, router.query.userid]);
 
     /**
      * Fetches data from a given API URL and handles errors.
@@ -148,7 +164,7 @@ export default function useSetlistSearchHook() {
      * @param {null | string} query The search term provided by the user.
      * @param {null | string} setlist The specific setlist ID to fetch (if applicable).
      */
-    const handleSearch = async (query: null | string, setlist: null | string): Promise<void> => {
+    const handleSearch = async (query: null | string, setlist: null | string, userId: null | string): Promise<void> => {
         // Reset search-related state before making API requests
         setState((prev) => ({
             ...prev,
@@ -168,7 +184,7 @@ export default function useSetlistSearchHook() {
         setState((prev) => ({ ...prev, showLoading: true }));
 
         try {
-            if (query && !setlist) {
+            if (query && !setlist && !userId) {
                 // Fetch setlists based on a user search query
                 const data = await fetchData(
                     `/api/controllers/get-setlists?${new URLSearchParams({ country: state.countryFilter, query }).toString()}`
@@ -180,7 +196,7 @@ export default function useSetlistSearchHook() {
                     searchComplete: true,
                     showLoading: false
                 }));
-            } else if (!query && setlist) {
+            } else if (!query && setlist && !userId) {
                 // Fetch details for a specific setlist by ID
                 const setlistData = await fetchData(
                     `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
@@ -190,7 +206,6 @@ export default function useSetlistSearchHook() {
                     `/api/spotify/search-artist?${new URLSearchParams({ query: setlistData.artist.name }).toString()}`
                 );
                 const fullArtistDetails = { setlistfmArtist: setlistData.artist, spotifyArtist: artistData };
-
                 setState((prev) => ({
                     ...prev,
                     allSetlistsData: fullArtistDetails,
@@ -199,14 +214,45 @@ export default function useSetlistSearchHook() {
                     setlistChosen: true,
                     showLoading: false
                 }));
-            } else if (query && setlist) {
-                // Fetch search results and specific setlist details together.
+            } else if (query && setlist && !userId) {
+                // Fetch search results and specific setlist details together
                 const queryData = await fetchData(
                     `/api/controllers/get-setlists?${new URLSearchParams({ country: state.countryFilter, query }).toString()}`
                 );
                 setState((prev) => ({
                     ...prev,
                     allSetlistsData: queryData,
+                    searchComplete: true,
+                    showLoading: false
+                }));
+                const setlistData = await fetchData(
+                    `/api/setlist-fm/setlist-setlistid?${new URLSearchParams({ setlistId: setlist }).toString()}`
+                );
+                setState((prev) => ({
+                    ...prev,
+                    chosenSetlistData: setlistData,
+                    pageState: PageState.LosSetlist,
+                    setlistChosen: true
+                }));
+            } else if (userId && !setlist) {
+                // Fetch setlists attended by a specific user
+                const data = await fetchData(
+                    `/api/setlist-fm/user-attended?${new URLSearchParams({ userId }).toString()}`
+                );
+                setState((prev) => ({
+                    ...prev,
+                    allSetlistsData: data,
+                    pageState: PageState.ListOfSetlists,
+                    searchComplete: true,
+                    showLoading: false
+                }));
+            } else if (userId && setlist) {
+                const userData = await fetchData(
+                    `/api/setlist-fm/user-attended?${new URLSearchParams({ userId }).toString()}`
+                );
+                setState((prev) => ({
+                    ...prev,
+                    allSetlistsData: userData,
                     searchComplete: true,
                     showLoading: false
                 }));
@@ -237,7 +283,9 @@ export default function useSetlistSearchHook() {
             // If the query is a setlist URL, extract the setlist ID. Otherwise, treat it as a search term
             const queryParams = query.includes("setlist.fm/setlist/")
                 ? { setlist: query.split("-").pop()?.replace(".html", "") }
-                : { q: query };
+                : query.includes("user/")
+                  ? { userid: query.split("/").pop() }
+                  : { q: query };
 
             // Update the URL with the search or setlist ID using shallow routing to avoid a full page reload
             await router.push({ pathname: "/setlist-search", query: queryParams }, undefined, { shallow: true });
@@ -252,14 +300,17 @@ export default function useSetlistSearchHook() {
      */
     const handleSetlistChosenRouterPush = useCallback(
         async (setlist: Record<string, any>): Promise<void> => {
-            setState((prev) => ({ ...prev, chosenSetlistData: setlist }));
+            setState((prev) => ({ ...prev, chosenSetlistData: setlist })); // Set setlist as chosen
 
-            // Push the selected setlist's ID to the URL, along with the search query if available
-            await router.push(
-                { pathname: "/setlist-search", query: { q: router.query.q, setlist: setlist.id } },
-                undefined,
-                { shallow: true }
-            );
+            const { q, userid } = router.query; // Extract query parameters
+
+            // Construct the query object, only including userid and q if truthy
+            const queryParams: Record<string, string> = {};
+            if (q) queryParams.q = q as string;
+            if (userid) queryParams.userid = userid as string;
+            queryParams.setlist = setlist.id;
+
+            await router.push({ pathname: "/setlist-search", query: queryParams }, undefined, { shallow: true });
         },
         [router]
     );
@@ -268,8 +319,15 @@ export default function useSetlistSearchHook() {
      * Navigates back to the list of setlists by updating the URL with the search query and resetting state.
      */
     const handleBackToList = useCallback(async (): Promise<void> => {
-        // Push the current search query back to the URL, omitting the setlist ID.
-        await router.push({ pathname: "/setlist-search", query: { q: router.query.q } }, undefined, { shallow: true });
+        const { q, userid } = router.query; // Extract query parameters
+
+        // Construct the query object, only including userid and q if truthy
+        const queryParams: Record<string, string> = {};
+        if (q) queryParams.q = q as string;
+        if (userid) queryParams.userid = userid as string;
+
+        // Navigate back to the list view without the setlist ID
+        await router.push({ pathname: "/setlist-search", query: queryParams }, undefined, { shallow: true });
         setState((prev) => ({
             ...prev,
             chosenSetlistData: null,

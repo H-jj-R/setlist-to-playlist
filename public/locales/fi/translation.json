@@ -215,6 +215,7 @@
         "stopListening": "Pysäytä kuuntelu",
         "unknown": "Tuntematon",
         "unknownCountry": "Tuntematon maa",
+        "userAttendedTitle": "Soittolistat, joissa {{userId}} oli mukana",
         "with": "yhdessä {{withName}}"
     },
     "settings": {
