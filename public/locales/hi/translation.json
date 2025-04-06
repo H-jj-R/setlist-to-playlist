@@ -215,6 +215,7 @@
         "stopListening": "सुनना बंद करें",
         "unknown": "अज्ञात",
         "unknownCountry": "अज्ञात देश",
+        "unsupportedBrowserFeature": "माफ़ कीजिए, आपका ब्राउज़र इस सुविधा का समर्थन नहीं करता।",
         "userAttendedTitle": "{{userId}} द्वारा देखी गई सेटलिस्ट",
         "with": "{{withName}} के साथ"
     },
