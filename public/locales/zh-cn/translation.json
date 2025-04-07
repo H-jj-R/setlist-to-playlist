@@ -215,6 +215,7 @@
         "stopListening": "停止监听",
         "unknown": "未知",
         "unknownCountry": "未知国家",
+        "unsupportedBrowserFeature": "很抱歉，您的浏览器不支持此功能。",
         "userAttendedTitle": "{{userId}} 参加的歌单",
         "with": "与{{withName}}"
     },

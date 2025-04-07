@@ -215,6 +215,7 @@
         "stopListening": "Dejar de escuchar",
         "unknown": "Desconocido",
         "unknownCountry": "País desconocido",
+        "unsupportedBrowserFeature": "Lo siento, tu navegador no admite esta función.",
         "userAttendedTitle": "Listas de canciones a las que asistió {{userId}}",
         "with": "con {{withName}}"
     },

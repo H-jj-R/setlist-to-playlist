@@ -216,6 +216,7 @@
         "stopListening": "Stop listening",
         "unknown": "Unknown",
         "unknownCountry": "Unknown Country",
+        "unsupportedBrowserFeature": "Sorry, your browser doesn't support this feature.",
         "userAttendedTitle": "Setlists Attended by {{userId}}",
         "with": "with {{withName}}"
     },

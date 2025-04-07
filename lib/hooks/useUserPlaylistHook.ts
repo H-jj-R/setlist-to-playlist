@@ -162,7 +162,7 @@ export default function useUserPlaylistHook(onDelete: (playlistId: number) => vo
                 credentials: "include",
                 method: "GET"
             });
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 400) {
                 // If unauthorised, prompt the user with an authentication dialog
                 setState((prev) => ({ ...prev, showAuthDialog: true }));
                 return;

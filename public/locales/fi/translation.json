@@ -215,6 +215,7 @@
         "stopListening": "Pysäytä kuuntelu",
         "unknown": "Tuntematon",
         "unknownCountry": "Tuntematon maa",
+        "unsupportedBrowserFeature": "Pahoittelut, selaimesi ei tue tätä ominaisuutta.",
         "userAttendedTitle": "Soittolistat, joissa {{userId}} oli mukana",
         "with": "yhdessä {{withName}}"
     },

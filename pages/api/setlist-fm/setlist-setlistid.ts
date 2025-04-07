@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * Regular expression to validate a Setlist.fm setlist ID.
      */
-    const SETLIST_ID_REGEX: RegExp = /^[0-9a-fA-F]{8}$/;
+    const SETLIST_ID_REGEX: RegExp = /^[0-9a-fA-F]{6,9}$/;
 
     // Validate the Setlist ID format
     if (!setlistId || !SETLIST_ID_REGEX.test(setlistId as string)) {

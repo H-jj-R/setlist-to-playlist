@@ -35,13 +35,22 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
     const { t: i18n } = useTranslation(); // Translation hook
     const [query, setQuery] = useState(""); // State to track the user's search input
     const [isListening, setIsListening] = useState(false); // Tracks whether microphone input is currently active
+    const [micUnsupported, setMicUnsupported] = useState(false); // Used to show message when microphone is unsupported
+    const [unsupportedFadeOut, setUnsupportedFadeOut] = useState(false); // Used to fade out the microphone unsupported message
     const recognitionRef = useRef(null); // Stores reference to webkit speech recognition API
 
     /**
      * Handles voice search using the browser's built-in speech recognition API.
      */
     const handleVoiceSearch = (): void => {
-        if (!("webkitSpeechRecognition" in window)) return;
+        // Check if the browser supports webkit speech recognition
+        if (!("webkitSpeechRecognition" in window)) {
+            setUnsupportedFadeOut(false);
+            setMicUnsupported(true);
+            setTimeout((): void => setUnsupportedFadeOut(true), 4000);
+            setTimeout((): void => setMicUnsupported(false), 5000);
+            return;
+        }
 
         // Initialise recognition if it's not already created
         if (!recognitionRef.current) {
@@ -111,6 +120,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ isPredicted, locked, onSearch }) 
                         icon={faMicrophone}
                         size="lg"
                     />
+                    {micUnsupported && (
+                        <div
+                            className={`animate-fade-in absolute top-full left-1/2 z-10 mt-3 w-64 -translate-x-1/2 cursor-default rounded-2xl bg-red-100 px-4 py-2 text-sm text-red-800 shadow-lg transition-opacity duration-500 ${
+                                !unsupportedFadeOut ? "opacity-100" : "pointer-events-none opacity-0"
+                            }`}
+                        >
+                            <div className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 transform rounded-xs bg-red-100" />
+                            {i18n("setlistSearch:unsupportedBrowserFeature")}
+                        </div>
+                    )}
                 </button>
                 <button
                     id="search-btn"
