@@ -18,7 +18,9 @@ import { Head, Html, Main, NextScript } from "next/document";
 export default function Document() {
     return (
         <Html lang="en">
-            <Head />
+            <Head>
+                <>{process.env.NODE_ENV === "production" && <link href="/manifest.json" rel="manifest" />}</>
+            </Head>
             <body>
                 <Main />
                 <NextScript />
