@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Check if the playlist was found
         if (result.affectedRows === 0) return res.status(404).json({ error: "userPlaylists:playlistNotFound" });
 
-        res.status(200).json({ sucess: true });
+        res.status(200).json({ success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "common:internalServerError" });
