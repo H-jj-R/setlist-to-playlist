@@ -17,7 +17,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const { redirect } = req.query;
 
-    // Redirect the user to the Spotify authorization page
+    // Redirect the user to the Spotify authorisation page
     res.redirect(
         `https://accounts.spotify.com/authorize?${new URLSearchParams({
             client_id: process.env.SPOTIFY_API_C_ID!,
@@ -32,7 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 "user-follow-read", // Read access to a user's followers and followed artists
                 "user-read-private" // Grants access to the user's information (username required for playlist creation)
             ].join(" "),
-            state: redirect.toString() // Pass the redirect state to identify where to redirect after authoriation
+            state: redirect.toString() // Pass the redirect state to identify where to redirect after authorisation
         }).toString()}`
     );
 }

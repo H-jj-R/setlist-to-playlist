@@ -84,7 +84,7 @@ export default function useChangePasswordHook(email: string, onClose: () => void
         const newPassword = formData.get("newPassword") as string;
         if (!(await validatePassword(newPassword))) return;
         const currentPassword = formData.get("password") as string;
-        if (!(await checkCorrectpassword(currentPassword))) return;
+        if (!(await checkCorrectPassword(currentPassword))) return;
         handleChangePassword(newPassword);
     };
 
@@ -117,7 +117,7 @@ export default function useChangePasswordHook(email: string, onClose: () => void
      * @param password - The entered password.
      * @returns {Promise<boolean>} `true` if the password is correct, `false` otherwise.
      */
-    const checkCorrectpassword = async (password: string): Promise<boolean> => {
+    const checkCorrectPassword = async (password: string): Promise<boolean> => {
         try {
             // Send login request to the API
             const response = await fetch("/api/auth/verify-correct-password", {
