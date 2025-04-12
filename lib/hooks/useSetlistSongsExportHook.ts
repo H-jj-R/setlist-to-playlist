@@ -75,7 +75,7 @@ export default function useSetlistSongsExportHook(
 
         // Add event listeners for each settings key
         settingsKeys.forEach((key): void => {
-            window.addEventListener(key, () => handleSettingChange(key));
+            window.addEventListener(key, (): void => handleSettingChange(key));
         });
 
         // Cleanup all listeners when the component unmounts
