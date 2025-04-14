@@ -50,7 +50,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     /**
      * Component pre-initialisation.
      */
-    useEffect(() => {
+    useEffect((): void => {
         // Trigger the slide-in and dimming animation after mounting
         setIsVisible(true);
     }, []);
@@ -58,7 +58,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose }) => {
     /**
      * Effect to focus the settings panel when it becomes visible, for accessibility.
      */
-    useEffect(() => {
+    useEffect((): void => {
         if (isVisible) {
             document.getElementById("settings-panel")?.focus();
         }

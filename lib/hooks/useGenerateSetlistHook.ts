@@ -170,7 +170,7 @@ export default function useGenerateSetlistHook() {
                 }
                 const openAIData = await openAIResponse.json();
 
-                if (!process.env.NEXT_PUBLIC_APP_ENV?.includes("test")) {
+                if (!process.env.NEXT_PUBLIC_APP_ENV?.includes("test")) { // Skip in test environment
                     // Increment query limit counter
                     const incrementQueryResponse = await fetch(`/api/database/increment-query-limit`, {
                         headers: {
@@ -186,7 +186,6 @@ export default function useGenerateSetlistHook() {
                             status: incrementQueryResponse.status
                         };
                     }
-                    setState((prev) => ({ ...prev, progress: 10 }));
                 }
 
                 clearInterval(interval);

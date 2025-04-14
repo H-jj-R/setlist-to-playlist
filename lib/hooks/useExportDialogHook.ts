@@ -57,7 +57,7 @@ export default function useExportDialogHook(
                     ? `${artistData.spotifyArtist.name} ${i18n("exportSetlist:predictedSetlist")}`
                     : `${artistData.spotifyArtist.name} ${i18n("common:setlist")} - ${
                           setlist.eventDate
-                              ? (() => {
+                              ? ((): string => {
                                     const [day, month, year] = setlist.eventDate.split("-");
                                     const date = new Date(`${year}-${month}-${day}`);
                                     return new Intl.DateTimeFormat("en-US", {
