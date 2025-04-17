@@ -22,7 +22,7 @@ describe("Choosing Setlist", () => {
 
     it("Setlist Choice Blocks appear when valid query is entered", async () => {
         const searchInput = await page.waitForSelector("#search-input");
-        await searchInput.type("Metallica");
+        await searchInput.type("The Beatles");
         const searchButton = await page.waitForSelector("#search-btn");
         await searchButton.click();
         await page.waitForSelector("#list-of-setlists");
