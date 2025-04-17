@@ -216,7 +216,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                             id="forgot-password-link"
                             className="text-md inline-block cursor-pointer text-center text-blue-500 hover:underline"
                             onClick={(): void => {
-                                setState((prev) => ({ ...prev, dialogState: LoginDialogState.ForgotPassword }));
+                                setState((prev) => ({
+                                    ...prev,
+                                    dialogState: LoginDialogState.ForgotPassword,
+                                    passwordError: null,
+                                    usernameError: null
+                                }));
                             }}
                             role="button"
                         >
@@ -244,7 +249,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                         id="back-to-login-link"
                         className="text-md mt-2 inline-block cursor-pointer pt-2 text-center text-blue-500 hover:underline"
                         onClick={(): void => {
-                            setState((prev) => ({ ...prev, dialogState: LoginDialogState.Login }));
+                            setState((prev) => ({
+                                ...prev,
+                                dialogState: LoginDialogState.Login,
+                                passwordError: null,
+                                usernameError: null
+                            }));
                         }}
                         role="button"
                     >
@@ -261,7 +271,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit, recaptchaRef, setSt
                                 dialogState:
                                     state.dialogState === LoginDialogState.Login
                                         ? LoginDialogState.SignUp
-                                        : LoginDialogState.Login
+                                        : LoginDialogState.Login,
+                                passwordError: null,
+                                usernameError: null
                             }));
                         }}
                         role="button"
