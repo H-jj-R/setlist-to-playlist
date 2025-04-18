@@ -137,7 +137,7 @@
         "spotifyAuthRequired": "Spotify Authorisation Required",
         "spotifyCallbackError": "Error in Spotify authorisation callback!",
         "spotifyCreatePlaylistError": "Error creating playlist!",
-        "spotifyGetUserDataError": "Error fetching user data!",
+        "spotifyGetUserDataError": "Sorry, unauthorised user! Please try again later.",
         "spotifySearchTrackError": "Error searching for song on Spotify!",
         "unknownSong": "Unknown Song",
         "uploadedPlaylistCover": "Uploaded playlist cover"
