@@ -19,25 +19,25 @@ describe("Page Navigation", () => {
         ({ browser, page } = await launch());
     }, 20000);
 
-    it("Go to Setlist Search", async () => {
+    it("Go to Setlist Search page", async () => {
         const setlistSearchBut = await page.waitForSelector("#go-to-setlist-search-btn");
         await Promise.all([setlistSearchBut.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/setlist-search");
     }, 10000);
 
-    it("Logo navigates to Landing Page", async () => {
+    it("Logo navigates to Landing page", async () => {
         const logo = await page.waitForSelector("#site-logo");
         await Promise.all([logo.click(), page.waitForNavigation()]);
         expect(page.url()).toBe("http://localhost:3000/");
     }, 10000);
 
-    it("Go to AI Generate Setlist", async () => {
+    it("Go to AI Generate Setlist page", async () => {
         const generateSetlistBut = await page.waitForSelector("#go-to-ai-generate-setlist-btn");
         await Promise.all([generateSetlistBut.click(), page.waitForNavigation()]);
         expect(page.url()).toContain("/ai-generate-setlist");
     }, 10000);
 
-    it("Title navigates to Landing Page", async () => {
+    it("Title navigates to Landing page", async () => {
         const title = await page.waitForSelector("#site-title");
         await Promise.all([title.click(), page.waitForNavigation()]);
         expect(page.url()).toBe("http://localhost:3000/");

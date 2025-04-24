@@ -217,8 +217,6 @@ describe("Settings", () => {
         await closeExportBtn.click();
     }, 10000);
 
-    // TODO: Temporarily removed due to constant failing in GitHub CI
-
     // it("Exclude Covers - Covers get excluded from export", async () => {
     //     const searchInput = await page.waitForSelector("#search-input");
     //     await clearInputs(page, [searchInput]);

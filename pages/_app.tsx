@@ -23,6 +23,7 @@ import { useEffect } from "react";
  * @returns The rendered `App` component.
  */
 export default function App({ Component, pageProps }: AppProps) {
+    
     /**
      * Registers the PWA service worker once the app is loaded.
      */

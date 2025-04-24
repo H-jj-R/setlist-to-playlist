@@ -112,7 +112,7 @@ describe("Signup", () => {
         await clearInputs(page, [emailInput, passwordInput]);
     }, 10000);
 
-    it("Cannot signup with empty email", async () => {
+    it("Cannot sign up with empty email", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const passwordInput = await page.waitForSelector("#password-input");
@@ -124,7 +124,7 @@ describe("Signup", () => {
         await clearInputs(page, [usernameInput, passwordInput]);
     }, 10000);
 
-    it("Cannot signup with empty password", async () => {
+    it("Cannot sign up with empty password", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const emailInput = await page.waitForSelector("#email-input");
@@ -136,7 +136,7 @@ describe("Signup", () => {
         await clearInputs(page, [usernameInput, emailInput]);
     }, 10000);
 
-    it("Cannot signup with invalid username", async () => {
+    it("Cannot sign up with invalid username", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const emailInput = await page.waitForSelector("#email-input");
@@ -150,7 +150,7 @@ describe("Signup", () => {
         await clearInputs(page, [usernameInput, emailInput, passwordInput]);
     }, 10000);
 
-    it("Cannot signup with invalid email", async () => {
+    it("Cannot sign up with invalid email", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const emailInput = await page.waitForSelector("#email-input");
@@ -164,7 +164,7 @@ describe("Signup", () => {
         await clearInputs(page, [usernameInput, emailInput, passwordInput]);
     }, 10000);
 
-    it("Cannot signup with invalid password", async () => {
+    it("Cannot sign up with invalid password", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const emailInput = await page.waitForSelector("#email-input");
@@ -178,7 +178,7 @@ describe("Signup", () => {
         await clearInputs(page, [usernameInput, emailInput, passwordInput]);
     }, 10000);
 
-    it("Can signup with valid details", async () => {
+    it("Can sign up with valid details", async () => {
         const submitBtn = await page.waitForSelector("#submit-btn");
         const usernameInput = await page.waitForSelector("#username-input");
         const emailInput = await page.waitForSelector("#email-input");
