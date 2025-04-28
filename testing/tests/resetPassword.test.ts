@@ -14,7 +14,7 @@ let page: puppeteer.Page;
 /**
  * Tests related to user authentication.
  */
-describe("Forgot Password", () => {
+describe("Reset Password", () => {
     beforeAll(async () => {
         ({ browser, page } = await launch());
     }, 20000);
